@@ -1,0 +1,49 @@
+----------------------------------
+07-02-2022
+
+Permission Table Queries:
+
+INSERT INTO `permissions` 
+(`id`, `name`, `codename`, `parent_status`, `description`, `to_be_considered`) VALUES
+(1, 'Staff', 'staff', 'parent', '', 'Yes'),
+(2, 'Add', 'staff_add', '1', '', 'Yes'),
+(3, 'Edit', 'staff_edit', '1', '', 'Yes'),
+(4, 'View', 'staff_view', '1', '', 'Yes'),
+(5, 'Status', 'staff_status', '1', '', 'Yes'),
+(6, 'Delete', 'staff_delete', '1', '', 'Yes');
+
+INSERT INTO `permissions` 
+(`id`, `name`, `codename`, `parent_status`, `description`, `to_be_considered`) VALUES
+(7, 'Category', 'category', 'parent', '', 'Yes'),
+(8, 'Add', 'category_add', '7', '', 'Yes'),
+(9, 'Edit', 'category_edit', '7', '', 'Yes'),
+(10, 'View', 'category_view', '7', '', 'Yes'),
+(11, 'Status', 'category_status', '7', '', 'Yes'),
+(12, 'Delete', 'category_delete', '7', '', 'Yes');
+
+INSERT INTO `permissions` 
+(`id`, `name`, `codename`, `parent_status`, `description`, `to_be_considered`) VALUES
+(13, 'City', 'city', 'parent', '', 'Yes'),
+(14, 'Add', 'city_add', '13', '', 'Yes'),
+(15, 'Edit', 'city_edit', '13', '', 'Yes'),
+(16, 'View', 'city_view', '13', '', 'No'),
+(17, 'Status', 'city_status', '13', '', 'Yes'),
+(18, 'Delete', 'city_delete', '13', '', 'Yes');
+
+INSERT INTO `permissions` 
+(`id`, `name`, `codename`, `parent_status`, `description`, `to_be_considered`) VALUES
+(19, 'Fright Price', 'fright_price', 'parent', '', 'Yes'),
+(20, 'Add', 'fright_price_add', '19', '', 'Yes'),
+(21, 'Edit', 'fright_price_edit', '19', '', 'Yes'),
+(22, 'View', 'fright_price_view', '19', '', 'No'),
+(23, 'Status', 'fright_price_status', '19', '', 'Yes'),
+(24, 'Delete', 'fright_price_delete', '19', '', 'Yes');
+
+INSERT INTO `permissions` 
+(`id`, `name`, `codename`, `parent_status`, `description`, `to_be_considered`) VALUES
+(25, 'Company', 'company', 'parent', '', 'Yes'),
+(26, 'Add', 'company_add', '25', '', 'Yes'),
+(27, 'Edit', 'company_edit', '25', '', 'Yes'),
+(28, 'View', 'company_view', '25', '', 'No'),
+(29, 'Status', 'company_status', '25', '', 'Yes'),
+(30, 'Delete', 'company_delete', '25', '', 'Yes');

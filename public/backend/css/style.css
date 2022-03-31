@@ -1,0 +1,120 @@
+
+.tblSearchLabel
+{
+	display: inline-block;
+	margin-bottom: 1rem;
+	float: right;
+}
+.tblSearchInput
+{
+	margin-left: 0.5em;
+	display: inline-block;
+	width: auto;
+}
+.horizontal-layout .navbar.header-navbar .container-fluid
+{
+	height: 70px;
+}
+.app-sidebar .logo-img img
+{
+	/* width: 140px; */
+	width: 40px;
+}
+.field-icon
+{
+	float: right;
+	margin-left: -25px;
+	margin-top: -25px;
+	position: relative;
+	z-index: 2;
+}
+.fs_i
+{
+	font-size: 5px !important;
+}
+.no-margin-top
+{
+	margin-top: 0 !important;
+}
+.margin-top-sm
+{
+	margin-top: 7px !important;
+}
+.margin-bottom-sm
+{
+	margin-bottom: 7px !important;
+}
+.hr-heading-xxs
+{
+	border-top: 4px solid #155c94;
+    width: 80px;
+    margin-right: calc(100% - 80px);
+    margin-top: 1px;
+    padding-bottom: 0;
+    margin-bottom: 5px;
+}
+.hr-heading-xs
+{
+	border-top: 4px solid #155c94;
+    width: 100px;
+    margin-right: calc(100% - 100px);
+    margin-top: 1px;
+    padding-bottom: 0;
+    margin-bottom: 5px;
+}
+.hr-heading-sm
+{
+	border-top: 4px solid #155c94;
+    width: 120px;
+    margin-right: calc(100% - 120px);
+    margin-top: 1px;
+    padding-bottom: 0;
+    margin-bottom: 5px;
+}
+.hr-heading-xsm
+{
+	border-top: 4px solid #155c94;
+    width: 130px;
+    margin-right: calc(100% - 130px);
+    margin-top: 1px;
+    padding-bottom: 0;
+    margin-bottom: 5px;
+}
+.hr-heading-md
+{
+	border-top: 4px solid #155c94;
+    width: 180px;
+    margin-right: calc(100% - 180px);
+    margin-top: 1px;
+    padding-bottom: 0;
+    margin-bottom: 5px;
+}
+.hr-heading-lg
+{
+	border-top: 4px solid #155c94;
+    width: 190px;
+    margin-right: calc(100% - 190px);
+    margin-top: 1px;
+    padding-bottom: 0;
+    margin-bottom: 5px;
+}
+.hr-heading-xl
+{
+	border-top: 4px solid #155c94;
+    width: 200px;
+    margin-right: calc(100% - 200px);
+    margin-top: 1px;
+    padding-bottom: 0;
+    margin-bottom: 5px;
+}
+@media (max-width: 768px)
+{
+	.app-sidebar .logo-img img
+	{
+		width: 0;
+	}
+	.menu-open .app-sidebar .logo-img img
+	{
+		width: 100px;
+	}
+}
