@@ -31,7 +31,7 @@
                         				<label>Phone Country Code<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="phone_country_code" name="phone_country_code" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($country as $val)
+                                            @foreach($phone_country as $val)
                                                 <option value="{{$val->id}}">+{{$val->phone_code}}</option>
                                             @endforeach
                                         </select><br/>
@@ -44,7 +44,7 @@
                         				<label>Whatsapp Country Code</label>
                         				<select class="select2" id="whatsapp_country_code" name="whatsapp_country_code" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($country as $val)
+                                            @foreach($whatsapp_country as $val)
                                                 <option value="{{$val->id}}">+{{$val->phone_code}}</option>
                                             @endforeach
                                         </select><br/>

@@ -20,7 +20,7 @@
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered">
                                             <tr>
-                                                <td><strong>Vendor Name</strong></td>
+                                                <td class="col-sm-5"><strong>Vendor Name</strong></td>
                                                 <td>{{$data->vendor_name}}</td>
                                             </tr>
                                             <tr>
@@ -31,6 +31,12 @@
                                                 <td><strong>Vendor Phone</strong></td>
                                                 <td>{{'+'.$data->phone_country->phone_code.' '.$data->phone}}</td>
                                             </tr>
+                                            @if ($data->whatsapp_no)
+                                                <tr>
+                                                    <td><strong>Vendor Phone</strong></td>
+                                                    <td>{{'+'.$data->whatsapp_country->phone_code.' '.$data->whatsapp_no}}</td>
+                                                </tr>
+                                            @endif
                                             <tr>
                                                 <td><strong>Address</strong></td>
                                                 <td>{{$data->vendor_address}}</td>
@@ -38,6 +44,10 @@
                                             <tr>
                                                 <td><strong>Pincode</strong></td>
                                                 <td>{{$data->pincode}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Vendor Status</strong></td>
+                                                <td>{{displayStatus($data->status)}}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -51,18 +61,18 @@
                                                     <th>Packaging Material Name</th>
                                                     <th>Recommendation Engine Name</th>
                                                     <th>Product Name</th>
-                                                    <th>Minimum Amount Profit</th>
-                                                    <th>Minimum Stock Quantity</th>
+                                                    <th>Commission Rate Per Kg</th>
+                                                    <th>Commission Rate Per Kg</th>
                                                     <th>Vendor Price</th>
                                                     <th>Date Time</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
 
-                                                @foreach ($vendorMaterialMapping as $value)
+                                                @foreach ($vendor_material_mapping as $value)
                                                     <tr>
-                                                        <td>{{ $value->material->material_name }}</td>
-                                                        <td>{{ $value->recommendationEngine->engine_name }}</td>
+                                                        <td>{{ $value->packaging_material->packaging_material_name }}</td>
+                                                        <td>{{ $value->recommendation_engine->engine_name }}</td>
                                                         <td>{{ $value->product->product_name }}</td>
                                                         <td>{{ $value->min_amt_profit }}</td>
                                                         <td>{{ $value->min_stock_qty }}</td>
@@ -70,9 +80,9 @@
                                                         <td>{{ date('d-m-Y H:i A', strtotime($value->updated_at)) }}</td>
                                                     </tr>
                                                 @endforeach
-                                                @if (empty($vendorMaterialMapping->toArray()))
+                                                @if (empty($vendor_material_mapping->toArray()))
                                                     <tr>
-                                                        <td colspan="6" class="text-center">No Material Map Found</td>
+                                                        <td colspan="7" class="text-center">No Material Map Found</td>
                                                     </tr>
                                                 @endif
                                             </tbody>

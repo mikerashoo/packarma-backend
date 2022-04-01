@@ -21,35 +21,24 @@
                                             <div class="col-md-12 row">
                                                 <div class="col-md-6">
                                                     <dl class="row">
-                                                        <dt class="col-sm-4 text-left">Type :</dt>
+                                                        <dt class="col-sm-4 text-left">Subscription Type :</dt>
                                                         <dd class="col-sm-8">{{ subscriptionType($data->type); }}</dd>
                                                     </dl>
                                                     <dl class="row">                                                                        
-                                                        <dt class="col-sm-4 text-left">Amount :</dt>
+                                                        <dt class="col-sm-4 text-left">Subscription Amount :</dt>
                                                         <dd class="col-sm-8">{{  $data->amount }} </dd>
-                                                    </dl>                                                    
+                                                    </dl>                                                     
                                                 </div>
                                             </div>                                    
                                         </div>
                                     </div>
                     			@csrf
                         		<div class="row">
-                        			<div class="col-sm-6">
-                        				<label>Type<span style="color:#ff0000">*</span></label>
-                        				<select class="select2" id="type" name="type" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach($type as $key => $val)
-                                                @if($key == $data->type)
-                                                    <option value="{{$key}}" selected>{{$val}}</option>
-                                                @else
-                                                    <option value="{{$key}}">{{$val}}</option>
-                                                @endif
-                                            @endforeach
-                                        </select><br/>
-                        			</div>
                                     <div class="col-sm-6">
-                        				<label>Amount<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control" type="number" step=".001" id="amount" name="amount"><br/>
+                        				<label>Subscription Amount<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control" type="text" step=".001" id="amount" name="amount" value="{{ $data->amount }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
+                                        {{-- passing subscription type  readonly in hidden form --}}
+                                        <input type="hidden" id="type" name="type" value="{{ $data->type }}" readonly>
                         			</div>                        		
                         		</div>
                         		<hr>

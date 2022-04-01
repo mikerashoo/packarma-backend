@@ -93,10 +93,29 @@ class VendorController extends Controller
                         return $approvalStatus;                        
     
                     })
+                    ->editColumn('vendor_status', function ($event) {
+                        $vendor_status = checkPermission('vendor_status');
+                        $status = '';
+                        if($vendor_status) {
+                            if($event->status == '1') {
+                                $status .= ' <input type="checkbox" data-url="publishVendor" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
+                            } else {
+                                $status .= ' <input type="checkbox" data-url="publishVendor" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
+                            }
+                        }else{
+                            $db_status = $event->status;
+                            $bg_class = 'bg-danger';
+                            if($db_status == '1'){
+                                $bg_class = 'bg-success';
+                            }
+                            $displayStatus = displayStatus($db_status);
+                            $status = '<span class="'.$bg_class.' text-center rounded p-1 text-white">'. $displayStatus.'</span>'; 
+                        }
+	                    return $status;
+	                })
 	                ->editColumn('action', function ($event) {
                         $vendor_view = checkPermission('vendor_view');
                         $vendor_edit = checkPermission('vendor_edit');
-	                    $vendor_status = checkPermission('vendor_status');
 	                    $vendor_material_map = checkPermission('vendor_material_map');
                         $actions = '<span style="white-space:nowrap;">';
                         if($vendor_view) {
@@ -113,7 +132,7 @@ class VendorController extends Controller
                         return $actions;
 	                }) 
 	                ->addIndexColumn()
-	                ->rawColumns(['vendor_name','vendor_approval_status','mark_featured','action'])->setRowId('id')->make(true);
+	                ->rawColumns(['vendor_name','vendor_approval_status', 'vendor_status', 'mark_featured','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -134,7 +153,8 @@ class VendorController extends Controller
        *   Uses : To load Add vendor page
     */
     public function add() {
-        $data['country'] = Country::all();
+        $data['phone_country'] = Country::all();
+        $data['whatsapp_country'] = Country::all();
         $data['currency'] = Currency::all();
         return view('backend/vendor/vendor_add',$data);
     }
@@ -148,23 +168,10 @@ class VendorController extends Controller
     */
     public function edit($id) {
         $data['data'] = Vendor::find($id);
-        $data['country'] = Country::all();
+        $data['phone_country'] = Country::all();
+        $data['whatsapp_country'] = Country::all();
         $data['currency'] = Currency::all();
         return view('backend/vendor/vendor_edit',$data);
-    }
-
-    /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 25-Mar-2022
-       *   Uses :  To load view vendor page
-       *   @param int $id
-       *   @return Response
-    */
-    public function view($id) {
-        $data['data'] = Vendor::with('country')->find($id);
-        $data['vendorGradeMapping'] = VendorMaterialMapping::with('material')->where('vendor_id', '=', $id)->get();
-        return view('backend/vendor/vendor_view',$data);
-        
     }
 
     /**
@@ -190,9 +197,13 @@ class VendorController extends Controller
             if(isset($response[0])){
                 errorMessage('Vendor Name Already Exist', $msg_data);
             }
-            $CheckPhoneresponse = Vendor::where([['country_id',$request->country_phone_code],['phone', $request->phone],['id', '<>', $_GET['id']]])->get()->toArray();
+            $CheckPhoneresponse = Vendor::where([['phone_country_id',$request->country_phone_code],['phone', $request->phone],['id', '<>', $_GET['id']]])->get()->toArray();
             if(isset($CheckPhoneresponse[0])){
-                errorMessage('Vendor Phone Already Exist', $msg_data);
+                errorMessage('Phone Number Already Exist', $msg_data);
+            }
+            $CheckPhoneresponse = Vendor::where([['whatsapp_country_id',$request->whatsapp_phone_code],['whatsapp_no', $request->whatsapp_no],['id', '<>', $_GET['id']]])->get()->toArray();
+            if(isset($CheckPhoneresponse[0])){
+                errorMessage('Whatsapp Number Already Exist', $msg_data);
             }
             $tblObj = Vendor::find($_GET['id']);
             $msg = "Data Updated Successfully";
@@ -204,7 +215,11 @@ class VendorController extends Controller
             }
             $CheckPhoneresponse = Vendor::where([['phone_country_id',($request->country_phone_code)],['phone',$request->phone]])->get()->toArray();
             if(isset($CheckPhoneresponse[0])){
-                errorMessage('Vendor Phone Already Exist', $msg_data);
+                errorMessage('Phone Number Already Exist', $msg_data);
+            }
+            $CheckPhoneresponse = Vendor::where([['whatsapp_country_id',($request->whatsapp_phone_code)],['whatsapp_no',$request->whatsapp_no]])->get()->toArray();
+            if(isset($CheckPhoneresponse[0])){
+                errorMessage('Whatsapp Number Already Exist', $msg_data);
             }
             $msg = "Data Saved Successfully";
         }
@@ -242,25 +257,18 @@ class VendorController extends Controller
         successMessage($msg , $msg_data);
     }
 
-    /**
+     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 25-Mar-2022
-       *   Uses :  To publish or unpublish Vendor records
-       *   @param Request request
+       *   Uses :  To load view vendor page
+       *   @param int $id
        *   @return Response
     */
-    public function updateStatus(Request $request)
-    {
-        $msg_data = array();
-        $recordData = Vendor::find($request->id);
-        $recordData->status = $request->status;
-        $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
-        }
+    public function view($id) {
+        $data['data'] = Vendor::with('phone_country','whatsapp_country','packaging_material')->find($id);
+        $data['vendor_material_mapping'] = VendorMaterialMapping::with('packaging_material','recommendation_engine','product')->where('vendor_id', '=', $id)->get();
+        return view('backend/vendor/vendor_view',$data);
+        
     }
 
     /**
@@ -355,6 +363,27 @@ class VendorController extends Controller
         }
         else {
         	successMessage('Vendor unmark as Featured', $msg_data);
+        }
+    }
+
+    /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 01-April-2022
+       *   Uses :  To publish or unpublish vendor records
+       *   @param Request request
+       *   @return Response
+    */
+    public function updateStatus(Request $request)
+    {
+        $msg_data = array();
+        $recordData = Vendor::find($request->id);
+        $recordData->status = $request->status;
+        $recordData->save();
+        if($request->status == 1) {
+        	successMessage('Published', $msg_data);
+        }
+        else {
+        	successMessage('Unpublished', $msg_data);
         }
     }
 }

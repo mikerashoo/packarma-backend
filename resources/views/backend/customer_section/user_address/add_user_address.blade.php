@@ -22,13 +22,15 @@
                                     <div class="col-sm-6">
                                         <label>User<span style="color:#ff0000">*</span></label>
                                         <select class="select2 required" id="user" name="user" style="width: 100% !important;">
+                                            @if (!isset($id))
+                                                <option value="">Select</option>
+                                            @endif
                                             @foreach ($user as $users)
                                             @if (isset($id))
                                                 @if ($users->id == $id)
                                                     <option selected value="{{ $users->id }}">{{ $users->name }}</option>
                                                 @endif
                                             @else
-                                                <option value="">Select</option>
                                                 <option value="{{ $users->id }}">{{ $users->name }}</option>
                                             @endif
                                         @endforeach

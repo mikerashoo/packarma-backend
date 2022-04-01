@@ -61,7 +61,7 @@
                                             <div class="col-sm-6">
                                                 <label>Banner Image<span class="text-danger">*</span></label>
                                                 <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.BANNER'); ?></p>
-                                                <input type="file" id="banner_image" name="banner_image" class="form-control required" accept="banner_image/png, banner_image/jpg, banner_image/jpeg" onchange="checkFiles(this.files)"><br/>
+                                                <input type="file" id="banner_image" name="banner_image" class="form-control required" accept="image/png, image/jpg, image/jpeg, image/svg" onchange="checkFiles(this.files)"><br/>
                                             </div>
                                         </div>
                                     </div>

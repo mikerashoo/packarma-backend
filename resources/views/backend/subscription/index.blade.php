@@ -22,12 +22,12 @@
                             	<div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
                                         <div class="col-sm-4">
-                                            <label>Type</label>
+                                            <label>Subscription Type</label>
                                             <select class="form-control mb-3 select2" id="search_type" name="search_type" style="width: 100% !important;">
                                                 <option value="">Select</option>
                                                 @foreach($data['type'] as $key => $val)
                                                     <option value="{{$key}}">{{$val}}</option>
-                                            @endforeach
+                                                @endforeach
                                             </select><br/>
                                         </div>                                                                    
                                         <div class="col-md-4">
@@ -44,7 +44,7 @@
                                                     <th id="amount" data-orderable="false" data-searchable="false">Amount</th>
                                                     <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>
                                                     @if($data['subscription_edit'])
-                                                    <th id="status" data-orderable="false" data-searchable="false" width="130px">Action</th>
+                                                        <th id="status" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>
 				                            </thead>

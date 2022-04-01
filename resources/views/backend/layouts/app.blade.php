@@ -280,6 +280,11 @@
                                         <a href="vendor_material_map" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Material Map</a>
                                     </li>
                                 @endif
+                                @if(in_array('vendor_warehouse', $permission_array) || session('data')['role_id'] == 1)
+                                    <li class="{{ Request::path() ==  'webadmin/vendor_warehouse' ? 'active' : ''  }}">
+                                        <a href="vendor_warehouse" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Warehouse</a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
                     </ul>

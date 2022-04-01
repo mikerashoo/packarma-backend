@@ -12,7 +12,7 @@ class SubscriptionController extends Controller
 {
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 03-March-2022
+       *   Created On : 01-April-2022
        *   Uses :  To show subscription listing page  
     */
     public function index() 
@@ -24,7 +24,7 @@ class SubscriptionController extends Controller
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 03-March-2022
+       *   Created On : 01-April-2022
        *   Uses :  display dynamic data in datatable for subscription page  
        *   @param Request request
        *   @return Response    
@@ -76,7 +76,7 @@ class SubscriptionController extends Controller
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 03-Mar-2022
+       *   Created On : 01-April-2022
        *   Uses :  To load Edit subscription page
        *   @param int $id
        *   @return Response
@@ -89,7 +89,7 @@ class SubscriptionController extends Controller
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 03-Mar-2022
+       *   Created On : 01-April-2022
        *   Uses :  To store subscription data in table
        *   @param Request request
        *   @return Response
@@ -100,32 +100,32 @@ class SubscriptionController extends Controller
         $msg = "";
         $validationErrors = $this->validateRequest($request);
 		if (count($validationErrors)) {
-            \Log::error("Review Validation Exception: " . implode(", ", $validationErrors->all()));
+            \Log::error("Subscription Validation Exception: " . implode(", ", $validationErrors->all()));
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
         if(isset($_GET['id'])) {            
             $getKeys = true;
             $subscriptionType = subscriptionType('',$getKeys);
             if (in_array( $request->type, $subscriptionType))
-             {
+            {
                 $tableObject = Subscription::find($_GET['id']);            
-                $msg = "Subscription Updated Successfully";
+                $msg = "Subscription Amount Updated Successfully";
             }
             else{
                 errorMessage('Subscription Does not Exists.', $msg_data);
             }
         } 
         $tableObject->type = $request->type;
+        $tableObject->amount = $request->amount;
         $tableObject->updated_at = date('Y-m-d H:i:s');
         $tableObject->updated_by =  session('data')['id'];
-        $tableObject->amount = $request->amount;
         $tableObject->save();
         successMessage($msg , $msg_data);
     }
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 03-Mar-2022
+       *   Created On : 01-April-2022
        *   Uses :  Subscription Form Validation part will be handle by below function
        *   @param Request request
        *   @return Response
@@ -133,8 +133,8 @@ class SubscriptionController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'type' => 'string|required',
-            'amount' => 'regex:/^\d+(\.\d{1,3})?$/|required',
+            'type' => 'required|string',
+            'amount' => 'required|regex:/^\d+(\.\d{1,3})?$/|required',
         ])->errors();
     }
 }

@@ -41,7 +41,10 @@
                                                     <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>
                                                     <th id="mark_featured" data-orderable="false" data-searchable="false">Mark Featured</th>
                                                     <th id="vendor_approval_status" data-orderable="false" data-searchable="false">Approval Status</th>
-                                                    @if($data['vendor_status'] || $data['vendor_edit'] || $data['vendor_material_map']) 
+                                                    @if($data['vendor_status'])
+                                                        <th id="vendor_status" data-orderable="false" data-searchable="false">Status</th>
+                                                    @endif
+                                                    @if($data['vendor_edit'] || $data['vendor_material_map']) 
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

@@ -36,7 +36,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	//Roles
 	Route::get('/roles', 'AdminController@roles');
 	Route::post('/role_data', 'AdminController@roleData')->name('role_data');
-	Route::get('role_permission/{id}','AdminController@assignRolePermission');
+	Route::get('/role_permission/{id}','AdminController@assignRolePermission');
 	Route::post('/publishPermission', 'AdminController@publishPermission');
 
 	//staff
@@ -44,7 +44,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/staff_data', 'StaffController@staffData')->name('staff_data');
 	Route::get('/staff_add', 'StaffController@addStaff');
 	Route::post('/saveStaff', 'StaffController@saveStaff');
-	Route::get('staff_edit/{id}','StaffController@editStaff');
+	Route::get('/staff_edit/{id}','StaffController@editStaff');
 	Route::post('/publishStaff', 'StaffController@publishStaff');
 
 	//City
@@ -52,7 +52,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/city_data', 'CityController@fetch')->name('city_data');
 	Route::get('/city_add', 'CityController@add');
 	Route::post('/saveCity', 'CityController@saveFormData');
-	Route::get('city_edit/{id}','CityController@edit');
+	Route::get('/city_edit/{id}','CityController@edit');
 	Route::post('/publishCity', 'CityController@updateStatus');
 
 	//Category
@@ -60,25 +60,25 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/category_data', 'CategoryController@fetch')->name('category_data');
 	Route::get('/category_add', 'CategoryController@add');
 	Route::post('/saveCategory', 'CategoryController@saveFormData');
-	Route::get('category_edit/{id}','CategoryController@edit');
+	Route::get('/category_edit/{id}','CategoryController@edit');
 	Route::post('/publishCategory', 'CategoryController@updateStatus');
-	Route::get('category_view/{id}','CategoryController@view');
+	Route::get('/category_view/{id}','CategoryController@view');
 
 	//Sub Category
 	Route::get('/sub_category', 'SubCategoryController@index');
 	Route::post('/sub_category_data', 'SubCategoryController@fetch')->name('sub_category_data');
 	Route::get('/sub_category_add', 'SubCategoryController@add');
-	Route::post('saveSubCategory', 'SubCategoryController@saveFormData');
-	Route::get('sub_category_edit/{id}','SubCategoryController@edit');
+	Route::post('/saveSubCategory', 'SubCategoryController@saveFormData');
+	Route::get('/sub_category_edit/{id}','SubCategoryController@edit');
 	Route::post('/publishSubCategory', 'SubCategoryController@updateStatus');
-	Route::get('sub_category_view/{id}','SubCategoryController@view');
+	Route::get('/sub_category_view/{id}','SubCategoryController@view');
 
 	//Company
 	Route::get('/company', 'CompanyController@index');
 	Route::post('/company_data', 'CompanyController@fetch')->name('company_data');
 	Route::get('/company_add', 'CompanyController@add');
 	Route::post('/saveCompany', 'CompanyController@saveFormData');
-	Route::get('company_edit/{id}','CompanyController@edit');
+	Route::get('/company_edit/{id}','CompanyController@edit');
 	Route::post('/publishCompany', 'CompanyController@updateStatus');
 
 	//Country
@@ -86,7 +86,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/country_data', 'CountryController@fetch')->name('country_data');
 	Route::get('/country_add', 'CountryController@addCountry');
 	Route::post('/saveCountry', 'CountryController@saveFormData');
-	Route::get('country_edit/{id}','CountryController@editCountry');
+	Route::get('/country_edit/{id}','CountryController@editCountry');
 	Route::post('/publishCountry', 'CountryController@updateStatus');
 
 	//state
@@ -94,7 +94,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/state_data', 'StateController@fetch')->name('state_data');
 	Route::get('/state_add', 'StateController@add');
 	Route::post('/saveState', 'StateController@saveFormData');
-	Route::get('state_edit/{id}','StateController@edit');
+	Route::get('/state_edit/{id}','StateController@edit');
 	Route::post('/publishState', 'StateController@updateStatus');
 
 	//Currency
@@ -102,21 +102,21 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/currency_data', 'CurrencyController@fetch')->name('currency_data');
 	Route::get('/currency_add', 'CurrencyController@addCurrency');
 	Route::post('/saveCurrency', 'CurrencyController@saveFormData');
-	Route::get('currency_edit/{id}','CurrencyController@editCurrency');
+	Route::get('/currency_edit/{id}','CurrencyController@editCurrency');
 	Route::post('/publishCurrency', 'CurrencyController@updateStatus');
 
 	//Subscription
 	Route::get('/subscription', 'SubscriptionController@index');
 	Route::post('/subscription_data', 'SubscriptionController@fetch')->name('subscription_data');
-	Route::get('subscriptionEdit/{id}','SubscriptionController@editSubscription');
+	Route::get('/subscriptionEdit/{id}','SubscriptionController@editSubscription');
 	Route::post('/subscriptionUpdate', 'SubscriptionController@updateSubscription');
 
 	//Order
 	Route::get('/orders', 'OrderController@index');
 	Route::post('/order_data', 'OrderController@fetch')->name('order_data');
-	Route::get('orderEdit/{id}','OrderController@editOrder');
+	Route::get('/orderEdit/{id}','OrderController@editOrder');
 	Route::post('/orderUpdate', 'OrderController@updateDeliveryStatus');
-	Route::get('orderPaymentUpdate/{id}','OrderController@updateOrderPayment');
+	Route::get('/orderPaymentUpdate/{id}','OrderController@updateOrderPayment');
 	Route::post('/orderUpdatePayment', 'OrderController@updatePaymentStatus');
 	Route::get('/order_view/{id}', 'OrderController@viewOrder');
 
@@ -126,7 +126,7 @@ Route::group(['middleware'=>['customAuth']],function(){
    //User approval List
    Route::get('/user_approval_list','UserController@indexApprovalList');
    Route::post('/approval_list_data', 'UserController@fetchUserApprovalList')->name('approval_list_data');
-   Route::get('approval_list_update/{id}','UserController@updateApproval');
+   Route::get('/approval_list_update/{id}','UserController@updateApproval');
    Route::post('/saveApprovalStatus', 'UserController@saveApprovalListFormData');
    Route::get('/approval_list_view/{id}', 'UserController@viewApprovalList');
 
@@ -134,7 +134,7 @@ Route::group(['middleware'=>['customAuth']],function(){
    Route:: get('/user_list','UserController@indexUserList');
    Route::post('/user_list_data', 'UserController@fetchUserList')->name('user_list_data');
    Route::get('/add_user', 'UserController@addUser');
-   Route::get('edit_user_list/{id}','UserController@editUserList');
+   Route::get('/edit_user_list/{id}','UserController@editUserList');
    Route::post('/saveUser', 'UserController@saveUserListFormData');
    Route::post('/publishUser', 'UserController@updateStatus');
    Route::get('/userListView/{id}', 'UserController@viewUserList');
@@ -144,73 +144,71 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/user_address_data', 'UserAddressController@fetch')->name('user_address_data');
 	Route::get('/add_user_address', 'UserAddressController@add');
 	Route::post('/saveUserAddress', 'UserAddressController@saveFormData');
-	Route::get('user_address_edit/{id}','UserAddressController@edit');
+	Route::get('/user_address_edit/{id}','UserAddressController@edit');
 	Route::get('/user_address_view/{id}', 'UserAddressController@view');
 	Route::post('/publishUserAddress', 'UserAddressController@updateStatus');
+
+	//user subscription payment
+	Route::get('/user_subscription_payment','UserSubscriptionPaymentController@index');
+	Route::post('/user_subscription_data', 'UserSubscriptionPaymentController@fetch')->name('user_subscription_data');
+	Route::get('/user_subscription_payment_view/{id}', 'UserSubscriptionPaymentController@view');
 
 	//Banners
 	Route::get('/banners', 'BannerController@index');
 	Route::post('/banners_data', 'BannerController@fetch')->name('banners_data');
 	Route::get('/banners_add', 'BannerController@add');
 	Route::post('/saveBanners', 'BannerController@saveFormData');
-	Route::get('banners_edit/{id}','BannerController@edit');
+	Route::get('/banners_edit/{id}','BannerController@edit');
 	Route::post('/publishBanners', 'BannerController@updateStatus');
-	Route::get('banners_view/{id}','BannerController@view');
-
-	//user subscription payment
-	Route:: get('/user_subscription_payment','UserSubscriptionPaymentController@index');
-	Route::post('/user_subscription_data', 'UserSubscriptionPaymentController@fetch')->name('user_subscription_data');
-	Route::get('/user_subscription_payment_view/{id}', 'UserSubscriptionPaymentController@view');
+	Route::get('/banners_view/{id}','BannerController@view');
 
   	//Vendor
 	Route::get('/vendor_list', 'VendorController@index');
 	Route::post('/vendor_data', 'VendorController@fetch')->name('vendor_data');
 	Route::get('/vendor_add', 'VendorController@add');
 	Route::post('/saveVendor', 'VendorController@saveFormData');
-	Route::get('vendor_edit/{id}','VendorController@edit');
+	Route::get('/vendor_edit/{id}','VendorController@edit');
 	Route::get('/vendor_view/{id}', 'VendorController@view');
 	Route::post('/publishVendor', 'VendorController@updateStatus');
-	Route::get('vendor_approval/{id}','VendorController@vendorApproval');  
+	Route::get('/vendor_approval/{id}','VendorController@vendorApproval');  
 	Route::post('/updateVendorApproval', 'VendorController@updateApprovalStatus');
 	Route::post('/featuredVendor', 'VendorController@markFeatured');
 
 	//Vendor Grade Mapping
 	Route::get('/vendor_material_map', 'VendorMaterialController@index');
-	Route::post('/vendorMaterialMapData', 'VendorMaterialController@fetch')->name('vendorMaterialMapData');
-	Route::get('/vendorMaterialMapAdd', 'VendorMaterialController@addVendorMaterialMap');
-	Route::post('/saveVendorMaterialMap', 'VendorMaterialController@saveVendorMaterialMapFormData');
-	Route::get('vendorMaterialMapEdit/{id}','VendorMaterialController@editVendorMaterialMap');
-	Route::get('/vendorMaterialMapView/{id}', 'VendorMaterialController@viewVendorMaterialMap');
-	Route::post('saveVendorGradeMapping', 'VendorMaterialController@saveFormDataVendor');
-	Route::get('/vendorGradeMapView/{id}', 'VendorMaterialController@viewVendorGradeMap');
-	Route::post('/publishVendorGradeMap', 'VendorMaterialController@updateStatus');
+	Route::post('/vendor_material_map_data', 'VendorMaterialController@fetch')->name('vendor_material_map_data');
+	Route::get('/vendor_material_map_add', 'VendorMaterialController@add');
+	Route::post('/saveVendorMaterialMap', 'VendorMaterialController@saveFormData');
+	Route::get('/vendor_material_map_edit/{id}','VendorMaterialController@edit');
+	Route::get('/vendor_material_map_view/{id}', 'VendorMaterialController@view');
+	Route::post('/publishVendorMaterialMap', 'VendorMaterialController@updateStatus');
 
 	//Product Form
 	Route::get('/product_form', 'ProductFormController@index');
 	Route::post('/product_form_data', 'ProductFormController@fetch')->name('product_form_data');
 	Route::get('/product_form_add', 'ProductFormController@add');
 	Route::post('/saveProductForm', 'ProductFormController@saveFormData');
-	Route::get('product_form_edit/{id}','ProductFormController@edit');
+	Route::get('/product_form_edit/{id}','ProductFormController@edit');
 	Route::post('/publishProductForm', 'ProductFormController@updateStatus');
-	Route::get('product_form_view/{id}', 'ProductFormController@view');
+	Route::get('/product_form_view/{id}', 'ProductFormController@view');
 
 	//Packing Types
 	Route::get('/packing_type', 'PackingTypeController@index');
 	Route::post('/packing_type_data', 'PackingTypeController@fetch')->name('packing_type_data');
 	Route::get('/packing_type_add', 'PackingTypeController@add');
 	Route::post('/savePackingType', 'PackingTypeController@saveFormData');
-	Route::get('packing_type_edit/{id}','PackingTypeController@edit');
+	Route::get('/packing_type_edit/{id}','PackingTypeController@edit');
 	Route::post('/publishPackingType', 'PackingTypeController@updateStatus');
-	Route::get('packing_type_view/{id}', 'PackingTypeController@view');
+	Route::get('/packing_type_view/{id}', 'PackingTypeController@view');
 
 	//Packaging Machine
 	Route::get('/packaging_machine', 'PackagingMachineController@index');
 	Route::post('/packaging_machine_data', 'PackagingMachineController@fetch')->name('packaging_machine_data');
 	Route::get('/packaging_machine_add', 'PackagingMachineController@add');
 	Route::post('/savePackagingMachine', 'PackagingMachineController@saveFormData');
-	Route::get('packaging_machine_edit/{id}','PackagingMachineController@edit');
+	Route::get('/packaging_machine_edit/{id}','PackagingMachineController@edit');
 	Route::post('/publishPackagingMachine', 'PackagingMachineController@updateStatus');
-	Route::get('packaging_machine_view/{id}', 'PackagingMachineController@view');
+	Route::get('/packaging_machine_view/{id}', 'PackagingMachineController@view');
 
 	//Packaging Treatment
 	Route::get('/packaging_treatment', 'PackagingTreatmentController@index');
@@ -226,28 +224,36 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/product_data', 'ProductController@fetch')->name('product_data');
 	Route::get('/product_add', 'ProductController@add');
 	Route::post('/saveProduct', 'ProductController@saveFormData');
-	Route::get('product_edit/{id}','ProductController@edit');
+	Route::get('/product_edit/{id}','ProductController@edit');
 	Route::post('/publishProduct', 'ProductController@updateStatus');
-	Route::get('product_view/{id}', 'ProductController@view');
+	Route::get('/product_view/{id}', 'ProductController@view');
 
 	//Packaging material
 	Route::get('/packaging_material', 'PackagingMaterialController@index');
 	Route::post('/packaging_material_data', 'PackagingMaterialController@fetch')->name('packaging_material_data');
 	Route::get('/packaging_material_add', 'PackagingMaterialController@add');
 	Route::post('/savePackagingMaterial', 'PackagingMaterialController@saveFormData');
-	Route::get('packaging_material_edit/{id}','PackagingMaterialController@edit');
+	Route::get('/packaging_material_edit/{id}','PackagingMaterialController@edit');
 	Route::post('/publishPackagingMaterial', 'PackagingMaterialController@updateStatus');
-	Route::get('packaging_material_view/{id}', 'PackagingMaterialController@view');
+	Route::get('/packaging_material_view/{id}', 'PackagingMaterialController@view');
 
 	//recommendation engine
 	Route::get('/recommendation_engine', 'RecommendationEngineController@index');
 	Route::post('/recommendation_engine_data', 'RecommendationEngineController@fetch')->name('recommendation_engine_data');
 	Route::get('/recommendation_engine_add', 'RecommendationEngineController@add');
 	Route::post('/saveRecommendationEngine', 'RecommendationEngineController@saveFormData');
-	Route::get('recommendation_engine_edit/{id}','RecommendationEngineController@edit');
+	Route::get('/recommendation_engine_edit/{id}','RecommendationEngineController@edit');
 	Route::post('/publishRecommendationEngine', 'RecommendationEngineController@updateStatus');
-	Route::get('recommendation_engine_view/{id}', 'RecommendationEngineController@view');
+	Route::get('/recommendation_engine_view/{id}', 'RecommendationEngineController@view');
 
+	//Vendor Warehouse
+	Route::get('/vendor_warehouse', 'VendorWarehouseController@index');
+	Route::post('/vendor_warehouse_data', 'VendorWarehouseController@fetch')->name('vendor_warehouse_data');
+	Route::get('/vendor_warehouse_add', 'VendorWarehouseController@add');
+	Route::post('/saveVendorWarehouse', 'VendorWarehouseController@saveFormData');
+	Route::get('/vendor_warehouse_edit/{id}','VendorWarehouseController@edit');
+	Route::post('/publishVendorWarehouse', 'VendorWarehouseController@updateStatus');
+	Route::get('/vendor_warehouse_view/{id}', 'VendorWarehouseController@view');
 
 });
 

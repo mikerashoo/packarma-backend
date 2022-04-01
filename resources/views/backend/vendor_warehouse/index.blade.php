@@ -12,30 +12,37 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-12 col-sm-7">
-                                            <h5 class="pt-2">Manage User Subscription Payment List</h5>
+                                            <h5 class="pt-2">Manage Vendor Warehouse List</h5>
                                         </div>
                                         <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                             <button class="btn btn-sm btn-outline-danger px-3 py-1 mr-2" id="listing-filter-toggle"><i class="fa fa-filter"></i> Filter</button>
+                                            @if($data['vendor_warehouse_add'])
+                                                <a href="vendor_warehouse_add" class="btn btn-sm btn-outline-primary px-3 py-1 src_data"><i class="fa fa-plus"></i> Add Vendor Warehouse</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             	<div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
+                                        <div class="col-md-4">
+                                            <label>Warehouse Name</label>
+                                            <input class="form-control mb-3" type="text" id="search_warehouse_name" name="search_warehouse_name">
+                                        </div>
                                         <div class="col-sm-4">
-                                            <label>User Name</label>
-                                            <select class="form-control mb-3 select2" id="search_user_name" name="search_user_name" style="width: 100% !important;">
+                                            <label>Vendor Name</label>
+                                            <select class="form-control mb-3 select2" id="search_vendor" name="search_vendor" style="width: 100% !important;">
                                                 <option value="">Select</option>
-                                                @foreach($data['user'] as $users)
-                                                    <option value="{{$users->id}}">{{$users->name}}</option>                                                
+                                                @foreach($data['vendor'] as $vendors)
+                                                    <option value="{{$vendors->id}}">{{$vendors->vendor_name}}</option>
                                                 @endforeach
                                             </select><br/>
                                         </div>
                                         <div class="col-sm-4">
-                                            <label>Subscription Type</label>
-                                            <select class="form-control mb-3 select2" id="search_subscription_type" name="search_subscription_type" style="width: 100% !important;">
+                                            <label>City Name</label>
+                                            <select class="form-control mb-3 select2" id="search_city" name="search_city" style="width: 100% !important;">
                                                 <option value="">Select</option>
-                                                @foreach($data['subscriptionType'] as $key => $val)
-                                                <option value="{{$key}}">{{$val}}</option>                                                 
+                                                @foreach($data['city'] as $cities)
+                                                    <option value="{{$cities->id}}">{{$cities->city_name}}</option>
                                                 @endforeach
                                             </select><br/>
                                         </div>
@@ -45,16 +52,16 @@
                                         </div>
                                     </div>
                             		<div class="table-responsive">
-                                        <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="user_subscription_data">
+                                        <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="vendor_warehouse_data">
 				                            <thead>
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
-                                                    <th id="name" data-orderable="false" data-searchable="false">User Name</th> 
-                                                    <th id="subscription_type" data-orderable="false" data-searchable="false">Subscription Type</th>
-                                                    <th id="payment_mode" data-orderable="false" data-searchable="false">Payment Mode</th>
-                                                    <th id="payment_status" data-orderable="false" data-searchable="false">Payment Status</th>
-                                                    <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>                                                    
-                                                    @if($data['user_subscription_payment_view'])
+                                                    <th id="warehouse_name" data-orderable="false" data-searchable="false">Warehouse Name</th>
+                                                    <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>
+                                                    <th id="address" data-orderable="false" data-searchable="false">Address</th>
+                                                    <th id="city" data-orderable="false" data-searchable="false">City</th>
+                                                    <th id="state" data-orderable="false" data-searchable="false">State</th>
+                                                    @if($data['vendor_warehouse_view'] || $data['vendor_warehouse_edit'] || $data['vendor_warehouse_status'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>
@@ -71,3 +78,6 @@
     </div>
 </div>
 @endsection
+<script>
+    $('.select2').select2();
+</script>
