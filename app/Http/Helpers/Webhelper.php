@@ -172,7 +172,7 @@ if (! function_exists('customerEnquiryType')) {
     function customerEnquiryType($displayValue="",$allKeys = false) {
         $returnArray = array(
             'general' => 'General',
-            'grade' => 'Grade'            
+            'engine' => 'Engine'            
         );
         if(!empty($displayValue)){
             $returnArray = $returnArray[$displayValue];
@@ -184,7 +184,7 @@ if (! function_exists('customerEnquiryType')) {
     }
 }
 
-/**
+    /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 01-Mar-2022
        *   Uses :  To fetch value in customer enquiry quote type       
@@ -192,13 +192,36 @@ if (! function_exists('customerEnquiryType')) {
     if (! function_exists('customerEnquiryQuoteType')) {
         function customerEnquiryQuoteType($displayValue="" ,$allKeys = false) {
             $returnArray = array(
-                'pending' => 'Pending',
+                'enquired' => 'Enquired',
                 'map_to_vendor' => 'Map To Vendor',
-                'quoted_vendor' => 'Quoted Vendor',
-                'requote' => 'Requote',
-                'accept_cust' => 'Accept Customer',
-                'reject_cust' => 'Reject Customer'
+                'accept_cust' => 'Accept By Customer',
+                'closed' => 'Closed'
                 
+            );
+            if(!empty($displayValue)){
+                $returnArray = $returnArray[$displayValue];
+            }
+            if(empty($displayValue) && $allKeys){
+                  $returnArray = array_keys($returnArray);
+            }
+            return $returnArray;
+        }
+    }
+
+    /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 01-Mar-2022
+       *   Uses :  To fetch value in customer enquiry quote type       
+    */
+    if (! function_exists('vendorEnquiryStatus')) {
+        function vendorEnquiryStatus($displayValue="" ,$allKeys = false) {
+            $returnArray = array(
+                'mapped' => 'Mapped',
+                'quoted' => 'Quoted',
+                'viewed' => 'Viewed',
+                'accept' => 'Accept',
+                'reject' => 'Reject',
+                'requote' => 'Requote',
             );
             if(!empty($displayValue)){
                 $returnArray = $returnArray[$displayValue];
@@ -309,7 +332,10 @@ if (! function_exists('customerEnquiryType')) {
         function paymentMode($displayValue="",$allKeys = false) {
             $returnArray = array(
                 'cod' => 'Cash on Delivery',
-                'online' => 'Online'
+                'bank_transfer' => 'Bank Transfer',
+                'payment_gateway' => 'Payment Gateway',
+                'cheque' => 'Cheque',
+                'demand_draft' => 'Demand Draft',
             );
             if(!empty($displayValue)){
                 $returnArray = $returnArray[$displayValue];

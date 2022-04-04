@@ -6,36 +6,43 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
-use App\Models\Grade;
+use App\Models\Product;
 use App\Models\Vendor;
+use App\Models\Category;
+use App\Models\SubCategory;
+use App\Models\StorageCondition;
+use App\Models\PackagingMachine;
+use App\Models\ProductForm;
+use App\Models\PackingType;
+use App\Models\PackagingTreatment;
+use App\Models\Country;
+use App\Models\Currency;
 use App\Models\OrderPayment;
 use Yajra\DataTables\DataTables;
 
 
 class OrderController extends Controller
 {
-    // public $emptyDate = null; //'0000-00-00 00:00:00';
     /**
-     *  created by : Shiram Mishra
-     *   Created On : 23-Feb-2022
-     *   Uses :  To show Contactus  listing page
+     *  created by : Pradyumn Dwivedi
+     *   Created On : 04-April-2022
+     *   Uses :  To show order  listing page
      */
     public function index()
     {
-        $data['data'] = Grade::all();
         $data['user'] = User::all();
         $data['vendor'] = Vendor::all();
         $data['paymentStatus'] = paymentStatus();
         $data['deliveryStatus'] = deliveryStatus();
-        $data['order_edit'] = checkPermission('order_edit');
         $data['order_view'] = checkPermission('order_view');
+        $data['order_delivery_update'] = checkPermission('order_delivery_update');
         $data['order_payment_update'] = checkPermission('order_payment_update');
-        return view('backend/order/index',["data"=>$data]);
+        return view('backend/order/order_list/index',["data"=>$data]);
     }
 
       /**
-     *   created by : Shriram Mishra
-     *   Created On : 23-Feb-2022
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 04-April-2022
      *   Uses :  display dynamic data in datatable for Contactus  page
      *   @param Request request
      *   @return Response
@@ -44,7 +51,7 @@ class OrderController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Order::with('grade','user','vendor')->orderBy('updated_at','desc');
+                $query = Order::with('user','vendor')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user_id']) && ! is_null($request['search']['search_user_id'])) {
@@ -77,21 +84,21 @@ class OrderController extends Controller
 	                    return date('d-m-Y H:i A', strtotime($event->updated_at));                        
 	                })
                     ->editColumn('action', function ($event) {
-                        $order_edit = checkPermission('order_edit');
                         $order_view = checkPermission('order_view');
+                        $order_delivery_update = checkPermission('order_delivery_update');
                         $order_payment_update = checkPermission('order_payment_update');
                         $actions = '<span style="white-space:nowrap;">';
                         if($order_view) {
                             $actions .= '<a href="order_view/'.$event->id.'" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if($event->order_delivery_status != "delivered"){
-                            if ($order_edit) {
-                                $actions .= '  <a href="orderEdit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update Delivery"><i class="fa fa-edit"></i></a>';
+                            if ($order_delivery_update) {
+                                $actions .= '  <a href="order_delivery_update/' . $event->id . '" class="btn btn-info btn-sm src_data" title="Update Delivery"><i class="fa fa-truck"></i></a>';
                             }
                         }
                         if($event->pending_payment != 0){
                             if ($order_payment_update) {
-                                $actions .= '  <a href="orderPaymentUpdate/' . $event->id . '" class="btn btn-secondary btn-sm src_data" title="Update Payment"><i class="fa fa-money"></i></a>';
+                                $actions .= '  <a href="order_payment_update/' . $event->id . '" class="btn btn-secondary btn-sm src_data" title="Update Payment"><i class="fa fa-money"></i></a>';
                             }
                         }
                         $actions .= '</span>';
@@ -115,16 +122,16 @@ class OrderController extends Controller
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 03-Mar-2022
+       *   Created On : 04-April-2022
        *   Uses :  To load update order delivery status page
        *   @param int $id
        *   @return Response
     */
-    public function editOrder($id) {
-        $data['data'] = Order::with('user','grade')->find($id);
+    public function updateOrderDelivery($id) {
+        $data['data'] = Order::with('user','product','vendor')->find($id);
         $data['deliveryStatus'] = deliveryStatus();
         $data['paymentStatus'] = paymentStatus();
-        return view('backend/order/order_edit',$data);
+        return view('backend/order/order_list/order_delivery_status_update',$data);
     }
 
     /**
@@ -134,20 +141,24 @@ class OrderController extends Controller
        *   @param Request request
        *   @return Response
     */
-    public function updateDeliveryStatus(Request $request)
+    public function updateDeliveryStatusData(Request $request)
     {
     	$msg_data=array();
         $msg = "";
         $validationErrors = $this->validateRequest($request);
 		if (count($validationErrors)) {
-            \Log::error("Delivery Status Validation Exception: " . implode(", ", $validationErrors->all()));
+            \Log::error("Order Delivery Status Validation Exception: " . implode(", ", $validationErrors->all()));
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
+        $deliveryData = Order::find($_GET['id']);
         if(isset($_GET['id'])) {
             $getKeys = true;
             $deliveryStatus = deliveryStatus('',$getKeys);
             if (in_array( $request->order_delivery_status, $deliveryStatus))
-             {
+            {
+                if($request->order_delivery_status == $deliveryData->order_delivery_status){
+                    errorMessage('Order is Already in '.deliveryStatus($request->order_delivery_status).' Status.', $msg_data);
+                }
                 $tableObject = Order::find($_GET['id']);            
                 $msg = "Delivery Status Updated Successfully";
             }
@@ -173,33 +184,33 @@ class OrderController extends Controller
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 08-Mar-2022
+       *   Created On : 04-April-2022
        *   Uses :  To load update order payment status page
        *   @param int $id
        *   @return Response
     */
     public function updateOrderPayment($id) {
-        $data['data'] = Order::with('user','grade','vendor')->find($id);
+        $data['data'] = Order::with('user','product','vendor')->find($id);
         $data['deliveryStatus'] = deliveryStatus();
         $data['paymentStatus'] = paymentStatus();
         $data['paymentMode'] = paymentMode();
-        return view('backend/order/order_payment_status_update',$data);
+        return view('backend/order/order_list/order_payment_status_update',$data);
     }
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 08-Mar-2022
+       *   Created On : 04-April-2022
        *   Uses :  To store order delivery status in table
        *   @param Request request
        *   @return Response
     */
-    public function updatePaymentStatus(Request $request)
+    public function updatePaymentStatusData(Request $request)
     {
     	$msg_data=array();
         $msg = "";
         $validationErrors = $this->validatePaymentRequest($request);
 		if (count($validationErrors)) {
-            \Log::error("Payment Status Validation Exception: " . implode(", ", $validationErrors->all()));
+            \Log::error("Order Payment Status Validation Exception: " . implode(", ", $validationErrors->all()));
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
         $orderData = Order::find($_GET['id']);
@@ -231,22 +242,34 @@ class OrderController extends Controller
         $tableObject  = new OrderPayment;            
         $tableObject->user_id = $request->user_id;
         $tableObject->order_id = $_GET['id'];
-        $tableObject->grade_id = $request->grade_id;
+        $tableObject->product_id = $request->product_id;
         $tableObject->vendor_id = $request->vendor_id;
         $tableObject->payment_mode = $request->payment_mode;
-        $tableObject->payment_status = $request->payment_status;
         $tableObject->amount = $request->amount;
         $tableObject->payment_status = $request->payment_status;
-        if($request->hasfile('order_image')) {
-            $file=$request->file('order_image');
-            $extention=$file->getClientOriginalExtension();
-            $filename = time().'.'.$extention;
-            $file->move('storage/app/public/uploads/order_payment/', $filename);
-            $tableObject->order_image = $filename;
+        $tableObject->gateway_id = $request->gateway_id;
+        $tableObject->gateway_key = $request->gateway_key;
+        if($request->hasFile('order_image')) {
+            $fixedSize = config('global.SIZE.ORDER_PAYMENT');
+            $size = $fixedSize/1000;
+            $fileSize = $request->file('order_image')->getSize();  //check file size
+            if($fileSize >= $fixedSize){
+                errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
+            };
         }
         $tableObject->created_at = date('Y-m-d H:i:s');
         $tableObject->created_by =  session('data')['id'];
         $tableObject->save();
+        $last_inserted_id = $tableObject->id;
+        if($request->hasFile('order_image')) {
+            $image = $request->file('order_image');
+            $actualImage = saveSingleImage($image,'order_payment',$last_inserted_id);
+            $thumbImage = createThumbnail($image,'order_payment',$last_inserted_id,'order_payment');
+            $bannerObj = OrderPayment::find($last_inserted_id);
+            $bannerObj->order_payment_image = $actualImage;
+            $bannerObj->order_payment_thumb_image = $thumbImage;
+            $bannerObj->save();
+        }
         //decreasing pending_payment by amount in order table
         Order::where('id',  $_GET['id'])->decrement('pending_payment', $request->amount);
         if(($request->payment_status == 'fully_paid') && ($request->amount == $orderData->pending_payment )){
@@ -258,19 +281,20 @@ class OrderController extends Controller
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 28-Feb-2022
-       *   Uses :  To view review  
+       *   Created On : 04-April-2022
+       *   Uses :  To view order details
        *   @param int $id
        *   @return Response
-    */
+    */    
+    // 'storage_condition', table pending
     public function viewOrder($id) {
-        $data['data'] = Order::with('user','grade','vendor')->find($id);
-        return view('backend/order/order_view',$data);
+        $data['data'] = Order::with('user','vendor','category','sub_category','product','packaging_machine','product_form','packing_type','packaging_treatment','country','currency')->find($id);
+        return view('backend/order/order_list/order_view',$data);
     }
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 04-Mar-2022
+       *   Created On : 04-April-2022
        *   Uses :  delivery status Form Validation part will be handle by below function
        *   @param Request request
        *   @return Response

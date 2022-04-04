@@ -22,7 +22,7 @@ class CreateVendorQuotationsTable extends Migration
             $table->integer('vendor_warehouse_id')->default(0);
             $table->decimal('vendor_price', $precision = 8, $scale = 3)->comment('Per Kg');
             $table->decimal('commission_amt', $precision = 8, $scale = 3)->comment('Per Kg');
-            $table->string('enquiry_status', 255)->default('pending')->comment('pending|viewed|accept|reject|requote');
+            $table->string('enquiry_status', 255)->default('mapped')->comment('mapped|quoted|viewed|accept|reject|requote');
             $table->enum('status', [1, 0])->default(0);
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);

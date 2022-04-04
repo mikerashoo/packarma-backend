@@ -23,9 +23,9 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#map_to_grade" role="tab" id="page_description-tab" class="nav-link d-flex align-items-center" data-toggle="tab" aria-controls="page_description" aria-selected="false">
+                                    <a href="#masters" role="tab" id="page_description-tab" class="nav-link d-flex align-items-center" data-toggle="tab" aria-controls="page_description" aria-selected="false">
                                         <i class="ft-link mr-2"></i>
-                                        <span class="d-none d-sm-block">Mapped Grade Details</span>
+                                        <span class="d-none d-sm-block">Product Details</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -42,12 +42,16 @@
                                             <div class="table-responsive">
                                                 <table class="table table-striped table-bordered">
                                                     <tr>
-                                                        <td><strong>Description</strong></td>
+                                                        <td><strong>Order ID</strong></td>
                                                         <td>{{$data->description;}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>User Name</strong></td>
                                                         <td>{{$data['user']->name;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="col-sm-5"><strong>Description</strong></td>
+                                                        <td>{{$data->description;}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Enquiry Type</strong></td>
@@ -76,6 +80,10 @@
                                                     <tr>
                                                         <td><strong>Country</strong></td>
                                                         <td>{{$data['country']->country_name;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Enquiry Status</strong></td>
+                                                        <td>{{displayStatus($data->status)}}</td>
                                                     </tr>                                                                                       
                                                     <tr>
                                                         <td><strong>Enquiry Date Time</strong></td>
@@ -86,35 +94,59 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade mt-2" id="map_to_grade" role="tabpanel" aria-labelledby="page_description-tab">
+                                <div class="tab-pane fade mt-2" id="masters" role="tabpanel" aria-labelledby="page_description-tab">
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="table-responsive">
                                                 <table class="table table-striped table-bordered">
-                                                    @if (empty($grade->toArray()))
-                                                        <tr>
-                                                            <td colspan="6" class="text-center">No grade map found</td>
-                                                        </tr>
-                                                    @else
-                                                    @foreach ($grade as $grades)
-                                                        <tr>
-                                                            <th class="col-sm-3">Grade Name</th>
-                                                            <td>{{$grades->grade_name;}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Stock Quantity</th>
-                                                            <td>{{$grades->stock_qty;}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Unit Per Kg</th>
-                                                            <td>{{$grades->unit;}}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Minimumn Order Quantity</th>
-                                                            <td>{{$grades->minimum_order_qty;}}</td>
-                                                        </tr>
-                                                    @endforeach
-                                                    @endif 
+                                                    <tr>
+                                                        <td class="col-sm-5"><strong>Product Name</strong></td>
+                                                        <td>{{$data['product']->product_name;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Category</strong></td>
+                                                        <td>{{$data['category']->category_name;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Sub Category</strong></td>
+                                                        <td>{{$data['sub_category']->sub_category_name }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Shelf Life</strong></td>
+                                                        <td>{{$data->shelf_life }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Product Weight</strong></td>
+                                                        <td>{{$data->product_weight;}}</td>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td><strong>Quantity</strong></td>
+                                                        <td>{{$data->quantity;}}</td>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td><strong>Storage Condition</strong></td>
+                                                        <td>{{$data['storage_condition']->storage_condition_title;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Packaging Machine</strong></td>
+                                                        <td>{{$data['packaging_machine']->packaging_machine_name;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Product Form</strong></td>
+                                                        <td>{{$data['product_form']->product_form_name;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Packing Type</strong></td>
+                                                        <td>{{$data['packing_type']->packing_name;}}</td>
+                                                    </tr>  
+                                                    <tr>
+                                                        <td><strong>Packaging Treatment</strong></td>
+                                                        <td>{{$data['packaging_treatment']->packaging_treatment_name;}}</td>
+                                                    </tr>                                                                                     
+                                                    <tr>
+                                                        <td><strong>Enquiry Date Time</strong></td>
+                                                        <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
+                                                    </tr>
                                                 </table>
                                             </div>
                                         </div>                                    

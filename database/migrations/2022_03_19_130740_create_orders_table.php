@@ -25,7 +25,7 @@ class CreateOrdersTable extends Migration
             $table->integer('storage_condition_id')->default(0);
             $table->integer('packaging_machine_id')->default(0);
             $table->integer('product_form_id')->default(0);
-            $table->integer('packaging_type_id')->default(0);
+            $table->integer('packing_type_id')->default(0);
             $table->integer('packaging_treatment_id')->default(0);
             $table->integer('country_id')->default(0);
             $table->integer('currency_id')->default(0); 

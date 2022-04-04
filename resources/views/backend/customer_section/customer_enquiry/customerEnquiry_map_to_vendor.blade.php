@@ -25,8 +25,8 @@
                                                 <dd class="col-sm-8">{{ $data['user']->name }}</dd>
                                             </dl>
                                             <dl class="row">
-                                                <dt class="col-sm-4 text-left">Grade Name :</dt>
-                                                <dd class="col-sm-8">{{ $data['grade']->grade_name }}</dd>
+                                                <dt class="col-sm-4 text-left">Product Name :</dt>
+                                                <dd class="col-sm-8">{{ $data['product']->product_name }}</dd>
                                             </dl>
                                             <dl class="row">
                                                 <dt class="col-sm-4 text-left">Enquiry Type :</dt>

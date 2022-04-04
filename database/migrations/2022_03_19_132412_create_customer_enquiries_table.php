@@ -15,7 +15,7 @@ class CreateCustomerEnquiriesTable extends Migration
     {
         Schema::create('customer_enquiries', function (Blueprint $table) {
             $table->id();
-            $table->longText('description')->nullable();
+            $table->longText('description');
             $table->string('enquiry_type', 255)->default('general')->comment('general|engine');
             $table->integer('order_id')->default(0);
             $table->integer('category_id')->default(0);
@@ -26,7 +26,7 @@ class CreateCustomerEnquiriesTable extends Migration
             $table->integer('storage_condition_id')->default(0);
             $table->integer('packaging_machine_id')->default(0);
             $table->integer('product_form_id')->default(0);
-            $table->integer('packaging_type_id')->default(0);
+            $table->integer('packing_type_id')->default(0);
             $table->integer('packaging_treatment_id')->default(0);
             $table->longText('address')->nullable();
             $table->integer('country_id')->default(0);
@@ -35,7 +35,7 @@ class CreateCustomerEnquiriesTable extends Migration
             $table->integer('pincode')->default(0);
             $table->integer('quantity')->default(0);
             $table->integer('user_id')->default(0);
-            $table->string('quote_type', 255)->default('pending')->comment('pending|map_to_vendor|quoted_vendor|accept_cust|reject_cust|closed'); //share with sagar sir
+            $table->string('quote_type', 255)->default('enquired')->comment('enquired|map_to_vendor|accept_cust|closed');
             $table->enum('status', [1, 0])->default(0);
             $table->string('seo_url', 255)->nullable();
             $table->text('meta_title')->nullable();

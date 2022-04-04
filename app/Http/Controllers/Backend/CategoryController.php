@@ -165,7 +165,6 @@ class CategoryController extends Controller
         $tableObject->category_name = $request->category_name;
         $tableObject->save();
         $last_inserted_id = $tableObject->id;
-        
         if($request->hasFile('category_image')) {
             $image = $request->file('category_image');
             $actualImage = saveSingleImage($image,'category',$last_inserted_id);

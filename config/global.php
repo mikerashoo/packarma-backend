@@ -16,6 +16,7 @@ return [
         "PACKAGING_MACHINE" => "1200X800 pixels (3:2), Max Size 500Kb and .jpg format image",
         "PACKAGING_TREATMENT" => "1200X800 pixels (3:2), Max Size 500Kb and .jpg format image",
         "PRODUCT" => "500X500 pixels (1:1), Max Size 500Kb and .jpg format image",
+        "ORDER_PAYMENT" => "1200X800 pixels (3:2), Max Size 500Kb and .jpg format image",
     ],
     'SIZE' =>  [
         "BANNER" => "500000",
@@ -27,6 +28,7 @@ return [
         "PACKAGING_MACHINE" => "500000",
         "PACKAGING_TREATMENT" => "500000",
         "PRODUCT" => "500000",
+        "ORDER_PAYMENT" => "500000",
     ],
 ]
 

@@ -7,7 +7,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-12 col-sm-7">
-                                    <h5 class="pt-2">View Order Details</h5>
+                                    <h5 class="pt-2">View Order Payment Details</h5>
                                 </div>
                                 <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                     <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
@@ -20,44 +20,44 @@
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered">
                                             <tr>
-                                                <td class="col-sm-5"><strong>User Name</strong></td>
+                                                <td class="col-sm-5"><strong>Order ID</strong></td>
+                                                <td>{{$data->order_id}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-sm-3"><strong>User Name</strong></td>
                                                 <td>{{$data->user->name}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Vendor Name</strong></td>
-                                                <td>{{$data->vendor->vendor_name; }}</td>
+                                                <td>{{$data->vendor->vendor_name}}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Grade Name</strong></td>
-                                                <td>{{$data->grade->grade_name; }}</td>
+                                                <td><strong>Product Name</strong></td>
+                                                <td>{{$data->product->product_name}}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Sub Total</strong></td>
-                                                <td>{{$data->sub_total}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Grand Total</strong></td>
-                                                <td>{{$data->grand_total}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Order Details</strong></td>
-                                                <td>{{$data->order_details}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Pending Payment</strong></td>
-                                                <td>{{$data->pending_payment}}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Delivery Status</strong></td>
-                                                <td>{{deliveryStatus($data->order_delivery_status);}}</td>
+                                                <td><strong>Payment Mode</strong></td>
+                                                <td>{{paymentMode($data->payment_mode)}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Payment Status</strong></td>
                                                 <td>{{paymentStatus($data->payment_status);}}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Order Date Time</strong></td>
+                                                <td><strong>Gateway ID</strong></td>
+                                                <td>{{$data->gateway_id}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Gateway Key</strong></td>
+                                                <td>{{$data->gateway_key}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Date Time</strong></td>
                                                 <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Order Payment Image</strong></td>
+                                                <td><img src="{{ListingImageUrl('order_payment',$data->order_payment_image)}}" width="150px" height="auto"/></td>
                                             </tr>
                                         </table>
                                     </div>

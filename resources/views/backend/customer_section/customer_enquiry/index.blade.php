@@ -17,7 +17,7 @@
                                         <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                             <button class="btn btn-sm btn-outline-danger px-3 py-1 mr-2" id="listing-filter-toggle"><i class="fa fa-filter"></i> Filter</button>
                                             @if($data['customer_enquiry_add'])
-                                                <a href="customerEnquiryAdd" class="btn btn-sm btn-outline-primary px-3 py-1 src_data"><i class="fa fa-plus"></i> Add Customer Enquiry</a>
+                                                <a href="customer_enquiry_add" class="btn btn-sm btn-outline-primary px-3 py-1 src_data"><i class="fa fa-plus"></i> Add Customer Enquiry</a>
                                             @endif
                                         </div>
                                     </div>
@@ -61,15 +61,14 @@
                                         </div>
                                     </div>
                             		<div class="table-responsive">
-                                        <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="customerEnquiryData">
+                                        <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="customer_enquiry_data">
 				                            <thead>
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="description" data-orderable="false" data-searchable="false">Description</th>
-                                                    <th id="name" data-orderable="false" data-searchable="false">User Name</th> 
+                                                    <th id="name" data-orderable="false" data-searchable="false">User Name</th>
                                                     <th id="enquiry_type" data-orderable="false" data-searchable="false">Enquiry Type</th>
                                                     <th id="quote_type" data-orderable="false" data-searchable="false">Quote Type</th>
-                                                    <th id="quantity" data-orderable="false" data-searchable="false">Quantity</th>
                                                     <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>                                                    
                                                     @if($data['customer_enquiry_view'] || $data['customer_enquiry_edit'] || $data['customer_enquiry_map_to_vendor'])
                                                     <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>

@@ -38,7 +38,7 @@ class VendorWarehouseController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = VendorWarehouse::with('vendor','city');              
+	            $query = VendorWarehouse::with('vendor','city','state');              
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                                             
@@ -66,7 +66,7 @@ class VendorWarehouseController extends Controller
 	                    return $event->city->city_name;
 	                })
                     ->editColumn('state', function ($event) {
-	                    return $event->state->state;
+	                    return $event->state->state_name;
 	                })
 	                ->editColumn('action', function ($event) {
                         $vendor_warehouse_view = checkPermission('vendor_warehouse_view');

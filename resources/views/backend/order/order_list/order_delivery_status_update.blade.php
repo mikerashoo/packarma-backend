@@ -15,24 +15,24 @@
                             </div>
                         </div>
                     	<div class="card-body">
-                    		<form id="editOrderData" method="post" action="orderUpdate?id={{$data->id}}">                                
+                    		<form id="updateOrderDeliveryStatus" method="post" action="saveOrderDeliveryStatus?id={{$data->id}}">                                
                                     <div class="card-text">                                        
                                         <div class="card-text">
                                             <div class="col-md-12 row">
                                                 <div class="col-md-6">
-                                                    <dl class="row">                                                                        
-                                                        <dt class="col-sm-4 text-left">Vendor Name :</dt>
-                                                        <dd class="col-sm-8">{{  $data['vendor']->vendor_name }} </dd>
-                                                    </dl>
-                                                    <dl class="row">
-                                                        <dt class="col-sm-4 text-left">Grade Name :</dt>
-                                                        <dd class="col-sm-8">{{ ($data['grade']->grade_name); }}</dd>
-                                                    </dl>
-                                                </div>
-                                                <div class="col-md-6">
                                                     <dl class="row">
                                                         <dt class="col-sm-4 text-left">User Name :</dt>
                                                         <dd class="col-sm-8">{{ ($data['user']->name); }}</dd>
+                                                    </dl>
+                                                    <dl class="row">
+                                                        <dt class="col-sm-4 text-left">Product Name :</dt>
+                                                        <dd class="col-sm-8">{{ ($data['product']->product_name); }}</dd>
+                                                    </dl>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <dl class="row">                                                                        
+                                                        <dt class="col-sm-4 text-left">Vendor Name :</dt>
+                                                        <dd class="col-sm-8">{{  $data['vendor']->vendor_name }} </dd>
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-4 text-left">Payment Status :</dt>
@@ -45,8 +45,8 @@
                     			@csrf
                         		<div class="row">
                         			<div class="col-sm-6">
-                        				<label>Type<span style="color:#ff0000">*</span></label>
-                        				<select class="select2" id="order_delivery_status" name="order_delivery_status" style="width: 100% !important;">
+                        				<label>Delivery Status<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="order_delivery_status" name="order_delivery_status" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($deliveryStatus as $key => $val)
                                                 @if($key == $data->order_delivery_status)
@@ -62,7 +62,7 @@
                         		<div class="row">
                         			<div class="col-sm-12">
                         				<div class="pull-right">
-                        					<button type="button" class="btn btn-success" onclick="submitForm('editOrderData','post')">Update</button>
+                        					<button type="button" class="btn btn-success" onclick="submitForm('updateOrderDeliveryStatus','post')">Update</button>
                                             <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
                         				</div>
                         			</div>
