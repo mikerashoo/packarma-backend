@@ -39,7 +39,8 @@
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="company_name" data-orderable="false" data-searchable="false">Company</th>
-                                                    @if($data['company_status'] || $data['company_edit'])
+                                                    <th id="company_image_url" data-orderable="false" data-searchable="false" alt="Image">Company Image </th>
+                                                    @if($data['company_status'] || $data['company_edit'] || $data['company_view'])
                                                     <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

@@ -47,6 +47,10 @@
                                             <td>{{displayStatus($data->status)}}</td>
                                         </tr>
                                         <tr>
+                                            <td><strong>Date Time</strong></td>
+                                            <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>Product Image</strong></td>
                                             <td><img src="{{ListingImageUrl('product',$data->product_image)}}" width="150px" height="auto"/></td>
                                         </tr>

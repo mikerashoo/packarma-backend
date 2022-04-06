@@ -55,7 +55,7 @@ class PackagingTreatmentController extends Controller
                         $packaging_treatment_status = checkPermission('packaging_treatment_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($packaging_treatment_view) {
-                            $actions .= '<a href="packaging_treatment_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="packaging_treatment_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Packaging Treatment Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($packaging_treatment_edit) {
                             $actions .= ' <a href="packaging_treatment_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';

@@ -65,7 +65,7 @@ class BannerController extends Controller
                         $banner_status = checkPermission('banner_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($banner_view) {
-                            $actions .= '<a href="banners_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Banners Details" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="banners_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Banner Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($banner_edit) {
                             $actions .= ' <a href="banners_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
@@ -162,7 +162,7 @@ class BannerController extends Controller
         if($request->hasFile('banner_image')) {
             $fixedSize = config('global.SIZE.BANNER');
             $size = $fixedSize/1000;
-            $fileSize = $request->file('banner_image')->getSize();  //check file size
+            $fileSize = $request->file('banner_image')->getSize();
             if($fileSize >= $fixedSize){
                 errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
             };
@@ -205,7 +205,7 @@ class BannerController extends Controller
      */
     public function view($id)
     {
-        $data= Banner::find($id);
+        $data = Banner::find($id);
         if($data){
             $data->image_path = getFile($data->banner_image,'banner',true);
         }

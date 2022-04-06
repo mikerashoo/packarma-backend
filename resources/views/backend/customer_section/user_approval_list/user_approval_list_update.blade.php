@@ -45,7 +45,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <form id="updateApprovalForm" method="post" action="saveApprovalStatus?id={{ $data->id }}">
+                            <form id="updateUserApprovalListForm" method="post" action="saveUserApprovalStatus?id={{ $data->id }}">
                                 @csrf
                                 <div class="col-sm-12 row">
                                     <div class="col-sm-6">
@@ -70,7 +70,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="pull-right">
-                                            <button type="button" class="btn btn-success" onclick="submitForm('updateApprovalForm','post')">Update</button>
+                                            <button type="button" class="btn btn-success" onclick="submitForm('updateUserApprovalListForm','post')">Update</button>
                                             <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
                                         </div>
                                     </div>
@@ -85,4 +85,20 @@
  </section>
  <script>
      $('.select2').select2();
+     $(document).ready(function() {
+         var status = $('#approval_status').val()
+         if (status == 'rejected') {
+             $("#remark").show();
+         } else {
+             $("#remark").hide();
+         }
+
+         $('#approval_status').on('change', function() {
+             if (this.value == 'rejected') {
+                 $("#remark").show();
+             } else {
+                 $("#remark").hide();
+             }
+         });
+     });
  </script>

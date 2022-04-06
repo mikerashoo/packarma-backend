@@ -21,8 +21,8 @@
                     			@csrf
                         		<div class="row">
                         			<div class="col-sm-6">
-                        				<label>Role</label>
-                        				<select class="select2" id="role_id" name="role_id" style="width: 100% !important;">
+                        				<label>Role<span class="text-danger">*</span></label>
+                        				<select class="select2 required" id="role_id" name="role_id" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($data as $roles)
                                                 <option value="{{$roles->id}}">{{$roles->role_name}}</option>
@@ -30,24 +30,33 @@
                                         </select><br/>
                         			</div>
                         			<div class="col-sm-6">
-                        				<label>Name</label>
-                        				<input class="form-control" type="text" id="name" name="name"><br/>
+                        				<label>Name<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="text" id="name" name="name"><br/>
                         			</div>
                         			<div class="col-sm-6">
-                        				<label>Email ID</label>
-                        				<input class="form-control" type="email" id="email" name="email"><br/>
+                        				<label>Email ID<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="email" id="email" name="email"><br/>
+                        			</div>
+									<div class="col-sm-6">
+                        				<label>Phone Country Code<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="phone_country_code" name="phone_country_code" style="width: 100% !important;">
+                                            <option value="">Select</option>
+                                            @foreach($country as $codes)
+                                                <option value="{{$codes->id}}">+{{$codes->phone_code}}</option>
+                                            @endforeach
+                                        </select><br/>
                         			</div>
                                     <div class="col-sm-6">
-                                        <label>Phone</label>
-                                        <input class="form-control" type="text" id="phone" name="phone"><br/>
+                                        <label>Phone<span class="text-danger">*</span></label>
+                                        <input class="form-control required" type="text" id="phone" name="phone"><br/>
                                     </div>
                         			<div class="col-sm-6">
-                        				<label>Password</label>
-                        				<input class="form-control" type="password" id="password" name="password"><br/>
+                        				<label>Password<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="password" id="password" name="password"><br/>
                         			</div>
                         			<div class="col-sm-6">
-                        				<label>Address</label>
-                        				<textarea class="form-control" id="address" name="address"></textarea><br/>
+                        				<label>Address<span class="text-danger">*</span></label>
+                        				<textarea class="form-control required" id="address" name="address"></textarea><br/>
                         			</div>
                         		</div>
                         		<hr>

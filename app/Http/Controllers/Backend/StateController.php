@@ -18,6 +18,7 @@ class StateController extends Controller
     public function index(){
         $data['country'] = Country::all();
         $data['state_add'] = checkPermission('state_add');
+        $data['state_view'] = checkPermission('state_view');
         $data['state_edit'] = checkPermission('state_edit');
         $data['state_status'] = checkPermission('state_status');        
         return view('backend/state/index',["data"=>$data]);
@@ -53,9 +54,13 @@ class StateController extends Controller
 	                    return $event->country->country_name;
 	                })
 	                ->editColumn('action', function ($event) {
+                        $state_view = checkPermission('state_view');
                         $state_edit = checkPermission('state_edit');
 	                    $state_status = checkPermission('state_status');
-	                    $actions = '';
+	                    $actions = '<span style="white-space:nowrap;">';
+                        if ($state_view) {
+                            $actions .= '<a href="state_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View State Details" title="View"><i class="fa fa-eye"></i></a>';
+                        }
                         if($state_edit) {
                             $actions .= ' <a href="state_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
@@ -66,6 +71,7 @@ class StateController extends Controller
                                 $actions .= ' <input type="checkbox" data-url="publishState" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
                             }
                         }
+                        $actions .= '</span>';	
                         return $actions;
 	                }) 
 	                ->addIndexColumn()
@@ -123,8 +129,9 @@ class StateController extends Controller
             \Log::error("State Validation Exception: " . implode(", ", $validationErrors->all()));
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
-
+        $isEditFlow = false;
         if(isset($_GET['id'])) {
+            $isEditFlow = true;
             $response = State::where([['state_name', strtolower($request->state_name)],['id', '<>', $_GET['id']]])->get()->toArray();
             if(isset($response[0])){
                 errorMessage('State Name Already Exist', $msg_data);
@@ -139,13 +146,31 @@ class StateController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-
-        
         $tblObj->state_name = $request->state_name;
         $tblObj->country_id = $request->country;
+        if($isEditFlow){
+            $tblObj->updated_by = session('data')['id'];
+        }else{
+            $tblObj->created_by = session('data')['id'];
+        }
         $tblObj->save();
         successMessage($msg , $msg_data);
     }
+
+    /**
+     *   Created by : Pradyumn Dwivedi
+     *   Created On : 05-April-2022
+     *   Uses :  to load state view
+     *   @param int $id
+     *   @return Response
+     */
+    public function view($id)
+    {
+       $data['data'] = State::find($id);
+       $data['country'] = Country::all();
+        return view('backend/state/state_view', $data);
+    }
+	
 
     /**
        *   created by : Pradyumn Dwivedi

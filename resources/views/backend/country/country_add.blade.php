@@ -20,20 +20,20 @@
                     			@csrf
                         		<div class="row">
                                     <div class="col-sm-6">
-                        				<label>Country Name</label>
-                        				<input class="form-control" type="text" id="country_name" name="country_name"><br/>
+                        				<label>Country Name<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="text" id="country_name" name="country_name"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Phone Code</label>
-                        				<input class="form-control" type="number" id="phone_code" name="phone_code"><br/>
+                        				<label>Phone Code<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="text" id="phone_code" name="phone_code" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Phone Length</label>
-                        				<input class="form-control" type="number" id="phone_length" name="phone_length"><br/>
+                        				<label>Phone Length<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="number" id="phone_length" name="phone_length" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Currency</label>
-                        				<select class="form-control select2" id="currency_id" name="currency_id" style="width: 100% !important;">
+                        				<label>Currency<span class="text-danger">*</span></label>
+                        				<select class="form-control select2 required" id="currency_id" name="currency_id" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($data as $currency)
                                                 <option value="{{$currency->id}}">{{$currency->currency_code}}</option>

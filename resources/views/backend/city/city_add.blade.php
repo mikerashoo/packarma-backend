@@ -21,15 +21,24 @@
                     			@csrf
                         		<div class="row">
                                     <div class="col-sm-6">
-                        				<label>City Name</label>
-                        				<input class="form-control" type="text" id="city_name" name="city_name"><br/>
+                        				<label>City Name<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" id="city_name" name="city_name"><br/>
                         			</div>                                    
                                     <div class="col-sm-6">
-                        				<label>State Name</label>
-                        				<select class="select2" id="state_id" name="state_id" style="width: 100% !important;">
+                        				<label>State Name<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="state" name="state" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($data as $state)
-                                                <option value="{{$state->id}}">{{$state->state_name}}</option>
+                                            @foreach($data['state'] as $states)
+                                                <option value="{{$states->id}}">{{$states->state_name}}</option>
+                                            @endforeach
+                                        </select><br/>
+                        			</div>
+                                    <div class="col-sm-6">
+                        				<label>Country Name<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="country" name="country" style="width: 100% !important;">
+                                            <option value="">Select</option>
+                                            @foreach($data['country'] as $countries)
+                                                <option value="{{$countries->id}}">{{$countries->country_name}}</option>
                                             @endforeach
                                         </select><br/>
                         			</div>

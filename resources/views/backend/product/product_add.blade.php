@@ -52,7 +52,7 @@
                                             @foreach($product_form as $forms)
                                                 <option value="{{$forms->id}}">{{$forms->product_form_name}}</option>
                                             @endforeach
-                                        </select><br/>
+                                        </select><br/><br>
                         			</div>
                                     <div class="col-sm-6">
                         				<label>Packaging Treatment<span style="color:#ff0000">*</span></label>
@@ -61,7 +61,7 @@
                                             @foreach($packaging_treatment as $treatments)
                                                 <option value="{{$treatments->id}}">{{$treatments->packaging_treatment_name}}</option>
                                             @endforeach
-                                        </select><br/>
+                                        </select><br/><br>
                         			</div>
                                     <div class="col-sm-6">
                                         <label>Product Image<span style="color:#ff0000">*</span></label>

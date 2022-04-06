@@ -31,12 +31,14 @@ class CreateOrdersTable extends Migration
             $table->integer('currency_id')->default(0); 
             $table->decimal('sub_total', $precision = 8, $scale = 3);
             $table->decimal('grand_total', $precision = 8, $scale = 3);
-            $table->decimal('pending_payment', $precision = 8, $scale = 3);
+            $table->decimal('customer_pending_payment', $precision = 8, $scale = 3);
+            $table->string('customer_payment_status', 255)->default('pending')->comment('pending|semi_paid|fully_paid');
+            $table->decimal('vendor_pending_payment', $precision = 8, $scale = 3);
+            $table->string('vendor_payment_status', 255)->default('pending')->comment('pending|semi_paid|fully_paid');
             $table->longText('order_details')->nullable()->comment('Json Data');
             $table->longText('product_details')->nullable()->comment('Json Data');
             $table->longText('shipping_details')->nullable()->comment('Json Data');
             $table->string('order_delivery_status', 255)->default('pending')->comment('pending|processing|out_for_delivery|delivered');
-            $table->string('payment_status', 255)->default('pending')->comment('pending|semi_paid|fully_paid');
             $table->datetime('processing_datetime');
             $table->datetime('out_for_delivery_datetime');
             $table->datetime('delivery_datetime');

@@ -59,7 +59,7 @@
                         			</div>
                                     <div class="col-sm-6">
                                         <label>Whatsapp Number</label>
-                                        <input class="form-control" type="text" id="whatsapp_no" name="whatsapp_no" value="{{$data->phone}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
+                                        <input class="form-control" type="text" id="whatsapp_no" name="whatsapp_no" value="{{$data->whatsapp_no}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                     </div>
                                     <div class="col-sm-6">
                                         <label>Vendor Address<span style="color:#ff0000">*</span></label>

@@ -26,14 +26,14 @@ class UserAddressController extends Controller
             $data['city'] = City::all();
             $data['user'] = UserAddress::all();
             $data['user'] = User::all();
-            $data['add_user_address'] = checkPermission('add_user_address');
+            $data['user_address_add'] = checkPermission('user_address_add');
             $data['user_address_view'] = checkPermission('user_address_view');
             $data['user_address_edit'] = checkPermission('user_address_edit');
             $data['user_address_status'] = checkPermission('user_address_status');
             if (isset($_GET['id'])) {
                 $data['id'] = Crypt::decrypt($_GET['id']);
             }
-            return view('backend/customer_section/user_address/index', $data);
+            return view('backend/customer_section/user_address_list/index', $data);
         }
         catch (\Exception $e) {
     		\Log::error($e->getMessage());
@@ -81,7 +81,7 @@ class UserAddressController extends Controller
                         $user_address_status = checkPermission('user_address_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($user_address_view) {
-                            $actions .= '<a href="user_address_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="user_address_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View User Address Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($user_address_edit) {
                             $actions .= ' <a href="user_address_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
@@ -130,7 +130,7 @@ class UserAddressController extends Controller
         }
         $data['state'] = State::all();
         $data['country'] = Country::all();
-        return view('backend/customer_section/user_address/add_user_address', $data);
+        return view('backend/customer_section/user_address_list/user_address_add', $data);
     }
 
     /**
@@ -152,7 +152,7 @@ class UserAddressController extends Controller
         $data['user'] = User::all();
         $data['state'] = State::all();
         $data['country'] = Country::all();
-        return view('backend/customer_section/user_address/edit_user_address', $data);
+        return view('backend/customer_section/user_address_list/user_address_edit', $data);
     }
 
     /**
@@ -224,7 +224,7 @@ class UserAddressController extends Controller
     */
     public function view($id) {
         $data['data'] = UserAddress::with('user','city','state','country')->find($id);
-        return view('backend/customer_section//user_address/view_user_address', $data);
+        return view('backend/customer_section//user_address_list/user_address_view', $data);
     }
 
     /**

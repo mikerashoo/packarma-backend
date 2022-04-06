@@ -46,6 +46,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/saveStaff', 'StaffController@saveStaff');
 	Route::get('/staff_edit/{id}','StaffController@editStaff');
 	Route::post('/publishStaff', 'StaffController@publishStaff');
+	Route::get('/staff_view/{id}','StaffController@view');
 
 	//City
 	Route::get('/city', 'CityController@index');
@@ -54,6 +55,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/saveCity', 'CityController@saveFormData');
 	Route::get('/city_edit/{id}','CityController@edit');
 	Route::post('/publishCity', 'CityController@updateStatus');
+	Route::get('/city_view/{id}','CityController@view');
 
 	//Category
 	Route::get('/category', 'CategoryController@index');
@@ -80,6 +82,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/saveCompany', 'CompanyController@saveFormData');
 	Route::get('/company_edit/{id}','CompanyController@edit');
 	Route::post('/publishCompany', 'CompanyController@updateStatus');
+	Route::get('/company_view/{id}', 'CompanyController@view');
 
 	//Country
 	Route::get('/country', 'CountryController@index');
@@ -88,6 +91,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/saveCountry', 'CountryController@saveFormData');
 	Route::get('/country_edit/{id}','CountryController@editCountry');
 	Route::post('/publishCountry', 'CountryController@updateStatus');
+	Route::get('/country_view/{id}','CountryController@view');
 
 	//state
 	Route::get('/state', 'StateController@index');
@@ -96,6 +100,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/saveState', 'StateController@saveFormData');
 	Route::get('/state_edit/{id}','StateController@edit');
 	Route::post('/publishState', 'StateController@updateStatus');
+	Route::get('/state_view/{id}','StateController@view');
 
 	//Currency
 	Route::get('/currency', 'CurrencyController@index');
@@ -104,6 +109,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/saveCurrency', 'CurrencyController@saveFormData');
 	Route::get('/currency_edit/{id}','CurrencyController@editCurrency');
 	Route::post('/publishCurrency', 'CurrencyController@updateStatus');
+	Route::get('/currency_view/{id}','CurrencyController@view');
 
 	//Subscription
 	Route::get('/subscription', 'SubscriptionController@index');
@@ -124,19 +130,19 @@ Route::group(['middleware'=>['customAuth']],function(){
 	//CustomerSection:-
 	//User approval List
 	Route::get('/user_approval_list','UserController@indexApprovalList');
-	Route::post('/approval_list_data', 'UserController@fetchUserApprovalList')->name('approval_list_data');
-	Route::get('/approval_list_update/{id}','UserController@updateApproval');
-	Route::post('/saveApprovalStatus', 'UserController@saveApprovalListFormData');
-	Route::get('/approval_list_view/{id}', 'UserController@viewApprovalList');
+	Route::post('/user_approval_list_data', 'UserController@fetchUserApprovalList')->name('user_approval_list_data');
+	Route::get('/user_approval_list_update/{id}','UserController@updateApproval');
+	Route::post('/saveUserApprovalStatus', 'UserController@saveApprovalListFormData');
+	Route::get('/user_approval_list_view/{id}', 'UserController@viewApprovalList');
 
 	//User List
 	Route:: get('/user_list','UserController@indexUserList');
 	Route::post('/user_list_data', 'UserController@fetchUserList')->name('user_list_data');
-	Route::get('/add_user', 'UserController@addUser');
-	Route::get('/edit_user_list/{id}','UserController@editUserList');
-	Route::post('/saveUser', 'UserController@saveUserListFormData');
-	Route::post('/publishUser', 'UserController@updateStatus');
-	Route::get('/userListView/{id}', 'UserController@viewUserList');
+	Route::get('/user_list_add', 'UserController@addUser');
+	Route::get('/user_list_edit/{id}','UserController@editUserList');
+	Route::post('/saveUserList', 'UserController@saveUserListFormData');
+	Route::post('/publishUserList', 'UserController@updateStatus');
+	Route::get('/user_list_view/{id}', 'UserController@viewUserList');
  
 	//User Address
 	Route:: get('/user_address_list','UserAddressController@index');
@@ -152,9 +158,9 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/customer_enquiry_data', 'CustomerEnquiryController@fetch')->name('customer_enquiry_data');
 	Route::get('/customer_enquiry_add', 'CustomerEnquiryController@addCustomerEnquiry');
 	Route::post('/saveCustomerEnquiry', 'CustomerEnquiryController@saveCustomerEnquiryFormData');
-	Route::get('/customer_enquiry_view/{id}', 'CustomerEnquiryController@view');
 	Route::get('/customer_enquiry_map_to_vendor/{id}', 'CustomerEnquiryController@customerEnquiryMapToVendor');
 	Route::post('saveEnquiryMapToVendor', 'CustomerEnquiryController@saveFormDataVendor');
+	Route::get('/customer_enquiry_view/{id}', 'CustomerEnquiryController@view');
 
 	//user subscription payment
 	Route::get('/user_subscription_payment','UserSubscriptionPaymentController@index');
@@ -174,15 +180,21 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::get('/vendor_list', 'VendorController@index');
 	Route::post('/vendor_data', 'VendorController@fetch')->name('vendor_data');
 	Route::get('/vendor_add', 'VendorController@add');
-	Route::post('/saveVendor', 'VendorController@saveFormData');
 	Route::get('/vendor_edit/{id}','VendorController@edit');
-	Route::get('/vendor_view/{id}', 'VendorController@view');
+	Route::post('/saveVendor', 'VendorController@saveFormData');
 	Route::post('/publishVendor', 'VendorController@updateStatus');
-	Route::get('/vendor_approval/{id}','VendorController@vendorApproval');  
-	Route::post('/updateVendorApproval', 'VendorController@updateApprovalStatus');
 	Route::post('/featuredVendor', 'VendorController@markFeatured');
+	Route::get('/vendor_view/{id}', 'VendorController@view');
 
-	//Vendor Grade Mapping
+
+	//vendor approval List
+	Route::get('/vendor_approval_list','VendorController@indexApprovalList');
+	Route::post('/vendor_approval_list_data', 'VendorController@fetchUserApprovalList')->name('vendor_approval_list_data');
+	Route::get('/vendor_approval_list_update/{id}','VendorController@vendorApproval');
+	Route::post('/saveVendorApprovalData', 'VendorController@saveVendorApprovalStatus');
+	Route::get('/vendor_approval_list_view/{id}', 'VendorController@viewApprovalList');
+
+	//Vendor material Mapping
 	Route::get('/vendor_material_map', 'VendorMaterialController@index');
 	Route::post('/vendor_material_map_data', 'VendorMaterialController@fetch')->name('vendor_material_map_data');
 	Route::get('/vendor_material_map_add', 'VendorMaterialController@add');
@@ -190,6 +202,24 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::get('/vendor_material_map_edit/{id}','VendorMaterialController@edit');
 	Route::get('/vendor_material_map_view/{id}', 'VendorMaterialController@view');
 	Route::post('/publishVendorMaterialMap', 'VendorMaterialController@updateStatus');
+
+	//Vendor Warehouse
+	Route::get('/vendor_warehouse', 'VendorWarehouseController@index');
+	Route::post('/vendor_warehouse_data', 'VendorWarehouseController@fetch')->name('vendor_warehouse_data');
+	Route::get('/vendor_warehouse_add', 'VendorWarehouseController@add');
+	Route::post('/saveVendorWarehouse', 'VendorWarehouseController@saveFormData');
+	Route::get('/vendor_warehouse_edit/{id}','VendorWarehouseController@edit');
+	Route::post('/publishVendorWarehouse', 'VendorWarehouseController@updateStatus');
+	Route::get('/vendor_warehouse_view/{id}', 'VendorWarehouseController@view');
+
+	//vendor payment
+	Route::get('/vendor_payment', 'VendorPaymentController@index');
+	Route::post('/vendor_payment_data', 'VendorPaymentController@fetch')->name('vendor_payment_data');
+	Route::get('/vendor_payment_add','VendorPaymentController@add');
+	Route::get('/vendor_payment_edit','VendorPaymentController@edit');
+	Route::post('/saveVendorPaymentStatus', 'VendorPaymentController@saveVendorPaymentStatusData');
+	Route::get('/vendor_payment_view/{id}', 'VendorPaymentController@view'); 
+	Route::post('/getVendorOrderDropdown', 'VendorPaymentController@getVendorOrders');
 
 	//Product Form
 	Route::get('/product_form', 'ProductFormController@index');
@@ -253,15 +283,6 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::get('/recommendation_engine_edit/{id}','RecommendationEngineController@edit');
 	Route::post('/publishRecommendationEngine', 'RecommendationEngineController@updateStatus');
 	Route::get('/recommendation_engine_view/{id}', 'RecommendationEngineController@view');
-
-	//Vendor Warehouse
-	Route::get('/vendor_warehouse', 'VendorWarehouseController@index');
-	Route::post('/vendor_warehouse_data', 'VendorWarehouseController@fetch')->name('vendor_warehouse_data');
-	Route::get('/vendor_warehouse_add', 'VendorWarehouseController@add');
-	Route::post('/saveVendorWarehouse', 'VendorWarehouseController@saveFormData');
-	Route::get('/vendor_warehouse_edit/{id}','VendorWarehouseController@edit');
-	Route::post('/publishVendorWarehouse', 'VendorWarehouseController@updateStatus');
-	Route::get('/vendor_warehouse_view/{id}', 'VendorWarehouseController@view');
 
 	//Order list
 	Route::get('/order_list', 'OrderController@index');

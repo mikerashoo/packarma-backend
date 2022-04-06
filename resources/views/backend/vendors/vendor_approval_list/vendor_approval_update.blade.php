@@ -7,7 +7,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-12 col-sm-7">
-                                    <h5 class="pt-2">Vendor Approval Status</h5>
+                                    <h5 class="pt-2">Vendor Approval Status : {{ $data->vendor_name }}</h5>
                                 </div>
                                 <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                     <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
@@ -33,7 +33,7 @@
                                     </div>                                       
                                 </div>                                    
                             </div>
-                    		<form id="vendorApprovalForm" method="post" action="updateVendorApproval?id={{$data->id}}">                                
+                    		<form id="vendorApprovalForm" method="post" action="saveVendorApprovalData?id={{$data->id}}">                                
                     			@csrf
                         		<div class="row">
                         			<div class="col-sm-6">
@@ -49,7 +49,7 @@
                                             @endforeach
                                         </select><br/>
                         			</div>
-                                    <div class="col-sm-6" id="remark" >
+                                    <div class="col-sm-6" id="remark">
                         				<label>Remark</label>
                         				<textarea class="form-control" id="admin_remark" name="admin_remark">{{$data->admin_remark}}</textarea><br/>
                         			</div>                        		
@@ -73,26 +73,21 @@
 </section>
 <script>
 $('.select2').select2();
-$(document).ready(function(){
-    var status = $('#approval_status').val();
-    if ( status == 'rejected')
-      {
-        $("#remark").show();
-      }
-      else
-      {
-        $("#remark").hide();
-      }
 
-    $('#approval_status').on('change', function() {
-      if ( this.value == 'rejected')
-      {
-        $("#remark").show();
-      }
-      else
-      {
-        $("#remark").hide();
-      }
-    });
-});
+$(document).ready(function() {
+         var status = $('#approval_status').val()
+         if (status == 'rejected') {
+             $("#remark").show();
+         } else {
+             $("#remark").hide();
+         }
+
+         $('#approval_status').on('change', function() {
+             if (this.value == 'rejected') {
+                 $("#remark").show();
+             } else {
+                 $("#remark").hide();
+             }
+         });
+     });
 </script>

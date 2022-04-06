@@ -34,7 +34,7 @@ class VendorController extends Controller
         $data['vendor_edit'] = checkPermission('vendor_edit');
         $data['vendor_status'] = checkPermission('vendor_status');
         $data['vendor_material_map'] = checkPermission('vendor_material_map');
-        return view('backend/vendor/index',["data"=>$data]);
+        return view('backend/vendors/vendor_list/index',["data"=>$data]);
     }
 
     /**
@@ -47,7 +47,7 @@ class VendorController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = Vendor::select('*')->orderBy('updated_at','desc');
+	            $query = Vendor::select('*')->Where('approval_status', '=', 'accepted')->orderBy('updated_at','desc');
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if ($request['search']['search_vendor_name'] && ! is_null($request['search']['search_vendor_name'])) {
@@ -78,21 +78,6 @@ class VendorController extends Controller
                     ->editColumn('vendor_name', function ($event) {
 	                    return $event->vendor_name;
 	                })
-                    ->editColumn('vendor_approval_status', function ($event) {
-                        $db_approval_status = $event->approval_status;
-                        $bg_class = 'bg-danger';
-                        if($db_approval_status == 'accepted'){
-                            $bg_class = 'bg-success';
-                        }else if($db_approval_status == 'rejected'){
-                            $bg_class = 'bg-danger';
-                        }else{
-                            $bg_class = 'bg-warning';
-                        }
-                        $displayStatus = approvalStatusArray($db_approval_status);
-                        $approvalStatus = '<span class="'.$bg_class.' text-center rounded p-1 text-white">'. $displayStatus.'</span>';
-                        return $approvalStatus;                        
-    
-                    })
                     ->editColumn('vendor_status', function ($event) {
                         $vendor_status = checkPermission('vendor_status');
                         $status = '';
@@ -123,7 +108,6 @@ class VendorController extends Controller
                         }
                         if($vendor_edit) {
                             $actions .= ' <a href="vendor_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
-                            $actions .= ' <a href="vendor_approval/'.$event->id.'" class="btn btn-info btn-sm src_data" title="Approval"><i class="fa fa-check"></i></a>';
                         }
                         if ($vendor_material_map) {
                             $actions .= ' <a href="vendor_material_map?id='.Crypt::encrypt($event->id).'" class="btn btn-secondary btn-sm" title="Map Material"><i class="fa ft-zap"></i></a>';
@@ -156,7 +140,7 @@ class VendorController extends Controller
         $data['phone_country'] = Country::all();
         $data['whatsapp_country'] = Country::all();
         $data['currency'] = Currency::all();
-        return view('backend/vendor/vendor_add',$data);
+        return view('backend/vendors/vendor_list/vendor_add',$data);
     }
 
     /**
@@ -171,7 +155,7 @@ class VendorController extends Controller
         $data['phone_country'] = Country::all();
         $data['whatsapp_country'] = Country::all();
         $data['currency'] = Currency::all();
-        return view('backend/vendor/vendor_edit',$data);
+        return view('backend/vendors/vendor_list/vendor_edit',$data);
     }
 
     /**
@@ -205,6 +189,9 @@ class VendorController extends Controller
             if(isset($CheckPhoneresponse[0])){
                 errorMessage('Whatsapp Number Already Exist', $msg_data);
             }
+            if(!empty($request->whatsapp_no) && empty($request->whatsapp_phone_code)){
+                errorMessage('Please Select Whatsapp Country Code.', $msg_data);
+            }
             $tblObj = Vendor::find($_GET['id']);
             $msg = "Data Updated Successfully";
         } else {
@@ -228,14 +215,16 @@ class VendorController extends Controller
         if(strlen($request->phone) != $allowedPhoneLength){
             errorMessage("Phone Number Should be $allowedPhoneLength digit long.", $msg_data);
         }
-        if(empty($request->whatsapp_phone_code)){
+        if(!empty($request->whatsapp_country_code)){
             $maxPhoneCodeLength = Country::where('id', $request->whatsapp_country_code)->get()->toArray();
             $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
             if(strlen($request->whatsapp_no) != $allowedPhoneLength){
                 errorMessage("Whatsapp Number Should be $allowedPhoneLength digit long.", $msg_data);
             }
+            print_r($request->whatsapp_country_code);exit;
             $tblObj->whatsapp_country_id = $request->whatsapp_country_code;
             $tblObj->whatsapp_no = $request->whatsapp_no;
+
         }
         $tblObj->vendor_name = $request->vendor_name;
         $tblObj->vendor_email = $request->vendor_email;
@@ -257,7 +246,7 @@ class VendorController extends Controller
         successMessage($msg , $msg_data);
     }
 
-     /**
+    /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 25-Mar-2022
        *   Uses :  To load view vendor page
@@ -267,10 +256,103 @@ class VendorController extends Controller
     public function view($id) {
         $data['data'] = Vendor::with('phone_country','whatsapp_country','packaging_material')->find($id);
         $data['vendor_material_mapping'] = VendorMaterialMapping::with('packaging_material','recommendation_engine','product')->where('vendor_id', '=', $id)->get();
-        return view('backend/vendor/vendor_view',$data);
+        return view('backend/vendors/vendor_list/vendor_view',$data);
         
     }
 
+    //-----------vendor approval list section---------
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 05-april-2022 
+     *   Uses :  To show Pending vendor listing for approval
+     */
+    public function indexApprovalList()
+    {
+        $data['data'] = Vendor::all();
+        $data['vendor_approval_list_view'] = checkPermission('vendor_approval_list_view');
+        $data['vendor_approval_list_update'] = checkPermission('vendor_approval_list_update');
+        return view('backend/vendors/vendor_approval_list/index',["data"=>$data]);
+    }
+
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 05-april-2022
+     *   Uses :  display dynamic data in datatable for Pending vendor in user approval list  
+     *   @param Request request
+     *   @return Response
+     */
+    public function fetchUserApprovalList(Request $request)
+    {
+        if ($request->ajax()) {
+            try {
+                $query = Vendor::with('phone_country','whatsapp_country','currency')->where('approval_status', '!=', 'accepted');
+                return DataTables::of($query)
+                    ->filter(function ($query) use ($request) {
+                        if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
+                            $query->where('vendor_name', 'like', "%" . $request['search']['search_name'] . "%");
+                        }
+                        if (isset($request['search']['search_phone']) && !is_null($request['search']['search_phone'])) {
+                            $query->where('phone', 'like', "%" . $request['search']['search_phone'] . "%");
+                        }
+                        $query->get();
+                    })
+                    ->editColumn('name', function ($event) {
+                        return $event->vendor_name;
+                    })
+                    ->editColumn('email', function ($event) {
+                        return $event->vendor_email;
+                    })
+                    ->editColumn('phone', function ($event) {
+                        return '+' . $event->phone_country->phone_code . ' ' . $event->phone;
+                    })
+                    ->editColumn('approval_status', function ($event) {
+                        $db_approval_status = $event->approval_status;
+                        $bg_class = 'bg-danger';
+                        if ($db_approval_status == 'accepted') {
+                            $bg_class = 'bg-success';
+                        }
+                        else if ($db_approval_status == 'rejected') {
+                            $bg_class = 'bg-danger';
+                        }
+                        else {
+                            $bg_class = 'bg-warning';
+                        }
+                        $displayStatus = approvalStatusArray($db_approval_status);
+                        $approvalStatus = '<span class="' . $bg_class . ' text-center rounded p-1 text-white">' . $displayStatus . '</span>';
+                        return $approvalStatus;
+                    })
+                    ->editColumn('created_at', function ($event) {
+                        return date('d-m-Y H:i A', strtotime($event->created_at));
+                    })
+                    ->editColumn('action', function ($event) {
+                        $vendor_approval_list_view = checkPermission('vendor_approval_list_view');
+                        $vendor_approval_list_update = checkPermission('vendor_approval_list_update');
+                        $actions = '<span style="white-space:nowrap;">';
+                        if ($vendor_approval_list_view) {
+                            $actions .= '<a href="vendor_approval_list_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Vendor Approval List Details" title="View"><i class="fa fa-eye"></i></a>';
+                        }
+                        if ($vendor_approval_list_update) {
+                            $actions .= ' <a href="vendor_approval_list_update/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update Approval"><i class="fa fa-edit"></i></a>';
+                        }
+                        $actions .= '</span>';
+                        return $actions;
+                    })
+                    ->addIndexColumn()
+                    ->rawColumns(['name', 'email', 'phone', 'approval_status','created_at','action'])->setRowId('id')->make(true);
+            }
+            catch (\Exception $e) {
+                \Log::error("Something Went Wrong. Error: " . $e->getMessage());
+                return response([
+                    'draw' => 0,
+                    'recordsTotal' => 0,
+                    'recordsFiltered' => 0,
+                    'data' => [],
+                    'error' => 'Something went wrong',
+                ]);
+            }
+        }
+    }
+    
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 25-Mar-2022
@@ -281,17 +363,17 @@ class VendorController extends Controller
     public function vendorApproval($id) {
         $data['data'] = Vendor::find($id);       
         $data['approvalArray'] = approvalStatusArray();
-        return view('backend/vendor/vendor_approval',$data);
+        return view('backend/vendors/vendor_approval_list/vendor_approval_update',$data);
     }
 
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : 25-Mar-2022
+       *   Created On : 05-April-2022
        *   Uses :  To update Vendor Approval Status
        *   @param Request request
        *   @return Response
     */
-    public function updateApprovalStatus(Request $request)
+    public function saveVendorApprovalStatus(Request $request)
     {
     	$msg_data=array();
         $msg = "";
@@ -319,6 +401,21 @@ class VendorController extends Controller
         }
         $tableObject->save();
         successMessage($msg , $msg_data);
+    }
+
+    /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 05-april-2022
+       *   Uses :  To view vendor approval list details  
+       *   @param int $id
+       *   @return Response
+    */
+    public function viewApprovalList($id)
+    {
+ 
+        $data['data'] = Vendor::with('phone_country','whatsapp_country','packaging_material')->find($id);
+        $data['vendor_material_mapping'] = VendorMaterialMapping::with('packaging_material','recommendation_engine','product')->where('vendor_id', '=', $id)->get();           
+        return view('backend/vendors/vendor_approval_list/vendor_approval_view', $data);
     }
 
     /**

@@ -9,7 +9,7 @@ class City extends Model
 {
     use HasFactory;
 
-/**
+    /**
     * Developed By : Pradyumn Dwivedi
     * Created On : 22-mar-2022
     * uses : to to get data of state model in city model 
@@ -17,5 +17,15 @@ class City extends Model
     public function state()
     {
         return $this->belongsTo('App\Models\State');
+    }
+
+    /**
+    * Developed By : Pradyumn Dwivedi
+    * Created On : 22-mar-2022
+    * uses : to to get data of country model in city model 
+    */
+    public function country()
+    {
+        return $this->belongsTo('App\Models\Country');
     }
 }

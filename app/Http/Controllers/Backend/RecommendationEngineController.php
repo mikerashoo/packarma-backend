@@ -186,7 +186,7 @@ class RecommendationEngineController extends Controller
         $tableObject->packaging_treatment_id = $request->packaging_treatment;
         $tableObject->packaging_material_id = $request->packaging_material;
         $tableObject->vendor_id = $request->vendor;
-        // $tableObject->display_shelf_life = $request->display_shelf_life; // enter data depend on min and max shelf life
+        $tableObject->display_shelf_life = $request->display_shelf_life;
         $tableObject->wvtr = $request->wvtr;
         $tableObject->otr = $request->otr;
         $tableObject->cof = $request->cof;
@@ -259,6 +259,7 @@ class RecommendationEngineController extends Controller
             'product' => 'required|integer',
             'min_shelf_life' => 'required|integer',
             'max_shelf_life' => 'required|integer',
+            'display_shelf_life' => 'required|integer',
             'min_weight' => 'required|numeric',
             'max_weight' => 'required|numeric',
             'price' => 'required|numeric',

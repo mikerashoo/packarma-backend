@@ -272,6 +272,11 @@
                         <li class="has-sub nav-item {{ $lastParam ==  'vendors' ? 'open' : ''  }} {{ $lastParam ==  'vendors' ? 'open' : ''  }}">
                             <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Vendors</span></a>
                             <ul class="menu-content">
+                                @if(in_array('vendor_approval_list', $permission_array) || session('data')['role_id'] == 1)
+                                    <li class="{{ Request::path() ==  'webadmin/vendor_approval_list' ? 'active' : ''  }}">
+                                        <a href="vendor_approval_list" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Approval List</a>
+                                    </li>
+                                @endif
                                 @if(in_array('vendor_list', $permission_array) || session('data')['role_id'] == 1)
                                     <li class="{{ Request::path() ==  'webadmin/vendor_list' ? 'active' : ''  }}">
                                         <a href="vendor_list" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor List</a>
@@ -285,6 +290,11 @@
                                 @if(in_array('vendor_warehouse', $permission_array) || session('data')['role_id'] == 1)
                                     <li class="{{ Request::path() ==  'webadmin/vendor_warehouse' ? 'active' : ''  }}">
                                         <a href="vendor_warehouse" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Warehouse</a>
+                                    </li>
+                                @endif
+                                @if(in_array('vendor_payment', $permission_array) || session('data')['role_id'] == 1)
+                                    <li class="{{ Request::path() ==  'webadmin/vendor_payment' ? 'active' : ''  }}">
+                                        <a href="vendor_payment" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Payment</a>
                                     </li>
                                 @endif
                             </ul>

@@ -49,7 +49,7 @@
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="state_name" data-orderable="false" data-searchable="false">State</th>
                                                     <th id="country_name" data-orderable="false" data-searchable="false">Country</th>
-                                                    @if($data['state_status'] || $data['state_edit'])
+                                                    @if($data['state_status'] || $data['state_edit'] || $data['state_view'])
                                                     <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

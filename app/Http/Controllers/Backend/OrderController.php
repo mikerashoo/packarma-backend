@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Product;
@@ -37,6 +38,7 @@ class OrderController extends Controller
         $data['order_view'] = checkPermission('order_view');
         $data['order_delivery_update'] = checkPermission('order_delivery_update');
         $data['order_payment_update'] = checkPermission('order_payment_update');
+        $data['vendor_payment_update'] = checkPermission('vendor_payment_update');
         return view('backend/order/order_list/index',["data"=>$data]);
     }
 
@@ -78,7 +80,7 @@ class OrderController extends Controller
                         return deliveryStatus($event->order_delivery_status);
                     })
                     ->editColumn('payment_status', function ($event) {
-                        return paymentStatus($event->payment_status);
+                        return paymentStatus($event->customer_payment_status);
                     })
                     ->editColumn('updated_at', function ($event) {
 	                    return date('d-m-Y H:i A', strtotime($event->updated_at));                        
@@ -87,6 +89,7 @@ class OrderController extends Controller
                         $order_view = checkPermission('order_view');
                         $order_delivery_update = checkPermission('order_delivery_update');
                         $order_payment_update = checkPermission('order_payment_update');
+                        $vendor_payment_update = checkPermission('vendor_payment_update');
                         $actions = '<span style="white-space:nowrap;">';
                         if($order_view) {
                             $actions .= '<a href="order_view/'.$event->id.'" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
@@ -96,9 +99,17 @@ class OrderController extends Controller
                                 $actions .= '  <a href="order_delivery_update/' . $event->id . '" class="btn btn-info btn-sm src_data" title="Update Delivery"><i class="fa fa-truck"></i></a>';
                             }
                         }
-                        if($event->pending_payment != 0){
+                        if($event->vendor_pending_payment != 0){
                             if ($order_payment_update) {
-                                $actions .= '  <a href="order_payment_update/' . $event->id . '" class="btn btn-secondary btn-sm src_data" title="Update Payment"><i class="fa fa-money"></i></a>';
+                                $actions .= '  <a href="vendor_payment/' . $event->id . '" class="btn btn-secondary btn-sm src_data" title="Customer Payment"><i class="fa fa-money"></i></a>';
+                            }
+                        }
+                        if($event->vendor_pending_payment != 0){
+                            // if ($vendor_payment_update) {
+                            //     $actions .= '  <a href="vendor_payment/' . $event->id . '" class="btn btn-warning btn-sm src_data" title="Vendor Payment"><i class="fa fa-money"></i></a>';
+                            // }
+                            if ($vendor_payment_update) {
+                                $actions .= ' <a href="vendor_payment?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="Vendor Payment"><i class="fa fa-money"></i></a>';
                             }
                         }
                         $actions .= '</span>';
@@ -220,16 +231,16 @@ class OrderController extends Controller
             $paymentMode = paymentMode('',$getKeys);
             if (in_array( $request->payment_status, $paymentStatus) && in_array( $request->payment_mode, $paymentMode))
              {
-                $tableObject = OrderPayment::find($_GET['id']);
+                // $tableObject = OrderPayment::find($_GET['id']);
                 if($request->payment_status == 'pending'){
                     errorMessage('Order is Already in Pending Status, Please Select Another Status', $msg_data);  
                 } elseif($request->amount == 0){
                     errorMessage('Entered Amount Should be Greater Than Zero', $msg_data);
-                } elseif(($request->payment_status == 'fully_paid') && ($request->amount != $orderData->pending_payment )){
-                    errorMessage('Please Enter Proper Amount for Seletcted Status.', $msg_data);
-                } elseif(($request->payment_status == 'semi_paid') && ($request->amount == $orderData->pending_payment )){
+                } elseif(($request->payment_status == 'fully_paid') && ($request->amount != $orderData->customer_pending_payment )){
+                    errorMessage('Please Enter Proper Amount for Selected Status.', $msg_data);
+                } elseif(($request->payment_status == 'semi_paid') && ($request->amount == $orderData->customer_pending_payment )){
                     errorMessage('Please Select Proper Status for Entered Amount.', $msg_data);
-                } elseif($orderData->pending_payment >= $request->amount){
+                } elseif($orderData->customer_pending_payment >= $request->amount){
                     $msg = "Payment Status Updated Successfully";
                 } else{
                     errorMessage('Amount Should be Less Than or Equal To Pending Payment', $msg_data);
@@ -244,9 +255,9 @@ class OrderController extends Controller
         $tableObject->order_id = $_GET['id'];
         $tableObject->product_id = $request->product_id;
         $tableObject->vendor_id = $request->vendor_id;
-        $tableObject->payment_mode = $request->payment_mode;
+        $tableObject->customer_payment_mode = $request->payment_mode;
+        $tableObject->customer_payment_status = $request->payment_status;
         $tableObject->amount = $request->amount;
-        $tableObject->payment_status = $request->payment_status;
         $tableObject->gateway_id = $request->gateway_id;
         $tableObject->gateway_key = $request->gateway_key;
         if($request->hasFile('order_image')) {
@@ -270,10 +281,10 @@ class OrderController extends Controller
             $bannerObj->order_payment_thumb_image = $thumbImage;
             $bannerObj->save();
         }
-        //decreasing pending_payment by amount in order table
-        Order::where('id',  $_GET['id'])->decrement('pending_payment', $request->amount);
-        if(($request->payment_status == 'fully_paid') && ($request->amount == $orderData->pending_payment )){
-            Order::where("id", '=',  $_GET['id'])->update(['payment_status'=> 'fully_paid']);
+        //decreasing customer pending_payment by amount in order table
+        Order::where('id',  $_GET['id'])->decrement('customer_pending_payment', $request->amount);
+        if(($request->payment_status == 'fully_paid') && ($request->amount == $orderData->customer_pending_payment )){
+            Order::where("id", '=',  $_GET['id'])->update(['customer_payment_status'=> 'fully_paid']);
             successMessage($msg , $msg_data);
         }
         successMessage($msg , $msg_data);

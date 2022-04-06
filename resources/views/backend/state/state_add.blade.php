@@ -20,12 +20,12 @@
                     			@csrf
                         		<div class="row">
                                     <div class="col-sm-6">
-                        				<label>State Name</label>
-                        				<input class="form-control" type="text" id="state_name" name="state_name"><br/>
+                        				<label>State Name<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" id="state_name" name="state_name"><br/>
                         			</div>                                    
                                     <div class="col-sm-6">
-                        				<label>Country Name</label>
-                        				<select class="select2" id="country" name="country" style="width: 100% !important;">
+                        				<label>Country Name<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="country" name="country" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($country as $countries)
                                                 <option value="{{$countries->id}}">{{$countries->country_name}}</option>

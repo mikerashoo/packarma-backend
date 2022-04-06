@@ -35,8 +35,8 @@
                             <div class="tab-pane fade mt-2 show active" id="details" role="tabpanel" aria-labelledby="details-tab">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <label>Company Name</label>
-                                            <input class="form-control" type="text" id="company_name" name="company_name"><br/>
+                                            <label>Company Name<span style="color:#ff0000">*</span></label>
+                                            <input class="form-control required" type="text" id="company_name" name="company_name"><br/>
                                         </div>
                                         <div class="col-sm-6">
                                             <label>Images</label>
@@ -80,10 +80,4 @@
 </section>
 <script>
     $('.select2').select2();
-    function checkFiles(files) {       
-        if(files.length>5) {
-            $('#attachment').val('');
-            bootbox.alert("length exceeded; maximum allowed files are 5");
-        } 
-    }
 </script>

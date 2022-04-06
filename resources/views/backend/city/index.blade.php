@@ -50,7 +50,8 @@
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="city_name" data-orderable="false" data-searchable="false">City</th>
                                                     <th id="state_name" data-orderable="false" data-searchable="false">State</th>
-                                                    @if($data['city_status'] || $data['city_edit'])
+                                                    <th id="country_name" data-orderable="false" data-searchable="false">Country</th>
+                                                    @if($data['city_status'] || $data['city_edit'] || $data['city_view'])
                                                     <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

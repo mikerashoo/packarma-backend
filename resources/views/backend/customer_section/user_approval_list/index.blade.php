@@ -35,16 +35,16 @@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
-                                            <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="approval_list_data">
+                                            <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="user_approval_list_data">
                                                 <thead>
                                                     <tr>
                                                         <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                         <th id="name" data-orderable="false" data-searchable="false">Name</th>
                                                         <th id="email" data-orderable="false" data-searchable="false">Email</th>
-                                                        <th id="phone" data-orderable="false" data-searchable="false">Phone</th>
+                                                        <th id="phone" data-orderable="false" class="col-md-2" data-searchable="false">Phone</th>
                                                         <th id="approval_status" data-orderable="false" data-searchable="false">Approval Status</th>
                                                         <th id="created_at" data-orderable="false" data-searchable="false">Datetime</th>
-                                                        @if ($data['approval_list_view'] || $data['approval_list_update'] )
+                                                        @if ($data['user_approval_list_view'] || $data['user_approval_list_update'] )
                                                             <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                         @endif
                                                     </tr>

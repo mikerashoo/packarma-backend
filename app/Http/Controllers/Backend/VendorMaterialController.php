@@ -29,7 +29,7 @@ class VendorMaterialController extends Controller
             if (isset($_GET['id'])) {
                 $data['id'] = Crypt::decrypt($_GET['id']);
             }
-            return view('backend/vendor_material_mapping/index', $data);
+            return view('backend/vendors/vendor_material_mapping/index', $data);
         }
         catch (\Exception $e) {
     		\Log::error($e->getMessage());
@@ -134,7 +134,7 @@ class VendorMaterialController extends Controller
         $data['product'] = Product::all();
         $data['packaging_material'] = PackagingMaterial::all();
         $data['recommendation_engine'] = RecommendationEngine::all();
-        return view('backend/vendor_material_mapping/vendor_material_map_add', $data);
+        return view('backend/vendors/vendor_material_mapping/vendor_material_map_add', $data);
     }
 
     /**
@@ -155,7 +155,7 @@ class VendorMaterialController extends Controller
         $data['product'] = Product::all();
         $data['packaging_material'] = PackagingMaterial::all();
         $data['recommendation_engine'] = RecommendationEngine::all();
-        return view('backend/vendor_material_mapping/vendor_material_map_edit', $data);
+        return view('backend/vendors/vendor_material_mapping/vendor_material_map_edit', $data);
     }
 
     /**
@@ -218,7 +218,7 @@ class VendorMaterialController extends Controller
     */
     public function view($id) {
         $data['data'] = VendorMaterialMapping::with('vendor','packaging_material','recommendation_engine', 'product')->find($id);
-        return view('backend/vendor_material_mapping/vendor_material_map_view',$data);
+        return view('backend/vendors/vendor_material_mapping/vendor_material_map_view',$data);
     }
 
     /**

@@ -14,7 +14,7 @@
                                 </div>
                             </div>
                         </div>
-                        <form id="editUserList" method="post" action="saveUser?id={{ $data->id }}">
+                        <form id="editUserList" method="post" action="saveUserList?id={{ $data->id }}">
                             <h4 class="form-section"><i class="ft-info"></i> Details</h4>
                             @csrf
                             <div class="card-body">

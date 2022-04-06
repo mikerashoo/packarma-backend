@@ -4,16 +4,6 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-content">
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-12 col-sm-7">
-                                    <h5 class="pt-2">View User Address Details</h5>
-                                </div>
-                                <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
-                                    <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
-                                </div>
-                            </div>
-                        </div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
@@ -43,6 +33,10 @@
                                             <tr>
                                                 <td><strong>Pincode</strong></td>
                                                 <td>{{ $data->pincode }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Date Time</strong></td>
+                                                <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
                                             </tr>
                                         </table>
                                     </div>

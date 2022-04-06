@@ -14,7 +14,7 @@
                                 </div>
                             </div>
                         </div>
-                        <form id="addUserForm" method="post" action="saveUser">
+                        <form id="addUserListForm" method="post" action="saveUserList">
                             <h4 class="form-section"><i class="ft-info"></i>Details</h4>
                             @csrf
                             <div class="card-body">
@@ -66,7 +66,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="pull-right">
-                                            <button type="button" class="btn btn-success" onclick="submitForm('addUserForm','post')">Submit</button>
+                                            <button type="button" class="btn btn-success" onclick="submitForm('addUserListForm','post')">Submit</button>
                                                 <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a><br> <br>
                                         </div>
                                     </div>

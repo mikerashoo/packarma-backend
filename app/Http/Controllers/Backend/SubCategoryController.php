@@ -61,7 +61,7 @@ class SubCategoryController extends Controller
                         $sub_category_status = checkPermission('sub_category_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($sub_category_view) {
-                            $actions .= '<a href="sub_category_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="sub_category_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Sub Category Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($sub_category_edit) {
                             $actions .= ' <a href="sub_category_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';

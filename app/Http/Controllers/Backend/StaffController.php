@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Role;
+use App\Models\Country;
 use Yajra\DataTables\DataTables;
 use Illuminate\Http\Request;
 use Str;
@@ -18,9 +19,12 @@ class StaffController extends Controller
     */
     public function index() 
     {
-        $data['staff_add'] = checkPermission('staff_add');
-        $data['staff_edit'] = checkPermission('staff_edit');
         $data['roles'] = Role::all();
+        $data['country'] = Country::all();
+        $data['staff_add'] = checkPermission('staff_add');
+        $data['staff_view'] = checkPermission('staff_view');
+        $data['staff_edit'] = checkPermission('staff_edit');
+        $data['staff_status'] = checkPermission('staff_status');
         return view('backend/staff/index',["data"=>$data]);
     }
     /**
@@ -60,15 +64,19 @@ class StaffController extends Controller
 	                    return $event->email;
 	                })
                     ->editColumn('phone', function ($event) {
-                        return $event->phone;
+                        return '+' . $event->country->phone_code . ' ' . $event->phone;
                     })
 	                ->editColumn('role', function ($event) {
 	                    return $event->role->role_name;
 	                }) 
 	                ->editColumn('action', function ($event) {
+                        $staff_view = checkPermission('staff_view');
 	                    $staff_edit = checkPermission('staff_edit');
 	                    $staff_status = checkPermission('staff_status');
-	                    $actions = '';
+	                    $actions = '<span style="white-space:nowrap;">';
+                        if ($staff_view) {
+                            $actions .= '<a href="staff_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Staff Details" title="View"><i class="fa fa-eye"></i></a>';
+                        }
 	                    if($event->id != 1) {
 	                        if($staff_edit) {
 	                            $actions .= ' <a href="staff_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
@@ -106,6 +114,7 @@ class StaffController extends Controller
     */
     public function addStaff(Request $request) {
         $data = Role::all();
+        $data['country'] = Country::all();
         return view('backend/staff/staff_add',["data"=>$data]);
     }
 
@@ -119,7 +128,22 @@ class StaffController extends Controller
     public function editStaff($id) {
         $data['data'] = Admin::find($id);
         $data['roles'] = Role::all();
+        $data['country'] = Country::all();
         return view('backend/staff/staff_edit',["data"=>$data]);
+    }
+
+    /**
+     *   Created by : Pradyumn Dwivedi
+     *   Created On : 05-April-2022
+     *   Uses :  to load staff view
+     *   @param int $id
+     *   @return Response
+     */
+    public function view($id)
+    {
+        $data['data'] = Admin::find($id);
+        $data['country'] = Country::all();
+        return view('backend/staff/staff_view', $data);
     }
 
     /**
@@ -142,14 +166,24 @@ class StaffController extends Controller
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
         $msg_data = array();
+        $isEditFlow = false;
         if(isset($_GET['id'])) {
+            $isEditFlow = true;
             $response = Admin::where([['email', $request->email],['id', '<>', $_GET['id']]])->get()->toArray();
             if(isset($response[0])){
                 errorMessage('Email Already Exist', $msg_data);
             }
+            $response = Admin::where([['phone', $request->phone], ['id', '<>', $_GET['id']]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Phone Number Already Exist', $msg_data);
+            }
             $admins = Admin::find($_GET['id']);
         } else {
             $admins = new Admin;
+            $response = Admin::where([['phone', $request->phone]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Phone Number Already Exist', $msg_data);
+            }
             $admins->password = md5($request->email.$request->password);
             $response = Admin::where([['email', $request->email]])->get();
         }
@@ -157,13 +191,19 @@ class StaffController extends Controller
         $admins->role_id = $request->role_id;
         $admins->admin_name = $request->name;
         $admins->email = $request->email;
-        $admins->phone = $request->phone;
-
-        $admins->address = '';
-        if(!empty($request->address)) {
-            $admins->address = $request->address;
+        $maxPhoneCodeLength = Country::where('id', $request->phone_country_code)->get()->toArray();
+        $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
+        if(strlen($request->phone) != $allowedPhoneLength){
+            errorMessage("Phone Number Should be $allowedPhoneLength digit long.", $msg_data);
         }
-
+        $admins->country_id = $request->phone_country_code;
+        $admins->phone = $request->phone;
+        $admins->address = $request->address;
+        if($isEditFlow){
+            $admins->updated_by = session('data')['id'];
+        }else{
+            $admins->created_by = session('data')['id'];
+        }
         $admins->save();
         successMessage('Data saved successfully', $msg_data);
     }

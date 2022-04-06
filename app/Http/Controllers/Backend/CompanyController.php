@@ -24,9 +24,8 @@ class CompanyController extends Controller
        *   Uses :  To show company listing page
     */
     public function index(){
-        // phpinfo();
-        // exit();
         $data['company_add'] = checkPermission('company_add');
+        $data['company_view'] = checkPermission('company_view');
         $data['company_edit'] = checkPermission('company_edit');
         $data['company_status'] = checkPermission('company_status');
         return view('backend/company/index',["data"=>$data]);
@@ -55,10 +54,18 @@ class CompanyController extends Controller
 	                ->editColumn('company_name', function ($event) {
 	                    return $event->company_name;
 	                })
+                    ->editColumn('company_image_url', function ($event) {
+                        $imageUrl = ListingImageUrl('company',$event->company_thumb_image,'thumb');      
+                        return ' <img src="'. $imageUrl .'" />';
+                    })
 	                ->editColumn('action', function ($event) {
+                        $company_view = checkPermission('company_view');
                         $company_edit = checkPermission('company_edit');
 	                    $company_status = checkPermission('company_status');
-	                    $actions = '';
+	                    $actions = '<span style="white-space:nowrap;">';
+                        if ($company_view) {
+                            $actions .= '<a href="company_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Company Details" title="View"><i class="fa fa-eye"></i></a>';
+                        }
                         if($company_edit) {
                             $actions .= ' <a href="company_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
@@ -72,7 +79,7 @@ class CompanyController extends Controller
                         return $actions;
 	                }) 
 	                ->addIndexColumn()
-	                ->rawColumns(['company_name','action'])->setRowId('id')->make(true);
+	                ->rawColumns(['company_name','company_image_url','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -105,13 +112,24 @@ class CompanyController extends Controller
     */
     public function edit($id) {
         $data['data'] = Company::find($id);
-        // echo '<pre>';
-        // print_r($data['data']);
-        // exit();
         return view('backend/company/company_edit',["data"=>$data]);
     }
 
-
+    /**
+     *   Created by : Pradyumn Dwivedi
+     *   Created On : 05-April-2022
+     *   Uses :  to load company view
+     *   @param int $id
+     *   @return Response
+     */
+    public function view($id)
+    {
+        $data= Company::find($id);
+        if($data){
+            $data->image_path = getFile($data->comapny_image,'company',true);
+        }
+        return view('backend/company/company_view', ["data"=>$data]);
+    }
     /**
        *   created by : Sagar Thokal
        *   Created On : 10-Feb-2022
@@ -128,8 +146,9 @@ class CompanyController extends Controller
             \Log::error("Company Validation Exception: " . implode(", ", $validationErrors->all()));
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
-
+        $isEditFlow = false;
         if(isset($_GET['id'])) {
+            $isEditFlow = true;
             $response = Company::where([['company_name', strtolower($request->company_name)],['id', '<>', $_GET['id']]])->get()->toArray();
             if(isset($response[0])){
                 errorMessage('Company Name Already Exist', $msg_data);
@@ -143,6 +162,11 @@ class CompanyController extends Controller
                 errorMessage('Company Name Already Exist', $msg_data);
             }
             $msg = "Data Saved Successfully";
+        }
+        if($isEditFlow){
+            $tableObject->updated_by = session('data')['id'];
+        }else{
+            $tableObject->created_by = session('data')['id'];
         }
         $tableObject->company_name = $request->company_name;
         $tableObject->incorporation_year = date('Y');

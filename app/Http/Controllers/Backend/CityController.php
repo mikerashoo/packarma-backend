@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\State;
+use App\Models\Country;
 use Yajra\DataTables\DataTables;
 
 class CityController extends Controller
@@ -25,6 +26,7 @@ class CityController extends Controller
     public function index(){
         $data['states'] = State::all();
         $data['city_add'] = checkPermission('city_add');
+        $data['city_view'] = checkPermission('city_view');
         $data['city_edit'] = checkPermission('city_edit');
         $data['city_status'] = checkPermission('city_status');        
         return view('backend/city/index',["data"=>$data]);
@@ -40,7 +42,7 @@ class CityController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = City::with('state');                
+	            $query = City::with('state','country');                
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                                             
@@ -59,10 +61,17 @@ class CityController extends Controller
                     ->editColumn('state_name', function ($event) {
 	                    return $event->state->state_name;
 	                })
+                    ->editColumn('country_name', function ($event) {
+	                    return $event->country->country_name;
+	                })
 	                ->editColumn('action', function ($event) {
+                        $city_view = checkPermission('city_view');
                         $city_edit = checkPermission('city_edit');
 	                    $city_status = checkPermission('city_status');
-	                    $actions = '';
+	                    $actions = '<span style="white-space:nowrap;">';
+                        if ($city_view) {
+                            $actions .= '<a href="city_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View City Details" title="View"><i class="fa fa-eye"></i></a>';
+                        }
                         if($city_edit) {
                             $actions .= ' <a href="city_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
@@ -73,10 +82,11 @@ class CityController extends Controller
                                 $actions .= ' <input type="checkbox" data-url="publishCity" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
                             }
                         }
+                        $actions .= '</span>';	
                         return $actions;
 	                }) 
 	                ->addIndexColumn()
-	                ->rawColumns(['city_name','state_name','action'])->setRowId('id')->make(true);
+	                ->rawColumns(['city_name','state_name','country_name','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -97,7 +107,8 @@ class CityController extends Controller
        *   Uses : To load Add city page
     */
     public function add() {
-        $data = State::all();
+        $data['state'] = State::all();
+        $data['country'] = Country::all();
         return view('backend/city/city_add',["data"=>$data]);
     }
 
@@ -111,6 +122,7 @@ class CityController extends Controller
     public function edit($id) {
         $data['data'] = City::find($id);
         $data['state'] = State::all();
+        $data['country'] = Country::all();
         return view('backend/city/city_edit',["data"=>$data]);
     }
     
@@ -130,8 +142,9 @@ class CityController extends Controller
             \Log::error("City Validation Exception: " . implode(", ", $validationErrors->all()));
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
-
+        $isEditFlow = false;
         if(isset($_GET['id'])) {
+            $isEditFlow = true;
             $response = City::where([['city_name', strtolower($request->city_name)],['id', '<>', $_GET['id']]])->get()->toArray();
             if(isset($response[0])){
                 errorMessage('City Name Already Exist', $msg_data);
@@ -146,11 +159,31 @@ class CityController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-
         $tblObj->city_name = $request->city_name;
-        $tblObj->state_id = $request->state_id;
+        $tblObj->state_id = $request->state;
+        $tblObj->country_id = $request->country;
+        if($isEditFlow){
+            $tblObj->updated_by = session('data')['id'];
+        }else{
+            $tblObj->created_by = session('data')['id'];
+        }
         $tblObj->save();
         successMessage($msg , $msg_data);
+    }
+
+    /**
+     *   Created by : Pradyumn Dwivedi
+     *   Created On : 28-Mar-2022
+     *   Uses :  to load banners view
+     *   @param int $id
+     *   @return Response
+     */
+    public function view($id)
+    {
+        $data['data'] = City::find($id);
+        $data['state'] = State::all();
+        $data['country'] = Country::all();
+        return view('backend/city/city_view', $data);
     }
 
     /**
@@ -184,8 +217,9 @@ class CityController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'city_name' => 'string|required',
-	        'state_id' => 'integer|required',
+            'city_name' => 'required|string',
+	        'state' => 'required|integer',
+            'country' => 'required|integer',
         ])->errors();
     }
 }

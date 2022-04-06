@@ -69,12 +69,13 @@ class AdminController extends Controller
 	                })
 	                ->editColumn('action', function ($event) {
                         $role_permission = checkPermission('role_permission');
-	                    $actions = '';
+	                    $actions = '<span style="white-space:nowrap;">';
 	                    if($event->id != 1) {
 	                        if($role_permission) {
                                 $actions .= ' <a href="role_permission/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Edit Permissions"><i class="fa fa-edit"></i></a>';
 	                        }
 	                    }
+                        $actions .= '</span>';
 	                    return $actions;
 	                }) 
 	                ->addIndexColumn()

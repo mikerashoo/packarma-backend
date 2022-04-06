@@ -65,7 +65,7 @@
                                                     <th id="order_delivery_status" data-orderable="false" data-searchable="false">Delivery Status</th>
                                                     <th id="payment_status" data-orderable="false" data-searchable="false">Payment Status</th>
                                                     <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>
-                                                    @if($data['order_view'] || $data['order_delivery_update'] || $data['order_payment_update'])
+                                                    @if($data['order_view'] || $data['order_delivery_update'] || $data['order_payment_update'] || $data['vendor_payment_update'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

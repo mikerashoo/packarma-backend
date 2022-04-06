@@ -47,7 +47,7 @@
                                                     <th id="currency_symbol" data-orderable="false" data-searchable="false">Currency Symbol</th>
                                                     <th id="currency_code" data-orderable="false" data-searchable="false">Currency Code</th>
                                                     <th id="exchange_rate" data-orderable="false" data-searchable="false">Exchange Rate</th>
-                                                    @if($data['currency_edit'] || $data['currency_status'])
+                                                    @if($data['currency_edit'] || $data['currency_status'] || $data['currency_view'])
                                                     <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

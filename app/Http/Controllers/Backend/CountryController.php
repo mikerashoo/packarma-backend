@@ -12,14 +12,14 @@ class CountryController extends Controller
 {
     /**
        *   created by : Pradyumn Dwivedi
-       *   Created On : -Feb-2022
+       *   Created On : 28-Feb-2022
        *   Uses :  To show country listing page
     */
     public function index(){
         $data['country_add'] = checkPermission('country_add');
+        $data['country_view'] = checkPermission('country_view');
         $data['country_edit'] = checkPermission('country_edit');
         $data['country_status'] = checkPermission('country_status'); 
-              
         return view('backend/country/index',["data"=>$data]);
     }
 
@@ -52,9 +52,13 @@ class CountryController extends Controller
 	                    return $event->currency->currency_code;
 	                })
 	                ->editColumn('action', function ($event) {
+                        $country_view = checkPermission('country_view');
                         $country_edit = checkPermission('country_edit');
 	                    $country_status = checkPermission('country_status');
-	                    $actions = '';
+	                    $actions = '<span style="white-space:nowrap;">';
+                        if ($country_view) {
+                            $actions .= '<a href="country_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Country Details" title="View"><i class="fa fa-eye"></i></a>';
+                        }
                         if($country_edit) {
                             $actions .= ' <a href="country_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
@@ -65,6 +69,7 @@ class CountryController extends Controller
                                 $actions .= ' <input type="checkbox" data-url="publishCountry" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
                             }
                         }
+                        $actions .= '</span>';
                         return $actions;
 	                }) 
 	                ->addIndexColumn()
@@ -99,8 +104,9 @@ class CountryController extends Controller
             \Log::error("Country Validation Exception: " . implode(", ", $validationErrors->all()));
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
-
+        $isEditFlow = false;
         if(isset($_GET['id'])) {
+            $isEditFlow = true;
             $response = Country::where([['country_name', strtolower($request->country_name)],['id', '<>', $_GET['id']]])->get()->toArray();
             if(isset($response[0])){
                 errorMessage('Country Name Already Exist', $msg_data);
@@ -135,8 +141,27 @@ class CountryController extends Controller
         $tblObj->phone_code = $request->phone_code;
         $tblObj->phone_length = $request->phone_length;
         $tblObj->currency_id = $request->currency_id;
+        if($isEditFlow){
+            $tblObj->updated_by = session('data')['id'];
+        }else{
+            $tblObj->created_by = session('data')['id'];
+        }
         $tblObj->save();
         successMessage($msg , $msg_data);
+    }
+
+    /**
+     *   Created by : Pradyumn Dwivedi
+     *   Created On : 05-April-2022
+     *   Uses :  to load country view
+     *   @param int $id
+     *   @return Response
+     */
+    public function view($id)
+    {
+        $data['data'] = Country::find($id);
+        $data['currency'] = Currency::all();
+        return view('backend/country/country_view', $data);
     }
 
     /**

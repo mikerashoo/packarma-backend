@@ -60,7 +60,7 @@
                                                     <th id="email" data-orderable="false" data-searchable="false">Email ID</th>
                                                     <th id="phone" data-orderable="false" data-searchable="false">Phone</th>
                                                     <th id="role" data-orderable="false" data-searchable="false">Role</th>
-                                                    @if($data['staff_edit'])
+                                                    @if($data['staff_edit'] || $data['staff_view'] || $data['staff_status'])
                                                     <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

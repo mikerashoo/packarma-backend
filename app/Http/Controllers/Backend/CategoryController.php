@@ -61,7 +61,7 @@ class CategoryController extends Controller
                         $category_status = checkPermission('category_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($category_view) {
-                            $actions .= '<a href="category_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="category_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Category Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($category_edit) {
                             $actions .= ' <a href="category_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
@@ -161,6 +161,11 @@ class CategoryController extends Controller
             if($fileSize >= $fixedSize){
                 errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
             };
+        }
+        if($isEditFlow){
+            $tableObject->updated_by = session('data')['id'];
+        }else{
+            $tableObject->created_by = session('data')['id'];
         }
         $tableObject->category_name = $request->category_name;
         $tableObject->save();

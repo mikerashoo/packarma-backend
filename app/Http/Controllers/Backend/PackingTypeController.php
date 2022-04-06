@@ -55,7 +55,7 @@ class PackingTypeController extends Controller
                         $packing_type_status = checkPermission('packing_type_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($packing_type_view) {
-                            $actions .= '<a href="packing_type_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="packing_type_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Packing Type Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($packing_type_edit) {
                             $actions .= ' <a href="packing_type_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';

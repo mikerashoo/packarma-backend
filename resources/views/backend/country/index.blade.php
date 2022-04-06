@@ -47,7 +47,7 @@
                                                     <th id="phone_code" data-orderable="false" data-searchable="false">Phone Code</th>
                                                     <th id="phone_length" data-orderable="false" data-searchable="false">Phone Length</th>
                                                     <th id="currency_code" data-orderable="false" data-searchable="false">Currency Code</th>
-                                                    @if($data['country_status'] || $data['country_edit'])
+                                                    @if($data['country_status'] || $data['country_edit'] || $data['country_view'])
                                                     <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

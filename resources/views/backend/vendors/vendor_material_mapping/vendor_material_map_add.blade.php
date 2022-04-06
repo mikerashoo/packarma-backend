@@ -34,7 +34,7 @@
                                                     <option value="{{ $vendors->id }}">{{ $vendors->vendor_name }}</option>
                                                 @endif
                                             @endforeach
-                                        </select><br><br>
+                                        </select><br>
                         			</div>
                                     <div class="col-sm-6 mb-3">
                         				<label>Packaging Material Name<span style="color:#ff0000">*</span></label>

@@ -25,7 +25,7 @@ class VendorWarehouseController extends Controller
         $data['vendor_warehouse_view'] = checkPermission('vendor_warehouse_view');
         $data['vendor_warehouse_edit'] = checkPermission('vendor_warehouse_edit');
         $data['vendor_warehouse_status'] = checkPermission('vendor_warehouse_status');        
-        return view('backend/vendor_warehouse/index',["data"=>$data]);
+        return view('backend/vendors/vendor_warehouse/index',["data"=>$data]);
     }
 
     /**
@@ -115,7 +115,7 @@ class VendorWarehouseController extends Controller
         $data['city'] = City::all();
         $data['state'] = State::all();
         $data['country'] = Country::all();
-        return view('backend/vendor_warehouse/vendor_warehouse_add',$data);
+        return view('backend/vendors/vendor_warehouse/vendor_warehouse_add',$data);
     }
 
     /**
@@ -131,7 +131,7 @@ class VendorWarehouseController extends Controller
         $data['vendor'] = Vendor::all();
         $data['state'] = State::all();
         $data['country'] = Country::all();
-        return view('backend/vendor_warehouse/vendor_warehouse_edit', $data);
+        return view('backend/vendors/vendor_warehouse/vendor_warehouse_edit', $data);
     }
 
     /**
@@ -194,7 +194,7 @@ class VendorWarehouseController extends Controller
     */
     public function view($id) {
         $data['data'] = VendorWarehouse::with('vendor','city','state','country')->find($id);
-        return view('backend/vendor_warehouse/vendor_warehouse_view',$data);
+        return view('backend/vendors/vendor_warehouse/vendor_warehouse_view',$data);
     }
 
     /**

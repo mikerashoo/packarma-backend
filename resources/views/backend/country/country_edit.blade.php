@@ -21,19 +21,19 @@
                                 @csrf
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <label>Country Name</label>
+                                        <label>Country Name<span class="text-danger">*</span></label>
                                         <input class="form-control" type="text" id="country_name" name="country_name" value="{{ $data['data']->country_name }}"><br />
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Phone Code</label>
-                                        <input class="form-control" type="number" id="phone_code" name="phone_code" value="{{ $data['data']->phone_code }}"><br />
+                                        <label>Phone Code<span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" id="phone_code" name="phone_code" value="{{ $data['data']->phone_code }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br />
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Phone Length</label>
-                                        <input class="form-control" type="number" value="{{ $data['data']->phone_length }}" id="phone_length" name="phone_length" value="{{ $data['data']->phone_length }}"><br />
+                                        <label>Phone Length<span class="text-danger">*</span></label>
+                                        <input class="form-control" type="text" value="{{ $data['data']->phone_length }}" id="phone_length" name="phone_length" value="{{ $data['data']->phone_length }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br />
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Currency</label>
+                                        <label>Currency<span class="text-danger">*</span></label>
                                         <select class="select2" id="currency_id" name="currency_id" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach ($data['currency'] as $currency)

@@ -67,7 +67,7 @@ class OrderPaymentController extends Controller
 	                    return date('d-m-Y H:i A', strtotime($event->updated_at));                        
 	                })
                     ->editColumn('action', function ($event) {
-                        $order_payment_view = checkPermission('user_subscription_payment_view');
+                        $order_payment_view = checkPermission('order_payment_view');
 	                    $actions = '<span style="white-space:nowrap;">';
                         if($order_payment_view) {
                             $actions .= '<a href="order_payment_view/'.$event->id.'" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';

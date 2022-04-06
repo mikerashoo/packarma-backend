@@ -55,7 +55,7 @@ class PackagingMachineController extends Controller
                         $packaging_machine_status = checkPermission('packaging_machine_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($packaging_machine_view) {
-                            $actions .= '<a href="packaging_machine_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="packaging_machine_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Packaging Machine Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($packaging_machine_edit) {
                             $actions .= ' <a href="packaging_machine_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';

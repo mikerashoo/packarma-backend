@@ -30,7 +30,7 @@
                                                             <option value="{{ $users->id }}" selected>{{ $users->name }}</option>
                                                         @endif
                                                     @endforeach
-                                                </select><br />
+                                                </select><br/><br>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>City<span style="color:#ff0000">*</span></label>
@@ -43,7 +43,7 @@
                                                             <option value="{{ $cities->id }}">{{ $cities->city_name }}</option>
                                                         @endif
                                                     @endforeach
-                                                </select><br />
+                                                </select><br/><br>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>State<span style="color:#ff0000">*</span></label>
@@ -73,7 +73,7 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Address<span style="color:#ff0000">*</span></label>
-                                                <textarea class="form-control required" id="address" name="address">{{ $data->address }}</textarea><br />
+                                                <textarea class="form-control required" id="address" name="address">{{ $data->address }}</textarea><br/>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Pincode<span style="color:#ff0000">*</span></label>

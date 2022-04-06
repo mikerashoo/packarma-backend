@@ -20,20 +20,20 @@
                     			@csrf
                         		<div class="row">
                                     <div class="col-sm-6">
-                        				<label>Currency Name</label>
-                        				<input class="form-control" type="text" id="currency_name" name="currency_name" style="text-transform: capitalize;"><br/>
+                        				<label>Currency Name<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="text" id="currency_name" name="currency_name" style="text-transform: capitalize;"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Currency Symbol</label>
-                        				<input class="form-control" type="text" id="currency_symbol" name="currency_symbol" style="text-transform: uppercase;"><br/>
+                        				<label>Currency Symbol<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="text" id="currency_symbol" name="currency_symbol" style="text-transform: uppercase;"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Currency Code</label>
-                        				<input class="form-control" type="text" id="currency_code" name="currency_code" style="text-transform: uppercase;"><br/>
+                        				<label>Currency Code<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="text" id="currency_code" name="currency_code" style="text-transform: uppercase;"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Exchange Rate</label>
-                        				<input class="form-control" type="number" step=".001" id="exchange_rate" name="exchange_rate"><br/>
+                        				<label>Exchange Rate<span class="text-danger">*</span></label>
+                        				<input class="form-control required" type="text" step=".001" id="exchange_rate" name="exchange_rate" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                         			</div>                                    
                         		</div>
                         		<hr>

@@ -40,6 +40,10 @@
                                                 <td><strong>Approval Status</strong></td>
                                                 <td>{{ approvalStatusArray($data->approval_status) }}</td>
                                             </tr>
+                                            <tr>
+                                                <td><strong>Date Time</strong></td>
+                                                <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
+                                            </tr>
                                         </table>
                                     </div>
                                 </div>

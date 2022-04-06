@@ -39,6 +39,10 @@
                                             <td>{{$data->max_shelf_life}}</td>
                                         </tr>
                                         <tr>
+                                            <td><strong>Display Shelf Life</strong></td>
+                                            <td>{{$data->display_shelf_life}}</td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>Minimum Weight</strong></td>
                                             <td>{{$data->min_weight}}</td>
                                         </tr>
@@ -79,10 +83,6 @@
                                             <td>{{$data->vendor->vendor_name}}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Display Shelf Life</strong></td>
-                                            <td>{{$data->display_shelf_life}}</td>
-                                        </tr>
-                                        <tr>
                                             <td><strong>WVTR</strong></td>
                                             <td>{{$data->wvtr}}</td>
                                         </tr>
@@ -109,6 +109,10 @@
                                         <tr>
                                             <td><strong>Category Status</strong></td>
                                             <td>{{displayStatus($data->status)}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Date Time</strong></td>
+                                            <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
                                         </tr>
                                     </table>
                                 </div>

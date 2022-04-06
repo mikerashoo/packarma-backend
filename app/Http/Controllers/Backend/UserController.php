@@ -30,7 +30,7 @@ class UserController extends Controller
     public function indexUserList($id = "")
     {
         $data['data'] = User::all();
-        $data['add_user'] = checkPermission('add_user');
+        $data['user_list_add'] = checkPermission('user_list_add');
         $data['user_list_view'] = checkPermission('user_list_view');
         $data['user_list_edit'] = checkPermission('user_list_edit');
         $data['user_list_status'] = checkPermission('user_list_status');
@@ -82,17 +82,17 @@ class UserController extends Controller
                     $user_list_add_address = checkPermission('user_list_add_address');
                     $actions = '<span style="white-space:nowrap;">';
                     if ($user_list_view) {
-                        $actions .= '<a href="userListView/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                        $actions .= '<a href="user_list_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                     }
                     if ($user_list_edit) {
-                        $actions .= ' <a href="edit_user_list/' . $event->id.  '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                        $actions .= ' <a href="user_list_edit/' . $event->id.  '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                     }
                     if ($user_list_status) {
                         if ($event->status == '1') {
-                            $actions .= ' <input type="checkbox" data-url=publishUser" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                            $actions .= ' <input type="checkbox" data-url=publishUserList" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
                         }
                         else {
-                            $actions .= ' <input type="checkbox" data-url="publishUser" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                            $actions .= ' <input type="checkbox" data-url="publishUserList" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
                         }
                     }
                     if ($user_list_add_address) {
@@ -126,7 +126,7 @@ class UserController extends Controller
     {
         $data['country'] = Country::all();
         $data['currency'] = Currency::all();
-        return view('backend/customer_section/user_list/add_user', $data);
+        return view('backend/customer_section/user_list/user_list_add', $data);
     }
 
     /**
@@ -146,7 +146,7 @@ class UserController extends Controller
         }
         $data['country'] = Country::all();
         $data['currency'] = Currency::all();
-        return view('backend/customer_section/user_list/edit_user', $data);
+        return view('backend/customer_section/user_list/user_list_edit', $data);
     }
 
     /**
@@ -269,7 +269,7 @@ class UserController extends Controller
     {
         $data['data'] = User::find($id);
         $data['userAddress'] = UserAddress::with('city', 'state', 'country','user')->where('user_id', '=', $id)->get();
-        return view('backend/customer_section/user_list/view_user', $data);
+        return view('backend/customer_section/user_list/user_list_view', $data);
     }
 
     /**
@@ -302,8 +302,8 @@ class UserController extends Controller
     public function indexApprovalList()
     {
         $data['data'] = User::all();
-        $data['approval_list_view'] = checkPermission('approval_list_view');
-        $data['approval_list_update'] = checkPermission('approval_list_update');
+        $data['user_approval_list_view'] = checkPermission('user_approval_list_view');
+        $data['user_approval_list_update'] = checkPermission('user_approval_list_update');
         return view('backend/customer_section/user_approval_list/index',["data"=>$data]);
     }
 
@@ -358,14 +358,14 @@ class UserController extends Controller
                         return date('d-m-Y H:i A', strtotime($event->created_at));
                     })
                     ->editColumn('action', function ($event) {
-                        $approval_list_view = checkPermission('approval_list_view');
-                        $approval_list_update = checkPermission('approval_list_update');
+                        $user_approval_list_view = checkPermission('user_approval_list_view');
+                        $user_approval_list_update = checkPermission('user_approval_list_update');
                         $actions = '<span style="white-space:nowrap;">';
-                        if ($approval_list_view) {
-                            $actions .= '<a href="approval_list_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                        if ($user_approval_list_view) {
+                            $actions .= '<a href="user_approval_list_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View User Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if ($approval_list_update) {
-                            $actions .= ' <a href="approval_list_update/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update Approval"><i class="fa fa-edit"></i></a>';
+                        if ($user_approval_list_update) {
+                            $actions .= ' <a href="user_approval_list_update/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update Approval"><i class="fa fa-edit"></i></a>';
                         }
                         $actions .= '</span>';
                         return $actions;
@@ -397,7 +397,7 @@ class UserController extends Controller
     {
         $data['data'] = User::find($id);
         $data['approvalArray'] = approvalStatusArray();
-        return view('backend/customer_section/user_approval_list/update_approval_list', $data);
+        return view('backend/customer_section/user_approval_list/user_approval_list_update', $data);
     }
 
     /**
@@ -452,7 +452,7 @@ class UserController extends Controller
         $data['country'] = Country::all();
         $data['currency'] = Currency::all();
         $data['approvalArray'] = approvalStatusArray();
-        return view('backend/customer_section/user_approval_list/view_approval_list', $data);
+        return view('backend/customer_section/user_approval_list/user_approval_list_view', $data);
     }
 
     /**

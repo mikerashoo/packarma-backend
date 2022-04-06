@@ -55,7 +55,7 @@ class ProductFormController extends Controller
                         $product_form_status = checkPermission('product_form_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($product_form_view) {
-                            $actions .= '<a href="product_form_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="product_form_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Product Form Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($product_form_edit) {
                             $actions .= ' <a href="product_form_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';

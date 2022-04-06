@@ -21,6 +21,10 @@
                                             <td>{{displayStatus($data->status)}}</td>
                                         </tr>
                                         <tr>
+                                            <td><strong>Date Time</strong></td>
+                                            <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>Banners Image</strong></td>
                                             <td><img src="{{ListingImageUrl('banner',$data->banner_image)}}" width="150px" height="auto"/></td>
                                         </tr>
