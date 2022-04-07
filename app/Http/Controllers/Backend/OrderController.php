@@ -99,9 +99,9 @@ class OrderController extends Controller
                                 $actions .= '  <a href="order_delivery_update/' . $event->id . '" class="btn btn-info btn-sm src_data" title="Update Delivery"><i class="fa fa-truck"></i></a>';
                             }
                         }
-                        if($event->vendor_pending_payment != 0){
+                        if($event->customer_pending_payment != 0){
                             if ($order_payment_update) {
-                                $actions .= '  <a href="vendor_payment/' . $event->id . '" class="btn btn-secondary btn-sm src_data" title="Customer Payment"><i class="fa fa-money"></i></a>';
+                                $actions .= '  <a href="orderPaymentUpdate/' . $event->id . '" class="btn btn-secondary btn-sm src_data" title="Customer Payment"><i class="fa fa-money"></i></a>';
                             }
                         }
                         if($event->vendor_pending_payment != 0){
@@ -109,7 +109,7 @@ class OrderController extends Controller
                             //     $actions .= '  <a href="vendor_payment/' . $event->id . '" class="btn btn-warning btn-sm src_data" title="Vendor Payment"><i class="fa fa-money"></i></a>';
                             // }
                             if ($vendor_payment_update) {
-                                $actions .= ' <a href="vendor_payment?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="Vendor Payment"><i class="fa fa-money"></i></a>';
+                                $actions .= ' <a href="vendor_payment_list?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="Vendor Payment"><i class="fa fa-money"></i></a>';
                             }
                         }
                         $actions .= '</span>';
@@ -211,7 +211,7 @@ class OrderController extends Controller
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 04-April-2022
-       *   Uses :  To store order delivery status in table
+       *   Uses :  To store order payment status in table
        *   @param Request request
        *   @return Response
     */
@@ -255,8 +255,8 @@ class OrderController extends Controller
         $tableObject->order_id = $_GET['id'];
         $tableObject->product_id = $request->product_id;
         $tableObject->vendor_id = $request->vendor_id;
-        $tableObject->customer_payment_mode = $request->payment_mode;
-        $tableObject->customer_payment_status = $request->payment_status;
+        $tableObject->payment_mode = $request->payment_mode;
+        $tableObject->payment_status = $request->payment_status;
         $tableObject->amount = $request->amount;
         $tableObject->gateway_id = $request->gateway_id;
         $tableObject->gateway_key = $request->gateway_key;

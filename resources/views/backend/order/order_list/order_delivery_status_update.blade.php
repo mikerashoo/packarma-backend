@@ -36,7 +36,7 @@
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-4 text-left">Payment Status :</dt>
-                                                        <dd class="col-sm-8">{{ paymentStatus(($data->payment_status)); }}</dd>
+                                                        <dd class="col-sm-8">{{ paymentStatus(($data->customer_payment_status)); }}</dd>
                                                     </dl>                                                    
                                                 </div>
                                             </div>                                    

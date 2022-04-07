@@ -33,8 +33,9 @@
                                             <label>Order ID</label>
                                             @if (isset($id))
                                                 <input class="form-control mb-3" type="text" id="search_order_id" value="{{ $id }}" name="search_order_id">
+                                            @else
+                                                <input class="form-control mb-3" type="text" id="search_order_id" name="search_order_id">
                                             @endif
-                                            <input class="form-control mb-3" type="text" id="search_order_id" name="search_order_id">
                                         </div>
                                         <div class="col-sm-4">
                                             <label>Vendor Name</label>
@@ -43,14 +44,14 @@
                                                     <option value="">Select</option>
                                                 @endif
                                                 @foreach ($vendor as $vendors)
-                                                        @if (isset($id))
-                                                            @if ($orders->vendor_id == $id)
-                                                                <option value="{{ $vendor->id }}" selected>{{ $vendor->vendor_name }}</option>
-                                                            @endif
-                                                        @else
-                                                            <option value="{{ $vendor->id }}">{{ $vendor->vendor_name }}</option>
+                                                    @if (isset($id))
+                                                        @if ($vendors->id == $id )
+                                                            <option value="{{ $vendors->id }}" selected>{{ $vendors->vendor_name }}</option>
                                                         @endif
-                                                    @endforeach
+                                                    @else
+                                                        <option value="{{ $vendors->id }}">{{ $vendors->vendor_name }}</option>
+                                                    @endif
+                                                @endforeach
                                             </select><br/>
                                         </div>
                                         <div class="col-md-4">
@@ -67,8 +68,9 @@
                                                     <th id="order_id" data-orderable="false" data-searchable="false">Order ID</th>
                                                     <th id="payment_mode" data-orderable="false" data-searchable="false">Payment Mode</th>
                                                     <th id="payment_status" data-orderable="false" data-searchable="false">Payment Status</th>
+                                                    <th id="transaction_date" data-orderable="false" data-searchable="false">Transaction Date</th>
                                                     <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>                                                    
-                                                    @if($data['vendor_payment_view'])
+                                                    @if($vendor_payment_view)
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

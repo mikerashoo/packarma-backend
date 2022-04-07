@@ -44,7 +44,7 @@
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-4 text-left">Pending Payment :</dt>
-                                                        <dd class="col-sm-8">{{ $data->pending_payment; }}</dd>
+                                                        <dd class="col-sm-8">{{ $data->customer_pending_payment; }}</dd>
                                                     </dl>                                                    
                                                 </div>
                                             </div>                                    

@@ -292,9 +292,9 @@
                                         <a href="vendor_warehouse" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Warehouse</a>
                                     </li>
                                 @endif
-                                @if(in_array('vendor_payment', $permission_array) || session('data')['role_id'] == 1)
-                                    <li class="{{ Request::path() ==  'webadmin/vendor_payment' ? 'active' : ''  }}">
-                                        <a href="vendor_payment" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Payment</a>
+                                @if(in_array('vendor_payment_list', $permission_array) || session('data')['role_id'] == 1)
+                                    <li class="{{ Request::path() ==  'webadmin/vendor_payment_list' ? 'active' : ''  }}">
+                                        <a href="vendor_payment_list" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Payment</a>
                                     </li>
                                 @endif
                             </ul>

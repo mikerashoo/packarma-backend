@@ -126,7 +126,6 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/orderUpdatePayment', 'OrderController@updatePaymentStatus');
 	Route::get('/order_view/{id}', 'OrderController@viewOrder');
 
-
 	//CustomerSection:-
 	//User approval List
 	Route::get('/user_approval_list','UserController@indexApprovalList');
@@ -213,13 +212,14 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::get('/vendor_warehouse_view/{id}', 'VendorWarehouseController@view');
 
 	//vendor payment
-	Route::get('/vendor_payment', 'VendorPaymentController@index');
+	Route::get('/vendor_payment_list', 'VendorPaymentController@index');
 	Route::post('/vendor_payment_data', 'VendorPaymentController@fetch')->name('vendor_payment_data');
 	Route::get('/vendor_payment_add','VendorPaymentController@add');
 	Route::get('/vendor_payment_edit','VendorPaymentController@edit');
 	Route::post('/saveVendorPaymentStatus', 'VendorPaymentController@saveVendorPaymentStatusData');
 	Route::get('/vendor_payment_view/{id}', 'VendorPaymentController@view'); 
 	Route::post('/getVendorOrderDropdown', 'VendorPaymentController@getVendorOrders');
+	Route::post('/getOrderDetailsTableData', 'VendorPaymentController@getVendoPaymentDetails');
 
 	//Product Form
 	Route::get('/product_form', 'ProductFormController@index');

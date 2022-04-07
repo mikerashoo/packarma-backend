@@ -20,6 +20,8 @@ class CreateVendorPaymentsTable extends Migration
             $table->string('payment_status', 255)->default('pending')->comment('pending|semi_paid|fully_paid');
             $table->string('payment_mode', 255)->default('cod')->comment('cod|bank_transfer|payment_gateway|cheque|demand_draft');
             $table->decimal('amount', $precision = 8, $scale = 3)->comment('chunk payment');
+            $table->longText('remark')->nullable();
+            $table->date('transaction_date')->nullable();
             $table->longText('payment_details')->nullable();
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);

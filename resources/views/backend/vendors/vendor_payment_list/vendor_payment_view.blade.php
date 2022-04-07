@@ -29,6 +29,14 @@
                                             <td>{{$data->amount}}</td>
                                         </tr>
                                         <tr>
+                                            <td><strong>Transaction Time</strong></td>
+                                            <td>{{date('d-m-Y', strtotime($data->transaction_date)) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Remark</strong></td>
+                                            <td>{{$data->remark}}</td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>Date Time</strong></td>
                                             <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
                                         </tr>
