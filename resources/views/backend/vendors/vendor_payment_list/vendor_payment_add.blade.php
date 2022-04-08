@@ -26,7 +26,7 @@
                                             @endif
                                             @foreach ($vendor as $vendors)
                                                 @if (isset($id))
-                                                    @if ($vendors->id == $id )
+                                                    @if ($vendors->id == $vendorID[0] )
                                                         <option value="{{ $vendors->id }}" selected>{{ $vendors->vendor_name }}</option>
                                                     @endif
                                                 @else
@@ -48,12 +48,13 @@
                                                                 $total_amount = $orders->grand_total;
                                                                 $pending_amount = $orders->vendor_pending_payment;
                                                             @endphp
-                                                            <option value="{{ $orders->id }}" selected>{{ $orders->id }}</option>
+                                                            <option value="{{ $orders->id }}" selected >{{ $orders->id }}</option>
                                                         @endif
                                                     @endforeach
                                                 @endif
                                             {{-- <option value="">Select</option> --}}
-                                        </select><br/><br>
+                                        </select><br/>
+                                        <a href="#"  id='hideshow' class="primary" title="Transaction History">Click Here To Show/Hide Transaction History of Selected Order</a><br><br>
                         			</div>
                                     <div class="col-sm-6">
                                         <label>Grand Total Amount</label>
@@ -94,8 +95,8 @@
                                         <input class="form-control required" type="text" id="amount" name="amount" step=".001" value="" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Transaction Date</label>
-                                        <input class="form-control" type="date" id="transaction_date" name="transaction_date"/><br>
+                                        <label>Transaction Date<span style="color:#ff0000">*</span></label>
+                                        <input class="form-control required" type="date" id="transaction_date" name="transaction_date"/><br>
                                     </div>
                                     <div class="col-sm-6">
                         				<label>Remark</label>
@@ -113,7 +114,7 @@
                         		</div>
                         	</form>
                     	</div>
-                        <div class="col-12 col-xl-12 users-module">
+                        <div class="col-12 col-xl-12 users-module" id="transaction_record" style="display: none;">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered mb-2" id="payment_history">
                                     <thead>
@@ -128,6 +129,27 @@
                                         </tr>
                                     </thead>
                                     <tbody id="trans_history_table">
+                                        @if($payment_details)
+                                            @foreach($payment_details as $key => $val)
+                                            <tr>
+                                                <td>{{  $val['vendor']['vendor_name'] }}</td>
+                                                <td>{{  $val['order_id'] }}</td>
+                                                <td>{{  paymentMode($val['payment_mode']) }}</td>
+                                                <td>{{  $val['amount'] }}</td>
+                                                <td>{{  date('d-m-Y', strtotime($val['transaction_date']))}}</td>
+                                                <td>{{  $val['remark'] }}</td>
+                                                <td>{{  date('d-m-Y H:i A', strtotime($val['updated_at'])) }}</td>
+                                            </tr>
+                                            @endforeach
+                                        @elseif (empty($payment_details))
+                                            <tr>
+                                                <td colspan="7" class="text-center">No Record Found For Selected Order</td>
+                                            </tr>
+                                        @else
+                                            <tr>
+                                                <td colspan="7" class="text-center">Please Select Order To Show Transaction History</td>
+                                            </tr>
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
@@ -152,7 +174,6 @@
             dataType:"JSON",
             success:function(result)
             {
-                // console.log(result.vendor_orders);
                 $dropdownData = '<option value="">Select</option>';
                 if(result.vendor_orders.length > 0){
                     $.each(result.vendor_orders,function(key,value){
@@ -169,7 +190,6 @@
     //function to get amount values of selected order from drop down
     $(document).on('change', '#order_id', function(event){
         event.preventDefault();
-        // var amount = $(this).attr('data-amt');
         var amount = $(this).select2().find(":selected").data("amt");
         var grandTotal = $(this).select2().find(":selected").data("total");
         if(amount !=  undefined){
@@ -193,46 +213,31 @@
             dataType:"JSON",
             success:function(result)
             {
-                console.log(result.payment_details);
-                // $payment_history = '';
+                $order_payment_details = "";
+                $empty_record = "<tr>"+"<td colspan='7' class='text-center'>"+'No Record Found For Selected Order'+"</td>"+"</tr>";
                 if(result.payment_details.length > 0){
                     $.each(result.payment_details,function(key,value){
-                        $("#trans_history_table").append("<tr>"+
-                            "<td>"+value.vendor_id+"</td>"+
-                            "<td>"+value.order_id+"</td>"+
-                            "<td>"+value.payment_mode+"</td>"+
-                            "<td>"+value.amount+"</td>"+
-                            "<td>"+value.transaction_date+"</td>"+
-                            "<td>"+value.remark+"</td>"+
-                            "<td>"+value.updated_at+"</td>"+"</tr>");
+                        $order_payment_details +=   "<tr>"+
+                                            "<td>"+value.vendor.vendor_name+"</td>"+
+                                            "<td>"+value.order_id+"</td>"+
+                                            "<td>"+value.transaction_mode+"</td>"+
+                                            "<td>"+value.amount+"</td>"+
+                                            "<td>"+value.transaction_datetime+"</td>"+
+                                            "<td>"+value.remark+"</td>"+
+                                            "<td>"+value.updated_datetime+"</td>"+"</tr>";
                     });
+                    $('#trans_history_table').html($order_payment_details);
                 }else{
-                    $('#trans_history_table .select2').val('').trigger('change');
-                    // $("#trans_history_table").val('No data found');
-                    // $("#trans_history_table").append("<tr>"+"<td colspan='7' class='text-center>"+'No Transaction History Found for Selected ID'+"</td>"+"</tr>");
-                    alert('bye');
+                    $('#trans_history_table').html($empty_record);
                 }
             },
         });  
     }
-
-    $(document).on('change', '#order_id', function(event){
-        event.preventDefault();
-        var trans_history_table = $(this).select2().find(":selected").attr('trans_history_table');;
-        // var grandTotal = $(this).select2().find(":selected").data("total");
-        if(trans_history_table !=  undefined){
-            $("#trans_history_table").append("<tr>"+
-                            "<td>"+value.vendor_id+"</td>"+
-                            "<td>"+value.order_id+"</td>"+
-                            "<td>"+value.payment_mode+"</td>"+
-                            "<td>"+value.amount+"</td>"+
-                            "<td>"+value.transaction_date+"</td>"+
-                            "<td>"+value.remark+"</td>"+
-                            "<td>"+value.updated_at+"</td>"+"</tr>");
-        }else{
-            $('#grand_total').val('');
-            $('#vendor_pending_amount').val('');
-        }
-        $('#trans_history_table').toggle();
+    // function to show hide transaction table
+    jQuery(document).ready(function(){
+    jQuery('#hideshow').on('click', function(event) {        
+        jQuery('#transaction_record').toggle('show');
     });
+});
+
 </script>

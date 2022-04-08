@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\resources",
+    "\\resources\\views",
+    "\\resources\\views\\backend",
+    "\\resources\\views\\backend\\vendors",
+    "\\resources\\views\\backend\\vendors\\vendor_payment_list"
+  ],
+  "SelectedNode": "\\resources\\views\\backend\\vendors\\vendor_payment_list\\vendor_payment_add.blade.php",
+  "PreviewInSolutionExplorer": false
+}

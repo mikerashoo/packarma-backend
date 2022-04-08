@@ -84,16 +84,24 @@
                                                 <td>{{$data->grand_total}}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Pending Payment</strong></td>
-                                                <td>{{$data->pending_payment}}</td>
-                                            </tr>
-                                            <tr>
                                                 <td><strong>Delivery Status</strong></td>
                                                 <td>{{deliveryStatus($data->order_delivery_status);}}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Payment Status</strong></td>
-                                                <td>{{paymentStatus($data->payment_status);}}</td>
+                                                <td><strong>Customer Pending Payment</strong></td>
+                                                <td>{{$data->customer_pending_payment}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Customer Payment Status</strong></td>
+                                                <td>{{paymentStatus($data->customer_payment_status);}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Vendor Pending Payment</strong></td>
+                                                <td>{{$data->vendor_pending_payment}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Vendor Payment Status</strong></td>
+                                                <td>{{paymentStatus($data->vendor_payment_status);}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Order Date Time</strong></td>

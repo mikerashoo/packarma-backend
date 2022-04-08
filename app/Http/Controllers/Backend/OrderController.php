@@ -105,9 +105,6 @@ class OrderController extends Controller
                             }
                         }
                         if($event->vendor_pending_payment != 0){
-                            // if ($vendor_payment_update) {
-                            //     $actions .= '  <a href="vendor_payment/' . $event->id . '" class="btn btn-warning btn-sm src_data" title="Vendor Payment"><i class="fa fa-money"></i></a>';
-                            // }
                             if ($vendor_payment_update) {
                                 $actions .= ' <a href="vendor_payment_list?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="Vendor Payment"><i class="fa fa-money"></i></a>';
                             }
@@ -300,7 +297,7 @@ class OrderController extends Controller
     // 'storage_condition', table pending
     public function viewOrder($id) {
         $data['data'] = Order::with('user','vendor','category','sub_category','product','packaging_machine','product_form','packing_type','packaging_treatment','country','currency')->find($id);
-        return view('backend/order/order_list/order_view',$data);
+        return view('backend/order/order_list/order_view', $data);
     }
 
     /**

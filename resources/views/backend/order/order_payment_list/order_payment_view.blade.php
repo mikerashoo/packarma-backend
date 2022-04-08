@@ -24,7 +24,7 @@
                                                 <td>{{$data->order_id}}</td>
                                             </tr>
                                             <tr>
-                                                <td class="col-sm-3"><strong>User Name</strong></td>
+                                                <td><strong>User Name</strong></td>
                                                 <td>{{$data->user->name}}</td>
                                             </tr>
                                             <tr>

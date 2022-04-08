@@ -114,7 +114,7 @@ class BannerController extends Controller
      */
     public function edit($id)
     {
-        $data= Banner::find($id);
+        $data = Banner::find($id);
         if($data){
             $data->image_path = getFile($data->banner_image,'banner',true);
         }

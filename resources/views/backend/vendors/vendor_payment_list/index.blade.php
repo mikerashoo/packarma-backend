@@ -45,7 +45,7 @@
                                                 @endif
                                                 @foreach ($vendor as $vendors)
                                                     @if (isset($id))
-                                                        @if ($vendors->id == $id )
+                                                        @if ($vendors->id == $order->vendor_id )
                                                             <option value="{{ $vendors->id }}" selected>{{ $vendors->vendor_name }}</option>
                                                         @endif
                                                     @else

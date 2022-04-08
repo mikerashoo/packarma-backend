@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Yajra\DataTables\DataTables;
-
 class CategoryController extends Controller
 {
     /**
@@ -28,7 +27,7 @@ class CategoryController extends Controller
         $data['category_status'] = checkPermission('category_status');
         return view('backend/category/index',["data"=>$data]);
     }
-
+    
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 28-Mar-2022

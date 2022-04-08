@@ -21,13 +21,15 @@ class VendorPaymentController extends Controller
     {   
         try {
             $data['vendor'] = Vendor::all();
-            $data['order'] = Order::all();
             $data['paymentMode'] = paymentMode();
             $data['paymentStatus'] = paymentStatus();
             $data['vendor_payment_add'] = checkPermission('vendor_payment_add');
             $data['vendor_payment_view'] = checkPermission('vendor_payment_view');
             if (isset($_GET['id'])) {
                 $data['id'] = Crypt::decrypt($_GET['id']);
+                $data['order'] = Order::find($data['id']);
+            }else{
+                $data['order'] = Order::all();
             }
             return view('backend/vendors/vendor_payment_list/index', $data);
         }
@@ -109,11 +111,21 @@ class VendorPaymentController extends Controller
     public function add()
     {
         $data['vendor'] = Vendor::all();
+        $data['payment_details'] = [];
         if (isset($_GET['id'])) {
             $data['order'][] = Order::find($_GET['id']);
             $data['id'] = $_GET['id'];
-        }
-        $data['order'] = Order::all();
+            $data['vendorID'] = Order::where('id', '=', $data['id'])->pluck('vendor_id')->toArray();
+            $vendorPayments = VendorPayment::with('vendor')->where("order_id",$_GET['id'])->get()->toArray();
+            if(count($vendorPayments) > 0){
+                foreach($vendorPayments as $k => $val){
+                    $vendorPayments[$k]['updated_datetime'] = date('d-m-Y H:i A', strtotime($val['updated_at']));
+                    $vendorPayments[$k]['transaction_datetime'] = date('d-m-Y', strtotime($val['transaction_date']));
+                    $vendorPayments[$k]['transaction_mode'] = paymentMode($val['payment_mode']);
+                }
+            }
+            $data['payment_details'] = $vendorPayments;
+        }        
         $data['vendor_payment'] = VendorPayment::all();
         $data['paymentMode'] = paymentMode();
         $data['paymentStatus'] = paymentStatus();
@@ -170,7 +182,11 @@ class VendorPaymentController extends Controller
         $tableObject->amount = $request->amount;
         $tableObject->payment_status = $request->payment_status;
         $tableObject->transaction_date = $request->transaction_date;
-        $tableObject->remark = $request->remark;
+        if($request->remark != ''){
+            $tableObject->remark = $request->remark;
+        }else{
+            $tableObject->remark = '';
+        }
         $tableObject->created_at = date('Y-m-d H:i:s');
         $tableObject->created_by =  session('data')['id'];
         $tableObject->save();
@@ -206,6 +222,9 @@ class VendorPaymentController extends Controller
      */
     public function getVendorOrders(Request $request){
         $data['vendor_orders'] = Order::where("vendor_id",$request->vendor_id)->get();
+        // $data['vendor_id'] = Vendor::where("id",$data['vendor_orders']->vendor_id)->get();
+        // echo "<pre>";
+        // print_r($data['vendor_id']);
         return response()->json($data);
     }
 
@@ -215,8 +234,16 @@ class VendorPaymentController extends Controller
      *   Uses :get vendor payment history of selected  order from vendor payment by order id From AJAX call
      */
     public function getVendoPaymentDetails(Request $request){
-        $data['payment_details'] = VendorPayment::where("order_id",$request->order_id)->get();
-        return response()->json($data);
+        $data= VendorPayment::with('vendor')->where("order_id",$request->order_id)->get()->toArray();
+        if(count($data) > 0){
+            foreach($data as $k => $val){
+                $data[$k]['updated_datetime'] = date('d-m-Y H:i A', strtotime($val['updated_at']));
+                $data[$k]['transaction_datetime'] = date('d-m-Y', strtotime($val['transaction_date']));
+                $data[$k]['transaction_mode'] = paymentMode($val['payment_mode']);
+            }
+        }
+        $returnData['payment_details'] = $data;
+        return response()->json($returnData);
     }
 
     /**
@@ -234,6 +261,7 @@ class VendorPaymentController extends Controller
             'payment_status' => 'required|string',
             'payment_mode' => 'required|string',
             'amount' => 'required|numeric',
+            'transaction_date' => 'required|date_format:Y-m-d',
         ])->errors();
     }
 }
