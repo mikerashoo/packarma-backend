@@ -78,7 +78,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade mt-2 show active" id="product_details" role="tabpanel" aria-labelledby="product_details-tab">
+                                    <div class="tab-pane fade mt-2" id="product_details" role="tabpanel" aria-labelledby="product_details-tab">
                                         <div class="row">    
                                             <div class="col-sm-6">
                                                 <label>Product Category<span style="color:#ff0000">*</span></label>

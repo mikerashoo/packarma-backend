@@ -16,6 +16,7 @@ use Session;
 use App\Models\Admin;
 use App\Models\Role;
 use Yajra\DataTables\DataTables;
+use App\Models\GeneralSetting;
 use App\Models\Permission;
 use Str;
 
@@ -251,5 +252,128 @@ class AdminController extends Controller
             'new_password' => 'required|min:5',
             'confirm_password' => 'required|min:5',
         ])->errors();
+    }
+
+    // General settings:-F
+     /**
+       *   created by : Sagar Thokal
+       *   Created On : 18-Feb-2022
+       *   Uses :  To load general setting page
+    */
+    public function fetchSetting(){
+        $data['data'] = GeneralSetting::pluck('value', 'type')->toArray();
+        return view('backend/dashboard/general_setting',$data);
+    }
+
+    /**
+       *   created by : Sagar Thokal
+       *   Created On : 20-Feb-2022
+       *   Uses :  To update general setting details
+       *   @param Request request
+       *   @return Response
+    */
+    public function updateSetting(Request $request){
+        $paramCase = $_GET['param'];
+        $msg_data = array();
+        $msg = "Data Saved Successfully";
+        if(isset($paramCase) && !empty($paramCase)){
+            try {
+                switch($paramCase){
+                    case 'general':
+                        GeneralSetting::where("type", 'system_email')->update(["value" => $request->system_email]);
+                        GeneralSetting::where("type", 'meta_title')->update(["value" => $request->meta_title]);
+                        GeneralSetting::where("type", 'meta_keywords')->update(["value" => $request->meta_keywords]);
+                        GeneralSetting::where("type", 'meta_description')->update(["value" => $request->meta_description]);
+                    break;
+
+                    case 'aboutus':
+                        GeneralSetting::where("type", 'about_us')->update(["value" => $request->editiorData]);
+                    break;
+
+                    case 'tnc':
+                        GeneralSetting::where("type", 'terms_condition')->update(["value" => $request->editiorData]);
+                    break;
+
+                    case 'privacy':
+                        GeneralSetting::where("type", 'privacy_policy')->update(["value" => $request->editiorData]);
+                    break;
+
+                    case 'social':
+                        GeneralSetting::where("type", 'fb_link')->update(["value" => $request->fb_link]);
+                        GeneralSetting::where("type", 'insta_link')->update(["value" => $request->insta_link]);
+                        GeneralSetting::where("type", 'twitter_link')->update(["value" => $request->twitter_link]);
+                    break;
+
+                    default:
+                        throw new \Exception("Invalid Paramter passed");
+                    
+                }
+                successMessage($msg , $msg_data);
+                //return redirect('webadmin/generalSetting');
+               ///return redirect()->back()->withErrors(array("msg"=>$msg));
+            }catch(\Exception $e){
+                \Log::error("General Setting Submit. Error: " . $e->getMessage());
+                errorMessage('Something Went Wrong', $msg_data);
+            }
+        }else{
+            errorMessage('Something Went Wrong', $msg_data);
+        }
+    }
+    
+    /**
+     *   created by : Sagar Thokal
+     *   Created On : 14-March-2022
+     *   Uses :  To enable email notification
+     *   @param Request request
+     *   @return Response
+     */
+    public function updateEmailNotification(Request $request)
+    {
+        $msg_data = array();
+        GeneralSetting::where("type", 'trigger_email_notification')->update(["value" => $request->status]);
+        if($request->status == 1) {
+        	successMessage('Published', $msg_data);
+        }
+        else {
+        	successMessage('Unpublished', $msg_data);
+        }
+    }
+
+    /**
+     *   created by : Sagar Thokal
+     *   Created On : 14-March-2022
+     *   Uses :  To enable whatsapp notification
+     *   @param Request request
+     *   @return Response
+    */
+    public function updateWhatsappNotification(Request $request)
+    {
+        $msg_data = array();
+        GeneralSetting::where("type", 'trigger_whatsapp_notification')->update(["value" => $request->status]);
+        if($request->status == 1) {
+        	successMessage('Published', $msg_data);
+        }
+        else {
+        	successMessage('Unpublished', $msg_data);
+        }
+    }
+
+    /**
+     *   created by : Sagar Thokal
+     *   Created On : 14-March-2022
+     *   Uses :  To enable SMS notification
+     *   @param Request request
+     *   @return Response
+    */
+    public function updateSMSNotification(Request $request)
+    {
+        $msg_data = array();
+        GeneralSetting::where("type", 'trigger_sms_notification')->update(["value" => $request->status]);
+        if($request->status == 1) {
+        	successMessage('Published', $msg_data);
+        }
+        else {
+        	successMessage('Unpublished', $msg_data);
+        }
     }
 }

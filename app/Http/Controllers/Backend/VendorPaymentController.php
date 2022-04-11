@@ -22,7 +22,7 @@ class VendorPaymentController extends Controller
         try {
             $data['vendor'] = Vendor::all();
             $data['paymentMode'] = paymentMode();
-            $data['paymentStatus'] = paymentStatus();
+            $data['paymentStatusType'] = paymentStatusType();
             $data['vendor_payment_add'] = checkPermission('vendor_payment_add');
             $data['vendor_payment_view'] = checkPermission('vendor_payment_view');
             if (isset($_GET['id'])) {
@@ -70,13 +70,10 @@ class VendorPaymentController extends Controller
 	                    return paymentMode($event->payment_mode);
 	                })
                     ->editColumn('payment_status', function ($event) {
-	                    return paymentStatus($event->payment_status);
+	                    return paymentStatusType($event->payment_status);
 	                })
                     ->editColumn('transaction_date', function ($event) {
 	                    return date('d-m-Y', strtotime($event->transaction_date));                        
-	                })
-                    ->editColumn('updated_at', function ($event) {
-	                    return date('d-m-Y H:i A', strtotime($event->updated_at));                        
 	                })
                     ->editColumn('action', function ($event) {
                         $vendor_payment_view = checkPermission('vendor_payment_view');
@@ -88,7 +85,7 @@ class VendorPaymentController extends Controller
                         return $actions;
 	                })   
                 ->addIndexColumn()                
-                ->rawColumns(['vendor_name','order_id','payment_mode','payment_status','transaction_date','updated_at','action'])->setRowId('id')->make(true);
+                ->rawColumns(['vendor_name','order_id','payment_mode','payment_status','transaction_date','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -128,7 +125,7 @@ class VendorPaymentController extends Controller
         }        
         $data['vendor_payment'] = VendorPayment::all();
         $data['paymentMode'] = paymentMode();
-        $data['paymentStatus'] = paymentStatus();
+        $data['paymentStatusType'] = paymentStatusType();
         return view('backend/vendors/vendor_payment_list/vendor_payment_add', $data);
     }
 
@@ -152,9 +149,9 @@ class VendorPaymentController extends Controller
         // $orderData = Order::find($_GET['id']);
         if(isset($request->order_id)) {
             $getKeys = true;
-            $paymentStatus = paymentStatus('',$getKeys);
+            $paymentStatusType = paymentStatusType('',$getKeys);
             $paymentMode = paymentMode('',$getKeys);
-            if (in_array( $request->payment_status, $paymentStatus) && in_array( $request->payment_mode, $paymentMode))
+            if (in_array( $request->payment_status, $paymentStatusType) && in_array( $request->payment_mode, $paymentMode))
              {
                 // $tableObject = OrderPayment::find($_GET['id']);
                 if($request->payment_status == 'pending'){
@@ -211,7 +208,7 @@ class VendorPaymentController extends Controller
         $data['data'] = VendorPayment::with('vendor')->find($id);
         $data['vendor'] = Vendor::all();
         $data['paymentMode'] = paymentMode();
-        $data['paymentStatus'] = paymentStatus();
+        $data['paymentStatusType'] = paymentStatusType();
         return view('backend/vendors/vendor_payment_list/vendor_payment_view',$data);
     }
 
@@ -222,9 +219,6 @@ class VendorPaymentController extends Controller
      */
     public function getVendorOrders(Request $request){
         $data['vendor_orders'] = Order::where("vendor_id",$request->vendor_id)->get();
-        // $data['vendor_id'] = Vendor::where("id",$data['vendor_orders']->vendor_id)->get();
-        // echo "<pre>";
-        // print_r($data['vendor_id']);
         return response()->json($data);
     }
 

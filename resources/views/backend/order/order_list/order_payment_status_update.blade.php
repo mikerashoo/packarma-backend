@@ -56,7 +56,7 @@
                         				<label>Payment Status<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="payment_status" name="payment_status" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($paymentStatus as $key => $val)
+                                            @foreach($paymentStatusType as $key => $val)
                                                 @if($key == $data->order_delivery_status)
                                                     <option value="{{$key}}" selected>{{$val}}</option>
                                                 @else
@@ -83,13 +83,13 @@
                                         <input class="form-control required" type="text" id="amount" name="amount" step=".001" value="" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Payment Gateway ID</label>
-                                        <input class="form-control" type="text" id="gateway_id" name="gateway_id"><br/>
+                                        <label>Transaction Date<span style="color:#ff0000">*</span></label>
+                                        <input class="form-control required" type="date" id="transaction_date" name="transaction_date"/><br>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Payment Gateway Key</label>
-                                        <input class="form-control" type="text" id="gateway_key" name="gateway_key"><br/>
-                                    </div>
+                        				<label>Remark</label>
+                        				<textarea class="form-control" id="remark" name="remark"></textarea><br/>
+                        			</div>
                                     <div class="col-sm-6">
                                         <label>Order Image</label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.ORDER_PAYMENT'); ?></p>
@@ -119,4 +119,5 @@
 </section>
 <script>
     $('.select2').select2();
+    $('#transaction_date').val(new Date().toJSON().slice(0,10));
 </script>

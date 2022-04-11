@@ -19,9 +19,11 @@ class CreateOrderPaymentsTable extends Migration
             $table->integer('order_id')->default(0);
             $table->integer('product_id')->default(0);
             $table->integer('vendor_id')->default(0);
-            $table->string('payment_mode', 255)->default('cod')->comment('cod|bank_transfer|payment_gateway|cheque|demand_draft');
+            $table->string('payment_mode', 255)->default('cash')->comment('cash|bank_transfer|cheque|demand_draft');
             $table->decimal('amount', $precision = 8, $scale = 3);
             $table->string('payment_status', 255)->default('pending')->comment('pending|semi_paid|fully_paid');
+            $table->date('transaction_date')->nullable();
+            $table->longText('remark')->nullable();
             $table->text('gateway_id')->nullable();
             $table->text('gateway_key')->nullable();
             $table->string('order_payment_image', 100)->nullable();

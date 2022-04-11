@@ -41,15 +41,15 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Payment Status</strong></td>
-                                                <td>{{paymentStatus($data->payment_status);}}</td>
+                                                <td>{{paymentStatusType($data->payment_status);}}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Gateway ID</strong></td>
-                                                <td>{{$data->gateway_id}}</td>
+                                                <td><strong>Transaction Date</strong></td>
+                                                <td>{{date('d-m-Y', strtotime($data->transaction_date)) }}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Gateway Key</strong></td>
-                                                <td>{{$data->gateway_key}}</td>
+                                                <td><strong>Remark</strong></td>
+                                                <td>{{$data->remark}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Date Time</strong></td>

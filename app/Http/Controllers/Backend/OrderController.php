@@ -200,7 +200,7 @@ class OrderController extends Controller
     public function updateOrderPayment($id) {
         $data['data'] = Order::with('user','product','vendor')->find($id);
         $data['deliveryStatus'] = deliveryStatus();
-        $data['paymentStatus'] = paymentStatus();
+        $data['paymentStatusType'] = paymentStatusType();
         $data['paymentMode'] = paymentMode();
         return view('backend/order/order_list/order_payment_status_update',$data);
     }
@@ -224,9 +224,9 @@ class OrderController extends Controller
         $orderData = Order::find($_GET['id']);
         if(isset($_GET['id'])) {
             $getKeys = true;
-            $paymentStatus = paymentStatus('',$getKeys);
+            $paymentStatusType = paymentStatusType('',$getKeys);
             $paymentMode = paymentMode('',$getKeys);
-            if (in_array( $request->payment_status, $paymentStatus) && in_array( $request->payment_mode, $paymentMode))
+            if (in_array( $request->payment_status, $paymentStatusType) && in_array( $request->payment_mode, $paymentMode))
              {
                 // $tableObject = OrderPayment::find($_GET['id']);
                 if($request->payment_status == 'pending'){
@@ -255,8 +255,12 @@ class OrderController extends Controller
         $tableObject->payment_mode = $request->payment_mode;
         $tableObject->payment_status = $request->payment_status;
         $tableObject->amount = $request->amount;
-        $tableObject->gateway_id = $request->gateway_id;
-        $tableObject->gateway_key = $request->gateway_key;
+        $tableObject->transaction_date = $request->transaction_date;
+        if($request->remark != ''){
+            $tableObject->remark = $request->remark;
+        }else{
+            $tableObject->remark = '';
+        }
         if($request->hasFile('order_image')) {
             $fixedSize = config('global.SIZE.ORDER_PAYMENT');
             $size = $fixedSize/1000;

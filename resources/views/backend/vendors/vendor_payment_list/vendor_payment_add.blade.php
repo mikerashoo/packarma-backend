@@ -76,7 +76,7 @@
                         				<label>Payment Status<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="payment_status" name="payment_status" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($paymentStatus as $key => $val)
+                                            @foreach($paymentStatusType as $key => $val)
                                                 <option value="{{$key}}">{{$val}}</option>
                                             @endforeach
                                         </select><br/><br>
@@ -162,6 +162,8 @@
 </section>
 <script>
     $('.select2').select2();
+    // set transaction date as today's default date selected
+    $('#transaction_date').val(new Date().toJSON().slice(0,10));
     //getVendorOrders function with Ajax to get order id drop down of selected vendor
     function getVendorOrders(vendor_id){
         $.ajax({

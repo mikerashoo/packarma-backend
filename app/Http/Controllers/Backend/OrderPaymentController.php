@@ -22,7 +22,7 @@ class OrderPaymentController extends Controller
         $data['user'] = User::all();
         $data['vendor'] = Vendor::all();
         $data['paymentMode'] = paymentMode();
-        $data['paymentStatus'] = paymentStatus();
+        $data['paymentStatusType'] = paymentStatusType();
         $data['order_payment_view'] = checkPermission('order_payment_view');
         return view('backend/order/order_payment_list/index',['data' =>$data] ); 
     }
@@ -61,10 +61,10 @@ class OrderPaymentController extends Controller
 	                    return paymentMode($event->payment_mode);
 	                })
                     ->editColumn('payment_status', function ($event) {
-	                    return paymentStatus($event->payment_status);
+	                    return paymentStatusType($event->payment_status);
 	                })
-                    ->editColumn('updated_at', function ($event) {
-	                    return date('d-m-Y H:i A', strtotime($event->updated_at));                        
+                    ->editColumn('transaction_date', function ($event) {
+	                    return date('d-m-Y', strtotime($event->transaction_date));                        
 	                })
                     ->editColumn('action', function ($event) {
                         $order_payment_view = checkPermission('order_payment_view');

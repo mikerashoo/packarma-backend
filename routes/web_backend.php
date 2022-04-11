@@ -32,6 +32,25 @@ Route::group(['middleware'=>['customAuth']],function(){
 	//change password
 	Route::get('/updatePassword', 'AdminController@updatePassword');
 	Route::post('/resetPassword', 'AdminController@resetPassword');
+
+	//General Settings
+	Route::get('/generalSetting', 'AdminController@fetchSetting');
+	Route::post('/updateSettingInfo', 'AdminController@updateSetting');
+	Route::post('/publishEmailNotification', 'AdminController@updateEmailNotification');
+	Route::post('/publishWhatsappNotification', 'AdminController@updateWhatsappNotification');
+	Route::post('/publishSMSNotification', 'AdminController@updateSMSNotification');
+
+	//ContactUs
+	Route:: get('/contactus','ContactusController@index');
+	Route::post('/contactus_data', 'ContactusController@fetch')->name('contactus_data');
+
+	//Reviews
+	Route::get('/review', 'ReviewController@index');
+	Route::post('/review_data', 'ReviewController@fetch')->name('review_data');
+	Route::get('reviewApproval/{id}','ReviewController@approval');
+	Route::post('/updateReviewApproval', 'ReviewController@updateApprovalStatus');
+	Route::post('/publishReview', 'ReviewController@updateStatus');
+	Route::get('/review_view/{id}', 'ReviewController@view');
 	
 	//Roles
 	Route::get('/roles', 'AdminController@roles');

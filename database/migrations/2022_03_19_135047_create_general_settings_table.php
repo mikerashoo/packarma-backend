@@ -16,7 +16,7 @@ class CreateGeneralSettingsTable extends Migration
         Schema::create('general_settings', function (Blueprint $table) {
             $table->id();
             $table->string('type',255);
-            $table->longText('Address')->nullable();
+            $table->longText('value')->nullable();
             $table->timestamps();
         });
     }

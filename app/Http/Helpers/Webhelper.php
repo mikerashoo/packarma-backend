@@ -288,7 +288,28 @@ if (! function_exists('customerEnquiryType')) {
         function paymentStatus($displayValue="",$allKeys = false) {
             $returnArray = array(
                 'pending' => 'Pending',
-                'semi_paid' => 'Semi paid',
+                'semi_paid' => 'Semi Paid',
+                'fully_paid' => 'Fully Paid'
+            );
+            if(!empty($displayValue)){
+                $returnArray = $returnArray[$displayValue];
+            }
+            if(empty($displayValue) && $allKeys){
+                $returnArray = array_keys($returnArray);
+            }
+            return $returnArray;
+        }
+    }
+
+    /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 03-Mar-2022
+       *   Uses :  To fetch value in order payment during payment status type       
+    */
+    if (! function_exists('paymentStatusType')) {
+        function paymentStatusType($displayValue="",$allKeys = false) {
+            $returnArray = array(
+                'semi_paid' => 'Semi Paid',
                 'fully_paid' => 'Fully Paid'
             );
             if(!empty($displayValue)){
@@ -331,9 +352,8 @@ if (! function_exists('customerEnquiryType')) {
     if (! function_exists('paymentMode')) {
         function paymentMode($displayValue="",$allKeys = false) {
             $returnArray = array(
-                'cod' => 'Cash on Delivery',
+                'cash' => 'Cash',
                 'bank_transfer' => 'Bank Transfer',
-                'payment_gateway' => 'Payment Gateway',
                 'cheque' => 'Cheque',
                 'demand_draft' => 'Demand Draft',
             );

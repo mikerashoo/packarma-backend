@@ -220,27 +220,8 @@
                                 </ul>
                             </li>
                         @endif
-                        @if(session('data')['role_id'] == 1  ||
-                            in_array('role', $permission_array) || in_array('staff', $permission_array) 
-                        )
-                            <li class="has-sub nav-item {{ $lastParam ==  'roles' ? 'open' : ''  }} {{ $lastParam ==  'staff' ? 'open' : ''  }}">
-                                <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Staff</span></a>
-                                <ul class="menu-content">
-                                    @if(in_array('role', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ Request::path() ==  'webadmin/roles' ? 'active' : ''  }}">
-                                            <a href="roles" class="menu-item"><i class="fa fa-circle fs_i"></i>Manage Roles</a>
-                                        </li>
-                                    @endif
-                                    @if(in_array('staff', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ Request::path() ==  'webadmin/staff' ? 'active' : ''  }}">
-                                            <a href="staff" class="menu-item"><i class="fa fa-circle fs_i"></i>Manage Staff</a>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </li>
-                        @endif
                         <li class="has-sub nav-item {{ $lastParam ==  'customer_section' ? 'open' : ''  }} {{ $lastParam ==  'customer_section' ? 'open' : ''  }}">
-                            <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Customer Section</span></a>
+                            <a href="javascript:;" class="dropdown-parent"><i class="ft-users"></i><span data-i18n="" class="menu-title">Customer Section</span></a>
                             <ul class="menu-content">
                                 @if(in_array('user_approval_list', $permission_array) || session('data')['role_id'] == 1)
                                     <li class="{{ Request::path() ==  'webadmin/user_approval_list' ? 'active' : ''  }}">
@@ -270,7 +251,7 @@
                             </ul>
                         </li>
                         <li class="has-sub nav-item {{ $lastParam ==  'vendors' ? 'open' : ''  }} {{ $lastParam ==  'vendors' ? 'open' : ''  }}">
-                            <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Vendors</span></a>
+                            <a href="javascript:;" class="dropdown-parent"><i class="icon-user-following"></i><span data-i18n="" class="menu-title">Vendors</span></a>
                             <ul class="menu-content">
                                 @if(in_array('vendor_approval_list', $permission_array) || session('data')['role_id'] == 1)
                                     <li class="{{ Request::path() ==  'webadmin/vendor_approval_list' ? 'active' : ''  }}">
@@ -300,7 +281,7 @@
                             </ul>
                         </li>
                         <li class="has-sub nav-item {{ $lastParam ==  'orders' ? 'open' : ''  }} {{ $lastParam ==  'orders' ? 'open' : ''  }}">
-                            <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Orders</span></a>
+                            <a href="javascript:;" class="dropdown-parent"><i class="icon-handbag"></i><span data-i18n="" class="menu-title">Orders</span></a>
                             <ul class="menu-content">
                                 @if(in_array('order_list', $permission_array) || session('data')['role_id'] == 1)
                                     <li class="{{ Request::path() ==  'webadmin/order_list' ? 'active' : ''  }}">
@@ -313,6 +294,34 @@
                                     </li>
                                 @endif
                             </ul>
+                        </li>
+                        @if(session('data')['role_id'] == 1  ||
+                            in_array('role', $permission_array) || in_array('staff', $permission_array) 
+                        )
+                            <li class="has-sub nav-item {{ $lastParam ==  'roles' ? 'open' : ''  }} {{ $lastParam ==  'staff' ? 'open' : ''  }}">
+                                <a href="javascript:;" class="dropdown-parent"><i class="icon-users"></i><span data-i18n="" class="menu-title">Staff</span></a>
+                                <ul class="menu-content">
+                                    @if(in_array('role', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ Request::path() ==  'webadmin/roles' ? 'active' : ''  }}">
+                                            <a href="roles" class="menu-item"><i class="fa fa-circle fs_i"></i>Manage Roles</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('staff', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ Request::path() ==  'webadmin/staff' ? 'active' : ''  }}">
+                                            <a href="staff" class="menu-item"><i class="fa fa-circle fs_i"></i>Manage Staff</a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </li>
+                        @endif
+                        <li class="nav-item {{ $lastParam ==  'review' ? 'active' : ''  }}">
+                            <a href="review"><i class="ft-star"></i><span class="menu-title" >Reviews</span></a>
+                        </li>
+                        <li class="nav-item {{$lastParam ==  'contactus' ? 'active' : ''  }}">
+                            <a href="contactus"><i class="ft-phone"></i><span class="menu-title" data-i18n="Documentation">Contact us</span></a>
+                        </li>
+                        <li class="nav-item {{ $lastParam ==  'generalSetting' ? 'active' : ''  }}">
+                            <a href="generalSetting"><i class="ft-settings"></i><span class="menu-title" >General Setting</span></a>
                         </li>
                     </ul>
                 </div>

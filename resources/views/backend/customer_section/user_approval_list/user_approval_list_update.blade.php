@@ -85,20 +85,4 @@
  </section>
  <script>
      $('.select2').select2();
-     $(document).ready(function() {
-         var status = $('#approval_status').val()
-         if (status == 'rejected') {
-             $("#remark").show();
-         } else {
-             $("#remark").hide();
-         }
-
-         $('#approval_status').on('change', function() {
-             if (this.value == 'rejected') {
-                 $("#remark").show();
-             } else {
-                 $("#remark").hide();
-             }
-         });
-     });
  </script>

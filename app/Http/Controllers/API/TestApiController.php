@@ -8,5 +8,5 @@ class TestApiController extends Controller
 {
      public function getCountryList(){
          echo "it working";
-     }
+    }
 }

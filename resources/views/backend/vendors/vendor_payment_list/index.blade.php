@@ -69,7 +69,6 @@
                                                     <th id="payment_mode" data-orderable="false" data-searchable="false">Payment Mode</th>
                                                     <th id="payment_status" data-orderable="false" data-searchable="false">Payment Status</th>
                                                     <th id="transaction_date" data-orderable="false" data-searchable="false">Transaction Date</th>
-                                                    <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>                                                    
                                                     @if($vendor_payment_view)
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif

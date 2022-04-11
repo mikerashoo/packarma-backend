@@ -16,6 +16,19 @@ $(document).ready(function(){
         $('#listing-filter-data .form-control').val('');
         $('#listing-filter-data .select2').val('').trigger('change');
     });
+        
+    $(document).on('change', '#approval_status', function(){
+        var status = document.getElementById("approval_status").value;
+        console.log(status);
+        if ( this.value == 'rejected')
+        {
+          $("#remark").show();
+        }
+        else
+        {
+          $("#remark").hide();
+        }
+    });
     setTimeout(function() {
         $('.successAlert').fadeOut('slow');
     }, 1000); // <-- time in milliseconds
@@ -133,9 +146,29 @@ function loadViewPage(page_url)
 {
 	$.ajax({
         url: page_url,
+        datatype : "application/json",
+        contentTypech : "application/json",
         async: true,
         success: function (data) { 
-            $('.content-wrapper').html(data);
+            var viewData = data; 
+            try {
+                if (JSON.parse(data)['success']) {
+                    $.activeitNoty({
+                        type: 'danger',
+                        icon : 'fa fa-minus',
+                        message : JSON.parse(data)['message'],
+                        container : 'floating',
+                        timer : 3000
+                    });
+                }
+            } catch (e) {
+                $('.content-wrapper').html(data);
+                //to make generic function: future implementation
+                if(document.getElementById("approval_status")) {
+                    var status = document.getElementById("approval_status").value;
+                    ( status == 'rejected') ? $("#remark").show() : $("#remark").hide();
+                }
+            }
         }
     });
 }

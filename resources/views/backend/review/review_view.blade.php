@@ -9,35 +9,33 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped">
                                         <tr>
-                                            <td><strong>Vendor Name</strong></td>
-                                            <td>{{$data->vendor->vendor_name}}</td>
+                                            <td class="col-sm-5"><strong>User Name</strong></td>
+                                            <td>{{$data->user->name}}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Order ID</strong></td>
-                                            <td>{{$data->order_id}}</td>
+                                            <td><strong>Product Name</strong></td>
+                                            <td>{{$data->product->product_name; }}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Payment Mode</strong></td>
-                                            <td>{{paymentMode($data->payment_mode)}}</td>
+                                            <td><strong>Title</strong></td>
+                                            <td>{{$data->title; }}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Payment Status</strong></td>
-                                            <td>{{paymentStatusType($data->payment_status);}}</td>
+                                            <td><strong>Review</strong></td>
+                                            <td>{{$data->review }}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Amount</strong></td>
-                                            <td>{{$data->amount}}</td>
+                                            <td><strong>Rating</strong></td>
+                                            <td>{{$data->rating}}</td>
                                         </tr>
+                                        <?php /*
                                         <tr>
-                                            <td><strong>Transaction Time</strong></td>
-                                            <td>{{date('d-m-Y', strtotime($data->transaction_date)) }}</td>
+                                            <td><strong>Approval Status</strong></td>
+                                            <td>{{approvalStatusArray($data->approval_status)}}</td>
                                         </tr>
+                                        */ ?>
                                         <tr>
-                                            <td><strong>Remark</strong></td>
-                                            <td>{{$data->remark}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Date Time</strong></td>
+                                            <td><strong>Review Date Time</strong></td>
                                             <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
                                         </tr>
                                     </table>
