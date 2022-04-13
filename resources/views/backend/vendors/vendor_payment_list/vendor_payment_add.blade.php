@@ -15,8 +15,44 @@
                             </div>
                         </div>
                     	<div class="card-body">
+                            <div class="card-text">                                        
+                                <div class="card-text">
+                                    @if (isset($id))
+                                        @foreach ($order as $orders)
+                                            @if ($orders->id == $id )
+                                                @php
+                                                    $total_amount = $orders->grand_total;
+                                                    $pending_amount = $orders->vendor_pending_payment;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                    <div class="col-md-12 row">
+                                        <div class="col-md-6">
+                                            <dl class="row">                                                                        
+                                                <dt class="col-sm-4 text-left">Grand Total :</dt>
+                                                @if (isset($id))
+                                                    <dd class="col-sm-8" id="grand_total">{{  $total_amount }} </dd>
+                                                @else
+                                                    <dd class="col-sm-8" id="grand_total"></dd>
+                                                @endif
+                                            </dl>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <dl class="row">
+                                                <dt class="col-sm-4 text-left">Pending Amount :</dt>
+                                                @if (isset($id))
+                                                    <dd class="col-sm-8" id="vendor_pending_amount">{{  $pending_amount }} </dd>
+                                                @else
+                                                    <dd class="col-sm-8" id="vendor_pending_amount"></dd>
+                                                @endif
+                                            </dl>
+                                        </div>
+                                    </div>                                    
+                                </div>
+                            </div>
                     		<form id="updateVendorPaymentStatus" method="post" action="saveVendorPaymentStatus">                                
-                    			@csrf
+                                @csrf
                         		<div class="row">
                                     <div class="col-sm-6">
                         				<label>Vendor<span style="color:#ff0000">*</span></label>
@@ -44,34 +80,13 @@
                                                 @if (isset($id))
                                                     @foreach ($order as $orders)
                                                         @if ($orders->id == $id )
-                                                            @php
-                                                                $total_amount = $orders->grand_total;
-                                                                $pending_amount = $orders->vendor_pending_payment;
-                                                            @endphp
                                                             <option value="{{ $orders->id }}" selected >{{ $orders->id }}</option>
                                                         @endif
                                                     @endforeach
                                                 @endif
                                             {{-- <option value="">Select</option> --}}
                                         </select><br/>
-                                        <a href="#"  id='hideshow' class="primary" title="Transaction History">Click Here To Show/Hide Transaction History of Selected Order</a><br><br>
                         			</div>
-                                    <div class="col-sm-6">
-                                        <label>Grand Total Amount</label>
-                                        @if (isset($id))
-                                            <input class="form-control" type="text" id="grand_total" disabled value="{{ $total_amount }}" style="border:0;"><br/>
-                                        @else
-                                            <input class="form-control" type="text" id="grand_total" disabled value="" style="border:0;"><br/>
-                                        @endif
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>Pending Amount</label>
-                                        @if (isset($id))
-                                            <input class="form-control" type="text" id="vendor_pending_amount" disabled value="{{ $pending_amount }}" style="border:0;"><br/>
-                                        @else
-                                            <input class="form-control" type="text" id="vendor_pending_amount" disabled value="" style="border:0;"><br/>
-                                        @endif
-                                    </div>
                         			<div class="col-sm-6">
                         				<label>Payment Status<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="payment_status" name="payment_status" style="width: 100% !important;">
@@ -107,6 +122,7 @@
                         		<div class="row">
                         			<div class="col-sm-12">
                         				<div class="pull-right">
+                                            <span id="show_history_btn"><button type="button" class="btn btn-warning" id="showHideHistory">Show Transaction History</button></span>
                         					<button type="button" class="btn btn-success" onclick="submitForm('updateVendorPaymentStatus','post')">Update</button>
                                             <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
                         				</div>
@@ -114,44 +130,57 @@
                         		</div>
                         	</form>
                     	</div>
-                        <div class="col-12 col-xl-12 users-module" id="transaction_record" style="display: none;">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered mb-2" id="payment_history">
-                                    <thead>
-                                        <tr>
-                                            <th>Vendor Name</th>
-                                            <th>Order ID</th>
-                                            <th>Payment Mode</th>
-                                            <th>Amount</th>
-                                            <th>Transaction Date</th>
-                                            <th>Remark</th>
-                                            <th>Date Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="trans_history_table">
-                                        @if($payment_details)
-                                            @foreach($payment_details as $key => $val)
+                    </div>
+                </div>
+                <div class="card" id="transaction_record" style="display: none;">
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-12 col-sm-7">
+                                    <h5 class="pt-2">Transaction History Of Selected Order</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-12 col-xl-12 users-module">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered mb-2"id="payment_history">
+                                        <thead>
                                             <tr>
-                                                <td>{{  $val['vendor']['vendor_name'] }}</td>
-                                                <td>{{  $val['order_id'] }}</td>
-                                                <td>{{  paymentMode($val['payment_mode']) }}</td>
-                                                <td>{{  $val['amount'] }}</td>
-                                                <td>{{  date('d-m-Y', strtotime($val['transaction_date']))}}</td>
-                                                <td>{{  $val['remark'] }}</td>
-                                                <td>{{  date('d-m-Y H:i A', strtotime($val['updated_at'])) }}</td>
+                                                <th>Vendor Name</th>
+                                                <th>Order ID</th>
+                                                <th>Payment Mode</th>
+                                                <th>Amount</th>
+                                                <th>Transaction Date</th>
+                                                <th>Remark</th>
+                                                <th>Date Time</th>
                                             </tr>
-                                            @endforeach
-                                        @elseif (empty($payment_details))
-                                            <tr>
-                                                <td colspan="7" class="text-center">No Record Found For Selected Order</td>
-                                            </tr>
-                                        @else
-                                            <tr>
-                                                <td colspan="7" class="text-center">Please Select Order To Show Transaction History</td>
-                                            </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody id="trans_history_table">
+                                            @if($payment_details)
+                                                @foreach($payment_details as $key => $val)
+                                                <tr>
+                                                    <td>{{  $val['vendor']['vendor_name'] }}</td>
+                                                    <td>{{  $val['order_id'] }}</td>
+                                                    <td>{{  paymentMode($val['payment_mode']) }}</td>
+                                                    <td>{{  $val['amount'] }}</td>
+                                                    <td>{{  date('d-m-Y', strtotime($val['transaction_date']))}}</td>
+                                                    <td>{{  $val['remark'] }}</td>
+                                                    <td>{{  date('d-m-Y H:i A', strtotime($val['updated_at'])) }}</td>
+                                                </tr>
+                                                @endforeach
+                                            @elseif (empty($payment_details))
+                                                <tr>
+                                                    <td colspan="7" class="text-center">No Record Found For Selected Order</td>
+                                                </tr>
+                                            @else
+                                                <tr>
+                                                    <td colspan="7" class="text-center">Please Select Order To Show Transaction History</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -166,6 +195,8 @@
     $('#transaction_date').val(new Date().toJSON().slice(0,10));
     //getVendorOrders function with Ajax to get order id drop down of selected vendor
     function getVendorOrders(vendor_id){
+        $('#grand_total').text('');
+        $('#vendor_pending_amount').text('');
         $.ajax({
             url:"getVendorOrderDropdown",
             type: "POST",
@@ -195,16 +226,21 @@
         var amount = $(this).select2().find(":selected").data("amt");
         var grandTotal = $(this).select2().find(":selected").data("total");
         if(amount !=  undefined){
-            $('#grand_total').val(grandTotal);
-            $('#vendor_pending_amount').val(amount);
+            $('#grand_total').text(grandTotal);
+            $('#vendor_pending_amount').text(amount);
         }else{
-            $('#grand_total').val('');
-            $('#vendor_pending_amount').val('');
+            $('#grand_total').text('');
+            $('#vendor_pending_amount').text('');
         }
     });
 
     //function to get vendor payment history of selected order id
     function getVendoPaymentDetails(order_id){
+        if($('#order_id').val() != ''){
+            $('#show_history_btn').show();
+        }else{
+            $('#show_history_btn').hide();
+        }
         $.ajax({
             url:"getOrderDetailsTableData",
             type: "POST",
@@ -237,7 +273,7 @@
     }
     // function to show hide transaction table
     jQuery(document).ready(function(){
-    jQuery('#hideshow').on('click', function(event) {        
+    jQuery('#showHideHistory').on('click', function(event) {        
         jQuery('#transaction_record').toggle('show');
     });
 });

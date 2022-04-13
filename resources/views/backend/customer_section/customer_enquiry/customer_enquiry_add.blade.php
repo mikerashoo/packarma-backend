@@ -33,6 +33,10 @@
                                         </select>
                         			</div>
                                     <div class="col-sm-6 mb-3">
+                        				<label>Order ID<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" value=""  id="order_id" name="order_id"/>
+                        			</div>
+                                    <div class="col-sm-6 mb-3">
                         				<label>Category<span style="color:#ff0000">*</span></label>
                         				<select class="form-control select2 required" id="category" value="" name="category" style="width: 100% !important;">
                                             <option value="">Select</option>
@@ -153,12 +157,12 @@
                                         </select><br />
                         			</div>
                                     <div class="col-sm-6 mb-3">
-                        				<label>Pincode<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" value=""  id="pincode" name="pincode" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br>
-                        			</div>
-                                    <div class="col-sm-6 mb-3">
                         				<label>Address<span style="color:#ff0000">*</span></label>
                         				<textarea class="form-control required" id="address" value="" name="address"></textarea><br>
+                        			</div>
+                                    <div class="col-sm-6 mb-3">
+                        				<label>Pincode<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" value=""  id="pincode" name="pincode" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br>
                         			</div>
                         		</div>
                         		<hr>

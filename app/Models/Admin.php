@@ -18,7 +18,6 @@ class Admin extends Model
         return $this->belongsTo('App\Models\Role');
     }
 
-    use HasFactory;
     /**
         * Developed By : Pradyumn Dwivedi
         * Created On : 05-april-2022

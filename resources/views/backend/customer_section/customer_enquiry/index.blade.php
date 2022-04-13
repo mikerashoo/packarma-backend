@@ -67,6 +67,7 @@
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="description" data-orderable="false" data-searchable="false">Description</th>
                                                     <th id="name" data-orderable="false" data-searchable="false">User Name</th>
+                                                    <th id="order_id" data-orderable="false" data-searchable="false">Order ID</th>
                                                     <th id="enquiry_type" data-orderable="false" data-searchable="false">Enquiry Type</th>
                                                     <th id="quote_type" data-orderable="false" data-searchable="false">Quote Type</th>
                                                     <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>                                                    

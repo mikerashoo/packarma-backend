@@ -26,7 +26,7 @@ class CreateVendorsTable extends Migration
             $table->integer('currency_id')->default(0);
             $table->enum('is_featured', [1, 0])->default(0);
             $table->string('approval_status', 255)->default('pending')->comment('pending|accepted|rejected');
-            $table->datetime('approved_on');
+            $table->datetime('approved_on')->nullable();
             $table->integer('approved_by')->default(0)->comment('Admin Id');
             $table->longText('admin_remark')->nullable();
             $table->text('meta_title')->nullable();

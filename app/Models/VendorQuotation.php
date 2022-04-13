@@ -8,4 +8,43 @@ use Illuminate\Database\Eloquent\Model;
 class VendorQuotation extends Model
 {
     use HasFactory;
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 13-april-2022
+     * uses : to get user data in vendor quotation table
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 13-april-2022
+     * uses : to get vendor data in vendor quotation table
+     */
+    public function vendor()
+    {
+        return $this->belongsTo('App\Models\Vendor');
+    }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 13-april-2022
+     * uses : to get product data in vendor quotation table
+     */
+    public function product()
+    {
+        return $this->belongsTo('App\Models\Product');
+    }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 13-april-2022
+     * uses : to get warehouse data in vendor quotation table
+     */
+    public function vendor_warehouse()
+    {
+        return $this->belongsTo('App\Models\VendorWarehouse');
+    }
 }

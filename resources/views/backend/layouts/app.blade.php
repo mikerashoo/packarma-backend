@@ -114,34 +114,18 @@
                             in_array('city', $permission_array) 
                         )
                             <li class="has-sub nav-item 
-                                {{ $lastParam ==  'category' ? 'open' : ''  }} 
-                                {{ $lastParam ==  'sub_category' ? 'open' : ''  }}
                                 {{ $lastParam ==  'company' ? 'open' : ''  }}
                                 {{ $lastParam ==  'city' ? 'open' : ''  }}
                                 {{ $lastParam ==  'state' ? 'open' : ''  }}                                
                                 {{ $lastParam ==  'country' ? 'open' : ''  }}
                                 {{ $lastParam ==  'currency' ? 'open' : ''  }}
-                                {{ $lastParam ==  'customer_enquiry' ? 'open' : ''  }}
                                 {{ $lastParam ==  'subscription' ? 'open' : ''  }}
                                 {{ $lastParam ==  'banners' ? 'open' : ''  }}
-                                {{ $lastParam ==  'product_form' ? 'open' : ''  }}
-                                {{ $lastParam ==  'packing_type' ? 'open' : ''  }}
-                                {{ $lastParam ==  'packaging_machine' ? 'open' : ''  }}
-                                {{ $lastParam ==  'packaging_treatment' ? 'open' : ''  }}
-                                {{ $lastParam ==  'product' ? 'open' : ''  }}
+                                {{ $lastParam ==  'storage_condition' ? 'open' : ''  }}
+                                {{ $lastParam ==  'measurement_unit' ? 'open' : ''  }}
                             ">
                                 <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Master</span></a>
                                 <ul class="menu-content">
-                                    @if(in_array('category', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ $lastParam ==  'category' ? 'active' : ''  }}">
-                                            <a href="category" class="menu-item"><i class="fa fa-circle fs_i"></i>Category</a>
-                                        </li>
-                                    @endif
-                                    @if(in_array('sub_category', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ $lastParam ==  'sub_category' ? 'active' : ''  }}">
-                                            <a href="sub_category" class="menu-item"><i class="fa fa-circle fs_i"></i>Sub Category</a>
-                                        </li>
-                                    @endif
                                     @if(in_array('company', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'company' ? 'active' : ''  }}">
                                             <a href="company" class="menu-item"><i class="fa fa-circle fs_i"></i>Company</a>
@@ -177,7 +161,48 @@
                                             <a href="banners" class="menu-item"><i class="fa fa-circle fs_i"></i>Banner</a>
                                         </li>
                                     @endif
-                                    @if(in_array('product_form', $permission_array) || session('data')['role_id'] == 1)
+                                    @if(in_array('storage_condition', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ $lastParam ==  'storage_condition' ? 'active' : ''  }}">
+                                            <a href="storage_condition" class="menu-item"><i class="fa fa-circle fs_i"></i>Storage Condition</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('measurement_unit', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ $lastParam ==  'measurement_unit' ? 'active' : ''  }}">
+                                            <a href="measurement_unit" class="menu-item"><i class="fa fa-circle fs_i"></i>Measurement Unit</a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </li>
+                        @endif
+
+                        @if(session('data')['role_id'] == 1  ||
+                                in_array('category', $permission_array) || in_array('company', $permission_array) ||
+                                in_array('city', $permission_array) 
+                            )
+                            <li class="has-sub nav-item 
+                                {{ $lastParam ==  'category' ? 'open' : ''  }} 
+                                {{ $lastParam ==  'sub_category' ? 'open' : ''  }}
+                                {{ $lastParam ==  'product_form' ? 'open' : ''  }}
+                                {{ $lastParam ==  'packing_type' ? 'open' : ''  }}
+                                {{ $lastParam ==  'packaging_machine' ? 'open' : ''  }}
+                                {{ $lastParam ==  'packaging_treatment' ? 'open' : ''  }}
+                                {{ $lastParam ==  'product' ? 'open' : ''  }}
+                                {{ $lastParam ==  'packaging_material' ? 'open' : ''  }}
+                                {{ $lastParam ==  'recommendation_engine' ? 'open' : ''  }}
+                            ">
+                                <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Product Master</span></a>
+                                <ul class="menu-content">
+                                    @if(in_array('category', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ $lastParam ==  'category' ? 'active' : ''  }}">
+                                            <a href="category" class="menu-item"><i class="fa fa-circle fs_i"></i>Category</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('sub_category', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ $lastParam ==  'sub_category' ? 'active' : ''  }}">
+                                            <a href="sub_category" class="menu-item"><i class="fa fa-circle fs_i"></i>Sub Category</a>
+                                        </li>
+									@endif
+									@if(in_array('product_form', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'product_form' ? 'active' : ''  }}">
                                             <a href="product_form" class="menu-item"><i class="fa fa-circle fs_i"></i>Product Form</a>
                                         </li>
@@ -212,14 +237,9 @@
                                             <a href="recommendation_engine" class="menu-item"><i class="fa fa-circle fs_i"></i>Recommendation Engine</a>
                                         </li>
                                     @endif
-                                    @if(in_array('storage_condition', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ $lastParam ==  'storage_condition' ? 'active' : ''  }}">
-                                            <a href="storage_condition" class="menu-item"><i class="fa fa-circle fs_i"></i>Storage Condition</a>
-                                        </li>
-                                    @endif
                                 </ul>
-                            </li>
                         @endif
+
                         <li class="has-sub nav-item {{ $lastParam ==  'customer_section' ? 'open' : ''  }} {{ $lastParam ==  'customer_section' ? 'open' : ''  }}">
                             <a href="javascript:;" class="dropdown-parent"><i class="ft-users"></i><span data-i18n="" class="menu-title">Customer Section</span></a>
                             <ul class="menu-content">
@@ -278,6 +298,11 @@
                                         <a href="vendor_payment_list" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Payment</a>
                                     </li>
                                 @endif
+                                @if(in_array('vendor_quotation_list', $permission_array) || session('data')['role_id'] == 1)
+                                    <li class="{{ Request::path() ==  'webadmin/vendor_quotation_list' ? 'active' : ''  }}">
+                                        <a href="vendor_quotation_list" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Quotation</a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
                         <li class="has-sub nav-item {{ $lastParam ==  'orders' ? 'open' : ''  }} {{ $lastParam ==  'orders' ? 'open' : ''  }}">
@@ -322,6 +347,9 @@
                         </li>
                         <li class="nav-item {{ $lastParam ==  'generalSetting' ? 'active' : ''  }}">
                             <a href="generalSetting"><i class="ft-settings"></i><span class="menu-title" >General Setting</span></a>
+                        </li>
+                        <li class="nav-item {{ $lastParam ==  'logout' ? 'active' : ''  }}">
+                            <a href="logout"><i class="fa fa-power-off"></i><span class="menu-title" >Logout</span></a>
                         </li>
                     </ul>
                 </div>

@@ -50,6 +50,10 @@
                                                         <td>{{$data['user']->name;}}</td>
                                                     </tr>
                                                     <tr>
+                                                        <td><strong>Order ID</strong></td>
+                                                        <td>{{$data->order_id;}}</td>
+                                                    </tr>
+                                                    <tr>
                                                         <td class="col-sm-5"><strong>Description</strong></td>
                                                         <td>{{$data->description;}}</td>
                                                     </tr>

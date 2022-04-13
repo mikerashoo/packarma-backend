@@ -147,4 +147,14 @@ class CustomerEnquiry extends Model
     {
         return $this->belongsTo('App\Models\PackagingTreatment');
     }
+
+    /**
+        * Developed By : Pradyumn Dwivedi
+        * Created On : 04-mar-2022
+        * uses : to get data of vendor in customer enquiry table
+    */   
+    public function warehouse()
+    {
+        return $this->belongsTo('App\Models\Vendorwarehouse');
+    }
 }

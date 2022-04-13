@@ -22,6 +22,7 @@ class CreateOrdersTable extends Migration
             $table->integer('product_id')->default(0);
             $table->integer('shelf_life')->default(0);
             $table->decimal('product_weight', $precision = 8, $scale = 3);
+            $table->integer('measurement_unit_id')->default(0);
             $table->integer('storage_condition_id')->default(0);
             $table->integer('packaging_machine_id')->default(0);
             $table->integer('product_form_id')->default(0);
@@ -39,9 +40,9 @@ class CreateOrdersTable extends Migration
             $table->longText('product_details')->nullable()->comment('Json Data');
             $table->longText('shipping_details')->nullable()->comment('Json Data');
             $table->string('order_delivery_status', 255)->default('pending')->comment('pending|processing|out_for_delivery|delivered');
-            $table->datetime('processing_datetime');
-            $table->datetime('out_for_delivery_datetime');
-            $table->datetime('delivery_datetime');
+            $table->datetime('processing_datetime')->nullable();
+            $table->datetime('out_for_delivery_datetime')->nullable();
+            $table->datetime('delivery_datetime')->nullable();
             $table->integer('delivered_by')->default(0);
             $table->text('user_choice')->nullable()->comment('Json Data');
             $table->integer('created_by')->default(0);

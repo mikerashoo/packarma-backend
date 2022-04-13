@@ -240,6 +240,11 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::post('/getVendorOrderDropdown', 'VendorPaymentController@getVendorOrders');
 	Route::post('/getOrderDetailsTableData', 'VendorPaymentController@getVendoPaymentDetails');
 
+	//vendor quotation
+	Route::get('/vendor_quotation_list','VendorQuotationController@index');
+	Route::post('/vendor_quotation_data', 'VendorQuotationController@fetch')->name('vendor_quotation_data');
+	Route::get('/vendor_quotation_view/{id}', 'VendorQuotationController@view');
+
 	//Product Form
 	Route::get('/product_form', 'ProductFormController@index');
 	Route::post('/product_form_data', 'ProductFormController@fetch')->name('product_form_data');
@@ -325,6 +330,15 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::get('/storage_condition_edit/{id}','StorageConditionController@edit');
 	Route::post('/publishStorageCondition', 'StorageConditionController@updateStatus');
 	Route::get('/storage_condition_view/{id}','StorageConditionController@view');
+
+	//measurement unit
+	Route::get('/measurement_unit', 'MeasurementUnitController@index');
+	Route::post('/measurement_unit_data', 'MeasurementUnitController@fetch')->name('measurement_unit_data');
+	Route::get('/measurement_unit_add', 'MeasurementUnitController@add');
+	Route::post('/saveMeasurementUnit', 'MeasurementUnitController@saveFormData');
+	Route::get('/measurement_unit_edit/{id}','MeasurementUnitController@edit');
+	Route::post('/publishMeasurementUnit', 'MeasurementUnitController@updateStatus');
+	Route::get('/measurement_unit_view/{id}','MeasurementUnitController@view');
 
 });
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\City;
 use App\Models\User;
 use App\Models\State;
@@ -16,6 +17,7 @@ use App\Models\ProductForm;
 use App\Models\PackingType;
 use App\Models\CustomerEnquiry;
 use App\Models\VendorQuotation;
+use App\Models\VendorWarehouse;
 use Yajra\DataTables\DataTables;
 use App\Models\PackagingMachine;
 use App\Models\StorageCondition;
@@ -69,6 +71,9 @@ class CustomerEnquiryController extends Controller
                     ->editColumn('name', function ($event) {
 	                    return $event->user->name;                        
 	                })
+                    ->editColumn('order_id', function ($event) {
+	                    return $event->order_id;                        
+	                })
                     ->editColumn('enquiry_type', function ($event) {
 	                    return customerEnquiryType($event->enquiry_type);
 	                })
@@ -97,7 +102,7 @@ class CustomerEnquiryController extends Controller
                         return $actions;
 	                }) 
 	                ->addIndexColumn()
-	                ->rawColumns(['description','name','enquiry_type','enquiry_quote','updated_at','action'])->setRowId('id')->make(true);
+	                ->rawColumns(['description','name','order_id','enquiry_type','enquiry_quote','updated_at','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -157,6 +162,7 @@ class CustomerEnquiryController extends Controller
         $msg = "Data Saved Successfully";
         $tblObj->description = $request->description;
         $tblObj->user_id = $request->user;
+        $tblObj->order_id = $request->order_id;
         $tblObj->category_id = $request->category;
         $tblObj->sub_category_id = $request->sub_category;
         $tblObj->product_id = $request->product;
@@ -190,7 +196,8 @@ class CustomerEnquiryController extends Controller
         $data['customerEnquiryType'] = customerEnquiryType();
         $data['vendorEnquiryStatus'] = vendorEnquiryStatus();
         $data['customerEnquiryQuoteType'] = customerEnquiryQuoteType();
-        $data['vendor'] = Vendor::all()->toArray();        
+        $data['vendor'] = Vendor::all()->toArray();
+        $data['warehouse'] = VendorWarehouse::all()->toArray();        
         $data['city'] = City::all();
         $data['state'] = State::all(); 
         return view('backend/customer_section/customer_enquiry/customer_enquiry_map_to_vendor', $data);
@@ -218,10 +225,18 @@ class CustomerEnquiryController extends Controller
             $tblObj = new VendorQuotation;
             $tblObj->user_id = $request->user[$k];
             $tblObj->customer_enquiry_id = $request->customer_enquiry_id[$k];
+            $tblObj->product_id = $request->product[$k];
             $tblObj->vendor_id = $val;
-            $tblObj->city_id= $request->city[$k];
+            $tblObj->vendor_warehouse_id= $request->warehouse[$k];
             $tblObj->vendor_price =  $request->vendor_price[$k];
-            $tblObj->min_amt_profit =  $request->commission_rate[$k];
+            $tblObj->commission_amt =  $request->commission_rate[$k];
+            //storing quotation validity in variable for increasing current time with validity hours
+            $validity_hours =  $request->quotation_validity[$k];
+            $currentDateTime = Carbon::now();
+            $newDateTime = Carbon::now()->addHours($validity_hours)->toArray();
+            $tblObj->quotation_expiry_datetime =  $newDateTime['formatted'];
+            $tblObj->etd =  $request->etd[$k];
+            $tblObj->etd =  $request->etd[$k];
             $tblObj->created_by = session('data')['id'];
             $tblObj->save();
         }
@@ -254,14 +269,18 @@ class CustomerEnquiryController extends Controller
         if( $for == 'vendor'){
             return \Validator::make($request->all(), [    
                 'vendor.*' => 'required',
+                'warehouse.*' => 'required',
                 'vendor_price.*' => 'required',
                 'commission_rate.*' => 'required',
                 'freight_price.*' => 'required',
+                'quotation_validity.*' => 'required',
+                'etd.*' => 'required',
             ])->errors(); 
         } elseif( $for == 'addEnquiry'){
             return \Validator::make($request->all(), [    
                 'description' => 'required|string',
                 'user' => 'required|integer',
+                'order_id' => 'required|integer',
                 'category' => 'required|integer',
                 'sub_category' => 'required|integer',
                 'product' => 'required|integer',
