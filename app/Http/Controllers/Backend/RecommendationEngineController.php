@@ -187,12 +187,6 @@ class RecommendationEngineController extends Controller
         $tableObject->packaging_material_id = $request->packaging_material;
         $tableObject->vendor_id = $request->vendor;
         $tableObject->display_shelf_life = $request->display_shelf_life;
-        $tableObject->wvtr = $request->wvtr;
-        $tableObject->otr = $request->otr;
-        $tableObject->cof = $request->cof;
-        $tableObject->sit = $request->sit;
-        $tableObject->gsm = $request->gsm;
-        $tableObject->special_feature = $request->special_feature;
         if($isEditFlow){
             $tableObject->updated_by = session('data')['id'];
         }else{
@@ -255,6 +249,7 @@ class RecommendationEngineController extends Controller
     {
         return \Validator::make($request->all(), [
             'engine_name' => 'required|string',
+            'vendor' => 'required|integer',
             'structure_type' => 'required|string', 
             'product' => 'required|integer',
             'min_shelf_life' => 'required|integer',
@@ -269,13 +264,6 @@ class RecommendationEngineController extends Controller
             'packaging_machine' => 'required|integer',
             'packaging_treatment' => 'required|integer',
             'packaging_material' => 'required|integer',
-            'vendor' => 'required|integer',
-            'wvtr' => 'required|string',
-            'otr' => 'required|string',
-            'cof' => 'required|string',
-            'sit' => 'required|string',
-            'gsm' => 'required|string',
-            'special_feature' => 'required|string',
         ])->errors();
     }
 }

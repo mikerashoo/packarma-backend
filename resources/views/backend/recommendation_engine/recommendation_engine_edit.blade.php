@@ -40,21 +40,21 @@
                                                 <input class="form-control required" type="text" id="engine_name" name="engine_name" value="{{ $data->engine_name }}"><br/>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Structure Type<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="structure_type" name="structure_type" value="{{ $data->structure_type }}"><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Product<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="product" name="product" style="width: 100% !important;">
+                                                <label>Vendor<span style="color:#ff0000">*</span></label>
+                                                <select class="select2 required" id="vendor" name="vendor" style="width: 100% !important;">
                                                     <option value="">Select</option>
-                                                    @foreach($product as $products)
-                                                        @if ($products->id == $data->product_id)
-                                                            <option value="{{$products->id}}" selected>{{$products->product_name}}</option>
-                                                        @else
-                                                            <option value="{{$products->id}}">{{$products->product_name}}</option>
-                                                        @endif
+                                                    @foreach($vendor as $vendors)
+                                                    @if ($vendors->id == $data->vendor_id)
+                                                        <option value="{{$vendors->id}}" selected>{{$vendors->vendor_name}}</option>
+                                                    @else
+                                                        <option value="{{$vendors->id}}">{{$vendors->vendor_name}}</option>
+                                                    @endif
                                                     @endforeach
                                                 </select><br/><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Structure Type<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="structure_type" name="structure_type" value="{{ $data->structure_type }}"><br/>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Minimum Shelf Life<span style="color:#ff0000">*</span></label>
@@ -84,6 +84,19 @@
                                     </div>
                                     <div class="tab-pane fade mt-2 show active" id="product_details" role="tabpanel" aria-labelledby="product_details-tab">
                                         <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Product<span style="color:#ff0000">*</span></label>
+                                                <select class="select2 required" id="product" name="product" style="width: 100% !important;">
+                                                    <option value="">Select</option>
+                                                    @foreach($product as $products)
+                                                        @if ($products->id == $data->product_id)
+                                                            <option value="{{$products->id}}" selected>{{$products->product_name}}</option>
+                                                        @else
+                                                            <option value="{{$products->id}}">{{$products->product_name}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select><br/><br/>
+                                            </div>
                                             <div class="col-sm-6">
                                                 <label>Product Category<span style="color:#ff0000">*</span></label>
                                                 <select class="select2 required" id="product_category" name="product_category" style="width: 100% !important;">
@@ -161,43 +174,6 @@
                                                         @endif
                                                     @endforeach
                                                 </select><br/><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Vendor<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="vendor" name="vendor" style="width: 100% !important;">
-                                                    <option value="">Select</option>
-                                                    @foreach($vendor as $vendors)
-                                                    @if ($vendors->id == $data->vendor_id)
-                                                        <option value="{{$vendors->id}}" selected>{{$vendors->vendor_name}}</option>
-                                                    @else
-                                                        <option value="{{$vendors->id}}">{{$vendors->vendor_name}}</option>
-                                                    @endif
-                                                    @endforeach
-                                                </select><br/><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>WVTR<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="wvtr" name="wvtr" value="{{ $data->wvtr }}"><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>OTR<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="otr" name="otr" value="{{ $data->otr }}"><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>COF<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="cof" name="cof" value="{{ $data->cof }}"><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>SIT<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="sit" name="sit" value="{{ $data->sit }}"><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>GSM<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="gsm" name="gsm" value="{{ $data->gsm }}"><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Special Feature<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="special_feature" name="special_feature" value="{{ $data->special_feature }}"><br/>
                                             </div>
                                         </div>
                                     </div>

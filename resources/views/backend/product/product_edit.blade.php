@@ -28,19 +28,6 @@
                         				<input class="form-control required" type="text" id="product_description" name="product_description" value="{{ $data->product_description }}"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Sub Category<span style="color:#ff0000">*</span></label>
-                        				<select class="select2 required" id="sub_category" name="sub_category" value="" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach($sub_category as $value)
-                                                @if ($value->id == $data->sub_category_id)
-                                                    <option value="{{$value->id}}" selected>{{$value->sub_category_name}}</option>
-                                                @else
-                                                    <option value="{{$value->id}}">{{$value->sub_category_name}}</option>
-                                                @endif
-                                            @endforeach
-                                        </select><br/><br/>
-                        			</div>
-                                    <div class="col-sm-6">
                         				<label>Category<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="category" name="category" style="width: 100% !important;">
                                             <option value="">Select</option>
@@ -49,6 +36,19 @@
                                                     <option value="{{$categories->id}}" selected>{{$categories->category_name}}</option>
                                                 @else
                                                     <option value="{{$categories->id}}">{{$categories->category_name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select><br/><br/>
+                        			</div>
+                                    <div class="col-sm-6">
+                        				<label>Sub Category<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="sub_category" name="sub_category" value="" style="width: 100% !important;">
+                                            <option value="">Select</option>
+                                            @foreach($sub_category as $value)
+                                                @if ($value->id == $data->sub_category_id)
+                                                    <option value="{{$value->id}}" selected>{{$value->sub_category_name}}</option>
+                                                @else
+                                                    <option value="{{$value->id}}">{{$value->sub_category_name}}</option>
                                                 @endif
                                             @endforeach
                                         </select><br/><br/>

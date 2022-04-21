@@ -65,8 +65,8 @@ class VendorMaterialController extends Controller
                     ->editColumn('min_amt_profit', function ($event) {
 	                    return $event->min_amt_profit;
 	                })
-                    ->editColumn('min_stock_qty', function ($event) {
-	                    return $event->min_stock_qty;
+                    ->editColumn('vendor_price', function ($event) {
+	                    return $event->vendor_price;
 	                })
                     ->editColumn('vendor_material_map_status', function ($event) {
                         $vendor_material_map_status = checkPermission('vendor_material_map_status');

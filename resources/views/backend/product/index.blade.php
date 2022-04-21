@@ -29,20 +29,20 @@
                                             <input class="form-control mb-3" type="text" id="search_product_name" name="search_product_name">
                                         </div>
                                         <div class="col-md-4">
-                                            <label>Sub Category</label>
-                                            <select class="form-control mb-3 select2" id="search_sub_category" name="search_sub_category" style="width: 100% !important;">
-                                                <option value="">Select</option>
-                                                @foreach($data['sub_category'] as $value)
-                                                    <option value="{{$value->id}}">{{$value->sub_category_name}}</option>
-                                                @endforeach
-                                            </select><br/><br/>
-                                        </div>
-                                        <div class="col-md-4">
                                             <label>Category</label>
                                             <select class="form-control mb-3 select2" id="search_category" name="search_category" style="width: 100% !important;">
                                                 <option value="">Select</option>
                                                 @foreach($data['category'] as $categories)
                                                     <option value="{{$categories->id}}">{{$categories->category_name}}</option>
+                                                @endforeach
+                                            </select><br/><br/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Sub Category</label>
+                                            <select class="form-control mb-3 select2" id="search_sub_category" name="search_sub_category" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach($data['sub_category'] as $value)
+                                                    <option value="{{$value->id}}">{{$value->sub_category_name}}</option>
                                                 @endforeach
                                             </select><br/><br/>
                                         </div>
@@ -57,10 +57,10 @@
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="product_name" data-orderable="false" data-searchable="false">Product Name</th>
-                                                    <th id="product_description" data-orderable="false" data-searchable="false">Product Description</th>
-                                                    <th id="sub_category_name" data-orderable="false" data-searchable="false">Sub Category Name</th>
                                                     <th id="category_name" data-orderable="false" data-searchable="false">Category Name</th>
-                                                    <th id="product_image_url" data-orderable="false" data-searchable="false" alt="Image">Category Image</th>
+                                                    <th id="sub_category_name" data-orderable="false" data-searchable="false">Sub Category Name</th>
+                                                    <th id="product_form" data-orderable="false" data-searchable="false">Product Form</th>
+                                                    <th id="product_image_url" data-orderable="false" data-searchable="false" alt="Image">Product Image</th>
                                                     @if($data['product_status'] || $data['product_edit'] ||$data['product_view'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
@@ -78,6 +78,3 @@
     </div>
 </div>
 @endsection
-<script>
-    $('.select2').select2();
-</script>

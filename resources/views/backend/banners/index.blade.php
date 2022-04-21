@@ -25,12 +25,8 @@
                             	<div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
                                         <div class="col-md-4">
-                                            <label>Banners Types</label>
-                                            <select class="form-control select2" id="type" value="" name="type" style="width: 100% !important;"> 
-                                                <option value="">Choose....</option>
-                                                 <option value="Customer" >Customer </option>
-                                                <option value="Vendor" >Vendor </option>
-                                            </select>  
+                                            <label>Banner Title</label>
+                                            <input class="form-control mb-3" type="text" id="search_banner_title" name="search_banner_title">
                                         </div>
                                         <div class="col-md-4">
                                             <label>&nbsp;</label><br/>
@@ -42,7 +38,7 @@
 				                            <thead>
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
-                                                    <th id="type" data-orderable="false" data-searchable="false">TYPE</th>
+                                                    <th id="title" data-orderable="false" data-searchable="false">Banner Title</th>
                                                     <th id="banner_image_url" data-orderable="false" data-searchable="false" alt="Image">BANNERS IMAGES </th>
                                                     @if($data['banner_status'] || $data['banner_edit'] || $data['banner_view'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
@@ -60,6 +56,3 @@
     </div>
 </div>
 @endsection
-<script>
-    $('.select2').select2();
-</script>

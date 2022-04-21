@@ -42,8 +42,8 @@ class CategoryController extends Controller
                 $query = Category::select('*');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
-                        if (isset($request['search']['category_name']) && !is_null($request['search']['category_name'])) {
-                            $query->where('category_name', 'like', "%" . $request['search']['category_name'] . "%");
+                        if (isset($request['search']['search_category_name']) && !is_null($request['search']['search_category_name'])) {
+                            $query->where('category_name', 'like', "%" . $request['search']['search_category_name'] . "%");
                         }
                         $query->get();
                     })

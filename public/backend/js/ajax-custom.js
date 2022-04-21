@@ -225,6 +225,51 @@ function submitForm(form_id,form_method,errorOverlay='')
         }
     });
 }
+
+//FOR CkEditor data pass to server - added by sagar - START 
+function submitEditor(form_id){
+    var content = theEditor.getData();
+    var form = $('#'+form_id);
+    var formdata = false;
+    if (window.FormData){
+        formdata = new FormData(form[0]);
+    }
+    $.ajax({
+        url: form.attr('action'),
+        type: 'post',
+        dataType: 'html',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        data: form.serialize()+'&editiorData='+content,
+        success: function(data) {   
+            // console.log(data);
+            var response = JSON.parse(data);
+            if(response['success'] == 0)
+            {
+                $.activeitNoty({
+                    type: 'danger',
+                    icon : 'fa fa-minus',
+                    message : response['message'],
+                    container : 'floating',
+                    timer : 3000
+                });
+            } else {
+                $.activeitNoty({
+                    type: 'success',
+                    icon : 'fa fa-check',
+                    message : response['message'],
+                    container : 'floating',
+                    timer : 3000
+                });
+              
+            }
+            setTimeout(function() {
+                location.reload();
+            }, 2000);
+        }
+    });
+}
+
+//FOR CkEditor data pass to server - added by sagar - END 
 $(document).on('click', '#addStock', function(event){
     var trlen = $('#batchTbl tbody tr').length;
     if(trlen == 0)
@@ -303,19 +348,29 @@ $(document).on('click', '.delimg', function(event){
 /**
  * -- CKEditor Textarea box
 */
-function loadCKEditor()
+let theEditor;
+function loadCKEditor(id)
 {
-    ClassicEditor.create( document.querySelector( '.ckeditor' ), {
+    $('.ck-editor').remove();
+    ClassicEditor.create( document.querySelector( '#'+id ), {
         toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
         heading: {
             options: [
                 { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
                 { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
-                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' }
             ]
         }
     } )
+    .then(editor => {
+        theEditor = editor;
+    })
     .catch( error => {
         console.log( error );
     } );
+}
+
+function getDataFromTheEditor() {
+    return theEditor.getData();
 }

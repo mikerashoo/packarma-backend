@@ -61,7 +61,7 @@ class PackagingMaterialController extends Controller
                         $packaging_material_status = checkPermission('packaging_material_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($packaging_material_view) {
-                            $actions .= '<a href="packaging_material_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View Packaging Material Details" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="packaging_material_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($packaging_material_edit) {
                             $actions .= ' <a href="packaging_material_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
@@ -169,6 +169,12 @@ class PackagingMaterialController extends Controller
             $tableObject->shelf_life = 90;
         }
         $tableObject->approx_price = $request->price;
+        $tableObject->wvtr = $request->wvtr;
+        $tableObject->otr = $request->otr;
+        $tableObject->cof = $request->cof;
+        $tableObject->sit = $request->sit;
+        $tableObject->gsm = $request->gsm;
+        $tableObject->special_feature = $request->special_feature;
         if($isEditFlow){
             $tableObject->updated_by = session('data')['id'];
         }else{
@@ -225,7 +231,13 @@ class PackagingMaterialController extends Controller
             'packaging_material_name' => 'required|string',
             'material_description' => 'required|string',
             'shelf_life' => 'required|integer',
-            'price' => 'required|numeric'
+            'price' => 'required|numeric',
+            'wvtr' => 'required|string',
+            'otr' => 'required|string',
+            'cof' => 'required|string',
+            'sit' => 'required|string',
+            'gsm' => 'required|string',
+            'special_feature' => 'required|string',
         ])->errors();
     }
 }

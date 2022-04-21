@@ -65,7 +65,7 @@
                                                     <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>
                                                     <th id="material_name" data-orderable="false" data-searchable="false">Material Name</th>
                                                     <th id="min_amt_profit" data-orderable="false" data-searchable="false">Commission Rate Per Kg</th>
-                                                    <th id="min_stock_qty" data-orderable="false" data-searchable="false">Commission Rate Per Quantity</th>
+                                                    <th id="vendor_price" data-orderable="false" data-searchable="false">Vendor Price</th>
                                                     @if($vendor_material_map_status)
                                                         <th id="vendor_material_map_status" data-orderable="false" data-searchable="false">Status</th>
                                                     @endif

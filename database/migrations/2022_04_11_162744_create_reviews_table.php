@@ -18,12 +18,12 @@ class CreateReviewsTable extends Migration
             $table->integer('user_id')->default(0);
             $table->integer('product_id')->default(0);
             $table->integer('rating')->default(0);
-            $table->text('title')->default(NULL);
-            $table->longText('review')->default(NULL);
+            $table->text('title')->nullable();
+            $table->longText('review')->nullable();
             $table->string('approval_status', 255)->default('pending')->comment('pending|approved|rejected');
-            $table->datetime('approved_on');
+            $table->datetime('approved_on')->nullable();
             $table->integer('approved_by')->default(0)->comment('Admin Id');
-            $table->longText('admin_remark')->default(NULL);
+            $table->longText('admin_remark')->nullable();
             $table->enum('status', [1, 0])->default(0);
             $table->softDeletes();
             $table->timestamps();

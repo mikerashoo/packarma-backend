@@ -23,10 +23,10 @@ class CreateProductsTable extends Migration
             $table->integer('packaging_treatment_id')->default(0);
             $table->string('product_image', 100)->nullable();
             $table->string('product_thumb_image', 100)->nullable();
-            $table->longText('machine_data')->default(0)->comment('Json Data');
-            $table->longText('storage_condition_data')->default(0)->comment('Json Data');
-            $table->longText('product_form_data')->default(0)->comment('Json Data');
-            $table->longText('packaging_treatment_data')->default(0)->comment('Json Data');
+            $table->longText('machine_data')->nullable()->comment('Json Data');
+            $table->longText('storage_condition_data')->nullable()->comment('Json Data');
+            $table->longText('product_form_data')->nullable()->comment('Json Data');
+            $table->longText('packaging_treatment_data')->nullable()->comment('Json Data');
             $table->text('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->text('meta_keyword')->nullable();

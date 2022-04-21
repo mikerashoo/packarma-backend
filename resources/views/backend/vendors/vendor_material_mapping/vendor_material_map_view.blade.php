@@ -40,10 +40,6 @@
                                                 <td>{{$data->min_amt_profit; }}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Commission Rate Per Quantity</strong></td>
-                                                <td>{{$data->min_stock_qty}}</td>
-                                            </tr>
-                                            <tr>
                                                 <td><strong>Vendor Price</strong></td>
                                                 <td>{{$data->vendor_price}}</td>
                                             </tr>

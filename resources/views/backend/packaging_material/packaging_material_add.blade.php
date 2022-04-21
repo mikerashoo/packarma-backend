@@ -35,6 +35,30 @@
                         				<label>Price<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" id="price" name="price" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                         			</div>
+									<div class="col-sm-6">
+										<label>WVTR<span style="color:#ff0000">*</span></label>
+										<input class="form-control required" type="text" id="wvtr" name="wvtr"><br/>
+									</div>
+									<div class="col-sm-6">
+										<label>OTR<span style="color:#ff0000">*</span></label>
+										<input class="form-control required" type="text" id="otr" name="otr"><br/>
+									</div>
+									<div class="col-sm-6">
+										<label>COF<span style="color:#ff0000">*</span></label>
+										<input class="form-control required" type="text" id="cof" name="cof"><br/>
+									</div>
+									<div class="col-sm-6">
+										<label>SIT<span style="color:#ff0000">*</span></label>
+										<input class="form-control required" type="text" id="sit" name="sit"><br/>
+									</div>
+									<div class="col-sm-6">
+										<label>GSM<span style="color:#ff0000">*</span></label>
+										<input class="form-control required" type="text" id="gsm" name="gsm"><br/>
+									</div>
+									<div class="col-sm-6">
+										<label>Special Feature<span style="color:#ff0000">*</span></label>
+										<input class="form-control required" type="text" id="special_feature" name="special_feature"><br/>
+									</div>
                         		</div>
                         		<hr>
                         		<div class="row">

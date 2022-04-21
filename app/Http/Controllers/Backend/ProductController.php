@@ -47,19 +47,25 @@ class ProductController extends Controller
                         if (isset($request['search']['search_product_name']) && !is_null($request['search']['search_product_name'])) {
                             $query->where('product_name', 'like', "%" . $request['search']['search_product_name'] . "%");
                         }
+                        if (isset($request['search']['search_category']) && ! is_null($request['search']['search_category'])) {
+                            $query->where('category_id', $request['search']['search_category']);
+                        }
+                        if (isset($request['search']['search_sub_category']) && ! is_null($request['search']['search_sub_category'])) {
+                            $query->where('sub_category_id', $request['search']['search_sub_category']);
+                        }
                         $query->get();
                     })
                     ->editColumn('product_name', function ($event) {
                         return $event->product_name;
                     })
-                    ->editColumn('product_description', function ($event) {
-                        return $event->product_description;
+                    ->editColumn('category_name', function ($event) {
+                        return $event->category->category_name;
                     })
                     ->editColumn('sub_category_name', function ($event) {
                         return $event->sub_category->sub_category_name;
                     })
-                    ->editColumn('category_name', function ($event) {
-                        return $event->category->category_name;
+                    ->editColumn('product_form', function ($event) {
+                        return $event->product_form->product_form_name;
                     })
                     ->editColumn('product_image_url', function ($event) {
                         $imageUrl = ListingImageUrl('product',$event->product_thumb_image,'thumb');      
@@ -88,7 +94,7 @@ class ProductController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['product_name','product_description','sub_category_name', 'category_name','product_image_url', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['product_name', 'category_name','sub_category_name','product_form','product_image_url', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([

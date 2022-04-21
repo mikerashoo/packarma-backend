@@ -82,8 +82,8 @@
             <div class="sidebar-header">
                 <div class="logo clearfix">
                     <a class="logo-text float-left" href="dashboard">
-                        <div class="logo-img">
-                            <img src="../public/backend/img/logo_1.png" alt="Logo" /> <span class="text-white text bold"> Packult</span>
+                        <div class="logo-img" style="">
+                            <img src="../public/backend/img/Packarma_Home_logo.png" alt="Logo"/><span class="text-white text bold" style="font-size: smaller;">&nbsp;&nbsp;Packarma</span>
                         </div>
                     </a>
                     <a class="nav-toggle d-none d-lg-none d-xl-block is-active" id="sidebarToggle" href="javascript:;"><i class="toggle-icon ft-toggle-right" data-toggle="collapsed"></i></a>
@@ -114,23 +114,21 @@
                             in_array('city', $permission_array) 
                         )
                             <li class="has-sub nav-item 
-                                {{ $lastParam ==  'company' ? 'open' : ''  }}
+                                {{-- {{ $lastParam ==  'company' ? 'open' : ''  }} --}}
                                 {{ $lastParam ==  'city' ? 'open' : ''  }}
                                 {{ $lastParam ==  'state' ? 'open' : ''  }}                                
-                                {{ $lastParam ==  'country' ? 'open' : ''  }}
-                                {{ $lastParam ==  'currency' ? 'open' : ''  }}
+                                {{-- {{ $lastParam ==  'country' ? 'open' : ''  }}
+                                {{ $lastParam ==  'currency' ? 'open' : ''  }} --}}
                                 {{ $lastParam ==  'subscription' ? 'open' : ''  }}
                                 {{ $lastParam ==  'banners' ? 'open' : ''  }}
-                                {{ $lastParam ==  'storage_condition' ? 'open' : ''  }}
-                                {{ $lastParam ==  'measurement_unit' ? 'open' : ''  }}
                             ">
                                 <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Master</span></a>
                                 <ul class="menu-content">
-                                    @if(in_array('company', $permission_array) || session('data')['role_id'] == 1)
+                                    {{-- @if(in_array('company', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'company' ? 'active' : ''  }}">
                                             <a href="company" class="menu-item"><i class="fa fa-circle fs_i"></i>Company</a>
                                         </li>
-                                    @endif
+                                    @endif --}}
                                     @if(in_array('city', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'city' ? 'active' : ''  }}">
                                             <a href="city" class="menu-item"><i class="fa fa-circle fs_i"></i>City</a>
@@ -141,7 +139,7 @@
                                             <a href="state" class="menu-item"><i class="fa fa-circle fs_i"></i>State</a>
                                         </li>
                                     @endif
-                                    @if(in_array('country', $permission_array) || session('data')['role_id'] == 1)
+                                    {{-- @if(in_array('country', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'country' ? 'active' : ''  }}">
                                             <a href="country" class="menu-item"><i class="fa fa-circle fs_i"></i>Country</a>
                                         </li>
@@ -150,7 +148,7 @@
                                         <li class="{{ $lastParam ==  'currency' ? 'active' : ''  }}">
                                             <a href="currency" class="menu-item"><i class="fa fa-circle fs_i"></i>Currency</a>
                                         </li>
-                                    @endif
+                                    @endif --}}
                                     @if(in_array('subscription', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'subscription' ? 'active' : ''  }}">
                                             <a href="subscription" class="menu-item"><i class="fa fa-circle fs_i"></i>Subscription</a>
@@ -159,16 +157,6 @@
                                     @if(in_array('banners', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'banners' ? 'active' : ''  }}">
                                             <a href="banners" class="menu-item"><i class="fa fa-circle fs_i"></i>Banner</a>
-                                        </li>
-                                    @endif
-                                    @if(in_array('storage_condition', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ $lastParam ==  'storage_condition' ? 'active' : ''  }}">
-                                            <a href="storage_condition" class="menu-item"><i class="fa fa-circle fs_i"></i>Storage Condition</a>
-                                        </li>
-                                    @endif
-                                    @if(in_array('measurement_unit', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ $lastParam ==  'measurement_unit' ? 'active' : ''  }}">
-                                            <a href="measurement_unit" class="menu-item"><i class="fa fa-circle fs_i"></i>Measurement Unit</a>
                                         </li>
                                     @endif
                                 </ul>
@@ -189,6 +177,8 @@
                                 {{ $lastParam ==  'product' ? 'open' : ''  }}
                                 {{ $lastParam ==  'packaging_material' ? 'open' : ''  }}
                                 {{ $lastParam ==  'recommendation_engine' ? 'open' : ''  }}
+                                {{ $lastParam ==  'storage_condition' ? 'open' : ''  }}
+                                {{ $lastParam ==  'measurement_unit' ? 'open' : ''  }}
                             ">
                                 <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Product Master</span></a>
                                 <ul class="menu-content">
@@ -235,6 +225,16 @@
                                     @if(in_array('recommendation_engine', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'recommendation_engine' ? 'active' : ''  }}">
                                             <a href="recommendation_engine" class="menu-item"><i class="fa fa-circle fs_i"></i>Recommendation Engine</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('storage_condition', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ $lastParam ==  'storage_condition' ? 'active' : ''  }}">
+                                            <a href="storage_condition" class="menu-item"><i class="fa fa-circle fs_i"></i>Storage Condition</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('measurement_unit', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ $lastParam ==  'measurement_unit' ? 'active' : ''  }}">
+                                            <a href="measurement_unit" class="menu-item"><i class="fa fa-circle fs_i"></i>Measurement Unit</a>
                                         </li>
                                     @endif
                                 </ul>
@@ -339,6 +339,35 @@
                                 </ul>
                             </li>
                         @endif
+                        @if(session('data')['role_id'] == 1  ||
+                            in_array('role', $permission_array) || in_array('messaging', $permission_array) 
+                        )
+                            <li class="has-sub nav-item {{ $lastParam ==  'roles' ? 'open' : ''  }} {{ $lastParam ==  'messaging' ? 'open' : ''  }}">
+                                <a href="javascript:;" class="dropdown-parent"><i class="icon-envelope"></i><span data-i18n="" class="menu-title">Messaging</span></a>
+                                <ul class="menu-content">
+                                    @if(in_array('sms', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ Request::path() ==  'webadmin/sms' ? 'active' : ''  }}">
+                                            <a href="sms" class="menu-item"><i class="fa fa-circle fs_i"></i>SMS</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('email', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ Request::path() ==  'webadmin/email' ? 'active' : ''  }}">
+                                            <a href="email" class="menu-item"><i class="fa fa-circle fs_i"></i>Email</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('whatsapp', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ Request::path() ==  'webadmin/whatsapp' ? 'active' : ''  }}">
+                                            <a href="whatsapp" class="menu-item"><i class="fa fa-circle fs_i"></i>Whatsapp</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('notification', $permission_array) || session('data')['role_id'] == 1)
+                                    <li class="{{ Request::path() ==  'webadmin/notification' ? 'active' : ''  }}">
+                                        <a href="notification" class="menu-item"><i class="fa fa-circle fs_i"></i>Notification</a>
+                                    </li>
+                                @endif
+                                </ul>
+                            </li>
+                        @endif
                         <li class="nav-item {{ $lastParam ==  'review' ? 'active' : ''  }}">
                             <a href="review"><i class="ft-star"></i><span class="menu-title" >Reviews</span></a>
                         </li>
@@ -359,7 +388,7 @@
         <div class="main-panel">
             @yield('content')
             <footer class="footer">
-                <p class="clearfix text-muted m-0"><span>Copyright &copy; 2021 &nbsp;</span><span class="d-none d-sm-inline-block"> All rights reserved.</span></p>
+                <p class="clearfix text-muted m-0"><span>Copyright &copy; 2022 &nbsp;</span><span class="d-none d-sm-inline-block"> All rights reserved.</span></p>
             </footer>
             <button class="btn btn-primary scroll-top" type="button"><i class="ft-arrow-up"></i></button>
         </div>

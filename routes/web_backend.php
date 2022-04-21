@@ -207,7 +207,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 
 	//vendor approval List
 	Route::get('/vendor_approval_list','VendorController@indexApprovalList');
-	Route::post('/vendor_approval_list_data', 'VendorController@fetchUserApprovalList')->name('vendor_approval_list_data');
+	Route::post('/vendor_approval_list_data', 'VendorController@fetchVendorApprovalList')->name('vendor_approval_list_data');
 	Route::get('/vendor_approval_list_update/{id}','VendorController@vendorApproval');
 	Route::post('/saveVendorApprovalData', 'VendorController@saveVendorApprovalStatus');
 	Route::get('/vendor_approval_list_view/{id}', 'VendorController@viewApprovalList');
@@ -339,6 +339,39 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::get('/measurement_unit_edit/{id}','MeasurementUnitController@edit');
 	Route::post('/publishMeasurementUnit', 'MeasurementUnitController@updateStatus');
 	Route::get('/measurement_unit_view/{id}','MeasurementUnitController@view');
+
+	//message sms
+	Route::get('/sms', 'MessageSmsController@index');
+	Route::post('/sms_data', 'MessageSmsController@fetch')->name('sms_data');
+	Route::post('/saveSms', 'MessageSmsController@saveFormData');
+	Route::get('/sms_edit/{id}','MessageSmsController@edit');
+	Route::post('/publishSmsStatus', 'MessageSmsController@updateStatus');
+	Route::get('/sms_view/{id}','MessageSmsController@view');
+
+	//message whatsapp
+	Route::get('/whatsapp', 'MessageWhatsappController@index');
+	Route::post('/whatsapp_data', 'MessageWhatsappController@fetch')->name('whatsapp_data');
+	Route::post('/saveWhatsapp', 'MessageWhatsappController@saveFormData');
+	Route::get('/whatsapp_edit/{id}','MessageWhatsappController@edit');
+	Route::post('/publishWhatsappStatus', 'MessageWhatsappController@updateStatus');
+	Route::get('/whatsapp_view/{id}','MessageWhatsappController@view');
+
+	//message notification
+	Route::get('/notification', 'MessageNotificationController@index');
+	Route::post('/notification_data', 'MessageNotificationController@fetch')->name('notification_data');
+	Route::get('/notification_add','MessageNotificationController@add');
+	Route::get('/notification_edit/{id}','MessageNotificationController@edit');
+	Route::post('/saveNotification', 'MessageNotificationController@saveFormData');
+	Route::post('/publishNotificationStatus', 'MessageNotificationController@updateStatus');
+	Route::get('/notification_view/{id}','MessageNotificationController@view');
+
+	//message email
+	Route::get('/email', 'MessageEmailController@index');
+	Route::post('/email_data', 'MessageEmailController@fetch')->name('email_data');
+	Route::get('/email_edit/{id}','MessageEmailController@edit');
+	Route::post('/saveEmail', 'MessageEmailController@saveFormData');
+	Route::post('/publishEmailStatus', 'MessageEmailController@updateStatus');
+	Route::get('/email_view/{id}','MessageEmailController@view');
 
 });
 

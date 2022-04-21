@@ -27,12 +27,12 @@
                                             <td>{{$data->product_description}}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Sub Category Name</strong></td>
-                                            <td>{{$data->sub_category->sub_category_name}}</td>
-                                        </tr>
-                                        <tr>
                                             <td><strong>Category Name</strong></td>
                                             <td>{{$data->category->category_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Sub Category Name</strong></td>
+                                            <td>{{$data->sub_category->sub_category_name}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Product Form Name</strong></td>

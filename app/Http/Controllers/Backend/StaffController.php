@@ -113,7 +113,7 @@ class StaffController extends Controller
      * Uses : This will load add staff view.
     */
     public function addStaff(Request $request) {
-        $data = Role::all();
+        $data['role'] = Role::all();
         $data['country'] = Country::all();
         return view('backend/staff/staff_add',["data"=>$data]);
     }

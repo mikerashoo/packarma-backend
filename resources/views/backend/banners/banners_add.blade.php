@@ -38,23 +38,6 @@
                                     <div class="tab-pane fade mt-2 show active" id="details" role="tabpanel" aria-labelledby="details-tab">
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <div class="form-group row ">
-                                                    <label class="col-md-3 label-control">Type<span class="text-danger">*</span></label>
-                                                    <div class="col-md-9">
-                                                        <div class="input-group col-md-9">
-                                                            <div class="radio d-inline-block mr-2 mb-1">
-                                                                <input type="radio" id="customer" name="type" value="Customer">
-                                                                <label for="customer">Customer</label>
-                                                            </div>
-                                                            <div class="radio d-inline-block">
-                                                                <input type="radio" id="vendor" name="type" value="Vendor">
-                                                                <label for="vendor">Vendor</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
                                                 <label>Banners Title<span class="text-danger">*</span></label>
                                                 <input class="form-control required" type="text" id="title" name="title"><br/>
                                             </div>

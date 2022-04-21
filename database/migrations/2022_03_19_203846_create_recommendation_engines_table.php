@@ -31,12 +31,6 @@ class CreateRecommendationEnginesTable extends Migration
             $table->integer('packaging_material_id')->default(0);
             $table->integer('vendor_id')->default(0);
             $table->integer('display_shelf_life')->default(0);
-            $table->string('wvtr', 255);
-            $table->string('otr', 255);
-            $table->string('cof', 255);
-            $table->string('sit', 255);
-            $table->string('gsm', 255);
-            $table->longText('special_feature');
             $table->text('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->text('meta_keyword')->nullable();

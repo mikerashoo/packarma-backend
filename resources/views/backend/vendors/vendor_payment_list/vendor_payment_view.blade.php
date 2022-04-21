@@ -29,7 +29,7 @@
                                             <td>{{$data->amount}}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Transaction Time</strong></td>
+                                            <td><strong>Transaction Date</strong></td>
                                             <td>{{date('d-m-Y', strtotime($data->transaction_date)) }}</td>
                                         </tr>
                                         <tr>

@@ -281,7 +281,7 @@ class VendorController extends Controller
      *   @param Request request
      *   @return Response
      */
-    public function fetchUserApprovalList(Request $request)
+    public function fetchVendorApprovalList(Request $request)
     {
         if ($request->ajax()) {
             try {

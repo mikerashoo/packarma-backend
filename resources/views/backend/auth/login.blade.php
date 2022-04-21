@@ -13,8 +13,8 @@
                                     <div class="card-body auth-img">
                                         <div class="row m-0">
                                             <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center auth-img-bg p-3">
-                                                <!-- <img src="public/img/logo.png" alt="" class="img-fluid" width="300" height="230"> -->
-                                                <h1 style="font-size: 70px;">&nbsp;&nbsp;PACKULT&nbsp;&nbsp;</h1>
+                                                <img src="public/backend/img/Packarma_logo_1.svg" alt="" class="img-fluid" width="300" height="230">
+                                                {{-- <h1 style="font-size: 70px;">&nbsp;&nbsp;PACKULT&nbsp;&nbsp;</h1> --}}
                                             </div>
                                             <form class="col-lg-6 col-12 px-4 py-3" action="webadmin/login" method="POST">
                                                 @csrf

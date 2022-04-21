@@ -24,7 +24,7 @@
                         				<label>Role<span class="text-danger">*</span></label>
                         				<select class="select2 required" id="role_id" name="role_id" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($data as $roles)
+                                            @foreach($data['role'] as $roles)
                                                 <option value="{{$roles->id}}">{{$roles->role_name}}</option>
                                             @endforeach
                                         </select><br/>
@@ -41,8 +41,8 @@
                         				<label>Phone Country Code<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="phone_country_code" name="phone_country_code" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($country as $codes)
-                                                <option value="{{$codes->id}}">+{{$codes->phone_code}}</option>
+                                            @foreach($data['country'] as $countries)
+                                                <option value="{{$countries->id}}">+{{$countries->phone_code}}</option>
                                             @endforeach
                                         </select><br/>
                         			</div>

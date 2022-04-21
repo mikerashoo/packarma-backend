@@ -47,13 +47,13 @@ class BannerController extends Controller
                 $query = Banner::select('*');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
-                        if (isset($request['search']['type']) && !is_null($request['search']['type'])) {
-                            $query->where('type', 'like', "%" . $request['search']['type'] . "%");
+                        if (isset($request['search']['search_banner_title']) && !is_null($request['search']['search_banner_title'])) {
+                            $query->where('title', 'like', "%" . $request['search']['search_banner_title'] . "%");
                         }
                         $query->get();
                     })
-                    ->editColumn('type', function ($event) {
-                        return $event->type;
+                    ->editColumn('title', function ($event) {
+                        return $event->title;
                     })
                     ->editColumn('banner_image_url', function ($event) {
                         $imageUrl = ListingImageUrl('banner',$event->banner_thumb_image,'thumb');      
@@ -81,7 +81,7 @@ class BannerController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['type','banner_image_url', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['title','banner_image_url', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -168,7 +168,6 @@ class BannerController extends Controller
             };
         }
         $tableObject->title = $request->title;
-        $tableObject->type = $request->type;
         //FOR SEO
         $seoUrl = generateSeoURL($request->title, 60);
         $tableObject->seo_url = $seoUrl;
@@ -243,7 +242,6 @@ class BannerController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'type' => 'required|string',
             'title' => 'required|string',
         ])->errors();
     }
@@ -258,7 +256,6 @@ class BannerController extends Controller
     private function validateNewRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'type' => 'required|string',
             'title' => 'required|string',
             'banner_image' => 'required',
         ])->errors();

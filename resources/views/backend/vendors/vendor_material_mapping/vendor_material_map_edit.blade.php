@@ -76,10 +76,6 @@
                         				<input class="form-control required" type="text" step=".001" value="{{ $data->min_amt_profit; }}" id="commission_rate_per_kg" name="commission_rate_per_kg" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Commission Rate Per Quantity<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" step=".001" value="{{ $data->min_stock_qty; }}" id="commission_rate_per_qty" name="commission_rate_per_qty" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                        			</div>
-                                    <div class="col-sm-6">
                         				<label>Vendor Price</label>
                         				<input class="form-control" type="text" step=".001" value="{{ $data->vendor_price; }}" id="vendor_price" name="vendor_price" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                         			</div>                                    

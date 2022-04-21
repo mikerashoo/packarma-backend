@@ -13,10 +13,6 @@
                                             <td>{{$data->title}}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Banners Type</strong></td>
-                                            <td>{{$data->type}}</td>
-                                        </tr>
-                                        <tr>
                                             <td><strong>Banners Status</strong></td>
                                             <td>{{displayStatus($data->status)}}</td>
                                         </tr>

@@ -17,6 +17,8 @@ return [
         "PACKAGING_TREATMENT" => "1200X800 pixels (3:2), Max Size 500Kb and .jpg format image",
         "PRODUCT" => "500X500 pixels (1:1), Max Size 500Kb and .jpg format image",
         "ORDER_PAYMENT" => "1200X800 pixels (3:2), Max Size 500Kb and .jpg format image",
+        "WHATSAPP_FILE" => "500X500 pixels (1:1), Max Size 500Kb and .jpg format image",
+        "NOTIFICATION" => "1200X800 pixels (3:2), Max Size 500Kb and .jpg format image",
     ],
     'SIZE' =>  [
         "BANNER" => "500000",
@@ -29,6 +31,8 @@ return [
         "PACKAGING_TREATMENT" => "500000",
         "PRODUCT" => "500000",
         "ORDER_PAYMENT" => "500000",
+        "WHATSAPP_FILE" => "500000",
+        "NOTIFICATION" => "500000"
     ],
 ]
 

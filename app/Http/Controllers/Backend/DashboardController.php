@@ -31,6 +31,12 @@ class DashboardController extends Controller
 		$data['subscription_start'] = User::whereDate('subscription_start','=', date('Y-m-d'))->count();
 		$data['user'] = User::all()->count();  
 		$data['revenue'] = Order::all()->sum('grand_total');
+		// if($data['rev'] == '50000'){
+		// 	$data['revenue'] = '50K';
+		// }elseif($data['rev'] == 100000){
+		// 	$data['revenue'] = '1Lac';
+		// }
+
     	return view('backend/dashboard/index',["data"=>$data]);
 	}
 

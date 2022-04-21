@@ -366,3 +366,47 @@ if (! function_exists('customerEnquiryType')) {
             return $returnArray;
         }     
     }
+
+    /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 18-Mar-2022
+       *   Uses :  To fetch value in user message user type       
+    */
+    if (! function_exists('messageUserType')) {
+        function messageUserType($displayValue="",$allKeys = false) {
+            $returnArray = array(
+                'all' => 'All',
+                'customer' => 'Customer',
+                'vendor' => 'Vendor',
+            );
+            if(!empty($displayValue)){
+                $returnArray = $returnArray[$displayValue];
+            }
+            if(empty($displayValue) && $allKeys){
+                $returnArray = array_keys($returnArray);
+            }
+            return $returnArray;
+        }     
+    }
+
+     /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 18-Mar-2022
+       *   Uses :  To fetch value in user message message trigger       
+    */
+    if (! function_exists('messageTrigger')) {
+        function messageTrigger($displayValue="",$allKeys = false) {
+            $returnArray = array(
+                'both' => 'Both',
+                'admin' => 'Admin',
+                'batch' => 'Batch',
+            );
+            if(!empty($displayValue)){
+                $returnArray = $returnArray[$displayValue];
+            }
+            if(empty($displayValue) && $allKeys){
+                $returnArray = array_keys($returnArray);
+            }
+            return $returnArray;
+        }     
+    }

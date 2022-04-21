@@ -21,6 +21,12 @@ class CreatePackagingMaterialsTable extends Migration
             $table->integer('product_id')->default(0);
             $table->integer('shelf_life')->default(0);
             $table->decimal('approx_price', $precision = 8, $scale = 3)->default(0);
+            $table->string('wvtr', 255);
+            $table->string('otr', 255);
+            $table->string('cof', 255);
+            $table->string('sit', 255);
+            $table->string('gsm', 255);
+            $table->longText('special_feature');
             $table->text('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->text('meta_keyword')->nullable();
