@@ -45,32 +45,6 @@
                                             @endforeach
                                         </select><br />
                         			</div>
-                                    <div class="col-sm-6 mb-3">
-                        				<label>Recommendation Engine Name<span style="color:#ff0000">*</span></label>
-                        				<select class="form-control select2 required" id="recommendation_engine" value="" name="recommendation_engine" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach ($recommendation_engine as $engines)
-                                                @if ($engines->id == $data->recommendation_engine_id)
-                                                    <option value="{{ $engines->id }}" selected>{{ $engines->engine_name }}</option>
-                                                @else
-                                                    <option value="{{ $engines->id }}">{{ $engines->engine_name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select><br />
-                        			</div>
-                                    <div class="col-sm-6 mb-3">
-                        				<label>Product Name<span style="color:#ff0000">*</span></label>
-                        				<select class="form-control select2 required" id="product" value="" name="product" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach ($product as $products)
-                                                @if ($products->id == $data->product_id)
-                                                    <option value="{{ $products->id }}" selected>{{ $products->product_name }}</option>
-                                                @else
-                                                    <option value="{{ $products->id }}">{{ $products->product_name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select><br />
-                        			</div>
                                     <div class="col-sm-6">
                         				<label>Commission Rate Per Kg<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" step=".001" value="{{ $data->min_amt_profit; }}" id="commission_rate_per_kg" name="commission_rate_per_kg" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>

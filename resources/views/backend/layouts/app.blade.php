@@ -7,7 +7,7 @@
     <meta name="author" content="MYPCOTINFOTECH">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Admin</title>
-    <link rel="shortcut icon" type="image/x-icon" href="../public/backend/img/ico/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="../public/backend/img/ico/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900%7CMontserrat:300,400,500,600,700,800,900" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../public/backend/css/mypcot.min.css">
     <link rel="stylesheet" type="text/css" href="../public/backend/fonts/feather/style.min.css">
@@ -83,7 +83,7 @@
                 <div class="logo clearfix">
                     <a class="logo-text float-left" href="dashboard">
                         <div class="logo-img" style="">
-                            <img src="../public/backend/img/Packarma_Home_logo.png" alt="Logo"/><span class="text-white text bold" style="font-size: smaller;">&nbsp;&nbsp;Packarma</span>
+                            <img src="../public/backend/img/Home_logo.png" alt="Logo"/><span class="text-white text bold" style="font-size: smaller;">&nbsp;Packarma</span>
                         </div>
                     </a>
                     <a class="nav-toggle d-none d-lg-none d-xl-block is-active" id="sidebarToggle" href="javascript:;"><i class="toggle-icon ft-toggle-right" data-toggle="collapsed"></i></a>
@@ -288,11 +288,11 @@
                                         <a href="vendor_material_map" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Material Map</a>
                                     </li>
                                 @endif
-                                @if(in_array('vendor_warehouse', $permission_array) || session('data')['role_id'] == 1)
+                                {{-- @if(in_array('vendor_warehouse', $permission_array) || session('data')['role_id'] == 1)
                                     <li class="{{ Request::path() ==  'webadmin/vendor_warehouse' ? 'active' : ''  }}">
                                         <a href="vendor_warehouse" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Warehouse</a>
                                     </li>
-                                @endif
+                                @endif --}}
                                 @if(in_array('vendor_payment_list', $permission_array) || session('data')['role_id'] == 1)
                                     <li class="{{ Request::path() ==  'webadmin/vendor_payment_list' ? 'active' : ''  }}">
                                         <a href="vendor_payment_list" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Payment</a>
@@ -313,11 +313,11 @@
                                         <a href="order_list" class="menu-item"><i class="fa fa-circle fs_i"></i>Order List</a>
                                     </li>
                                 @endif
-                                @if(in_array('order_payment_list', $permission_array) || session('data')['role_id'] == 1)
+                                {{-- @if(in_array('order_payment_list', $permission_array) || session('data')['role_id'] == 1)
                                     <li class="{{ Request::path() ==  'webadmin/order_payment_list' ? 'active' : ''  }}">
                                         <a href="order_payment_list" class="menu-item"><i class="fa fa-circle fs_i"></i>Order Payment List</a>
                                     </li>
-                                @endif
+                                @endif --}}
                             </ul>
                         </li>
                         @if(session('data')['role_id'] == 1  ||
@@ -339,7 +339,7 @@
                                 </ul>
                             </li>
                         @endif
-                        @if(session('data')['role_id'] == 1  ||
+                        {{-- @if(session('data')['role_id'] == 1  ||
                             in_array('role', $permission_array) || in_array('messaging', $permission_array) 
                         )
                             <li class="has-sub nav-item {{ $lastParam ==  'roles' ? 'open' : ''  }} {{ $lastParam ==  'messaging' ? 'open' : ''  }}">
@@ -367,7 +367,7 @@
                                 @endif
                                 </ul>
                             </li>
-                        @endif
+                        @endif --}}
                         <li class="nav-item {{ $lastParam ==  'review' ? 'active' : ''  }}">
                             <a href="review"><i class="ft-star"></i><span class="menu-title" >Reviews</span></a>
                         </li>

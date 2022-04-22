@@ -28,14 +28,6 @@
                                                 <td>{{$data->packaging_material->packaging_material_name; }}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Recommendation Engine Name</strong></td>
-                                                <td>{{$data->recommendation_engine->engine_name; }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Product Name</strong></td>
-                                                <td>{{$data->product->product_name; }}</td>
-                                            </tr>
-                                            <tr>
                                                 <td><strong>Commission Rate Per Kg</strong></td>
                                                 <td>{{$data->min_amt_profit; }}</td>
                                             </tr>

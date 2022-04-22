@@ -57,7 +57,7 @@
                                                     <th id="customer_enquiry_id" data-orderable="false" data-searchable="false">Enquiry ID</th> 
                                                     <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>
                                                     <th id="product_name" data-orderable="false" data-searchable="false">Product Name</th>
-                                                    <th id="vendor_warehouse" data-orderable="false" data-searchable="false">Vendor Warehouse</th>
+                                                    {{-- <th id="vendor_warehouse" data-orderable="false" data-searchable="false">Vendor Warehouse</th> --}}
                                                     <th id="enquiry_status" data-orderable="false" data-searchable="false">Enquiry Status</th>
                                                     <th id="quotation_validity" data-orderable="false" data-searchable="false">Quotation Validity</th>                                                    
                                                     @if($data['vendor_quotation_view'])

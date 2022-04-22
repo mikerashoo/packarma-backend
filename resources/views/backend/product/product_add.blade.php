@@ -28,20 +28,20 @@
                         				<input class="form-control required" type="text" id="product_description" name="product_description"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Sub Category<span style="color:#ff0000">*</span></label>
-                        				<select class="select2 required" id="sub_category" name="sub_category" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach($sub_category as $value)
-                                                <option value="{{$value->id}}">{{$value->sub_category_name}}</option>
-                                            @endforeach
-                                        </select><br/><br/>
-                        			</div>
-                                    <div class="col-sm-6">
                         				<label>Category<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="category" name="category" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($category as $categories)
                                                 <option value="{{$categories->id}}">{{$categories->category_name}}</option>
+                                            @endforeach
+                                        </select><br/><br/>
+                        			</div>
+                                    <div class="col-sm-6">
+                        				<label>Sub Category<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="sub_category" name="sub_category" style="width: 100% !important;">
+                                            <option value="">Select</option>
+                                            @foreach($sub_category as $value)
+                                                <option value="{{$value->id}}">{{$value->sub_category_name}}</option>
                                             @endforeach
                                         </select><br/><br/>
                         			</div>

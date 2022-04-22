@@ -68,6 +68,7 @@
                                                     <th id="order_id" data-orderable="false" data-searchable="false">Order ID</th>
                                                     <th id="payment_mode" data-orderable="false" data-searchable="false">Payment Mode</th>
                                                     <th id="payment_status" data-orderable="false" data-searchable="false">Payment Status</th>
+                                                    <th id="amount" data-orderable="false" data-searchable="false">Amount</th>
                                                     <th id="transaction_date" data-orderable="false" data-searchable="false">Transaction Date</th>
                                                     @if($vendor_payment_view)
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>

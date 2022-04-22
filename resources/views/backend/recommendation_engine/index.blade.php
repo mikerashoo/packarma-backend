@@ -41,7 +41,6 @@
                                                     <th id="engine_name" data-orderable="false" data-searchable="false">Recommendation Engine Name</th>
                                                     <th id="structure_type" data-orderable="false" data-searchable="false">Structure Type</th>
                                                     <th id="product_name" data-orderable="false" data-searchable="false">Product Name</th>
-                                                    <th id="approx_price" data-orderable="false" data-searchable="false">Price</th>
                                                     @if($data['recommendation_engine_view'] || $data['recommendation_engine_edit'] || $data['recommendation_engine_status'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif

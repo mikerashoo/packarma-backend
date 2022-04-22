@@ -17,6 +17,7 @@ class CreateMeasurementUnitsTable extends Migration
             $table->id();
             $table->string('unit_name', 100);
             $table->string('unit_symbol', 25);
+            $table->enum('unit_form', ['A','S','L','P','SS','O'])->comment('aerosols|solids|liquid|pump_spray|semi_solid|other');
             $table->enum('status', [1, 0])->default(0);
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);

@@ -200,7 +200,7 @@ class OrderController extends Controller
     public function updateOrderPayment($id) {
         $data['data'] = Order::with('user','product','vendor')->find($id);
         $data['deliveryStatus'] = deliveryStatus();
-        $data['paymentStatusType'] = paymentStatusType();
+        $data['customerPaymentStatus'] = customerPaymentStatus();
         $data['paymentMode'] = paymentMode();
         return view('backend/order/order_list/order_payment_status_update',$data);
     }
@@ -224,9 +224,9 @@ class OrderController extends Controller
         $orderData = Order::find($_GET['id']);
         if(isset($_GET['id'])) {
             $getKeys = true;
-            $paymentStatusType = paymentStatusType('',$getKeys);
+            $customerPaymentStatus = customerPaymentStatus('',$getKeys);
             $paymentMode = paymentMode('',$getKeys);
-            if (in_array( $request->payment_status, $paymentStatusType) && in_array( $request->payment_mode, $paymentMode))
+            if (in_array( $request->payment_status, $customerPaymentStatus) && in_array( $request->payment_mode, $paymentMode))
              {
                 // $tableObject = OrderPayment::find($_GET['id']);
                 if($request->payment_status == 'pending'){

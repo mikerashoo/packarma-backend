@@ -93,7 +93,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Customer Payment Status</strong></td>
-                                                <td>{{paymentStatus($data->customer_payment_status);}}</td>
+                                                <td>{{customerPaymentStatus($data->customer_payment_status);}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Vendor Pending Payment</strong></td>

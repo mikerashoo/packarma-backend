@@ -304,6 +304,27 @@ if (! function_exists('customerEnquiryType')) {
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 03-Mar-2022
+       *   Uses :  To fetch value in order payment status type       
+    */
+    if (! function_exists('customerPaymentStatus')) {
+        function customerPaymentStatus($displayValue="",$allKeys = false) {
+            $returnArray = array(
+                'pending' => 'Pending',
+                'fully_paid' => 'Fully Paid'
+            );
+            if(!empty($displayValue)){
+                $returnArray = $returnArray[$displayValue];
+            }
+            if(empty($displayValue) && $allKeys){
+                $returnArray = array_keys($returnArray);
+            }
+            return $returnArray;
+        }
+    }
+
+    /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 03-Mar-2022
        *   Uses :  To fetch value in order payment during payment status type       
     */
     if (! function_exists('paymentStatusType')) {

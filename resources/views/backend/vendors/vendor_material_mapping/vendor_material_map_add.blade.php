@@ -45,24 +45,6 @@
                                             @endforeach
                                         </select><br />
                         			</div>
-                                    <div class="col-sm-6 mb-3">
-                        				<label>Recommendation Engine Name<span style="color:#ff0000">*</span></label>
-                        				<select class="form-control select2 required" id="recommendation_engine" value="" name="recommendation_engine" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach ($recommendation_engine as $engines)
-                                                    <option value="{{ $engines->id }}">{{ $engines->engine_name }}</option>
-                                            @endforeach
-                                        </select><br />
-                        			</div>
-                                    <div class="col-sm-6 mb-3">
-                        				<label>Product Name<span style="color:#ff0000">*</span></label>
-                        				<select class="form-control select2 required" id="product" value="" name="product" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach ($product as $products)
-                                                    <option value="{{ $products->id }}">{{ $products->product_name }}</option>
-                                            @endforeach
-                                        </select><br />
-                        			</div>
                                     <div class="col-sm-6">
                         				<label>Commission Rate Per Kg<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" value="" step=".001" id="commission_rate_per_kg" name="commission_rate_per_kg" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>

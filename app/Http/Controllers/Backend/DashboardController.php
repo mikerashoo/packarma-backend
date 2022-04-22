@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Admin;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Vendor;
 use App\Models\Order;
 
 class DashboardController extends Controller
@@ -27,16 +28,18 @@ class DashboardController extends Controller
 		// print_r($generatedPwd);
 		// exit;
 
-		$data['subscription_end'] = User::whereDate('subscription_end','=', date('Y-m-d'))->count();
-		$data['subscription_start'] = User::whereDate('subscription_start','=', date('Y-m-d'))->count();
-		$data['user'] = User::all()->count();  
+		$data['user'] = User::where('approval_status','=','accepted')->count(); 
+		$data['cust_reg_today'] = User::where('approval_status','=','accepted')->whereDate('approved_on','=', date('Y-m-d'))->count();
+		$data['vendor'] = Vendor::where('approval_status','=','accepted')->count(); 
+		$data['vendor_reg_today'] = Vendor::where('approval_status','=','accepted')->whereDate('approved_on','=', date('Y-m-d'))->count();
 		$data['revenue'] = Order::all()->sum('grand_total');
-		// if($data['rev'] == '50000'){
-		// 	$data['revenue'] = '50K';
-		// }elseif($data['rev'] == 100000){
-		// 	$data['revenue'] = '1Lac';
-		// }
-
+		$data['today_sales'] = Order::whereDate('created_at','=', date('Y-m-d'))->count();
+		$data['subs_renew_today'] = User::whereDate('subscription_start','=', date('Y-m-d'))->count();
+		$data['subs_end_today'] = User::whereDate('subscription_end','=', date('Y-m-d'))->count();
+		$data['today_orders'] = Order::whereDate('created_at','=', date('Y-m-d'))->count();
+		$data['pending_orders'] = Order::where('order_delivery_status','=','pending')->count();
+		$data['processing_orders'] = Order::where('order_delivery_status','=','processing')->orWhere('order_delivery_status','=','out_for_delivery')->count();
+		$data['completed_orders'] = Order::where('order_delivery_status','=','delivered')->count();  
     	return view('backend/dashboard/index',["data"=>$data]);
 	}
 

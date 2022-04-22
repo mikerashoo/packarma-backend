@@ -64,7 +64,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Vendor Name<span style="color:#ff0000">*</span></th>
-                                                    <th>Warehouse<span style="color:#ff0000">*</span></th>
+                                                    {{-- <th>Warehouse<span style="color:#ff0000">*</span></th> --}}
                                                     <th>Vendor Price<span style="color:#ff0000">*</span></th>
                                                     <th>Commission Rate Per Kg<span style="color:#ff0000">*</span></th>
                                                     <th>Freight Price<span style="color:#ff0000">*</span></th>
@@ -122,7 +122,6 @@ $(document).on('click', '#addStock', function(event){
     var vendor_dropdown = '<?php echo $vendor_drop ?>';
     var warehouse_dropdown = '<?php echo $warehouse_drop ?>';
     $('#vendorMapTbl').append('<tr id="vendorMapTblTr'+i+'" data-key="'+i+'">'+
-        '<input class="form-control" type="hidden"  value="<?php echo $data->grade_id; ?>" id="grade'+i+'" name="grade[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->id; ?>" id="customer_enquiry_id'+i+'" name="customer_enquiry_id[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->product_id; ?>" id="product'+i+'" name="product[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->user_id; ?>" id="user'+i+'" name="user[]">'+
@@ -131,11 +130,11 @@ $(document).on('click', '#addStock', function(event){
                 vendor_dropdown+
             '</select>'+
         '</td'+'<br>'+
-        '<td>'+
-            '<select class="select2" id="warehouse'+i+'" value="" name="warehouse[]" style="width:100%;">'+
-                warehouse_dropdown+
-            '</select>'+
-        '</td>'+
+        // '<td>'+
+        //     '<select class="select2" id="warehouse'+i+'" value="" name="warehouse[]" style="width:100%;">'+
+        //         warehouse_dropdown+
+        //     '</select>'+
+        // '</td>'+
         '<td><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="vendor_price'+i+'" name="vendor_price[]"></td>'+
         '<td><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="commission_rate'+i+'" name="commission_rate[]"></td>'+
         '<td><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="freight_price'+i+'" name="freight_price[]"></td>'+
@@ -144,7 +143,7 @@ $(document).on('click', '#addStock', function(event){
         '<td><button type="button" class="btn btn-danger btn-sm" id="removeVendorMap'+i+'" onclick="remove_vendor_map_tbl_row('+i+')"><i class="fa fa-minus"></i></button></td>'+
     '</tr>');
     $('#vendor'+i).select2();
-    $('#warehouse'+i).select2();
+    // $('#warehouse'+i).select2();
 });
 function remove_vendor_map_tbl_row(i)
 {

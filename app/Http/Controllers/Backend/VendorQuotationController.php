@@ -25,8 +25,6 @@ class VendorQuotationController extends Controller
         $data['vendor'] = Vendor::all();
         $data['vendor_quotation_view'] = checkPermission('vendor_quotation_view');
         return view('backend/vendors/vendor_quotation/index',['data' =>$data] ); 
-        // echo "<pre>";
-        // print_r($query);exit;
     }
 
     /**
@@ -65,9 +63,9 @@ class VendorQuotationController extends Controller
                     ->editColumn('product_name', function ($event) {
 	                    return $event->product->product_name;                        
 	                }) 
-                    ->editColumn('vendor_warehouse', function ($event) {
-	                    return $event->vendor_warehouse->warehouse_name;                        
-	                })
+                    // ->editColumn('vendor_warehouse', function ($event) {
+	                //     return $event->vendor_warehouse->warehouse_name;                        
+	                // })
                     ->editColumn('enquiry_status', function ($event) {
 	                    return vendorEnquiryStatus($event->enquiry_status);
 	                })
@@ -84,7 +82,7 @@ class VendorQuotationController extends Controller
                         return $actions;
 	                })   
                 ->addIndexColumn()                
-                ->rawColumns(['user_name','customer_enquiry_id','vendor_name','product_name','vendor_warehouse','enquiry_status','quotation_validity','action'])->setRowId('id')->make(true);
+                ->rawColumns(['user_name','customer_enquiry_id','vendor_name','product_name','enquiry_status','quotation_validity','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());

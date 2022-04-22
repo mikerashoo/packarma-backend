@@ -38,16 +38,7 @@
                                             </select><br/>
                                         </div>
                                         <div class="col-sm-4">
-                                            <label>Enquiry Type</label>
-                                            <select class="form-control mb-3 select2" id="search_enquiry_type" name="search_enquiry_type" style="width: 100% !important;">
-                                                <option value="">Select</option>
-                                                @foreach($data['enquiryType'] as $key => $val)
-                                                    <option value="{{$key}}">{{$val}}</option>                                                
-                                                @endforeach
-                                            </select><br/>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <label>Quote Type</label>
+                                            <label>Enquiry Status</label>
                                             <select class="form-control mb-3 select2" id="search_quote_type" name="search_quote_type" style="width: 100% !important;">
                                                 <option value="">Select</option>
                                                 @foreach($data['quoteType'] as $key => $val)
@@ -56,7 +47,7 @@
                                             </select><br/>
                                         </div>
                                         <div class="col-md-4">
-                                            <label>&nbsp;</label><br/>
+                                            <label>&nbsp;</label>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
                                     </div>
@@ -68,8 +59,7 @@
                                                     <th id="description" data-orderable="false" data-searchable="false">Description</th>
                                                     <th id="name" data-orderable="false" data-searchable="false">User Name</th>
                                                     <th id="order_id" data-orderable="false" data-searchable="false">Order ID</th>
-                                                    <th id="enquiry_type" data-orderable="false" data-searchable="false">Enquiry Type</th>
-                                                    <th id="quote_type" data-orderable="false" data-searchable="false">Quote Type</th>
+                                                    <th id="enquiry_status" data-orderable="false" data-searchable="false">Enquiry Status</th>
                                                     <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>                                                    
                                                     @if($data['customer_enquiry_view'] || $data['customer_enquiry_edit'] || $data['customer_enquiry_map_to_vendor'])
                                                     <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>

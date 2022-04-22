@@ -40,15 +40,6 @@
                                                 <input class="form-control required" type="text" id="engine_name" name="engine_name"><br/>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Vendor<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="vendor" name="vendor" style="width: 100% !important;">
-                                                    <option value="">Select</option>
-                                                    @foreach($vendor as $vendors)
-                                                        <option value="{{$vendors->id}}">{{$vendors->vendor_name}}</option>
-                                                    @endforeach
-                                                </select><br/><br/>
-                                            </div>
-                                            <div class="col-sm-6">
                                                 <label>Structure Type<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="structure_type" name="structure_type"><br/>
                                             </div>
@@ -71,10 +62,6 @@
                                             <div class="col-sm-6">
                                                 <label>Maximum Weight<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="max_weight" name="max_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Price<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="price" name="price" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                         </div>
                                     </div>

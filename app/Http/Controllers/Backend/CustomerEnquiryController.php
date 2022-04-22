@@ -57,9 +57,6 @@ class CustomerEnquiryController extends Controller
                         if (isset($request['search']['search_user_name']) && ! is_null($request['search']['search_user_name'])) {
                             $query->where('user_id', $request['search']['search_user_name']);                           
                         }
-                        if (isset($request['search']['search_enquiry_type']) && ! is_null($request['search']['search_enquiry_type'])) {
-                            $query->where('enquiry_type', 'like', "%" . $request['search']['search_enquiry_type'] . "%");
-                        }                        
                         if (isset($request['search']['search_quote_type']) && ! is_null($request['search']['search_quote_type'])) {
                             $query->where('quote_type', 'like', "%" . $request['search']['search_quote_type'] . "%");
                         }
@@ -74,10 +71,7 @@ class CustomerEnquiryController extends Controller
                     ->editColumn('order_id', function ($event) {
 	                    return $event->order_id;                        
 	                })
-                    ->editColumn('enquiry_type', function ($event) {
-	                    return customerEnquiryType($event->enquiry_type);
-	                })
-                    ->editColumn('quote_type', function ($event) {
+                    ->editColumn('enquiry_status', function ($event) {
 	                    return customerEnquiryQuoteType($event->quote_type);
 	                })
                     ->editColumn('updated_at', function ($event) {
@@ -102,7 +96,7 @@ class CustomerEnquiryController extends Controller
                         return $actions;
 	                }) 
 	                ->addIndexColumn()
-	                ->rawColumns(['description','name','order_id','enquiry_type','enquiry_quote','updated_at','action'])->setRowId('id')->make(true);
+	                ->rawColumns(['description','name','order_id','enquiry_status','updated_at','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -227,7 +221,7 @@ class CustomerEnquiryController extends Controller
             $tblObj->customer_enquiry_id = $request->customer_enquiry_id[$k];
             $tblObj->product_id = $request->product[$k];
             $tblObj->vendor_id = $val;
-            $tblObj->vendor_warehouse_id= $request->warehouse[$k];
+            // $tblObj->vendor_warehouse_id= $request->warehouse[$k];
             $tblObj->vendor_price =  $request->vendor_price[$k];
             $tblObj->commission_amt =  $request->commission_rate[$k];
             //storing quotation validity in variable for increasing current time with validity hours

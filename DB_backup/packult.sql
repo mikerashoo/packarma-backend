@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2022 at 03:15 PM
+-- Generation Time: Apr 22, 2022 at 03:06 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -49,9 +49,10 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `admin_name`, `email`, `country_id`, `phone`, `password`, `address`, `role_id`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Super Admin', 'test@mypcot.com', 1, '9090909090', 'c8eaee21df1cba8d7fdc2c0a47894af6', NULL, 1, '1', 1, 0, NULL, '2022-01-30 12:12:01', '2022-02-16 05:42:20'),
+(1, 'Super Admin', 'test@mypcot.com', 1, '9090909090', 'c8eaee21df1cba8d7fdc2c0a47894af6', NULL, 1, '1', 1, 0, NULL, '2022-01-30 12:12:01', '2022-04-21 06:03:48'),
 (2, 'Admin Manager', 'manager@admin.com', 1, '7977586379', 'e10adc3949ba59abbe56e057f20f883e', 'Borivali', 2, '1', 0, 1, NULL, '2022-01-31 15:10:41', '2022-04-05 15:09:48'),
-(3, 'Sagar Thokal', 'sagar@gmail.com', 1, '1234567890', '26bf3df6ebf89c0c85ef026c26610aea', 'Borivali Tata Power', 3, '1', 0, 0, NULL, '2022-02-02 00:52:01', '2022-02-15 18:03:53');
+(3, 'Sagar Thokal', 'sagar@gmail.com', 1, '1234567890', '26bf3df6ebf89c0c85ef026c26610aea', 'Borivali Tata Power', 3, '1', 0, 0, NULL, '2022-02-02 00:52:01', '2022-02-15 18:03:53'),
+(4, 'Pradyumn', 'pradyumn@mypcot.com', 1, '1234567891', 'a6942ac343d25a25e732e839246bc98d', 'Santacruz', 2, '0', 1, 0, NULL, '2022-04-21 06:06:31', '2022-04-21 06:06:44');
 
 -- --------------------------------------------------------
 
@@ -64,7 +65,7 @@ CREATE TABLE `banners` (
   `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `banner_image` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `banner_thumb_image` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Customer' COMMENT 'customer|vendor',
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'customer' COMMENT 'customer|vendor',
   `seo_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_title` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -85,11 +86,12 @@ INSERT INTO `banners` (`id`, `title`, `banner_image`, `banner_thumb_image`, `typ
 (1, 'Food', 'banner_1.jpg', 'banner_thumb_1.jpg', 'Customer', 'food', NULL, NULL, NULL, '1', 1, 1, NULL, '2022-03-28 05:27:46', '2022-03-29 14:22:39'),
 (2, 'Foods', 'banner_2.jpg', 'banner_thumb_2.jpg', 'Vendor', 'foods', NULL, NULL, NULL, '0', 1, 1, NULL, '2022-03-28 05:34:26', '2022-03-29 14:22:59'),
 (3, 'demo', NULL, NULL, 'Customer', 'demo', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-31 15:49:22', '2022-03-31 15:49:22'),
-(4, 'rr', NULL, NULL, 'Customer', 'rr', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-31 15:49:42', '2022-03-31 15:49:42'),
+(4, 'No Image', NULL, NULL, 'Customer', 'no-image', NULL, NULL, NULL, '0', 1, 1, NULL, '2022-03-31 15:49:42', '2022-04-21 12:17:15'),
 (5, 'tts', NULL, NULL, 'Vendor', 'tts', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-31 15:52:13', '2022-03-31 15:52:13'),
 (6, 'ttsqq', NULL, NULL, 'Vendor', 'ttsqq', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-31 15:58:03', '2022-03-31 15:58:03'),
 (7, 'ttsqqq', NULL, NULL, 'Vendor', 'ttsqqq', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-31 15:58:31', '2022-03-31 15:58:31'),
-(8, 'demo12', NULL, NULL, 'Customer', 'demo12', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-31 16:00:58', '2022-03-31 16:00:58');
+(8, 'demo12', NULL, NULL, 'Customer', 'demo12', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-31 16:00:58', '2022-03-31 16:00:58'),
+(9, 'demo test', 'banner_9.jpg', 'banner_thumb_9.jpg', 'customer', 'demo-test', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-04-21 11:26:11', '2022-04-21 11:26:11');
 
 -- --------------------------------------------------------
 
@@ -122,7 +124,9 @@ INSERT INTO `categories` (`id`, `category_name`, `category_image`, `category_thu
 (1, 'Food', NULL, NULL, NULL, NULL, NULL, NULL, '0', 0, 0, NULL, '2022-03-21 11:59:03', '2022-04-01 15:05:02'),
 (2, 'Soft Food', 'category_2.jpg', 'category_thumb_2.jpg', NULL, NULL, NULL, NULL, '0', 0, 0, NULL, '2022-03-25 13:50:53', '2022-03-29 11:58:11'),
 (3, 'Fast Food', 'category_3.jpg', 'category_thumb_3.jpg', NULL, NULL, NULL, NULL, '0', 0, 0, NULL, '2022-03-28 13:44:52', '2022-03-28 13:44:52'),
-(4, 'Solid bis', 'category_4.jpg', 'category_thumb_4.jpg', NULL, NULL, NULL, NULL, '0', 0, 0, NULL, '2022-03-31 12:16:15', '2022-03-31 12:16:15');
+(4, 'Solid bis', 'category_4.jpg', 'category_thumb_4.jpg', NULL, NULL, NULL, NULL, '0', 0, 0, NULL, '2022-03-31 12:16:15', '2022-03-31 12:16:15'),
+(5, 'Test Category', 'category_5.jpg', 'category_thumb_5.jpg', NULL, NULL, NULL, NULL, '0', 1, 0, NULL, '2022-04-19 07:20:38', '2022-04-19 07:20:38'),
+(6, 'Food test', 'category_6.jpg', 'category_thumb_6.jpg', NULL, NULL, NULL, NULL, '0', 1, 0, NULL, '2022-04-19 07:25:44', '2022-04-19 07:25:45');
 
 -- --------------------------------------------------------
 
@@ -241,7 +245,7 @@ CREATE TABLE `currencies` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `currency_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `currency_symbol` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `currency_code` char(3) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `currency_code` char(6) COLLATE utf8mb4_unicode_ci NOT NULL,
   `exchange_rate` decimal(8,3) NOT NULL,
   `status` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `created_by` int(11) NOT NULL DEFAULT 0,
@@ -257,7 +261,8 @@ CREATE TABLE `currencies` (
 
 INSERT INTO `currencies` (`id`, `currency_name`, `currency_symbol`, `currency_code`, `exchange_rate`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1, 'Rupees', 'INR', 'INR', '74.000', '1', 0, 1, NULL, '2022-03-22 06:25:00', '2022-04-05 13:29:51'),
-(2, 'Dollar', 'USD', 'USD', '1.000', '1', 0, 0, NULL, '2022-03-23 08:56:25', '2022-03-23 08:56:30');
+(2, 'Dollar', 'USD', 'USD', '1.000', '1', 0, 0, NULL, '2022-03-23 08:56:25', '2022-03-23 08:56:30'),
+(3, 'Rupees Test', 'INR1', 'INR1', '74.000', '0', 1, 0, NULL, '2022-04-21 05:05:07', '2022-04-21 05:05:07');
 
 -- --------------------------------------------------------
 
@@ -341,8 +346,8 @@ CREATE TABLE `general_settings` (
 --
 
 INSERT INTO `general_settings` (`id`, `type`, `value`, `created_at`, `updated_at`) VALUES
-(1, 'about_us', '<p><strong>sdfsdf </strong>fsdgsdgsd1g</p>', NULL, '2022-04-05 08:14:46'),
-(2, 'terms_condition', '<p>sdsgsdg &nbsp;<i>uuuiuiu</i></p>', NULL, '2022-04-05 08:15:01'),
+(1, 'about_us', '<p>new<strong> data</strong></p>', NULL, '2022-04-20 12:12:01'),
+(2, 'terms_condition', '<p>sdsgsdg &nbsp;<i>uuuiuiu</i></p>', NULL, '2022-04-16 12:40:37'),
 (3, 'privacy_policy', '<p>fsdfklk;lfk ;d f;skf <strong>foiusdf </strong>oisudfiou 656</p>', NULL, '2022-04-05 08:14:34'),
 (4, 'fb_link', 'https://www.facebook.com/1', NULL, '2022-04-05 08:17:00'),
 (5, 'insta_link', 'https://www.instagram.com/2', NULL, '2022-04-05 08:17:00'),
@@ -352,7 +357,7 @@ INSERT INTO `general_settings` (`id`, `type`, `value`, `created_at`, `updated_at
 (9, 'meta_description', NULL, NULL, '2022-04-04 11:21:58'),
 (10, 'system_email', 'info@mypcot.com', NULL, '2022-04-04 11:21:58'),
 (11, 'system_name', 'RRPL', NULL, NULL),
-(12, 'trigger_email_notification', '1', NULL, '2022-04-05 08:17:19'),
+(12, 'trigger_email_notification', '1', NULL, '2022-04-14 08:13:07'),
 (13, 'trigger_sms_notification', '1', NULL, '2022-03-31 04:42:07'),
 (14, 'trigger_whatsapp_notification', '1', NULL, '2022-03-31 04:42:05');
 
@@ -374,6 +379,14 @@ CREATE TABLE `languages` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `languages`
+--
+
+INSERT INTO `languages` (`id`, `language_title`, `language_code`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'English', 'en', '1', 0, 0, NULL, NULL, NULL),
+(2, 'Hindi', 'hin', '1', 0, 0, NULL, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -384,6 +397,7 @@ CREATE TABLE `measurement_units` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `unit_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `unit_symbol` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `unit_form` enum('A','S','L','P','SS','O') COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'aerosols|solids|liquid|pump_spray|semi_solid|other',
   `status` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `created_by` int(11) NOT NULL DEFAULT 0,
   `updated_by` int(11) NOT NULL DEFAULT 0,
@@ -396,8 +410,151 @@ CREATE TABLE `measurement_units` (
 -- Dumping data for table `measurement_units`
 --
 
-INSERT INTO `measurement_units` (`id`, `unit_name`, `unit_symbol`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Kilogram', 'kg', '0', 1, 1, NULL, '2022-04-12 14:33:32', '2022-04-12 14:33:54');
+INSERT INTO `measurement_units` (`id`, `unit_name`, `unit_symbol`, `unit_form`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'Kilogram', 'kg', 'A', '0', 1, 0, NULL, '2022-04-22 11:39:43', '2022-04-22 11:39:43');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `message_emails`
+--
+
+CREATE TABLE `message_emails` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `mail_key` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_type` enum('all','customer','vendor') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'all' COMMENT 'all|customer|vendor',
+  `language_id` int(11) NOT NULL DEFAULT 0,
+  `title` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cc_email` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subject` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `label` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `trigger` enum('both','admin','batch') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'both',
+  `status` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `created_by` int(11) NOT NULL DEFAULT 0,
+  `updated_by` int(11) NOT NULL DEFAULT 0,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `message_emails`
+--
+
+INSERT INTO `message_emails` (`id`, `mail_key`, `user_type`, `language_id`, `title`, `from_name`, `from_email`, `to_name`, `cc_email`, `subject`, `label`, `content`, `trigger`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'USER_FORGOT_PASS', 'all', 0, 'User- Forgot Password', 'Rosefield B2B', 'noreply@rosefieldb2b.com', '', '', 'Forgot Password - Rosefield B2B new', 'demo  new', '<p>new tester data packult new data test successfull</p>', 'both', '1', 0, 1, NULL, NULL, '2022-04-20 12:27:41'),
+(2, 'WEBINAR_REMINDER_REGI_USERS', 'all', 0, 'Reminder template for webinar', 'Rosefield B2B', 'noreply@rosefieldb2b.com', NULL, NULL, 'Reminder: {webinar_name} starts soon, hope to see you there', NULL, '<table style=\"width:100%;background-color:#fff\">\r\n', 'both', '1', 0, 0, NULL, NULL, '2022-04-20 08:29:00'),
+(3, 'NEW_QUERY_INFORM_ADMIN', 'all', 0, 'Inform Admin team for new query entered from the website', '', '', NULL, NULL, 'There is a new query added from the website, I understand you want to have a look on it', 'Rosefield B2B', '<figure class=\"table\"><table><tbody><tr><td><i><strong>Testing Packult Demo</strong></i></td></tr></tbody></table></figure>', 'both', '0', 0, 1, NULL, NULL, '2022-04-20 08:23:11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `message_notifications`
+--
+
+CREATE TABLE `message_notifications` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_type` enum('all','customer','vendor') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'all' COMMENT 'all|customer|vendor',
+  `language_id` int(11) NOT NULL DEFAULT 0,
+  `page_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `body` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` enum('M','F','All') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'All',
+  `notification_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notification_thumb_image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `notification_date` datetime DEFAULT NULL,
+  `trigger` enum('both','admin','batch') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'both',
+  `status` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `created_by` int(11) NOT NULL DEFAULT 0,
+  `updated_by` int(11) NOT NULL DEFAULT 0,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `message_notifications`
+--
+
+INSERT INTO `message_notifications` (`id`, `user_type`, `language_id`, `page_name`, `title`, `body`, `gender`, `notification_image`, `notification_thumb_image`, `notification_date`, `trigger`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'customer', 0, NULL, 'Test Notification edit', 'Testing notification edit', 'All', 'notification_1.jpg', 'notification_thumb_1.jpg', '2022-04-19 00:33:45', 'both', '1', 1, 1, NULL, '2022-04-19 18:59:25', '2022-04-19 19:19:09'),
+(2, 'all', 0, NULL, 'Test Notifications', 'Testing notification2', 'All', 'notification_2.jpg', 'notification_thumb_2.jpg', NULL, 'both', '0', 1, 0, NULL, '2022-04-19 19:00:56', '2022-04-19 19:00:57');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `message_sms`
+--
+
+CREATE TABLE `message_sms` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_type` enum('all','customer','vendor') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'all' COMMENT 'all|customer|vendor',
+  `language_id` int(11) NOT NULL DEFAULT 0,
+  `params` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `operation` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `trigger` enum('both','admin','batch') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'both',
+  `status` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `created_by` int(11) NOT NULL DEFAULT 0,
+  `updated_by` int(11) NOT NULL DEFAULT 0,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `message_sms`
+--
+
+INSERT INTO `message_sms` (`id`, `type`, `user_type`, `language_id`, `params`, `operation`, `message`, `trigger`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'text', 'all', 1, 'customername', 'customer_registration', 'Dear $$customername$$, Thank you for registering with us.', 'both', '1', 0, 0, NULL, NULL, '2022-04-18 06:46:20'),
+(2, 'text', 'all', 2, 'customername', 'customer_registration', 'Dear $$customername$$, Thank you for registering with us.', 'both', '0', 0, 0, NULL, NULL, NULL),
+(3, 'text', 'all', 1, 'OTP|', 'otp_request', 'Welcome to Kika, your OTP is $$OTP$$. Do not share OTP to any other person.', 'both', '0', 0, 0, NULL, NULL, NULL),
+(4, 'text', 'all', 2, 'OTP|', 'otp_request', 'Welcome to Kika, your OTP is $$OTP$$. Do not share OTP to any other person.', 'both', '0', 0, 0, NULL, NULL, NULL),
+(5, 'text', 'all', 1, 'amount|salesid|', 'customer_order_creation', 'Order Placed: Your order no $$salesid$$ worth amount $$amount$$ has been placed.', 'both', '0', 0, 0, NULL, NULL, NULL),
+(6, 'text', 'all', 2, 'amount|salesid|', 'customer_order_creation', 'Order Placed: Your order no $$salesid$$ worth amount $$amount$$ has been placed.', 'both', '0', 0, 0, NULL, NULL, NULL),
+(7, 'text', 'all', 1, 'amount|salesid|', 'customer_order_acceptance', 'Order Processed: Your order id $$salesid$$ worth amount $$amount$$ has been accepted by kika retailer and will be delivered to you very soon.', 'both', '0', 0, 0, NULL, NULL, NULL),
+(8, 'text', 'all', 2, 'amount|salesid|', 'customer_order_acceptance', 'Order Processed: Your order id $$salesid$$ worth amount $$amount$$ has been accepted by kika retailer and will be delivered to you very soon.', 'both', '0', 0, 0, NULL, NULL, NULL),
+(9, 'text', 'all', 1, 'amount|salesid|date|', 'customer_order_delivery', 'Order Delivered:Your order id $$salesid$$ has been delivered to you on $$date$$ by our delivery person.', 'both', '0', 0, 0, NULL, NULL, NULL),
+(10, 'text', 'all', 2, 'amount|salesid|date|', 'customer_order_delivery', 'Order Delivered:Your order id $$salesid$$ has been delivered to you on $$date$$ by our delivery person.', 'both', '0', 0, 0, NULL, NULL, NULL),
+(11, 'text', 'all', 1, 'retailername', 'retailer_registration', 'Thankyou $$retailername$$ you are now registered with us,kika team will reach you soon for verification process.', 'both', '0', 0, 0, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `message_whatsapps`
+--
+
+CREATE TABLE `message_whatsapps` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `type` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_type` enum('all','customer','vendor') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'all' COMMENT 'all|customer|vendor',
+  `language_id` int(11) NOT NULL DEFAULT 0,
+  `params` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `operation` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gender` enum('M','F','All') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'All',
+  `file_attached` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `trigger` enum('both','admin','batch') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'both',
+  `status` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `created_by` int(11) NOT NULL DEFAULT 0,
+  `updated_by` int(11) NOT NULL DEFAULT 0,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `message_whatsapps`
+--
+
+INSERT INTO `message_whatsapps` (`id`, `type`, `user_type`, `language_id`, `params`, `operation`, `message`, `gender`, `file_attached`, `trigger`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'text', 'all', 1, 'customername', 'customer_registration', 'Dear $$customername$$, Thank you for registering with us.', 'All', 'whatsapp_file_1.jpg', 'both', '1', 0, 1, NULL, NULL, '2022-04-19 04:58:52');
 
 -- --------------------------------------------------------
 
@@ -420,7 +577,6 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (2, '2022_03_19_102043_create_packing_types_table', 2),
 (3, '2022_03_19_102349_create_packaging_machines_table', 3),
 (4, '2022_03_19_103432_create_packaging_treatments_table', 4),
-(5, '2022_03_19_105655_create_packaging_materials_table', 5),
 (6, '2022_03_19_112546_create_vendors_table', 6),
 (8, '2022_03_19_121417_create_subscriptions_table', 8),
 (10, '2022_03_19_131720_create_admins_table', 10),
@@ -440,7 +596,6 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (26, '2022_03_19_140335_create_cities_table', 26),
 (27, '2022_03_19_140424_create_languages_table', 27),
 (28, '2022_03_19_140512_create_currencies_table', 28),
-(29, '2022_03_19_203846_create_recommendation_engines_table', 29),
 (30, '2022_03_21_134342_create_vendor_material_mappings_table', 30),
 (31, '2022_03_21_163853_create_sub_categories_table', 31),
 (32, '2022_03_19_132412_create_customer_enquiries_table', 32),
@@ -454,7 +609,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (47, '2022_03_21_121733_create_vendor_payments_table', 47),
 (48, '2022_03_19_135047_create_general_settings_table', 48),
 (49, '2022_04_11_162744_create_reviews_table', 49),
-(50, '2022_04_12_175915_create_measurement_units_table', 50);
+(51, '2022_04_14_152400_create_message_sms_table', 51),
+(53, '2022_04_14_153058_create_message_whatsapps_table', 53),
+(54, '2022_04_14_153143_create_message_notifications_table', 54),
+(55, '2022_03_19_105655_create_packaging_materials_table', 55),
+(56, '2022_03_19_203846_create_recommendation_engines_table', 56),
+(57, '2022_04_14_153020_create_message_emails_table', 57),
+(58, '2022_04_12_175915_create_measurement_units_table', 58);
 
 -- --------------------------------------------------------
 
@@ -506,8 +667,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `vendor_id`, `category_id`, `sub_category_id`, `product_id`, `shelf_life`, `product_weight`, `measurement_unit_id`, `storage_condition_id`, `packaging_machine_id`, `product_form_id`, `packing_type_id`, `packaging_treatment_id`, `country_id`, `currency_id`, `sub_total`, `grand_total`, `customer_pending_payment`, `customer_payment_status`, `vendor_pending_payment`, `vendor_payment_status`, `order_details`, `product_details`, `shipping_details`, `order_delivery_status`, `processing_datetime`, `out_for_delivery_datetime`, `delivery_datetime`, `delivered_by`, `user_choice`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 1, 1, 1, '30.000', 0, 1, 1, 1, 1, 1, 1, 1, '20000.000', '50000.000', '7000.000', 'pending', '10000.000', 'pending', NULL, NULL, NULL, 'processing', '2022-04-07 10:27:12', '2022-04-06 16:29:34', '2022-04-06 16:29:34', 0, NULL, 0, 1, NULL, NULL, '2022-04-12 07:32:09'),
-(2, 1, 1, 1, 1, 1, 1, '350.000', 0, 1, 1, 1, 1, 1, 1, 1, '20000.000', '50000.000', '0.000', 'fully_paid', '17000.000', 'pending', NULL, NULL, NULL, 'processing', '2022-04-07 10:27:12', '2022-04-06 16:29:34', '2022-04-06 16:29:34', 0, NULL, 0, 1, NULL, NULL, '2022-04-08 12:17:55');
+(1, 1, 1, 1, 1, 1, 1, '30.000', 0, 1, 1, 1, 1, 1, 1, 1, '20000.000', '50000.000', '10000.000', 'pending', '10000.000', 'pending', NULL, NULL, NULL, 'delivered', '2022-04-07 10:27:12', '2022-04-06 16:29:34', '2022-04-06 16:29:34', 0, NULL, 0, 1, NULL, '2022-04-22 06:17:38', '2022-04-22 12:49:00'),
+(2, 1, 1, 1, 1, 1, 1, '350.000', 0, 1, 1, 1, 1, 1, 1, 1, '20000.000', '50000.000', '0.000', 'fully_paid', '17000.000', 'pending', NULL, NULL, NULL, 'out_for_delivery', '2022-04-07 10:27:12', '2022-04-06 16:29:34', '2022-04-06 16:29:34', 0, NULL, 0, 1, NULL, '2022-04-21 06:17:44', '2022-04-08 12:17:55');
 
 -- --------------------------------------------------------
 
@@ -544,7 +705,8 @@ INSERT INTO `order_payments` (`id`, `user_id`, `order_id`, `product_id`, `vendor
 (1, 1, 1, 1, 1, 'cash', '1000.000', 'semi_paid', '2022-04-14', 'good', NULL, NULL, NULL, NULL, 1, 0, '2022-04-07 04:52:21', '2022-04-07 04:52:21'),
 (2, 1, 2, 1, 1, 'cash', '50000.000', 'fully_paid', '2022-04-15', 'test', NULL, NULL, NULL, NULL, 1, 0, '2022-04-08 10:57:23', '2022-04-08 10:57:23'),
 (3, 1, 1, 1, 1, 'cash', '1000.000', 'semi_paid', '2022-04-21', 'bad', NULL, NULL, NULL, NULL, 1, 0, '2022-04-11 14:34:32', '2022-04-11 14:34:32'),
-(4, 1, 1, 1, 1, 'cash', '1000.000', 'semi_paid', '2022-04-12', '', NULL, NULL, 'order_payment_4.jpg', 'order_payment_thumb_4.jpg', 1, 0, '2022-04-12 07:32:08', '2022-04-12 07:32:09');
+(4, 1, 1, 1, 1, 'cash', '1000.000', 'semi_paid', '2022-04-12', '', NULL, NULL, 'order_payment_4.jpg', 'order_payment_thumb_4.jpg', 1, 0, '2022-04-12 07:32:08', '2022-04-12 07:32:09'),
+(5, 1, 1, 1, 1, 'bank_transfer', '7000.000', 'fully_paid', '2022-04-22', '', NULL, NULL, NULL, NULL, 1, 0, '2022-04-22 12:49:00', '2022-04-22 12:49:00');
 
 -- --------------------------------------------------------
 
@@ -604,8 +766,16 @@ CREATE TABLE `packaging_materials` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `packaging_material_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `material_description` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `packing_type_id` int(11) NOT NULL DEFAULT 0,
+  `product_id` int(11) NOT NULL DEFAULT 0,
   `shelf_life` int(11) NOT NULL DEFAULT 0,
   `approx_price` decimal(8,3) NOT NULL DEFAULT 0.000,
+  `wvtr` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `otr` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cof` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sit` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gsm` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `special_feature` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `meta_title` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_keyword` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -621,9 +791,9 @@ CREATE TABLE `packaging_materials` (
 -- Dumping data for table `packaging_materials`
 --
 
-INSERT INTO `packaging_materials` (`id`, `packaging_material_name`, `material_description`, `shelf_life`, `approx_price`, `meta_title`, `meta_description`, `meta_keyword`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'BOPP PLAIN PCT', 'PACKAGING MATERIAL DESCRIPTION', 90, '999.000', NULL, NULL, NULL, '0', 1, 1, NULL, '2022-03-30 17:52:59', '2022-03-30 17:59:51'),
-(2, 'BOPP PLAIN PCT second', 'BOPP PLAIN PCT second description', 30, '999.000', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-04-01 09:14:21', '2022-04-01 09:14:21');
+INSERT INTO `packaging_materials` (`id`, `packaging_material_name`, `material_description`, `packing_type_id`, `product_id`, `shelf_life`, `approx_price`, `wvtr`, `otr`, `cof`, `sit`, `gsm`, `special_feature`, `meta_title`, `meta_description`, `meta_keyword`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'BOPP PLAIN PCT1', 'BOPP PLAIN PCT second description1', 0, 0, 30, '999.000', 'g/m2/24 hr', 'cc/m2/24 hr', '0.00-1.00', '5N/24mm', 'g/m2', 'best quality', NULL, NULL, NULL, '1', 1, 1, NULL, '2022-04-19 10:56:03', '2022-04-21 12:48:01'),
+(2, 'BOPP PLAIN PCT third', 'BOPP PLAIN PCT second description', 0, 0, 60, '999.000', 'g/m2/24 hr', 'cc/m2/24 hr', '0.00-1.00', '5N/24mm', 'g/m2', 'best quality', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-04-21 12:47:40', '2022-04-21 12:47:40');
 
 -- --------------------------------------------------------
 
@@ -783,10 +953,10 @@ CREATE TABLE `products` (
   `packaging_treatment_id` int(11) NOT NULL DEFAULT 0,
   `product_image` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `product_thumb_image` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `machine_data` longtext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0' COMMENT 'Json Data',
-  `storage_condition_data` longtext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0' COMMENT 'Json Data',
-  `product_form_data` longtext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0' COMMENT 'Json Data',
-  `packaging_treatment_data` longtext COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0' COMMENT 'Json Data',
+  `machine_data` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Json Data',
+  `storage_condition_data` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Json Data',
+  `product_form_data` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Json Data',
+  `packaging_treatment_data` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Json Data',
   `meta_title` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_keyword` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -860,12 +1030,6 @@ CREATE TABLE `recommendation_engines` (
   `packaging_material_id` int(11) NOT NULL DEFAULT 0,
   `vendor_id` int(11) NOT NULL DEFAULT 0,
   `display_shelf_life` int(11) NOT NULL DEFAULT 0,
-  `wvtr` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `otr` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cof` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sit` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `gsm` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `special_feature` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `meta_title` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_keyword` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -881,10 +1045,8 @@ CREATE TABLE `recommendation_engines` (
 -- Dumping data for table `recommendation_engines`
 --
 
-INSERT INTO `recommendation_engines` (`id`, `engine_name`, `structure_type`, `product_id`, `min_shelf_life`, `max_shelf_life`, `min_weight`, `max_weight`, `approx_price`, `category_id`, `product_form_id`, `packing_type_id`, `packaging_machine_id`, `packaging_treatment_id`, `packaging_material_id`, `vendor_id`, `display_shelf_life`, `wvtr`, `otr`, `cof`, `sit`, `gsm`, `special_feature`, `meta_title`, `meta_description`, `meta_keyword`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'BOPP PLAIN', '15 μ BOPP PLAIN PCT 1', 1, 25, 32, '50.000', '60.000', '999.000', 3, 1, 1, 1, 1, 1, 1, 7, 'g/m2/24 hr', 'cc/m2/24 hr', '0.00-1.00', '5N/24mm', 'g/m2', 'Lamination / Link etc.', NULL, NULL, NULL, '0', 1, 1, NULL, '2022-03-31 14:38:27', '2022-04-05 13:59:22'),
-(2, 'BOPP PLAIN 3', '15 μ BOPP PLAIN PCT 133', 1, 25, 32, '50.000', '60.000', '999.000', 1, 1, 1, 1, 1, 1, 2, 7, 'g/m2/24 hr', 'cc/m2/24 hr', '0.00-1.00', '5N/24mm', 'g/m2', 'best quality', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-04-06 04:47:19', '2022-04-06 04:47:19'),
-(3, 'BOPP PLAIN 32', '15 μ BOPP PLAIN PCT 12', 1, 25, 32, '50.000', '60.000', '999.000', 2, 1, 1, 1, 1, 1, 3, 7, 'g/m2/24 hr', 'cc/m2/24 hr', '0.00-1.00', '5N/24mm', 'g/m2', 'best quality', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-04-06 05:03:36', '2022-04-06 05:03:36');
+INSERT INTO `recommendation_engines` (`id`, `engine_name`, `structure_type`, `product_id`, `min_shelf_life`, `max_shelf_life`, `min_weight`, `max_weight`, `approx_price`, `category_id`, `product_form_id`, `packing_type_id`, `packaging_machine_id`, `packaging_treatment_id`, `packaging_material_id`, `vendor_id`, `display_shelf_life`, `meta_title`, `meta_description`, `meta_keyword`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'BOPP PLAIN', '15 μ BOPP PLAIN PCT 12', 1, 25, 32, '50.000', '60.000', '999.000', 1, 1, 1, 1, 1, 1, 3, 7, NULL, NULL, NULL, '0', 1, 0, NULL, '2022-04-21 12:47:04', '2022-04-21 12:47:04');
 
 -- --------------------------------------------------------
 
@@ -897,12 +1059,12 @@ CREATE TABLE `reviews` (
   `user_id` int(11) NOT NULL DEFAULT 0,
   `product_id` int(11) NOT NULL DEFAULT 0,
   `rating` int(11) NOT NULL DEFAULT 0,
-  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `review` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `review` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `approval_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending' COMMENT 'pending|approved|rejected',
-  `approved_on` datetime NOT NULL,
+  `approved_on` datetime DEFAULT NULL,
   `approved_by` int(11) NOT NULL DEFAULT 0 COMMENT 'Admin Id',
-  `admin_remark` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `admin_remark` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` enum('1','0') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -1075,7 +1237,7 @@ CREATE TABLE `users` (
   `language_id` int(11) NOT NULL DEFAULT 0,
   `currency_id` int(11) NOT NULL DEFAULT 0,
   `approval_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending' COMMENT 'pending|accepted|rejected',
-  `approved_on` datetime NOT NULL,
+  `approved_on` datetime DEFAULT NULL,
   `approved_by` int(11) NOT NULL DEFAULT 0 COMMENT 'Admin Id',
   `admin_remark` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `subscription_id` int(11) NOT NULL DEFAULT 0,
@@ -1103,8 +1265,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `phone_country_id`, `phone`, `whatsapp_country_id`, `whatsapp_no`, `language_id`, `currency_id`, `approval_status`, `approved_on`, `approved_by`, `admin_remark`, `subscription_id`, `subscription_start`, `subscription_end`, `type`, `status`, `sms_notification`, `email_notification`, `whatsapp_notification`, `email_verified_at`, `mkey`, `msalt`, `password`, `remember_token`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Mahesh', 'mahesh@gmail.com', 1, '1245785412', 1, '2154874521', 0, 1, 'pending', '2022-04-05 23:54:17', 1, '', 0, NULL, NULL, 'normal', '0', '1', '1', '1', NULL, NULL, NULL, '', NULL, 1, 1, NULL, '2022-03-31 08:14:00', '2022-04-05 18:24:17'),
-(2, 'kamlesh', 'kamlesh@gmail.com', 1, '8785875481', 1, '2157874521', 0, 1, 'accepted', '2022-04-06 00:00:05', 1, NULL, 0, NULL, NULL, 'normal', '1', '1', '1', '1', NULL, NULL, NULL, '', NULL, 1, 1, NULL, '2022-03-31 08:15:54', '2022-04-05 18:30:10');
+(1, 'Mahesh', 'mahesh@gmail.com', 1, '1245785412', 1, '2154874521', 0, 1, 'accepted', '2022-04-22 10:57:33', 1, '', 0, '2022-04-22 11:50:29', '2022-04-30 18:32:58', 'normal', '0', '1', '1', '1', NULL, NULL, NULL, '', NULL, 1, 1, NULL, '2022-03-31 08:14:00', '2022-04-22 05:27:33'),
+(2, 'kamlesh', 'kamlesh@gmail.com', 1, '8785875481', 1, '2157874521', 0, 1, 'accepted', '2022-04-22 11:34:35', 1, '', 0, '2022-04-19 18:33:02', '2022-04-22 11:53:29', 'normal', '1', '1', '1', '1', NULL, NULL, NULL, '', NULL, 1, 1, NULL, '2022-03-31 08:15:54', '2022-04-22 06:04:35');
 
 -- --------------------------------------------------------
 
@@ -1149,7 +1311,7 @@ CREATE TABLE `user_subscription_payments` (
   `subscription_id` int(11) NOT NULL DEFAULT 0,
   `amount` decimal(8,3) NOT NULL,
   `subscription_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'monthly' COMMENT 'monthly|quarterly|semi_yearly|yearly',
-  `payment_mode` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'cod' COMMENT 'cod|bank_transfer',
+  `payment_mode` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'cod' COMMENT 'cash|bank_transfer',
   `payment_reference` int(11) NOT NULL DEFAULT 0,
   `payment_unique_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `payment_details` longtext COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Json Data',
@@ -1166,7 +1328,7 @@ CREATE TABLE `user_subscription_payments` (
 --
 
 INSERT INTO `user_subscription_payments` (`id`, `user_id`, `subscription_id`, `amount`, `subscription_type`, `payment_mode`, `payment_reference`, `payment_unique_id`, `payment_details`, `payment_status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, '0.000', 'monthly', 'cod', 0, '0', NULL, 'pending', 1, 0, NULL, NULL, NULL);
+(1, 1, 1, '0.000', 'monthly', 'cash', 0, '0', NULL, 'pending', 1, 0, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1206,8 +1368,8 @@ CREATE TABLE `vendors` (
 --
 
 INSERT INTO `vendors` (`id`, `vendor_name`, `vendor_email`, `vendor_address`, `pincode`, `phone_country_id`, `phone`, `whatsapp_country_id`, `whatsapp_no`, `currency_id`, `is_featured`, `approval_status`, `approved_on`, `approved_by`, `admin_remark`, `meta_title`, `meta_description`, `meta_keyword`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Ramesh', 'ramesh@gmail.com', 'Khar', '400049', 1, '1245785412', 0, NULL, 1, '1', 'accepted', '2022-03-25 14:24:39', 1, NULL, NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-25 08:54:39', '2022-03-25 09:08:41'),
-(2, 'Adi', 'adi@gmail.com', 'Santacruz', '400049', 1, '1245785472', 0, NULL, 1, '0', 'accepted', '2022-04-04 10:10:33', 1, '', NULL, NULL, NULL, '1', 1, 0, NULL, '2022-03-25 10:51:59', '2022-04-04 04:40:33'),
+(1, 'Ramesh', 'ramesh@gmail.com', 'Khar', '400049', 1, '1245785412', 0, NULL, 1, '1', 'accepted', '2022-04-22 14:24:39', 1, NULL, NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-25 08:54:39', '2022-03-25 09:08:41'),
+(2, 'Adi', 'adi@gmail.com', 'Santacruz', '400049', 1, '1245785472', 0, NULL, 1, '0', 'pending', '2022-04-04 10:10:33', 1, '', NULL, NULL, NULL, '1', 1, 0, NULL, '2022-03-25 10:51:59', '2022-04-04 04:40:33'),
 (3, 'Pradyumn', 'pradyumn@gmail.com', 'juhu', '125487', 1, '8785875481', 0, NULL, 1, '0', 'rejected', '2022-04-11 11:47:05', 1, '', NULL, NULL, NULL, '0', 1, 0, NULL, '2022-03-25 10:54:07', '2022-04-11 06:17:05'),
 (4, 'Manish', 'manish@gmail.com', 'Juhu', '400049', 1, '8785875481', 1, '8785875481', 1, '1', 'pending', '2022-04-11 11:37:03', 1, '', NULL, NULL, NULL, '1', 1, 1, NULL, '2022-04-01 05:21:48', '2022-04-11 06:07:03'),
 (5, 'Shani', 'shani@gmail.com', 'Khar', '125487', 1, '1245785412', 0, NULL, 1, '0', 'pending', '2022-04-05 13:39:05', 1, NULL, NULL, NULL, NULL, '0', 1, 0, NULL, '2022-04-05 08:09:05', '2022-04-05 08:09:05'),
@@ -1229,9 +1391,9 @@ CREATE TABLE `vendor_material_mappings` (
   `packaging_material_id` int(11) NOT NULL,
   `recommendation_engine_id` int(11) NOT NULL DEFAULT 0 COMMENT 'Mapping with ID',
   `product_id` int(11) NOT NULL DEFAULT 0,
-  `min_amt_profit` decimal(8,3) NOT NULL COMMENT 'Per Kg',
-  `min_stock_qty` decimal(8,3) NOT NULL,
-  `vendor_price` decimal(8,3) NOT NULL COMMENT 'Per Kg',
+  `min_amt_profit` decimal(8,3) DEFAULT 0.000 COMMENT 'Per Kg',
+  `min_stock_qty` decimal(8,3) DEFAULT 0.000,
+  `vendor_price` decimal(8,3) NOT NULL DEFAULT 0.000 COMMENT 'Per Kg',
   `meta_title` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `meta_keyword` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1250,9 +1412,9 @@ CREATE TABLE `vendor_material_mappings` (
 INSERT INTO `vendor_material_mappings` (`id`, `vendor_id`, `packaging_material_id`, `recommendation_engine_id`, `product_id`, `min_amt_profit`, `min_stock_qty`, `vendor_price`, `meta_title`, `meta_description`, `meta_keyword`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1, 3, 1, 1, 1, '254.000', '399.000', '255.000', NULL, NULL, NULL, '1', 0, 1, NULL, '2022-04-01 08:35:10', '2022-04-01 09:40:36'),
 (2, 4, 1, 1, 1, '254.000', '399.000', '0.000', NULL, NULL, NULL, '0', 0, 1, NULL, '2022-04-01 09:16:18', '2022-04-01 10:43:28'),
-(3, 4, 2, 1, 1, '254.000', '399.000', '0.000', NULL, NULL, NULL, '1', 1, 0, NULL, '2022-04-01 09:48:34', '2022-04-01 09:48:40'),
+(3, 4, 1, 1, 1, '254.000', '399.000', '0.000', NULL, NULL, NULL, '1', 1, 0, NULL, '2022-04-01 09:48:34', '2022-04-01 09:48:40'),
 (4, 2, 1, 1, 1, '254.000', '399.000', '399.000', NULL, NULL, NULL, '1', 1, 0, NULL, '2022-04-01 13:52:25', '2022-04-01 13:52:40'),
-(5, 10, 2, 1, 1, '254.000', '399.000', '0.000', NULL, NULL, NULL, '1', 1, 1, NULL, '2022-04-05 08:47:53', '2022-04-05 08:48:14');
+(5, 10, 1, 1, 1, '254.000', '399.000', '0.000', NULL, NULL, NULL, '1', 1, 1, NULL, '2022-04-05 08:47:53', '2022-04-05 08:48:14');
 
 -- --------------------------------------------------------
 
@@ -1327,7 +1489,9 @@ CREATE TABLE `vendor_quotations` (
 --
 
 INSERT INTO `vendor_quotations` (`id`, `user_id`, `customer_enquiry_id`, `product_id`, `vendor_id`, `vendor_warehouse_id`, `vendor_price`, `commission_amt`, `enquiry_status`, `quotation_expiry_datetime`, `etd`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 1, 1, 1, '125.000', '5645.000', 'mapped', '2022-04-13 21:40:05', '2022-04-21', '0', 1, 0, '2022-04-13 11:10:05', '2022-04-13 11:10:05');
+(1, 1, 0, 1, 1, 1, '125.000', '5645.000', 'mapped', '2022-04-13 21:40:05', '2022-04-21', '0', 1, 0, '2022-04-13 11:10:05', '2022-04-13 11:10:05'),
+(2, 1, 0, 1, 4, 2, '53656.000', '5645.000', 'mapped', '2022-04-21 23:30:29', '2022-04-22', '0', 1, 0, '2022-04-21 13:00:29', '2022-04-21 13:00:29'),
+(3, 1, 2, 1, 1, 0, '125.000', '5645.000', 'mapped', '2022-04-22 20:17:55', '2022-04-22', '0', 1, 0, '2022-04-22 09:47:55', '2022-04-22 09:47:55');
 
 -- --------------------------------------------------------
 
@@ -1357,7 +1521,8 @@ CREATE TABLE `vendor_warehouses` (
 --
 
 INSERT INTO `vendor_warehouses` (`id`, `warehouse_name`, `vendor_id`, `city_id`, `state_id`, `country_id`, `address`, `pincode`, `status`, `created_by`, `updated_by`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Super Fast', 1, 1, 1, 1, 'Juhu', 400049, '0', 1, 1, NULL, '2022-04-01 14:46:58', '2022-04-01 14:55:42');
+(1, 'Super Fast', 1, 1, 1, 1, 'Juhu', 400049, '0', 1, 1, NULL, '2022-04-01 14:46:58', '2022-04-01 14:55:42'),
+(2, 'Express Warehouse', 1, 1, 1, 1, 'Juhu', 125487, '0', 1, 1, NULL, '2022-04-21 04:43:23', '2022-04-21 04:43:48');
 
 --
 -- Indexes for dumped tables
@@ -1368,7 +1533,8 @@ INSERT INTO `vendor_warehouses` (`id`, `warehouse_name`, `vendor_id`, `city_id`,
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `admins_email_unique` (`email`);
+  ADD UNIQUE KEY `admins_email_unique` (`email`),
+  ADD UNIQUE KEY `email_unique` (`email`);
 
 --
 -- Indexes for table `banners`
@@ -1423,7 +1589,8 @@ ALTER TABLE `customer_enquiries`
 --
 ALTER TABLE `failed_jobs`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`),
+  ADD UNIQUE KEY `jobs_uuid_unique` (`uuid`);
 
 --
 -- Indexes for table `general_settings`
@@ -1441,6 +1608,30 @@ ALTER TABLE `languages`
 -- Indexes for table `measurement_units`
 --
 ALTER TABLE `measurement_units`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `message_emails`
+--
+ALTER TABLE `message_emails`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `message_notifications`
+--
+ALTER TABLE `message_notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `message_sms`
+--
+ALTER TABLE `message_sms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `message_whatsapps`
+--
+ALTER TABLE `message_whatsapps`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1570,7 +1761,8 @@ ALTER TABLE `sub_categories`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD UNIQUE KEY `email_unique` (`email`);
 
 --
 -- Indexes for table `user_addresses`
@@ -1622,19 +1814,19 @@ ALTER TABLE `vendor_warehouses`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `banners`
 --
 ALTER TABLE `banners`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `cities`
@@ -1664,7 +1856,7 @@ ALTER TABLE `countries`
 -- AUTO_INCREMENT for table `currencies`
 --
 ALTER TABLE `currencies`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `customer_enquiries`
@@ -1688,7 +1880,7 @@ ALTER TABLE `general_settings`
 -- AUTO_INCREMENT for table `languages`
 --
 ALTER TABLE `languages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `measurement_units`
@@ -1697,10 +1889,34 @@ ALTER TABLE `measurement_units`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `message_emails`
+--
+ALTER TABLE `message_emails`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `message_notifications`
+--
+ALTER TABLE `message_notifications`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `message_sms`
+--
+ALTER TABLE `message_sms`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `message_whatsapps`
+--
+ALTER TABLE `message_whatsapps`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -1712,7 +1928,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT for table `order_payments`
 --
 ALTER TABLE `order_payments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `otps`
@@ -1772,7 +1988,7 @@ ALTER TABLE `product_forms`
 -- AUTO_INCREMENT for table `recommendation_engines`
 --
 ALTER TABLE `recommendation_engines`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -1850,13 +2066,13 @@ ALTER TABLE `vendor_payments`
 -- AUTO_INCREMENT for table `vendor_quotations`
 --
 ALTER TABLE `vendor_quotations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `vendor_warehouses`
 --
 ALTER TABLE `vendor_warehouses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

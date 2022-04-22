@@ -20,8 +20,8 @@ class CreateVendorMaterialMappingsTable extends Migration
             $table->integer('recommendation_engine_id')->default(0)->comment('Mapping with ID');
             $table->integer('product_id')->default(0);
             $table->decimal('min_amt_profit', $precision = 8, $scale = 3)->default(0.000)->comment('Per Kg');
-            $table->decimal('min_stock_qty', $precision = 8, $scale = 3)->nullable();
-            $table->decimal('vendor_price', $precision = 8, $scale = 3)->comment('Per Kg');
+            $table->decimal('min_stock_qty', $precision = 8, $scale = 3)->default(0.000);
+            $table->decimal('vendor_price', $precision = 8, $scale = 3)->default(0.000)->comment('Per Kg');
             $table->text('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->text('meta_keyword')->nullable();

@@ -12,18 +12,18 @@
                             {{-- <p class="content-sub-header mb-1">static content loaded</p> --}}
                         </div>
                     </div>
-4                    <div class="row">
+                    <div class="row">
                         <div class="col-xl-3 col-lg-6 col-12">
                             <div class="card">
-                                <div class="card-content">
+                                <div class="card-content" style="height:150px;">
                                     <div class="card-body">
                                         <div class="media">
                                             <div class="media-body text-left">
-                                                <h3 class="mb-1 danger">{{ $data['subscription_end']; }}</h3>
-                                                <span>Subscription Ending Today</span><br><br>
+                                                <h3 class="mb-1 success">{{ $data['user']; }}</h3>
+                                                <span>Total Customers</span><br><br><br>
                                             </div>
                                             <div class="media-right align-self-center">
-                                                <i class="ft-briefcase danger font-large-2 float-right"></i>
+                                                <i class="ft-users success font-large-2 float-right"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -32,12 +32,63 @@
                         </div>
                         <div class="col-xl-3 col-lg-6 col-12">
                             <div class="card">
-                                <div class="card-content">
+                                <div class="card-content" style="height:150px;">
                                     <div class="card-body">
                                         <div class="media">
                                             <div class="media-body text-left">
-                                                <h3 class="mb-1 success">{{ $data['subscription_start'] }}</h3>
-                                                <span>Subscription Renewed Today</span><br><br>
+                                                <h3 class="mb-1 warning">{{ $data['cust_reg_today'] }}</h3>
+                                                <span>Customers Registered Today</span><br><br>
+                                            </div>
+                                            <div class="media-right align-self-center">
+                                                <i class="ft-user-plus warning font-large-2 float-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-12">
+                            <div class="card">
+                                <div class="card-content" style="height:150px;">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <div class="media-body text-left">
+                                                <h3 class="mb-1 success">{{ $data['vendor'] }}</h3>
+                                                <span>Total Vendors</span><br><br><br>
+                                            </div>
+                                            <div class="media-right align-self-center">
+                                                <i class="ft-users success font-large-2 float-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-12">
+                            <div class="card">
+                                <div class="card-content" style="height:150px;">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <div class="media-body text-left">
+                                                <h3 class="mb-1 warning">{{ $data['vendor_reg_today'] }}</h3>
+                                                <span>Vendors Registered Today</span><br><br>
+                                            </div>
+                                            <div class="media-right align-self-center">
+                                                <i class="ft-user-plus warning font-large-2 float-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-12">
+                            <div class="card">
+                                <div class="card-content" style="height:150px;">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <div class="media-body text-left">
+                                                <h3 class="mb-1 success">{{ $data['revenue'] }}</h3>
+                                                <span>Total Revenue</span><br><br>
                                             </div>
                                             <div class="media-right align-self-center">
                                                 <i class="ft-pie-chart warning font-large-2 float-right"></i>
@@ -49,15 +100,15 @@
                         </div>
                         <div class="col-xl-3 col-lg-6 col-12">
                             <div class="card">
-                                <div class="card-content">
+                                <div class="card-content" style="height:150px;">
                                     <div class="card-body">
                                         <div class="media">
                                             <div class="media-body text-left">
-                                                <h3 class="mb-1 warning">{{ $data['user']; }}</h3>
-                                                <span>Customer Count</span><br><br>
+                                                <h3 class="mb-1 primary">{{ $data['today_sales']; }}</h3>
+                                                <span>Today's Sales</span><br><br>
                                             </div>
                                             <div class="media-right align-self-center">
-                                                <i class="ft-user success font-large-2 float-right"></i>
+                                                <i class="ft-briefcase primary font-large-2 float-right"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -66,15 +117,15 @@
                         </div>
                         <div class="col-xl-3 col-lg-6 col-12">
                             <div class="card">
-                                <div class="card-content">
+                                <div class="card-content" style="height:150px;">
                                     <div class="card-body">
                                         <div class="media">
                                             <div class="media-body text-left">
-                                                <h3 class="mb-1 primary">{{ $data['revenue']; }}</h3>
-                                                <span>Total Revenue</span><br><br>
+                                                <h3 class="mb-1 success">{{ $data['subs_renew_today']; }}</h3>
+                                                <span>Subscriptions Renewed Today</span><br>
                                             </div>
                                             <div class="media-right align-self-center">
-                                                <i class="ft-life-buoy primary font-large-2 float-right"></i>
+                                                <i class="ft-plus-square success font-large-2 float-right"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -83,15 +134,83 @@
                         </div>
                         <div class="col-xl-3 col-lg-6 col-12">
                             <div class="card">
-                                <div class="card-content">
+                                <div class="card-content" style="height:150px;">
                                     <div class="card-body">
                                         <div class="media">
                                             <div class="media-body text-left">
-                                                <h3 class="mb-1 primary">0</h3>
-                                                <span>Services</span><br><br>
+                                                <h3 class="mb-1 warning">{{ $data['subs_end_today']; }}</h3>
+                                                <span>Subscriptions Ending Today</span><br>
                                             </div>
                                             <div class="media-right align-self-center">
-                                                <i class="ft-life-buoy primary font-large-2 float-right"></i>
+                                                <i class="ft-minus-square warning font-large-2 float-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-12">
+                            <div class="card">
+                                <div class="card-content" style="height:150px;">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <div class="media-body text-left">
+                                                <h3 class="mb-1 success">{{ $data['today_orders'] }}</h3>
+                                                <span>Today's Orders</span><br><br>
+                                            </div>
+                                            <div class="media-right align-self-center">
+                                                <i class="ft-briefcase success font-large-2 float-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-12">
+                            <div class="card">
+                                <div class="card-content" style="height:150px;">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <div class="media-body text-left">
+                                                <h3 class="mb-1 warning">{{ $data['pending_orders'] }}</h3>
+                                                <span>Pending Orders</span><br><br>
+                                            </div>
+                                            <div class="media-right align-self-center">
+                                                <i class="ft-alert-circle warning font-large-2 float-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-12">
+                            <div class="card">
+                                <div class="card-content" style="height:150px;">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <div class="media-body text-left">
+                                                <h3 class="mb-1 primary">{{ $data['processing_orders'] }}</h3>
+                                                <span>InProcess Orders</span><br><br>
+                                            </div>
+                                            <div class="media-right align-self-center">
+                                                <i class="ft-trending-up primary font-large-2 float-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-6 col-12">
+                            <div class="card">
+                                <div class="card-content" style="height:150px;">
+                                    <div class="card-body">
+                                        <div class="media">
+                                            <div class="media-body text-left">
+                                                <h3 class="mb-1 success">{{ $data['completed_orders'] }}</h3>
+                                                <span>Completed Orders</span><br><br>
+                                            </div>
+                                            <div class="media-right align-self-center">
+                                                <i class="ft-check-square success font-large-2 float-right"></i>
                                             </div>
                                         </div>
                                     </div>

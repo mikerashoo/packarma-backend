@@ -72,6 +72,9 @@ class VendorPaymentController extends Controller
                     ->editColumn('payment_status', function ($event) {
 	                    return paymentStatusType($event->payment_status);
 	                })
+                    ->editColumn('amount', function ($event) {
+	                    return $event->amount;
+	                })
                     ->editColumn('transaction_date', function ($event) {
 	                    return date('d-m-Y', strtotime($event->transaction_date));                        
 	                })

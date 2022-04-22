@@ -40,19 +40,6 @@
                                                 <input class="form-control required" type="text" id="engine_name" name="engine_name" value="{{ $data->engine_name }}"><br/>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Vendor<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="vendor" name="vendor" style="width: 100% !important;">
-                                                    <option value="">Select</option>
-                                                    @foreach($vendor as $vendors)
-                                                    @if ($vendors->id == $data->vendor_id)
-                                                        <option value="{{$vendors->id}}" selected>{{$vendors->vendor_name}}</option>
-                                                    @else
-                                                        <option value="{{$vendors->id}}">{{$vendors->vendor_name}}</option>
-                                                    @endif
-                                                    @endforeach
-                                                </select><br/><br/>
-                                            </div>
-                                            <div class="col-sm-6">
                                                 <label>Structure Type<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="structure_type" name="structure_type" value="{{ $data->structure_type }}"><br/>
                                             </div>
@@ -76,13 +63,9 @@
                                                 <label>Maximum Weight<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="max_weight" name="max_weight" value="{{ $data->max_weight }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
-                                            <div class="col-sm-6">
-                                                <label>Price<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="price" name="price" value="{{ $data->approx_price }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                            </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade mt-2 show active" id="product_details" role="tabpanel" aria-labelledby="product_details-tab">
+                                    <div class="tab-pane fade mt-2" id="product_details" role="tabpanel" aria-labelledby="product_details-tab">
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <label>Product<span style="color:#ff0000">*</span></label>

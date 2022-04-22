@@ -53,7 +53,8 @@
                                                     <th id="subscription_type" data-orderable="false" data-searchable="false">Subscription Type</th>
                                                     <th id="payment_mode" data-orderable="false" data-searchable="false">Payment Mode</th>
                                                     <th id="payment_status" data-orderable="false" data-searchable="false">Payment Status</th>
-                                                    <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>                                                    
+                                                    <th id="subscription_start" data-orderable="false" data-searchable="false">Subscription Start Date</th>
+                                                    <th id="subscription_end" data-orderable="false" data-searchable="false">Subscription End Date</th>
                                                     @if($data['user_subscription_payment_view'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif

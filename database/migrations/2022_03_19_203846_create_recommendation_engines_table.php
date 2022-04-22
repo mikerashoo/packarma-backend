@@ -20,9 +20,9 @@ class CreateRecommendationEnginesTable extends Migration
             $table->integer('product_id')->default(0);
             $table->integer('min_shelf_life')->default(0);
             $table->integer('max_shelf_life')->default(0);
-            $table->decimal('min_weight', $precision = 8, $scale = 3)->default(0);
-            $table->decimal('max_weight', $precision = 8, $scale = 3)->default(0);
-            $table->decimal('approx_price', $precision = 8, $scale = 3);
+            $table->decimal('min_weight', $precision = 8, $scale = 3)->default(0.000);
+            $table->decimal('max_weight', $precision = 8, $scale = 3)->default(0.000);
+            $table->decimal('approx_price', $precision = 8, $scale = 3)->default(0.000);
             $table->integer('category_id')->default(0);
             $table->integer('product_form_id')->default(0);
             $table->integer('packing_type_id')->default(0);

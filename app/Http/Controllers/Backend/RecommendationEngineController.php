@@ -60,9 +60,6 @@ class RecommendationEngineController extends Controller
                     ->editColumn('product_name', function ($event) {
                         return $event->product->product_name;
                     })
-                    ->editColumn('approx_price', function ($event) {
-                        return $event->approx_price;
-                    })
                     ->editColumn('action', function ($event) {
                         $recommendation_engine_view = checkPermission('recommendation_engine_view');
                         $recommendation_engine_edit = checkPermission('recommendation_engine_edit');
@@ -85,7 +82,7 @@ class RecommendationEngineController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['engine_name', 'structure_type', 'product_name', 'approx_price', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['engine_name', 'structure_type', 'product_name', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -178,14 +175,12 @@ class RecommendationEngineController extends Controller
         $tableObject->max_shelf_life = $request->max_shelf_life;
         $tableObject->min_weight = $request->min_weight;
         $tableObject->max_weight = $request->max_weight;
-        $tableObject->approx_price = $request->price;
         $tableObject->category_id = $request->product_category;
         $tableObject->product_form_id = $request->product_form;
         $tableObject->packing_type_id = $request->packing_type;
         $tableObject->packaging_machine_id = $request->packaging_machine;
         $tableObject->packaging_treatment_id = $request->packaging_treatment;
         $tableObject->packaging_material_id = $request->packaging_material;
-        $tableObject->vendor_id = $request->vendor;
         $tableObject->display_shelf_life = $request->display_shelf_life;
         if($isEditFlow){
             $tableObject->updated_by = session('data')['id'];
@@ -249,7 +244,6 @@ class RecommendationEngineController extends Controller
     {
         return \Validator::make($request->all(), [
             'engine_name' => 'required|string',
-            'vendor' => 'required|integer',
             'structure_type' => 'required|string', 
             'product' => 'required|integer',
             'min_shelf_life' => 'required|integer',
@@ -257,7 +251,6 @@ class RecommendationEngineController extends Controller
             'display_shelf_life' => 'required|integer',
             'min_weight' => 'required|numeric',
             'max_weight' => 'required|numeric',
-            'price' => 'required|numeric',
             'product_category' => 'required|integer',
             'product_form' => 'required|integer',
             'packing_type' => 'required|integer',

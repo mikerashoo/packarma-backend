@@ -195,10 +195,8 @@ class VendorMaterialController extends Controller
         }
         $tblObj->vendor_id = $request->vendor;
         $tblObj->packaging_material_id = $request->material;
-        $tblObj->recommendation_engine_id = $request->recommendation_engine;
-        $tblObj->product_id = $request->product;
         $tblObj->min_amt_profit = $request->commission_rate_per_kg;
-        $tblObj->min_stock_qty = $request->commission_rate_per_qty;
+        // $tblObj->min_stock_qty = $request->commission_rate_per_qty;
         $tblObj->vendor_price = $request->vendor_price;
         if($isEditFlow){
             $tblObj->updated_by = session('data')['id'];
@@ -234,10 +232,8 @@ class VendorMaterialController extends Controller
 
             'vendor' => 'required|integer',
             'material' => 'required|integer',
-            'recommendation_engine' => 'required|integer',
-            'product' => 'required|integer',
 	        'commission_rate_per_kg' => 'required|regex:/^\d+(\.\d{0,3})?$/',
-            'commission_rate_per_qty' => 'required|regex:/^\d+(\.\d{0,3})?$/',
+            // 'commission_rate_per_qty' => 'required|regex:/^\d+(\.\d{0,3})?$/',
             'vendor_price' => 'regex:/^\d+(\.\d{3})?$/',
         ])->errors();
     }

@@ -15,7 +15,7 @@ class OrderPaymentController extends Controller
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 04-April-2022
-       *   Uses :  To show order paymennt listing page  
+       *   Uses :  To show order payment listing page  
     */
     public function index() 
     {   
@@ -61,7 +61,7 @@ class OrderPaymentController extends Controller
 	                    return paymentMode($event->payment_mode);
 	                })
                     ->editColumn('payment_status', function ($event) {
-	                    return paymentStatusType($event->payment_status);
+	                    return customerPaymentStatus($event->payment_status);
 	                })
                     ->editColumn('transaction_date', function ($event) {
 	                    return date('d-m-Y', strtotime($event->transaction_date));                        

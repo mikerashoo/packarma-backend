@@ -45,22 +45,25 @@ class UserSubscriptionPaymentController extends Controller
                         }
                         $query->get();
                     })
-                ->editColumn('name', function ($event) {
+                    ->editColumn('name', function ($event) {
 	                    return $event->user->name;                        
 	                }) 
-                ->editColumn('subscription_type', function ($event) {
+                    ->editColumn('subscription_type', function ($event) {
 	                    return subscriptionType($event->subscription_type);                        
 	                }) 
-                ->editColumn('payment_mode', function ($event) {
+                    ->editColumn('payment_mode', function ($event) {
 	                    return paymentMode($event->payment_mode);
 	                })
-                ->editColumn('payment_status', function ($event) {
+                    ->editColumn('payment_status', function ($event) {
 	                    return subscriptionPaymentStatus($event->payment_status);
 	                })
-                ->editColumn('updated_at', function ($event) {
-	                    return date('d-m-Y H:i A', strtotime($event->updated_at));                        
+                    ->editColumn('subscription_start', function ($event) {
+	                    return date('d-m-Y', strtotime($event->user->subscription_start));                        
 	                })
-                ->editColumn('action', function ($event) {
+                    ->editColumn('subscription_end', function ($event) {
+	                    return date('d-m-Y', strtotime($event->user->subscription_end));                        
+	                })
+                    ->editColumn('action', function ($event) {
                         $user_subscription_payment_view = checkPermission('user_subscription_payment_view');
 	                    $actions = '<span style="white-space:nowrap;">';
                         if($user_subscription_payment_view) {
@@ -70,7 +73,7 @@ class UserSubscriptionPaymentController extends Controller
                         return $actions;
 	                })   
                 ->addIndexColumn()                
-                ->rawColumns(['name','subscription_type','payment_mode','payment_status','updated_at','action'])->setRowId('id')->make(true);
+                ->rawColumns(['name','subscription_type','payment_mode','payment_status','subscription_start','subscription_end','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());

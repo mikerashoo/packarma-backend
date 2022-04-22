@@ -23,10 +23,6 @@
                                             <td>{{$data->engine_name}}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Vendor Name</strong></td>
-                                            <td>{{$data->vendor->vendor_name}}</td>
-                                        </tr>
-                                        <tr>
                                             <td><strong>Structure Type</strong></td>
                                             <td>{{$data->structure_type}}</td>
                                         </tr>
@@ -49,10 +45,6 @@
                                         <tr>
                                             <td><strong>Maximum Weight</strong></td>
                                             <td>{{$data->max_weight}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Price</strong></td>
-                                            <td>{{$data->approx_price}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Product Name</strong></td>

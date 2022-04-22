@@ -56,8 +56,8 @@
                         				<label>Payment Status<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="payment_status" name="payment_status" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($paymentStatusType as $key => $val)
-                                                @if($key == $data->order_delivery_status)
+                                            @foreach($customerPaymentStatus as $key => $val)
+                                                @if($key == $data->customer_payment_status)
                                                     <option value="{{$key}}" selected>{{$val}}</option>
                                                 @else
                                                     <option value="{{$key}}">{{$val}}</option>

@@ -35,10 +35,10 @@
                                                 <td><strong>Product Name</strong></td>
                                                 <td>{{$data->product->product_name}}</td>
                                             </tr>
-                                            <tr>
+                                            {{-- <tr>
                                                 <td><strong>Warehouse Name</strong></td>
                                                 <td>{{$data->vendor_warehouse->warehouse_name}}</td>
-                                            </tr>
+                                            </tr> --}}
                                             <tr>
                                                 <td><strong>Vendor Price</strong></td>
                                                 <td>{{$data->vendor_price}}</td>

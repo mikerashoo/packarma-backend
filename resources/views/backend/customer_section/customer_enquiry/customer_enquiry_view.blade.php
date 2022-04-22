@@ -58,11 +58,7 @@
                                                         <td>{{$data->description;}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><strong>Enquiry Type</strong></td>
-                                                        <td>{{customerEnquiryType($data->enquiry_type); }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Quote Type</strong></td>
+                                                        <td><strong>Enquiry Status</strong></td>
                                                         <td>{{customerEnquiryQuoteType($data->quote_type); }}</td>
                                                     </tr>
                                                     <tr>
@@ -86,7 +82,7 @@
                                                         <td>{{$data['country']->country_name;}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><strong>Enquiry Status</strong></td>
+                                                        <td><strong>Status</strong></td>
                                                         <td>{{displayStatus($data->status)}}</td>
                                                     </tr>                                                                                       
                                                     <tr>
