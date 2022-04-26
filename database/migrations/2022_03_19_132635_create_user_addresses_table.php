@@ -18,7 +18,7 @@ class CreateUserAddressesTable extends Migration
             $table->integer('user_id');
             $table->integer('city_id');
             $table->integer('state_id')->default(0);
-            $table->integer('country_id')->default(0);
+            $table->integer('country_id')->default(1);
             $table->text('address')->nullable();
             $table->string('pincode',15)->nullable();
             $table->enum('status', [1, 0])->default(0);

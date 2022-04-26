@@ -63,11 +63,10 @@
                                         <table class="table table-stripped" id="vendorMapTbl">
                                             <thead>
                                                 <tr>
-                                                    <th>Vendor Name<span style="color:#ff0000">*</span></th>
-                                                    {{-- <th>Warehouse<span style="color:#ff0000">*</span></th> --}}
-                                                    <th>Vendor Price<span style="color:#ff0000">*</span></th>
-                                                    <th>Commission Rate Per Kg<span style="color:#ff0000">*</span></th>
-                                                    <th>Freight Price<span style="color:#ff0000">*</span></th>
+                                                    <th style="width: 20%;">Vendor Name<span style="color:#ff0000">*</span></th>
+                                                    {{-- <th style="width: 18%;">Warehouse<span style="color:#ff0000">*</span></th> --}}
+                                                    <th style="width: 18%;">Vendor Price<span style="color:#ff0000">*</span></th>
+                                                    <th style="width: 18%;">Commission Rate Per Kg<span style="color:#ff0000">*</span></th>
                                                     <th>Validity in Hours<span style="color:#ff0000">*</span></th>
                                                     <th>ETD<span style="color:#ff0000">*</span></th>
                                                     <th><button type="button" class="btn btn-primary btn-sm" id="addStock"><i class="fa fa-plus"></i></button></th>
@@ -113,14 +112,15 @@ $(document).on('click', '#addStock', function(event){
             $vendor_drop = $vendor_drop.'<option value="'.$vendor[$i]['id'].'">'.$vendor[$i]['vendor_name'].'</option>';
         }
     }
-    if(is_array($warehouse[0])){
-        for($i=0; $i<count($warehouse); $i++){
-            $warehouse_drop = $warehouse_drop.'<option value="'.$warehouse[$i]['id'].'">'.$warehouse[$i]['warehouse_name'].'</option>';
-        }
-    }
+    // if(is_array($warehouse[0])){
+    //     for($i=0; $i<count($warehouse); $i++){
+    //         $warehouse_drop = $warehouse_drop.'<option value="'.$warehouse[$i]['id'].'">'.$warehouse[$i]['warehouse_name'].'</option>';
+    //     }
+    // }
     ?>
     var vendor_dropdown = '<?php echo $vendor_drop ?>';
     var warehouse_dropdown = '<?php echo $warehouse_drop ?>';
+    var etddate = new Date().toJSON().slice(0,10);
     $('#vendorMapTbl').append('<tr id="vendorMapTblTr'+i+'" data-key="'+i+'">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->id; ?>" id="customer_enquiry_id'+i+'" name="customer_enquiry_id[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->product_id; ?>" id="product'+i+'" name="product[]">'+
@@ -137,16 +137,45 @@ $(document).on('click', '#addStock', function(event){
         // '</td>'+
         '<td><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="vendor_price'+i+'" name="vendor_price[]"></td>'+
         '<td><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="commission_rate'+i+'" name="commission_rate[]"></td>'+
-        '<td><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="freight_price'+i+'" name="freight_price[]"></td>'+
         '<td><input class="form-control" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="quotation_validity'+i+'" name="quotation_validity[]"></td>'+
-        '<td><input class="form-control" type="date" value="" id="etd'+i+'" name="etd[]"></td>'+
+        '<td><input class="form-control" type="date" value="'+etddate+'" id="etd'+i+'" name="etd[]"></td>'+
         '<td><button type="button" class="btn btn-danger btn-sm" id="removeVendorMap'+i+'" onclick="remove_vendor_map_tbl_row('+i+')"><i class="fa fa-minus"></i></button></td>'+
     '</tr>');
+
     $('#vendor'+i).select2();
-    // $('#warehouse'+i).select2();
+    $('#warehouse'+i).select2();
 });
 function remove_vendor_map_tbl_row(i)
 {
     $('#vendorMapTblTr'+i).remove();
 }
+    //getVendorWarehouse function with Ajax to get order id drop down of selected vendor
+    // function getVendorWarehouse(vendor){
+    // // alert(vendor);return false;
+    //     $.ajax({
+    //         url:"getVendorWarehouseDropdown",
+    //         type: "POST",
+    //         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+    //         data: {
+    //              vendor_id: vendor
+    //         },
+    //         dataType:"JSON",
+    //         success:function(result)
+    //         {
+    //             $dropdownData = '<option value="">Select</option>';
+    //             if(result.vendor_warehouses.length > 0){
+    //                 $.each(result.vendor_warehouses,function(key,value){
+    //                     $dropdownData +='<option value="'+value.id+'">'+value.warehouse_name+'</option>';
+    //                 });
+    //                 // $("#order_id").html($dropdownData);
+    //                 alert( $dropdownData);
+    //                 var warehouse_dropdown = $dropdownData;
+    //             }else{
+    //                 // $("#order_id").html( $dropdownData );
+    //                 alert( $dropdownData);
+    //                 var warehouse_dropdown = $dropdownData;
+    //             }
+    //         },
+    //     });  
+    // }
 </script>

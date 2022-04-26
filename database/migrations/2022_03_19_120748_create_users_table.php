@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->integer('whatsapp_country_id')->default(0)->comment('whatsapp_phone_code');
             $table->string('whatsapp_no', 20)->nullable();
             $table->integer('language_id')->default(0);
-            $table->integer('currency_id')->default(0);
+            $table->integer('currency_id')->default(1);
             $table->string('approval_status', 255)->default('pending')->comment('pending|accepted|rejected');
             $table->datetime('approved_on')->nullable();
             $table->integer('approved_by')->default(0)->comment('Admin Id');

@@ -23,7 +23,7 @@ class CreateVendorsTable extends Migration
             $table->string('phone', 15);
             $table->integer('whatsapp_country_id')->default(0)->comment('whatsapp_phone_code');
             $table->string('whatsapp_no', 20)->nullable();
-            $table->integer('currency_id')->default(0);
+            $table->integer('currency_id')->default(1);
             $table->enum('is_featured', [1, 0])->default(0);
             $table->string('approval_status', 255)->default('pending')->comment('pending|accepted|rejected');
             $table->datetime('approved_on')->nullable();

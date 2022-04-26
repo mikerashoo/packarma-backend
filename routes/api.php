@@ -14,10 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['basicAuth'])->group(function () {
+    Route::post('/register_api', 'RegisterApiController@index');
+    Route::post('/request_otp', 'OtpApiController@requestOtp');
+    Route::post('/verify_otp', 'OtpApiController@verifyOtp');
+    Route::post('/login_api', 'LoginApiController@index');
+    Route::middleware(['tokenAuth'])->group(function () {
+    	Route::post('/products/listing', 'ProductApiController@index');
+    	// Route::post('/products/store', 'ProductApiController@store');
+    	// Route::post('/products/update', 'ProductApiController@update');
+    	// Route::post('/products/destroy', 'ProductApiController@destroy');
+    });
 });
-
-
- Route::get('/getCountryData','TestApiController@getCountryList');
-

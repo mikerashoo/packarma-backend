@@ -10,6 +10,7 @@ class Review extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    protected $dates = ['deleted_at'];
     /**
         * Developed By : Pradyumn Dwivedi
         * Created On : 11-april-2022

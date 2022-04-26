@@ -17,7 +17,7 @@ class CreateCitiesTable extends Migration
             $table->id();
             $table->string('city_name', 100);
             $table->integer('state_id')->default(0);
-            $table->integer('country_id')->default(0);
+            $table->integer('country_id')->default(1);
             $table->enum('status', [1, 0])->default(0);
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);

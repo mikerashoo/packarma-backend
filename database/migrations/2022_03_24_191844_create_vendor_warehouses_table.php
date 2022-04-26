@@ -19,7 +19,7 @@ class CreateVendorWarehousesTable extends Migration
             $table->integer('vendor_id')->default(0);
             $table->integer('city_id')->default(0);
             $table->integer('state_id')->default(0);
-            $table->integer('country_id')->default(0);
+            $table->integer('country_id')->default(1);
             $table->text('address')->nullable();
             $table->integer('pincode')->default(0);
             $table->enum('status', [1, 0])->default(0);

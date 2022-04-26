@@ -46,7 +46,7 @@
                                                         <th id="name" data-orderable="false" data-searchable="false">Name</th>
                                                         <th id="email" data-orderable="false" data-searchable="false">Email</th>
                                                         <th id="phone" data-orderable="false" data-searchable="false">Phone</th>
-                                                        <th id="whatsapp" data-orderable="false" data-searchable="false">Whatsapp</th>
+                                                        {{-- <th id="whatsapp" data-orderable="false" data-searchable="false">Whatsapp</th> --}}
                                                         <th id="created_at" data-orderable="false" data-searchable="false">DateTime</th>
                                                         @if($data['user_list_status'] || $data['user_list_edit'] || $data['user_list_view'] )
                                                             <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>

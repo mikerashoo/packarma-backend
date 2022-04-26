@@ -72,9 +72,9 @@ class UserController extends Controller
                     ->editColumn('phone', function ($event) {
                         return '+' . $event->phone_country->phone_code . ' ' . $event->phone;
                     })
-                    ->editColumn('whatsapp', function ($event) {
-                        return '+' . $event->whatsapp_country->phone_code . ' ' . $event->whatsapp_no;
-                    })
+                    // ->editColumn('whatsapp', function ($event) {
+                    //     return '+' . $event->whatsapp_country->phone_code . ' ' . $event->whatsapp_no;
+                    // })
                     ->editColumn('action', function ($event) {
                     $user_list_view = checkPermission('user_list_view');
                     $user_list_edit = checkPermission('user_list_edit');
@@ -102,7 +102,7 @@ class UserController extends Controller
                     return $actions;
                 })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'email', 'phone','whatsapp','action'])->setRowId('id')->make(true);
+                    ->rawColumns(['name', 'email', 'phone','action'])->setRowId('id')->make(true);
             }
             catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -211,19 +211,27 @@ class UserController extends Controller
         if(strlen($request->phone) != $allowedPhoneLength){
             errorMessage("Phone Number Should be $allowedPhoneLength digit long.", $msg_data);
         }
-        $maxPhoneCodeLength = Country::where('id', $request->whatsapp_country_code)->get()->toArray();
-        $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
-        if(strlen($request->whatsapp_no) != $allowedPhoneLength){
-            errorMessage("Whatsapp Number Should be $allowedPhoneLength digit long.", $msg_data);
+        if($request->whatsapp_country_code == '' && $request->whatsapp_no != ''){
+            errorMessage("Please Select Country Code for Whatsapp Number", $msg_data);
+        }
+        if($request->whatsapp_country_code != ''){
+            $maxPhoneCodeLength = Country::where('id', $request->whatsapp_country_code)->get()->toArray();
+            $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
+            if(strlen($request->whatsapp_no) != $allowedPhoneLength){
+                errorMessage("Whatsapp Number Should be $allowedPhoneLength digit long.", $msg_data);
+            }
         }
         $tableObject->name = $request->name;
         $tableObject->email = $request->email;
         $tableObject->phone_country_id = $request->phone_country_code;
         $tableObject->phone = $request->phone;
-        $tableObject->whatsapp_country_id = $request->whatsapp_country_code;
-        $tableObject->whatsapp_no = $request->whatsapp_no;
-        $tableObject->currency_id = $request->currency;
-        $tableObject->currency_id = $request->currency;
+        if($request->whatsapp_country_code != '' && $request->whatsapp_no != ''){
+            $tableObject->whatsapp_country_id = $request->whatsapp_country_code;
+            $tableObject->whatsapp_no = $request->whatsapp_no;
+        }
+        if($request->currency != ''){
+            $tableObject->currency_id = $request->currency;
+        }
         $tableObject->approval_status = "accepted";
         $tableObject->approved_on = date('Y-m-d H:i:s');
         $tableObject->approved_by =  session('data')['id'];
@@ -286,9 +294,7 @@ class UserController extends Controller
             'email' => 'required|email',
             'phone_country_code' => 'required|integer',
             'phone' => 'required|integer',
-            'whatsapp_country_code' =>'required|integer',
-            'whatsapp_no' => 'required|integer',
-            'currency' => 'required|integer',
+            // 'currency' => 'required|integer',
         ])->errors();
     }
     

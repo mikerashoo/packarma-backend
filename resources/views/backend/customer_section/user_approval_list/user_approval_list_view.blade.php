@@ -21,11 +21,12 @@
                                                 <td><strong>Phone : </strong></td>
                                                 <td><span>+{{ $data['phone_country']->phone_code }}</span><span> {{ $data->phone }}</span></td>
                                             </tr>
-                                            <tr>
-                                                <td><strong>Whatapp Number : </strong></td>
-                                                <td><span>+{{ $data['whatsapp_country']->phone_code }}</span><span> {{ $data->whatsapp_no }}</span></td>
-                                            </tr>
-
+                                            @if ($data->whatsapp_country_id != 0 && !empty($data->whatsapp_no))
+                                                <tr>
+                                                    <td><strong>Whatapp Number : </strong></td>
+                                                    <td><span>+{{ $data['whatsapp_country']->phone_code }}</span><span> {{ $data->whatsapp_no }}</span></td>
+                                                </tr> 
+                                            @endif
                                             <tr>
                                                 <td><strong>Approval Status : </strong></td>
                                                 <td>{{ approvalStatusArray($data->approval_status) }}</td>

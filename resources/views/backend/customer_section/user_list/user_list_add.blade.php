@@ -41,8 +41,8 @@
                                         <input class="form-control required" type="text" id="phone" name="phone" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Whatsapp Country Code<span style="color:#ff0000">*</span></label>
-                                        <select class="select2 required" id="whatsapp_country_code" name="whatsapp_country_code" style="width: 100% !important;">
+                                        <label>Whatsapp Country Code</label>
+                                        <select class="select2" id="whatsapp_country_code" name="whatsapp_country_code" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach ($country as $code)
                                                 <option value="{{ $code->id }}">+{{ $code->phone_code }}</option>
@@ -50,12 +50,12 @@
                                         </select><br><br>
                                     </div> 
                                     <div class="col-sm-6">
-                                        <label>Whatapp Number<span style="color:#ff0000">*</span></label>
-                                        <input class="form-control required" type="text" id="whatsapp_no" name="whatsapp_no" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
+                                        <label>Whatapp Number</label>
+                                        <input class="form-control" type="text" id="whatsapp_no" name="whatsapp_no" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
                                     </div> 
                                     <div class="col-sm-6">
-                                        <label>Currency<span style="color:#ff0000">*</span></label>
-                                        <select class="select2 required" id="currency" name="currency" style="width: 100% !important;">
+                                        <label>Currency</label>
+                                        <select class="select2" id="currency" name="currency" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach ($currency as $val)
                                                 <option value="{{ $val->id }}">{{ $val->currency_code }}</option>

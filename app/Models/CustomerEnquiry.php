@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomerEnquiry extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
     /**
         * Developed By : Pradyumn Dwivedi
         * Created On : 04-mar-2022
@@ -151,10 +154,10 @@ class CustomerEnquiry extends Model
     /**
         * Developed By : Pradyumn Dwivedi
         * Created On : 04-mar-2022
-        * uses : to get data of vendor in customer enquiry table
+        * uses : to get data of vendor warehouse in customer enquiry table
     */   
-    public function warehouse()
+    public function vendor_warehouse()
     {
-        return $this->belongsTo('App\Models\Vendorwarehouse');
+        return $this->belongsTo('App\Models\VendorWarehouse');
     }
 }

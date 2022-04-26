@@ -45,11 +45,11 @@
                                         <input class="form-control required" type="text" id="phone" name="phone" value="{{ $data->phone }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Phone Country Code<span style="color:#ff0000">*</span></label>
-                                        <select class="select2 required" id="whatsapp_country_code" name="whatsapp_country_code" style="width: 100% !important;">
+                                        <label>Whatsapp Country Code</label>
+                                        <select class="select2" id="whatsapp_country_code" name="whatsapp_country_code" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach ($country as $code)
-                                                @if ($code->id == $data->phone_country_id)
+                                                @if ($code->id == $data->whatsapp_country_id)
                                                     <option value="{{ $code->id }}" selected>+{{ $code->phone_code }}</option>
                                                 @else
                                                     <option value="{{ $code->id }}">+{{ $code->phone_code }}</option>
@@ -58,12 +58,12 @@
                                         </select><br><br>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Whatapp Number<span style="color:#ff0000">*</span></label>
-                                        <input class="form-control required" type="text" id="whatsapp_no" name="whatsapp_no" value="{{ $data->whatsapp_no }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
+                                        <label>Whatapp Number</label>
+                                        <input class="form-control" type="text" id="whatsapp_no" name="whatsapp_no" value="{{ $data->whatsapp_no }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Currency<span style="color:#ff0000">*</span></label>
-                                        <select class="select2 required" id="currency" name="currency" style="width: 100% !important;">
+                                        <label>Currency</label>
+                                        <select class="select2" id="currency" name="currency" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach ($currency as $val)
                                                 @if ($val->id == $data->currency_id)

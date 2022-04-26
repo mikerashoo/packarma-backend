@@ -18,7 +18,7 @@ class CreateCountriesTable extends Migration
             $table->string('country_name', 100);
             $table->char('phone_code', 3);
             $table->char('phone_length', 3);
-            $table->integer('currency_id')->default(0);
+            $table->integer('currency_id')->default(1);
             $table->enum('status', [1, 0])->default(0);
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);

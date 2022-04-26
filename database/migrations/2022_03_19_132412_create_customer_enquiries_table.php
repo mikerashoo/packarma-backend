@@ -29,7 +29,7 @@ class CreateCustomerEnquiriesTable extends Migration
             $table->integer('packing_type_id')->default(0);
             $table->integer('packaging_treatment_id')->default(0);
             $table->longText('address')->nullable();
-            $table->integer('country_id')->default(0);
+            $table->integer('country_id')->default(1);
             $table->integer('city_id')->default(0);
             $table->integer('state_id')->default(0); 
             $table->integer('pincode')->default(0);

@@ -34,6 +34,7 @@ return [
         "WHATSAPP_FILE" => "500000",
         "NOTIFICATION" => "500000"
     ],
+    'MAX_IMAGE_SIZE' => '2048'
 ]
 
 ?>
