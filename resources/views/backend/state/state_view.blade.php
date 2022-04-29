@@ -17,13 +17,13 @@
                                             <td>{{$data->country->country_name}}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Country Status</strong></td>
+                                            <td><strong>State Status</strong></td>
                                             <td>{{displayStatus($data->status)}}</td>
                                         </tr>
-                                        <tr>
+                                        {{-- <tr>
                                             <td><strong>Date Time</strong></td>
                                             <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
-                                        </tr>
+                                        </tr> --}}
                                     </table>
                                 </div>
                             </div>

@@ -20,10 +20,15 @@
                             <h4 class="form-section"><i class="ft-info"></i> Details</h4>
                     			@csrf
                         		<div class="row">
-                                    <div class="col-sm-6">
-                        				<label>City Name<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" id="city_name" name="city_name"><br/>
-                        			</div>                                    
+                                    {{-- <div class="col-sm-6">
+                        				<label>Country Name<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="country" name="country" style="width: 100% !important;">
+                                            <option value="">Select</option>
+                                            @foreach($data['country'] as $countries)
+                                                <option value="{{$countries->id}}">{{$countries->country_name}}</option>
+                                            @endforeach
+                                        </select><br/>
+                        			</div> --}}
                                     <div class="col-sm-6">
                         				<label>State Name<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="state" name="state" style="width: 100% !important;">
@@ -34,14 +39,9 @@
                                         </select><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Country Name<span style="color:#ff0000">*</span></label>
-                        				<select class="select2 required" id="country" name="country" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach($data['country'] as $countries)
-                                                <option value="{{$countries->id}}">{{$countries->country_name}}</option>
-                                            @endforeach
-                                        </select><br/>
-                        			</div>
+                        				<label>City Name<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" id="city_name" name="city_name"><br/>
+                        			</div>                                    
                         		</div>
                         		<hr>
                         		<div class="row">

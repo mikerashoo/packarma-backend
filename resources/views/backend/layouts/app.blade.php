@@ -212,6 +212,16 @@
                                             <a href="packaging_treatment" class="menu-item"><i class="fa fa-circle fs_i"></i>Packaging Treatment</a>
                                         </li>
                                     @endif
+                                    @if(in_array('storage_condition', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ $lastParam ==  'storage_condition' ? 'active' : ''  }}">
+                                            <a href="storage_condition" class="menu-item"><i class="fa fa-circle fs_i"></i>Storage Condition</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('measurement_unit', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ $lastParam ==  'measurement_unit' ? 'active' : ''  }}">
+                                            <a href="measurement_unit" class="menu-item"><i class="fa fa-circle fs_i"></i>Measurement Unit</a>
+                                        </li>
+                                    @endif
                                     @if(in_array('product', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'product' ? 'active' : ''  }}">
                                             <a href="product" class="menu-item"><i class="fa fa-circle fs_i"></i>Product</a>
@@ -225,16 +235,6 @@
                                     @if(in_array('recommendation_engine', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'recommendation_engine' ? 'active' : ''  }}">
                                             <a href="recommendation_engine" class="menu-item"><i class="fa fa-circle fs_i"></i>Recommendation Engine</a>
-                                        </li>
-                                    @endif
-                                    @if(in_array('storage_condition', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ $lastParam ==  'storage_condition' ? 'active' : ''  }}">
-                                            <a href="storage_condition" class="menu-item"><i class="fa fa-circle fs_i"></i>Storage Condition</a>
-                                        </li>
-                                    @endif
-                                    @if(in_array('measurement_unit', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ $lastParam ==  'measurement_unit' ? 'active' : ''  }}">
-                                            <a href="measurement_unit" class="menu-item"><i class="fa fa-circle fs_i"></i>Measurement Unit</a>
                                         </li>
                                     @endif
                                 </ul>

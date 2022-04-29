@@ -115,6 +115,19 @@ class RecommendationEngineController extends Controller
     }
 
     /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 27-04-2022
+     *   Uses : get product details from product table in recrommendation engine selected product from dropdown  
+   */
+    public function getProductDetails(Request $request){
+        $productData = Product::with('category','product_form','packaging_treatment')->find($request->product_id);
+        $data['category'] = $productData->category;
+        $data['product_form'] = $productData->product_form;
+        $data['packaging_treatment'] = $productData->packaging_treatment;
+        successMessage('Data fetched successfully', $data);
+    }
+
+    /**
      *   Created by : Pradyumn Dwivedi
      *   Created On : 31-Mar-2022
      *   Uses :   To load edit recommendation engine page

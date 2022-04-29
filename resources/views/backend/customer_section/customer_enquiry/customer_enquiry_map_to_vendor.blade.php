@@ -126,7 +126,7 @@ $(document).on('click', '#addStock', function(event){
         '<input class="form-control" type="hidden"  value="<?php echo $data->product_id; ?>" id="product'+i+'" name="product[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->user_id; ?>" id="user'+i+'" name="user[]">'+
         '<td>'+
-            '<select class="select2" id="vendor'+i+'" value="" name="vendor[]" style="width:100%;">'+
+            '<select class="select2" id="vendor'+i+'" value="" name="vendor[]" style="width:100%;" onchange="getVendorWarehouse(this.value,'+i+')">'+
                 vendor_dropdown+
             '</select>'+
         '</td'+'<br>'+
@@ -149,33 +149,28 @@ function remove_vendor_map_tbl_row(i)
 {
     $('#vendorMapTblTr'+i).remove();
 }
-    //getVendorWarehouse function with Ajax to get order id drop down of selected vendor
-    // function getVendorWarehouse(vendor){
-    // // alert(vendor);return false;
-    //     $.ajax({
-    //         url:"getVendorWarehouseDropdown",
-    //         type: "POST",
-    //         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-    //         data: {
-    //              vendor_id: vendor
-    //         },
-    //         dataType:"JSON",
-    //         success:function(result)
-    //         {
-    //             $dropdownData = '<option value="">Select</option>';
-    //             if(result.vendor_warehouses.length > 0){
-    //                 $.each(result.vendor_warehouses,function(key,value){
-    //                     $dropdownData +='<option value="'+value.id+'">'+value.warehouse_name+'</option>';
-    //                 });
-    //                 // $("#order_id").html($dropdownData);
-    //                 alert( $dropdownData);
-    //                 var warehouse_dropdown = $dropdownData;
-    //             }else{
-    //                 // $("#order_id").html( $dropdownData );
-    //                 alert( $dropdownData);
-    //                 var warehouse_dropdown = $dropdownData;
-    //             }
-    //         },
-    //     });  
-    // }
+
+//getVendorWarehouse function with Ajax to get warehouse drop down of selected vendor in customer enquiry map to vendor
+function getVendorWarehouse(vendor,i){
+        var product_id ='<?php echo $data->product_id; ?>';
+        // alert(product_id);
+        $.ajax({
+            url:"getVendorWarehouseDropdown",
+            type: "POST",
+            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+            data: {
+                vendor_id: vendor, product_id: product_id,
+
+            },
+            success:function(result)
+            {
+                response = JSON.parse(result);
+                // var vendor_warehouses (response['data']['vendor_warehouse'][0]); 
+                var vendor_price = response['data']['vendorMaterialMapData'][0]['vendor_price']; 
+                var vommission_rate = response['data']['vendorMaterialMapData'][0]['min_amt_profit'];                
+                $("#vendor_price"+i).val(vendor_price);
+                $("#commission_rate"+i).val(vendor_price);
+            },
+        });  
+    }
 </script>

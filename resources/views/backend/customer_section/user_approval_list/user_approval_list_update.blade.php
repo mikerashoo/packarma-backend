@@ -38,10 +38,12 @@
                                             <dt class="col-sm-4 text-left">Phone Number : </dt>
                                             <dd class="col-sm-8"><span>+{{ $data['phone_country']->phone_code }}</span><span> {{ $data->phone }}</span></dd>
                                         </dl>
-                                        <dl class="row">
-                                            <dt class="col-sm-4 text-left">Whatsapp Number : </dt>
-                                            <dd class="col-sm-8"><span>+{{ $data['whatsapp_country']->phone_code }}</span><span> {{ $data->whatsapp_no }}</span></dd>
-                                        </dl>
+                                        @if ($data->whatsapp_country_id != 0 && !empty($data->whatsapp_no))
+                                            <dl class="row">
+                                                <dt class="col-sm-4 text-left">Whatsapp Number : </dt>
+                                                <dd class="col-sm-8"><span>+{{ $data['whatsapp_country']->phone_code }}</span><span> {{ $data->whatsapp_no }}</span></dd>
+                                            </dl>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

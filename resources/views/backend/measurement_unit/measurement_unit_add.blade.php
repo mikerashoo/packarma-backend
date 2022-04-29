@@ -20,6 +20,15 @@
                     			@csrf
                         		<div class="row">
                                     <div class="col-sm-6">
+                                        <label>Measurement Unit Form<span style="color:#ff0000">*</span></label>
+                                        <select class="select2 required" id="unit_form" name="unit_form" style="width: 100% !important;">
+                                            <option value="">Select</option>
+                                            @foreach($measurementUnitForm as $key => $val)
+                                                <option value="{{$key}}">{{$val}}</option>
+                                            @endforeach
+                                        </select><br />
+                                    </div>
+                                    <div class="col-sm-6">
                         				<label>Unit Name<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" id="unit_name" name="unit_name"><br/>
                         			</div>

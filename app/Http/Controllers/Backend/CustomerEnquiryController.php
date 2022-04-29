@@ -22,6 +22,10 @@ use Yajra\DataTables\DataTables;
 use App\Models\PackagingMachine;
 use App\Models\StorageCondition;
 use App\Models\PackagingTreatment;
+use App\Models\PackagingMaterial;
+use App\Models\RecommendationEngine;
+use App\Models\VendorMaterialMapping;
+
 
 class CustomerEnquiryController extends Controller
 {
@@ -186,12 +190,12 @@ class CustomerEnquiryController extends Controller
        *   @return Response
     */
     public function customerEnquiryMapToVendor($id) {
-        $data['data'] = CustomerEnquiry::find($id);       
+        $data['data'] = CustomerEnquiry::find($id); 
         $data['customerEnquiryType'] = customerEnquiryType();
         $data['vendorEnquiryStatus'] = vendorEnquiryStatus();
         $data['customerEnquiryQuoteType'] = customerEnquiryQuoteType();
         $data['vendor'] = Vendor::all()->toArray();
-        // $data['vendor_warehouse'] = VendorWarehouse::all()->toArray();        
+        $data['vendor_warehouse'] = VendorWarehouse::all()->toArray();        
         $data['city'] = City::all();
         $data['state'] = State::all(); 
         return view('backend/customer_section/customer_enquiry/customer_enquiry_map_to_vendor', $data);
@@ -238,13 +242,17 @@ class CustomerEnquiryController extends Controller
     }
 
     /**
-     *   created by : Sagar Thokal
-     *   Created On : 06-04-2022
-     *   Uses : vendor payment from vendor order id From AJAX call
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 27-04-2022
+     *   Uses : get selected vendor warehouse and vendor price, commission rate from vendor material mapping table in customer enquiry map to vendor
      */
     public function getVendorWarehouse(Request $request){
-        $data['vendor_warehouses'] = VendorWarehouse::where("vendor_id",$request->vendor_id)->get();
-        return response()->json($data);
+        $data['vendor_warehouse'] = VendorWarehouse::where("vendor_id",$request->vendor_id)->get();
+        $data['recommendationData'] = RecommendationEngine::where('product_id',$request->product_id)->get();
+        $data['vendorMaterialMapData'] = VendorMaterialMapping::where('packaging_material_id',$data['recommendationData'][0]->packaging_material_id)
+                                                                ->where('vendor_id',$request->vendor_id)
+                                                                ->get();
+        successMessage('Data fetched successfully', $data);
     }
 
     /**
@@ -256,11 +264,8 @@ class CustomerEnquiryController extends Controller
     */
     public function view($id) {
         $data['data'] = CustomerEnquiry::find($id);
-        // $data['product'] = Product::all();
         $data['vendor_id'] = VendorQuotation::where('customer_enquiry_id', '=', $data['data']->id)->pluck('vendor_id')->toArray();
         $data['vendor'] = Vendor::whereIn('id', $data['vendor_id'])->get();
-        // echo "<pre>";
-        // print_r($data['vendor']);exit;
         return view('backend/customer_section/customer_enquiry/customer_enquiry_view', $data);
     }
 

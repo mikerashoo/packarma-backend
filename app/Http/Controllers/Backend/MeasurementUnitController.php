@@ -47,8 +47,8 @@ class MeasurementUnitController extends Controller
                     ->editColumn('unit_symbol', function ($event) {
                         return $event->unit_symbol;
                     })
-                    ->editColumn('updated_at', function ($event) {
-	                    return date('d-m-Y H:i A', strtotime($event->updated_at));                        
+                    ->editColumn('unit_form', function ($event) {
+	                    return measurementUnitForm($event->unit_form);                        
 	                })
                     ->editColumn('action', function ($event) {
                         $measurement_unit_view = checkPermission('measurement_unit_view');
@@ -72,7 +72,7 @@ class MeasurementUnitController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns([ 'unit_name','unit_symbol','updated_at', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns([ 'unit_name','unit_symbol','unit_form', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -92,7 +92,8 @@ class MeasurementUnitController extends Controller
        *   Uses : To load Add measurement unit page
     */
     public function add() {
-        return view('backend/measurement_unit/measurement_unit_add');
+        $data['measurementUnitForm'] = measurementUnitForm();
+        return view('backend/measurement_unit/measurement_unit_add', $data);
     }
 
     /**
@@ -105,6 +106,7 @@ class MeasurementUnitController extends Controller
     public function edit($id)
     {
         $data['data'] = MeasurementUnit::find($id);
+        $data['measurementUnitForm'] = measurementUnitForm();
         return view('backend/measurement_unit/measurement_unit_edit', $data);
     }
 
@@ -136,8 +138,17 @@ class MeasurementUnitController extends Controller
             if (isset($response[0])) {
                 errorMessage('Unit Symbol Already Exist', $msg_data);
             }
-            $tableObject = MeasurementUnit::find($_GET['id']);
-            $msg = "Data Updated Successfully";
+            //unit_form  -  is actual unit_form
+            $getKeys = true;
+            $measurementUnitForm = measurementUnitForm('',$getKeys);
+            if (in_array( $request->unit_form, $measurementUnitForm))
+            {
+               $tableObject = MeasurementUnit::find($_GET['id']);
+               $msg = "Data Updated Successfully";
+            }
+            else{
+                errorMessage('Measurement Unit Form Does not Exists.', $msg_data);
+            }
         } else {
             $tableObject = new MeasurementUnit;
             $response = MeasurementUnit::where([['unit_name', strtolower($request->unit_name)]])->get()->toArray();
@@ -148,8 +159,18 @@ class MeasurementUnitController extends Controller
             if (isset($response[0])) {
                 errorMessage('Unit Symbol Already Exist', $msg_data);
             }
-            $msg = "Data Saved Successfully";
+            //unit_form  -  is actual unit_form
+            $getKeys = true;
+            $measurementUnitForm = measurementUnitForm('',$getKeys);
+            if (in_array( $request->unit_form, $measurementUnitForm))
+            {
+               $msg = "Data Updated Successfully";
+            }
+            else{
+                errorMessage('Measurement Unit Form Does not Exists.', $msg_data);
+            }
         }
+        $tableObject->unit_form = $request->unit_form;
         $tableObject->unit_name = $request->unit_name;
         $tableObject->unit_symbol = $request->unit_symbol;
         if($isEditFlow){
@@ -172,6 +193,7 @@ class MeasurementUnitController extends Controller
     public function view($id)
     {
         $data['data'] = MeasurementUnit::find($id);
+        $data['measurementUnitForm'] = measurementUnitForm();
         return view('backend/measurement_unit/measurement_unit_view', $data);
     }
 

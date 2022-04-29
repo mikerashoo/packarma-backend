@@ -16,18 +16,18 @@
                                             <td><strong>State Name</strong></td>
                                             <td>{{$data->state->state_name}}</td>
                                         </tr>
-                                        <tr>
+                                        {{-- <tr>
                                             <td><strong>Country Name</strong></td>
                                             <td>{{$data->country->country_name}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Date Time</strong></td>
-                                            <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
-                                        </tr>
+                                        </tr> --}}
                                         <tr>
                                             <td><strong>City Status</strong></td>
                                             <td>{{displayStatus($data->status)}}</td>
                                         </tr>
+                                        {{-- <tr>
+                                            <td><strong>Date Time</strong></td>
+                                            <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
+                                        </tr> --}}
                                     </table>
                                 </div>
                             </div>

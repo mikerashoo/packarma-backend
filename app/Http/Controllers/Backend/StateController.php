@@ -53,17 +53,9 @@ class StateController extends Controller
                     ->editColumn('country_name', function ($event) {
 	                    return $event->country->country_name;
 	                })
-	                ->editColumn('action', function ($event) {
-                        $state_view = checkPermission('state_view');
-                        $state_edit = checkPermission('state_edit');
+                    ->editColumn('status', function ($event) {
 	                    $state_status = checkPermission('state_status');
 	                    $actions = '<span style="white-space:nowrap;">';
-                        if ($state_view) {
-                            $actions .= '<a href="state_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View State Details" title="View"><i class="fa fa-eye"></i></a>';
-                        }
-                        if($state_edit) {
-                            $actions .= ' <a href="state_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
-                        }
                         if($state_status) {
                             if($event->status == '1') {
                                 $actions .= ' <input type="checkbox" data-url="publishState" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
@@ -74,8 +66,21 @@ class StateController extends Controller
                         $actions .= '</span>';	
                         return $actions;
 	                }) 
+	                ->editColumn('action', function ($event) {
+                        $state_view = checkPermission('state_view');
+                        $state_edit = checkPermission('state_edit');
+	                    $actions = '<span style="white-space:nowrap;">';
+                        if ($state_view) {
+                            $actions .= '<a href="state_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View State Details" title="View"><i class="fa fa-eye"></i></a>';
+                        }
+                        if($state_edit) {
+                            $actions .= ' <a href="state_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                        }
+                        $actions .= '</span>';	
+                        return $actions;
+	                }) 
 	                ->addIndexColumn()
-	                ->rawColumns(['state_name','country_name','action'])->setRowId('id')->make(true);
+	                ->rawColumns(['state_name','country_name','status','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());

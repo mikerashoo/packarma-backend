@@ -63,7 +63,7 @@
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>
-                                                    <th id="material_name" data-orderable="false" data-searchable="false">Material Name</th>
+                                                    <th id="material_name" data-orderable="false" data-searchable="false">Packaging Material Name</th>
                                                     <th id="min_amt_profit" data-orderable="false" data-searchable="false">Commission Rate Per Kg</th>
                                                     <th id="vendor_price" data-orderable="false" data-searchable="false">Vendor Price</th>
                                                     @if($vendor_material_map_status)

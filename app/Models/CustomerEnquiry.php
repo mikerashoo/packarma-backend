@@ -134,6 +134,16 @@ class CustomerEnquiry extends Model
     /**
         * Developed By : Pradyumn Dwivedi
         * Created On : 04-mar-2022
+        * uses : to get data of packaging material in customer enquiry table
+    */   
+    public function packaging_material()
+    {
+        return $this->belongsTo('App\Models\PackagingMaterial');
+    }
+
+    /**
+        * Developed By : Pradyumn Dwivedi
+        * Created On : 04-mar-2022
         * uses : to get data of storage condition  in customer enquiry table
     */   
     public function storage_condition()

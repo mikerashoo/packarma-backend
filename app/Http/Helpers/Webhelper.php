@@ -54,7 +54,7 @@ if (! function_exists('readHeaderToken')) {
         $tokenData = Session::get('tokenData');
         $token = JWTAuth::setToken($tokenData)->getPayload();
         $userChk = User::where([['id', $token['sub']]])->get();
-        if(count($userChk) == 0 || $userChk[0]->access_token != $tokenData) {
+        if(count($userChk) == 0 || $userChk[0]->remember_token == '') {
             errorMessage('please_login_and_try_again', $msg_data, 4);
         }
         return $token;
@@ -410,7 +410,7 @@ if (! function_exists('customerEnquiryType')) {
         }     
     }
 
-     /**
+    /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 18-Mar-2022
        *   Uses :  To fetch value in user message message trigger       
@@ -430,4 +430,29 @@ if (! function_exists('customerEnquiryType')) {
             }
             return $returnArray;
         }     
+    }
+
+    /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 29-April-2022
+       *   Uses :  To fetch value in measure message message trigger       
+    */
+    if (! function_exists('measurementUnitForm')) {
+        function measurementUnitForm($displayValue="",$allKeys = false) {
+            $returnArray = array(
+                'A' => 'Aerosols',
+                'S' => 'Solid',
+                'L' => 'Liquid',
+                'P' => 'Pump Spray',
+                'SS' => 'Semi Solid',
+                'O' => 'Other'
+            );
+            if(!empty($displayValue)){
+                $returnArray = $returnArray[$displayValue];
+            }
+            if(empty($displayValue) && $allKeys){
+                  $returnArray = array_keys($returnArray);
+            }
+            return $returnArray;
+        }
     }

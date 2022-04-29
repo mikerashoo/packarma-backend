@@ -61,20 +61,12 @@ class CityController extends Controller
                     ->editColumn('state_name', function ($event) {
 	                    return $event->state->state_name;
 	                })
-                    ->editColumn('country_name', function ($event) {
-	                    return $event->country->country_name;
-	                })
-	                ->editColumn('action', function ($event) {
-                        $city_view = checkPermission('city_view');
-                        $city_edit = checkPermission('city_edit');
+                    // ->editColumn('country_name', function ($event) {
+	                //     return $event->country->country_name;
+	                // })
+                    ->editColumn('status', function ($event) {
 	                    $city_status = checkPermission('city_status');
 	                    $actions = '<span style="white-space:nowrap;">';
-                        if ($city_view) {
-                            $actions .= '<a href="city_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View City Details" title="View"><i class="fa fa-eye"></i></a>';
-                        }
-                        if($city_edit) {
-                            $actions .= ' <a href="city_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
-                        }
                         if($city_status) {
                             if($event->status == '1') {
                                 $actions .= ' <input type="checkbox" data-url="publishCity" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
@@ -85,8 +77,21 @@ class CityController extends Controller
                         $actions .= '</span>';	
                         return $actions;
 	                }) 
+	                ->editColumn('action', function ($event) {
+                        $city_view = checkPermission('city_view');
+                        $city_edit = checkPermission('city_edit');
+	                    $actions = '<span style="white-space:nowrap;">';
+                        if ($city_view) {
+                            $actions .= '<a href="city_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View City Details" title="View"><i class="fa fa-eye"></i></a>';
+                        }
+                        if($city_edit) {
+                            $actions .= ' <a href="city_edit/'.$event->id.'" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                        }
+                        $actions .= '</span>';	
+                        return $actions;
+	                }) 
 	                ->addIndexColumn()
-	                ->rawColumns(['city_name','state_name','country_name','action'])->setRowId('id')->make(true);
+	                ->rawColumns(['city_name','state_name','country_name','status','action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -161,7 +166,7 @@ class CityController extends Controller
         }
         $tblObj->city_name = $request->city_name;
         $tblObj->state_id = $request->state;
-        $tblObj->country_id = $request->country;
+        // $tblObj->country_id = $request->country;
         if($isEditFlow){
             $tblObj->updated_by = session('data')['id'];
         }else{
@@ -217,9 +222,9 @@ class CityController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
+            'state' => 'required|integer',  
             'city_name' => 'required|string',
-	        'state' => 'required|integer',
-            'country' => 'required|integer',
+            // 'country' => 'required|integer',
         ])->errors();
     }
 }

@@ -69,7 +69,7 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <label>Product<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="product" name="product" style="width: 100% !important;">
+                                                <select class="select2 required" id="product" name="product" style="width: 100% !important;" onchange="getProductDetails(this.value)">
                                                     <option value="">Select</option>
                                                     @foreach($product as $products)
                                                         @if ($products->id == $data->product_id)
@@ -83,12 +83,10 @@
                                             <div class="col-sm-6">
                                                 <label>Product Category<span style="color:#ff0000">*</span></label>
                                                 <select class="select2 required" id="product_category" name="product_category" style="width: 100% !important;">
-                                                    <option value="">Select</option>
+                                                    {{-- <option value="">Select</option> --}}
                                                     @foreach($category as $categories)
                                                         @if ($categories->id == $data->category_id)
                                                             <option value="{{$categories->id}}" selected>{{$categories->category_name}}</option> 
-                                                        @else
-                                                            <option value="{{$categories->id}}">{{$categories->category_name}}</option>
                                                         @endif
                                                     @endforeach
                                                 </select><br/><br/>
@@ -96,12 +94,25 @@
                                             <div class="col-sm-6">
                                                 <label>Product Form<span style="color:#ff0000">*</span></label>
                                                 <select class="select2 required" id="product_form" name="product_form" style="width: 100% !important;">
-                                                    <option value="">Select</option>
+                                                    {{-- <option value="">Select</option> --}}
                                                     @foreach($product_form as $forms)
                                                         @if ($forms->id == $data->product_form_id)
                                                             <option value="{{$forms->id}}" selected>{{$forms->product_form_name}}</option>
-                                                        @else
-                                                            <option value="{{$forms->id}}">{{$forms->product_form_name}}</option>
+                                                        {{-- @else
+                                                            <option value="{{$forms->id}}">{{$forms->product_form_name}}</option> --}}
+                                                        @endif
+                                                    @endforeach
+                                                </select><br/><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Packaging Treatment<span style="color:#ff0000">*</span></label>
+                                                <select class="select2 required" id="packaging_treatment" name="packaging_treatment" style="width: 100% !important;">
+                                                    {{-- <option value="">Select</option> --}}
+                                                    @foreach($packaging_treatment as $treatments)
+                                                        @if ($treatments->id == $data->packaging_treatment_id)
+                                                            <option value="{{$treatments->id}}" selected>{{$treatments->packaging_treatment_name}}</option>
+                                                        {{-- @else
+                                                            <option value="{{$treatments->id}}">{{$treatments->packaging_treatment_name}}</option> --}}
                                                         @endif
                                                     @endforeach
                                                 </select><br/><br/>
@@ -128,19 +139,6 @@
                                                             <option value="{{$machines->id}}" selected>{{$machines->packaging_machine_name}}</option>
                                                         @else
                                                             <option value="{{$machines->id}}">{{$machines->packaging_machine_name}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select><br/><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Packaging Treatment<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="packaging_treatment" name="packaging_treatment" style="width: 100% !important;">
-                                                    <option value="">Select</option>
-                                                    @foreach($packaging_treatment as $treatments)
-                                                        @if ($treatments->id == $data->packaging_treatment_id)
-                                                            <option value="{{$treatments->id}}" selected>{{$treatments->packaging_treatment_name}}</option>
-                                                        @else
-                                                            <option value="{{$treatments->id}}">{{$treatments->packaging_treatment_name}}</option>
                                                         @endif
                                                     @endforeach
                                                 </select><br/><br/>

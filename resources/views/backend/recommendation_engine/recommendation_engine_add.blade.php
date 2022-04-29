@@ -69,7 +69,7 @@
                                         <div class="row">   
                                             <div class="col-sm-6">
                                                 <label>Product<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="product" name="product" style="width: 100% !important;">
+                                                <select class="select2 required" id="product" name="product" style="width: 100% !important;" onchange="getProductDetails(this.value)">
                                                     <option value="">Select</option>
                                                     @foreach($product as $products)
                                                         <option value="{{$products->id}}">{{$products->product_name}}</option>
@@ -79,19 +79,28 @@
                                             <div class="col-sm-6">
                                                 <label>Product Category<span style="color:#ff0000">*</span></label>
                                                 <select class="select2 required" id="product_category" name="product_category" style="width: 100% !important;">
-                                                    <option value="">Select</option>
+                                                    {{-- <option value="">Select</option>
                                                     @foreach($category as $categories)
                                                         <option value="{{$categories->id}}">{{$categories->category_name}}</option>
-                                                    @endforeach
+                                                    @endforeach --}}
                                                 </select><br/><br/>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Product Form<span style="color:#ff0000">*</span></label>
                                                 <select class="select2 required" id="product_form" name="product_form" style="width: 100% !important;">
-                                                    <option value="">Select</option>
+                                                    {{-- <option value="">Select</option>
                                                     @foreach($product_form as $forms)
                                                         <option value="{{$forms->id}}">{{$forms->product_form_name}}</option>
-                                                    @endforeach
+                                                    @endforeach --}}
+                                                </select><br/><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Packaging Treatment<span style="color:#ff0000">*</span></label>
+                                                <select class="select2 required" id="packaging_treatment" name="packaging_treatment" style="width: 100% !important;">
+                                                    {{-- <option value="">Select</option>
+                                                    @foreach($packaging_treatment as $treatments)
+                                                        <option value="{{$treatments->id}}">{{$treatments->packaging_treatment_name}}</option>
+                                                    @endforeach --}}
                                                 </select><br/><br/>
                                             </div>
                                             <div class="col-sm-6">
@@ -109,15 +118,6 @@
                                                     <option value="">Select</option>
                                                     @foreach($packaging_machine as $machines)
                                                         <option value="{{$machines->id}}">{{$machines->packaging_machine_name}}</option>
-                                                    @endforeach
-                                                </select><br/><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Packaging Treatment<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="packaging_treatment" name="packaging_treatment" style="width: 100% !important;">
-                                                    <option value="">Select</option>
-                                                    @foreach($packaging_treatment as $treatments)
-                                                        <option value="{{$treatments->id}}">{{$treatments->packaging_treatment_name}}</option>
                                                     @endforeach
                                                 </select><br/><br/>
                                             </div>

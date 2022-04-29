@@ -374,3 +374,29 @@ function loadCKEditor(id)
 function getDataFromTheEditor() {
     return theEditor.getData();
 }
+
+ //getProductDetails function with Ajax to get product details drop down of selected product in recommendation engine add|edit
+ function getProductDetails(product){
+    $.ajax({
+        url:"getProductDetailsDropdown",
+        type: "POST",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            product_id: product
+        },
+        success:function(result)
+        {
+            response = JSON.parse(result);
+            var category_id = response['data']['category']['id'];
+            var category_name = response['data']['category']['category_name'];
+            var product_form_id = response['data']['product_form']['id'];
+            var product_form_name = response['data']['product_form']['product_form_name'];
+            var packaging_treatment_id = response['data']['packaging_treatment']['id'];
+            var packaging_treatment_name = response['data']['packaging_treatment']['packaging_treatment_name'];
+
+            $("#product_category").html('<option value="'+category_id+'"">'+category_name+'</option>');
+            $("#product_form").html('<option value="'+product_form_id+'"">'+product_form_name+'</option>');
+            $("#packaging_treatment").html('<option value="'+packaging_treatment_id+'"">'+packaging_treatment_name+'</option>');
+        },
+    });  
+} 

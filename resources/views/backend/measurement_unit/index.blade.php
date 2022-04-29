@@ -40,6 +40,7 @@
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="unit_name" data-orderable="false" data-searchable="false">Unit Name</th>
                                                     <th id="unit_symbol" data-orderable="false" data-searchable="false">Unit Symbol</th>
+                                                    <th id="unit_form" data-orderable="false" data-searchable="false">Unit Form</th>
                                                     @if($data['measurement_unit_view'] || $data['measurement_unit_edit'] || $data['measurement_unit_status'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif

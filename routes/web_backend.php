@@ -308,6 +308,7 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::get('/recommendation_engine_edit/{id}','RecommendationEngineController@edit');
 	Route::post('/publishRecommendationEngine', 'RecommendationEngineController@updateStatus');
 	Route::get('/recommendation_engine_view/{id}', 'RecommendationEngineController@view');
+	Route::post('/getProductDetailsDropdown', 'RecommendationEngineController@getProductDetails');
 
 	//Order list
 	Route::get('/order_list', 'OrderController@index');
