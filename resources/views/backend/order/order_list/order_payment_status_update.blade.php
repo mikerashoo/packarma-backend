@@ -29,8 +29,8 @@
                                                         <dd class="col-sm-8">{{ ($data['product']->product_name); }}</dd>
                                                     </dl>
                                                     <dl class="row">
-                                                        <dt class="col-sm-4 text-left">Total Amount :</dt>
-                                                        <dd class="col-sm-8">{{ $data->grand_total; }}</dd>
+                                                        <dt class="col-sm-4 text-left">Order Amount :</dt>
+                                                        <dd class="col-sm-8">{{ $data->currency->currency_symbol.' '.$data->grand_total; }}</dd>
                                                     </dl>
                                                 </div>
                                                 <div class="col-md-6">
@@ -44,7 +44,7 @@
                                                     </dl>
                                                     <dl class="row">
                                                         <dt class="col-sm-4 text-left">Pending Payment :</dt>
-                                                        <dd class="col-sm-8">{{ $data->customer_pending_payment; }}</dd>
+                                                        <dd class="col-sm-8">{{ $data->currency->currency_symbol.' '.$data->customer_pending_payment; }}</dd>
                                                     </dl>                                                    
                                                 </div>
                                             </div>                                    
@@ -69,7 +69,7 @@
                         				<label>Payment Mode<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="payment_mode" name="payment_mode" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($paymentMode as $key => $val)
+                                            @foreach($onlinePaymentMode as $key => $val)
                                                 @if($key == $data->payment_mode)
                                                     <option value="{{$key}}" selected>{{$val}}</option>
                                                 @else

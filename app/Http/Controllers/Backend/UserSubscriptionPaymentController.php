@@ -52,7 +52,7 @@ class UserSubscriptionPaymentController extends Controller
 	                    return subscriptionType($event->subscription_type);                        
 	                }) 
                     ->editColumn('payment_mode', function ($event) {
-	                    return paymentMode($event->payment_mode);
+	                    return onlinePaymentMode($event->payment_mode);
 	                })
                     ->editColumn('payment_status', function ($event) {
 	                    return subscriptionPaymentStatus($event->payment_status);

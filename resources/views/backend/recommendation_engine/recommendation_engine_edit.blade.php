@@ -7,7 +7,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-12 col-sm-7">
-                                    <h5 class="pt-2">Edit Recommendation Engine : {{$data->engine_name}}</h5>
+                                    <h5 class="pt-2">Edit Packaging Solution : {{$data->engine_name}}</h5>
                                 </div>
                                 <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                     <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
@@ -36,8 +36,8 @@
                                     <div class="tab-pane fade mt-2 show active" id="engine_details" role="tabpanel" aria-labelledby="engine_details-tab">
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <label>Engine Name<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="engine_name" name="engine_name" value="{{ $data->engine_name }}"><br/>
+                                                <label>Packaging Solution Name<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="packaging_solution" name="packaging_solution" value="{{ $data->engine_name }}"><br/>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Structure Type<span style="color:#ff0000">*</span></label>
@@ -62,6 +62,19 @@
                                             <div class="col-sm-6">
                                                 <label>Maximum Weight<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="max_weight" name="max_weight" value="{{ $data->max_weight }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Storage Condition<span style="color:#ff0000">*</span></label>
+                                                <select class="select2 required" id="storage_condition" name="storage_condition" style="width: 100% !important;">
+                                                    <option value="">Select</option>
+                                                    @foreach($storage_condition as $conditions)
+                                                        @if ($conditions->id == $data->storage_condition_id)
+                                                            <option value="{{$conditions->id}}" selected>{{$conditions->storage_condition_title}}</option>
+                                                        @else
+                                                            <option value="{{$conditions->id}}">{{$conditions->storage_condition_title}}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select><br/><br/>
                                             </div>
                                         </div>
                                     </div>

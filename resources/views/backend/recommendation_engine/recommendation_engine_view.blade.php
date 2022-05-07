@@ -7,7 +7,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-12 col-sm-7">
-                                    <h5 class="pt-2">View Recommendation Engine Details</h5>
+                                    <h5 class="pt-2">View Packaging Solution Details</h5>
                                 </div>
                                 <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                     <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
@@ -19,7 +19,7 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-striped">
                                         <tr>
-                                            <td class="col-sm-5"><strong>Recommendation Engine Name</strong></td>
+                                            <td class="col-sm-5"><strong>Packaging Solution Name</strong></td>
                                             <td>{{$data->engine_name}}</td>
                                         </tr>
                                         <tr>
@@ -73,6 +73,10 @@
                                         <tr>
                                             <td><strong>Packaging Material</strong></td>
                                             <td>{{$data->packaging_material->packaging_material_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Storage Condition</strong></td>
+                                            <td>{{$data->storage_condition->storage_condition_title}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Category Status</strong></td>

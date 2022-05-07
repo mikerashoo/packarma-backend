@@ -11,6 +11,35 @@ class CustomerEnquiry extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'description',
+        'user',
+        'order_id',
+        'category',
+        'sub_category',
+        'product',
+        'shelf_life',
+        'product_weight',
+        'storage_condition',
+        'packaging_machine',
+        'product_form',
+        'packing_type',
+        'packaging_treatment',
+        'quantity',
+        'quote_type',
+        // 'country,
+        'state',
+        'city',
+        'pincode',
+        'address'
+    ];
+
     /**
         * Developed By : Pradyumn Dwivedi
         * Created On : 04-mar-2022

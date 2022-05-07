@@ -93,7 +93,7 @@ class CustomerEnquiryController extends Controller
                         $vendor_quotation_count = VendorQuotation::where('customer_enquiry_id', '=', $event->id)->get()->count();
                         if($vendor_quotation_count == 0){
                             if($customer_enquiry_map_to_vendor) {
-                                $actions .= ' <a href="customer_enquiry_map_to_vendor/'.$event->id.'" class="btn btn-info btn-sm src_data" title="Map Vender"><i class="fa ft-zap"></i></a>';
+                                $actions .= ' <a href="customer_enquiry_map_to_vendor/'.$event->id.'" class="btn btn-info btn-sm src_data" title="Map Vendor"><i class="fa ft-zap"></i></a>';
                             }
                         }                             
                         $actions .= '</span>';                 
@@ -191,11 +191,15 @@ class CustomerEnquiryController extends Controller
     */
     public function customerEnquiryMapToVendor($id) {
         $data['data'] = CustomerEnquiry::find($id); 
+        
+        $data['recommendation_engine'] = RecommendationEngine::where('product_id',$data['data']->product_id)->first()->toArray();
+        $data['packaging_material'] = PackagingMaterial::where('id',$data['recommendation_engine']['packaging_material_id'])->first()->toArray();
+        $data['vendor_material_map'] = VendorMaterialMapping::with('vendor')->where('packaging_material_id', $data['recommendation_engine']['packaging_material_id'])->first()->toArray();
+        $data['vendor'] = Vendor::all()->toArray();
         $data['customerEnquiryType'] = customerEnquiryType();
         $data['vendorEnquiryStatus'] = vendorEnquiryStatus();
         $data['customerEnquiryQuoteType'] = customerEnquiryQuoteType();
-        $data['vendor'] = Vendor::all()->toArray();
-        $data['vendor_warehouse'] = VendorWarehouse::all()->toArray();        
+        // $data['vendor_warehouse'] = VendorWarehouse::all()->toArray();        
         $data['city'] = City::all();
         $data['state'] = State::all(); 
         return view('backend/customer_section/customer_enquiry/customer_enquiry_map_to_vendor', $data);
@@ -233,8 +237,7 @@ class CustomerEnquiryController extends Controller
             $currentDateTime = Carbon::now();
             $newDateTime = Carbon::now()->addHours($validity_hours)->toArray();
             $tblObj->quotation_expiry_datetime =  $newDateTime['formatted'];
-            $tblObj->etd =  $request->etd[$k];
-            $tblObj->etd =  $request->etd[$k];
+            $tblObj->lead_time =  $request->lead_time[$k];
             $tblObj->created_by = session('data')['id'];
             $tblObj->save();
         }
@@ -281,12 +284,11 @@ class CustomerEnquiryController extends Controller
         if( $for == 'vendor'){
             return \Validator::make($request->all(), [    
                 'vendor.*' => 'required',
-                'warehouse.*' => 'required',
+                // 'warehouse.*' => 'required',
                 'vendor_price.*' => 'required',
                 'commission_rate.*' => 'required',
-                'freight_price.*' => 'required',
                 'quotation_validity.*' => 'required',
-                'etd.*' => 'required',
+                'lead_time.*' => 'required'
             ])->errors(); 
         } elseif( $for == 'addEnquiry'){
             return \Validator::make($request->all(), [    
@@ -305,7 +307,7 @@ class CustomerEnquiryController extends Controller
                 'packaging_treatment' => 'required|integer',
                 'quantity' => 'required|integer',
                 'quote_type' => 'required|string',
-                'country' => 'required|integer',
+                // 'country' => 'required|integer',
                 'state' => 'required|integer',
                 'city' => 'required|integer',
                 'pincode' => 'required|integer',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Role;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,7 @@ class LoginController extends Controller
             	return redirect()->back()->withErrors(array("msg"=>implode("\n", $validationErrors->all())));
             }
             
-            $response = Admin::where([['email', $request->email],['password', md5($request->email.$request->password)]])->get();
+            $response = Admin::with('role')->where([['email', $request->email],['password', md5($request->email.$request->password)]])->get();
             if(!count($response)) {
                 \Log::error("User not found with this email id and password.");
                 return redirect()->back()->withErrors(array("msg"=>"Invalid login credentials"));
@@ -47,7 +48,8 @@ class LoginController extends Controller
                         "id"=>$response[0]['id'],
                         "name"=>$response[0]['admin_name'],
                         "email"=>$request->email,
-                        "role_id"=>$response[0]['role_id']
+                        "role_id"=>$response[0]['role_id'],
+                        "permissions"=>$response[0]['role']['permission']
                     );
                     $request->session()->put('data',$data);
                     return redirect('webadmin/dashboard');

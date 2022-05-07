@@ -37,7 +37,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Payment Mode</strong></td>
-                                                <td>{{paymentMode($data->payment_mode)}}</td>
+                                                <td>{{onlinePaymentMode($data->payment_mode)}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Payment Status</strong></td>

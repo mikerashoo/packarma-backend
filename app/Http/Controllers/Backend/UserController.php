@@ -89,10 +89,10 @@ class UserController extends Controller
                     }
                     if ($user_list_status) {
                         if ($event->status == '1') {
-                            $actions .= ' <input type="checkbox" data-url=publishUserList" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                            $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked data-url="publishUserList">';
                         }
                         else {
-                            $actions .= ' <input type="checkbox" data-url="publishUserList" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                            $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" data-url="publishUserList">';
                         }
                     }
                     if ($user_list_add_address) {

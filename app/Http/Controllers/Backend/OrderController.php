@@ -16,6 +16,7 @@ use App\Models\PackagingMachine;
 use App\Models\ProductForm;
 use App\Models\PackingType;
 use App\Models\PackagingTreatment;
+use App\Models\PackagingMaterial;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\OrderPayment;
@@ -53,7 +54,7 @@ class OrderController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Order::with('user','vendor')->orderBy('updated_at','desc');
+                $query = Order::with('user','vendor','currency')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user_id']) && ! is_null($request['search']['search_user_id'])) {
@@ -74,16 +75,19 @@ class OrderController extends Controller
                         return $event->vendor->vendor_name;
                     })
                     ->editColumn('grand_total', function ($event) {
-                        return $event->grand_total;
+                        return $event->currency->currency_symbol.$event->grand_total;
                     })
+                    ->editColumn('product_quantity', function ($event) {
+	                    return $event->product_quantity;                        
+	                })
                     ->editColumn('order_delivery_status', function ($event) {
                         return deliveryStatus($event->order_delivery_status);
                     })
                     ->editColumn('payment_status', function ($event) {
                         return paymentStatus($event->customer_payment_status);
                     })
-                    ->editColumn('updated_at', function ($event) {
-	                    return date('d-m-Y H:i A', strtotime($event->updated_at));                        
+                    ->editColumn('packaging_material', function ($event) {
+	                    return $event->packaging_material->packaging_material_name;                        
 	                })
                     ->editColumn('action', function ($event) {
                         $order_view = checkPermission('order_view');
@@ -136,7 +140,7 @@ class OrderController extends Controller
        *   @return Response
     */
     public function updateOrderDelivery($id) {
-        $data['data'] = Order::with('user','product','vendor')->find($id);
+        $data['data'] = Order::with('user','product','vendor','packaging_material')->find($id);
         $data['deliveryStatus'] = deliveryStatus();
         $data['paymentStatus'] = paymentStatus();
         return view('backend/order/order_list/order_delivery_status_update',$data);
@@ -198,10 +202,10 @@ class OrderController extends Controller
        *   @return Response
     */
     public function updateOrderPayment($id) {
-        $data['data'] = Order::with('user','product','vendor')->find($id);
+        $data['data'] = Order::with('user','product','vendor','currency')->find($id);
         $data['deliveryStatus'] = deliveryStatus();
         $data['customerPaymentStatus'] = customerPaymentStatus();
-        $data['paymentMode'] = paymentMode();
+        $data['onlinePaymentMode'] = onlinePaymentMode();
         return view('backend/order/order_list/order_payment_status_update',$data);
     }
 
@@ -225,8 +229,8 @@ class OrderController extends Controller
         if(isset($_GET['id'])) {
             $getKeys = true;
             $customerPaymentStatus = customerPaymentStatus('',$getKeys);
-            $paymentMode = paymentMode('',$getKeys);
-            if (in_array( $request->payment_status, $customerPaymentStatus) && in_array( $request->payment_mode, $paymentMode))
+            $onlinePaymentMode = onlinePaymentMode('',$getKeys);
+            if (in_array( $request->payment_status, $customerPaymentStatus) && in_array( $request->payment_mode, $onlinePaymentMode))
              {
                 // $tableObject = OrderPayment::find($_GET['id']);
                 if($request->payment_status == 'pending'){

@@ -1,20 +1,18 @@
 <?php
-/**
- * Created By :Ankita Singh
- * Created On : 12 Apr 2022
- * Uses : This controller will be used for Product related APIs.
-*/
+
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\Category;
 use Response;
 
-class ProductApiController extends Controller
+class CategoryApiController extends Controller
 {
     /**
-     * Display a listing of the products.
+     * Created By : Pradyumn Dwivedi
+     * Created at : 06-05-2022
+     * Uses : Display a listing of the category.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -38,31 +36,26 @@ class ProductApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
 
-                $data = Product::with('category','sub_category')->where('status','1');
+                $data = Category::where('status','1');
 
-                $productData = Product::whereRaw("1 = 1");
-                if($request->product_id)
+                $categoryData = Category::whereRaw("1 = 1");
+                if($request->category_id)
                 {
-                    $productData = $productData->where('id',$request->product_id);
-                    $data = $data->where('id',$request->product_id);
+                    $categoryData = $categoryData->where('id',$request->category_id);
+                    $data = $data->where('id',$request->category_id);
                 }
-                if($request->product_name)
+                if($request->category_name)
                 {
-                    $productData = $productData->where('product_name',$request->product_name);
-                    $data = $data->where('product_name',$request->product_name);
+                    $categoryData = $categoryData->where('category_name',$request->category_name);
+                    $data = $data->where('category_name',$request->category_name);
                 }
-                if(empty($productData->first()))
+                if(empty($categoryData->first()))
                 {
-                    errorMessage(__('product.product_not_found'), $msg_data);
+                    errorMessage(__('category.category_not_found'), $msg_data);
                 }
-
-                // if($request->id)
-                // {
-                //     $data = $data->where('id',$request->id);
-                // }
 
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = $this->fullSearchQuery($data, $request->search,'product_name|product_description');
+                    $data = $this->fullSearchQuery($data, $request->search,'category_name');
                 }
 
                 $total_records = $data->get()->count();
@@ -72,8 +65,8 @@ class ProductApiController extends Controller
                 $i=0;
                 foreach($data as $row)
                 {
-                    $data[$i]['product_image'] = getFile($row['product_image'], 'product');
-                    $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product',false,'thumb');
+                    $data[$i]['category_image'] = getFile($row['category_image'], 'product');
+                    $data[$i]['category_thumb_image'] = getFile($row['category_thumb_image'], 'category',false,'thumb');
                     $i++;
                 }
                 $responseData['result'] = $data;
@@ -87,7 +80,7 @@ class ProductApiController extends Controller
         }
         catch(\Exception $e)
         {
-            \Log::error("Product fetching failed: " . $e->getMessage());
+            \Log::error("Category fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

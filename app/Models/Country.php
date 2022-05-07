@@ -11,6 +11,17 @@ class Country extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'country_name',
+        'phone_code',
+        'phone_length'
+    ];
     
 /**
     * Developed By : Pradyumn Dwivedi

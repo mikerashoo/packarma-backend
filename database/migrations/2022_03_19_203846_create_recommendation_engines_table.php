@@ -29,6 +29,7 @@ class CreateRecommendationEnginesTable extends Migration
             $table->integer('packaging_machine_id')->default(0);
             $table->integer('packaging_treatment_id')->default(0);
             $table->integer('packaging_material_id')->default(0);
+            $table->integer('storage_condition_id')->default(0);
             $table->integer('vendor_id')->default(0);
             $table->integer('display_shelf_life')->default(0);
             $table->text('meta_title')->nullable();

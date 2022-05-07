@@ -24,5 +24,6 @@ return [
     'otp_verified' => 'OTP verified successfully!',
     'please_login_and_try_again' => 'Please login and try again!',
     'authentication_failed' => 'Authentication failed',
+    'verify_mobile_to_reset_password' => 'First verify your mobile number to reset password.',
 
 ];

@@ -21,12 +21,12 @@
                                             <div class="col-md-12 row">
                                                 <div class="col-md-6">
                                                     <dl class="row">
-                                                        <dt class="col-sm-4 text-left">User Name :</dt>
-                                                        <dd class="col-sm-8">{{ ($data['user']->name); }}</dd>
+                                                        <dt class="col-sm-6 text-left">User Name :</dt>
+                                                        <dd class="col-sm-6">{{ ($data['user']->name); }}</dd>
                                                     </dl>
                                                     <dl class="row">
-                                                        <dt class="col-sm-4 text-left">Product Name :</dt>
-                                                        <dd class="col-sm-8">{{ ($data['product']->product_name); }}</dd>
+                                                        <dt class="col-sm-6 text-left">Packaging Material Name :</dt>
+                                                        <dd class="col-sm-6">{{ ($data['packaging_material']->packaging_material_name); }}</dd>
                                                     </dl>
                                                 </div>
                                                 <div class="col-md-6">

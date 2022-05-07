@@ -8,6 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class VendorQuotation extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'vendor.*',
+        // 'warehouse.*',
+        'vendor_price.*',
+        'commission_rate.*',
+        'quotation_validity.*',
+        'etd.*',
+    ];
+
     /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 13-april-2022

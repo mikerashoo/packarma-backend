@@ -104,12 +104,11 @@ class AdminController extends Controller
     */
     public function assignRolePermission($id){
         $roleData = Role::find($id)->toArray();
-       
+        
         $data['roleData'] = $roleData;
         $permissions = json_decode($roleData['permission'], TRUE);
         $data['role_permissions'] = $permissions;
         $permissionArr= Permission::where([['to_be_considered','Yes']])->get()->toArray();
-        
         $formatedPermissions = array();
         $permisstion_type = array('List','Add','Edit','View','Status','Delete');
         foreach($permissionArr as $key => $value){
@@ -122,7 +121,8 @@ class AdminController extends Controller
                     $formatedPermissions[$value['id']][$permisstion_type[0]]['id']  = $value['id'];
                     $formatedPermissions[$value['id']][$permisstion_type[0]]['codename']  = $value['codename'];
                     $formatedPermissions[$value['id']][$permisstion_type[0]]['parent_status']  = $value['parent_status'];
-                }
+              }
+              
             }else{
                 foreach($permisstion_type as $k => $v){
                     if($v == $value['name']){
@@ -139,6 +139,7 @@ class AdminController extends Controller
                 }
             }
         }
+
         $data['permissions'] = array_values($formatedPermissions);
         $data['permission_types'] = $permisstion_type;
         return view('backend/role/assignRole',["data"=>$data]);

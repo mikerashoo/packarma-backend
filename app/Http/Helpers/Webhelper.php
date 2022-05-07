@@ -368,7 +368,7 @@ if (! function_exists('customerEnquiryType')) {
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 10-Mar-2022
-       *   Uses :  To fetch value in user subscription payment status type       
+       *   Uses :  To fetch value in user subscription payment mode type       
     */
     if (! function_exists('paymentMode')) {
         function paymentMode($displayValue="",$allKeys = false) {
@@ -377,6 +377,26 @@ if (! function_exists('customerEnquiryType')) {
                 'bank_transfer' => 'Bank Transfer',
                 'cheque' => 'Cheque',
                 'demand_draft' => 'Demand Draft',
+            );
+            if(!empty($displayValue)){
+                $returnArray = $returnArray[$displayValue];
+            }
+            if(empty($displayValue) && $allKeys){
+                $returnArray = array_keys($returnArray);
+            }
+            return $returnArray;
+        }     
+    }
+
+    /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 06-may-2022
+       *   Uses :  To fetch payment value in customer and subscription payment mode type       
+    */
+    if (! function_exists('onlinePaymentMode')) {
+        function onlinePaymentMode($displayValue="",$allKeys = false) {
+            $returnArray = array(
+                'online' => 'Online Payment',
             );
             if(!empty($displayValue)){
                 $returnArray = $returnArray[$displayValue];
@@ -435,7 +455,7 @@ if (! function_exists('customerEnquiryType')) {
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 29-April-2022
-       *   Uses :  To fetch value in measure message message trigger       
+       *   Uses :  To fetch value in measurement  message trigger       
     */
     if (! function_exists('measurementUnitForm')) {
         function measurementUnitForm($displayValue="",$allKeys = false) {

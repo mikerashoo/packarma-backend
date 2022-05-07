@@ -77,11 +77,11 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Sub Total</strong></td>
-                                                <td>{{$data->sub_total}}</td>
+                                                <td>{{$data->currency->currency_symbol.' '.$data->sub_total}}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Grand Total</strong></td>
-                                                <td>{{$data->grand_total}}</td>
+                                                <td><strong>Order Amount</strong></td>
+                                                <td>{{$data->currency->currency_symbol.' '.$data->grand_total}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Delivery Status</strong></td>
@@ -89,7 +89,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Customer Pending Payment</strong></td>
-                                                <td>{{$data->customer_pending_payment}}</td>
+                                                <td>{{$data->currency->currency_symbol.' '.$data->customer_pending_payment}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Customer Payment Status</strong></td>
@@ -97,7 +97,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Vendor Pending Payment</strong></td>
-                                                <td>{{$data->vendor_pending_payment}}</td>
+                                                <td>{{$data->currency->currency_symbol.' '.$data->vendor_pending_payment}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Vendor Payment Status</strong></td>

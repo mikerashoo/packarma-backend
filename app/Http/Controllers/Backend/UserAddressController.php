@@ -88,10 +88,10 @@ class UserAddressController extends Controller
                         }
                         if ($user_address_status) {
                             if ($event->status == '1') {
-                                $actions .= ' <input type="checkbox" data-url=publishUserAddress" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                                $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
                             }
                             else {
-                                $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                                $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
                             }
                         }
                         $actions .= '</span>';

@@ -11,4 +11,13 @@ class Company extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'company_name',
+    ];
 }

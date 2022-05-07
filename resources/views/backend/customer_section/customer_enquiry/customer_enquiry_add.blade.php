@@ -129,7 +129,7 @@
                                             @endforeach
                                         </select>
                         			</div>
-                                    <div class="col-sm-6 mb-3">
+                                    {{-- <div class="col-sm-6 mb-3">
                         				<label>Country Name<span style="color:#ff0000">*</span></label>
                         				<select class="form-control select2 required" id="country" value="" name="country" style="width: 100% !important;">
                                             <option value="">Select</option>
@@ -137,7 +137,7 @@
                                                     <option value="{{ $countries->id }}">{{ $countries->country_name }}</option>
                                             @endforeach
                                         </select>
-                        			</div>
+                        			</div> --}}
                                     <div class="col-sm-6 mb-3">
                         				<label>State Name<span style="color:#ff0000">*</span></label>
                         				<select class="form-control select2 required" id="state" value="" name="state" style="width: 100% !important;">

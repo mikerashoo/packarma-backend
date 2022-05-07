@@ -19,11 +19,14 @@ class Banner extends Model
     use SoftDeletes;
     protected $dates = ['deleted_at'];
 
-    protected $table = 'banners';
+     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
     protected $fillable = [
         'title',
-        'banner_image',
-        'type'
-     ];
+        'banner_image'
+    ];
  
 }

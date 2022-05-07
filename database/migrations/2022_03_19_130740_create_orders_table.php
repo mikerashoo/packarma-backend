@@ -22,14 +22,16 @@ class CreateOrdersTable extends Migration
             $table->integer('product_id')->default(0);
             $table->integer('shelf_life')->default(0);
             $table->decimal('product_weight', $precision = 8, $scale = 3);
+            $table->integer('product_quantity')->default(0);
             $table->integer('measurement_unit_id')->default(0);
             $table->integer('storage_condition_id')->default(0);
             $table->integer('packaging_machine_id')->default(0);
             $table->integer('product_form_id')->default(0);
             $table->integer('packing_type_id')->default(0);
             $table->integer('packaging_treatment_id')->default(0);
-            $table->integer('country_id')->default(0);
-            $table->integer('currency_id')->default(0); 
+            $table->integer('packaging_material_id')->default(0);
+            $table->integer('country_id')->default(1);
+            $table->integer('currency_id')->default(1); 
             $table->decimal('sub_total', $precision = 8, $scale = 3);
             $table->decimal('grand_total', $precision = 8, $scale = 3);
             $table->decimal('customer_pending_payment', $precision = 8, $scale = 3);

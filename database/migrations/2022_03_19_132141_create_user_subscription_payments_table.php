@@ -19,7 +19,7 @@ class CreateUserSubscriptionPaymentsTable extends Migration
             $table->integer('subscription_id')->default(0);
             $table->decimal('amount', $precision = 8, $scale = 3);
             $table->string('subscription_type', 255)->default('monthly')->comment('monthly|quarterly|semi_yearly|yearly');
-            $table->string('payment_mode', 255)->default('cod')->comment('cod|bank_transfer');
+            $table->string('payment_mode', 255)->default('online')->comment('online_payment');
             $table->integer('payment_reference')->default(0);
             $table->string('payment_unique_id')->default(0);
             $table->longText('payment_details')->nullable()->comment('Json Data');

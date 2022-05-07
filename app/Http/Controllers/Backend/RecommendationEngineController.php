@@ -4,31 +4,32 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\RecommendationEngine;
+use App\Models\Vendor;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductForm;
 use App\Models\PackingType;
+use App\Models\StorageCondition;
 use App\Models\PackagingTreatment;
 use App\Models\PackagingMachine;
 use App\Models\PackagingMaterial;
-use App\Models\Vendor;
 use Yajra\DataTables\DataTables;
+use App\Models\RecommendationEngine;
 
 class RecommendationEngineController extends Controller
 {
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 31-Mar-2022
-     *   Uses :  To show recommendation engine listing page
+     *   Uses :  To show recommendation engine listing page (recommendation engine name replaced by packaging solution)
      */
 
     public function index()
     {
-        $data['recommendation_engine_add'] = checkPermission('recommendation_engine_add');
-        $data['recommendation_engine_edit'] = checkPermission('recommendation_engine_edit');
-        $data['recommendation_engine_view'] = checkPermission('recommendation_engine_view');
-        $data['recommendation_engine_status'] = checkPermission('recommendation_engine_status');
+        $data['packaging_solution_add'] = checkPermission('packaging_solution_add');
+        $data['packaging_solution_edit'] = checkPermission('packaging_solution_edit');
+        $data['packaging_solution_view'] = checkPermission('packaging_solution_view');
+        $data['packaging_solution_status'] = checkPermission('packaging_solution_status');
         return view('backend/recommendation_engine/index', ["data" => $data]);
     }
 
@@ -61,17 +62,17 @@ class RecommendationEngineController extends Controller
                         return $event->product->product_name;
                     })
                     ->editColumn('action', function ($event) {
-                        $recommendation_engine_view = checkPermission('recommendation_engine_view');
-                        $recommendation_engine_edit = checkPermission('recommendation_engine_edit');
-                        $recommendation_engine_status = checkPermission('recommendation_engine_status');
+                        $packaging_solution_view = checkPermission('packaging_solution_view');
+                        $packaging_solution_edit = checkPermission('packaging_solution_edit');
+                        $packaging_solution_status = checkPermission('packaging_solution_status');
                         $actions = '<span style="white-space:nowrap;">';
-                        if ($recommendation_engine_view) {
+                        if ($packaging_solution_view) {
                             $actions .= '<a href="recommendation_engine_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if ($recommendation_engine_edit) {
+                        if ($packaging_solution_edit) {
                             $actions .= ' <a href="recommendation_engine_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
-                        if ($recommendation_engine_status) {
+                        if ($packaging_solution_status) {
                             if ($event->status == '1') {
                                 $actions .= ' <input type="checkbox" data-url="publishRecommendationEngine" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
                             } else {
@@ -107,6 +108,7 @@ class RecommendationEngineController extends Controller
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
+        $data['storage_condition'] = StorageCondition::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['packaging_material'] = PackagingMaterial::all();
@@ -141,6 +143,7 @@ class RecommendationEngineController extends Controller
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
+        $data['storage_condition'] = StorageCondition::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['packaging_material'] = PackagingMaterial::all();
@@ -181,7 +184,7 @@ class RecommendationEngineController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        $tableObject->engine_name = $request->engine_name;
+        $tableObject->engine_name = $request->packaging_solution;
         $tableObject->structure_type = $request->structure_type;
         $tableObject->product_id = $request->product;
         $tableObject->min_shelf_life = $request->min_shelf_life;
@@ -194,6 +197,7 @@ class RecommendationEngineController extends Controller
         $tableObject->packaging_machine_id = $request->packaging_machine;
         $tableObject->packaging_treatment_id = $request->packaging_treatment;
         $tableObject->packaging_material_id = $request->packaging_material;
+        $tableObject->storage_condition_id = $request->storage_condition;
         $tableObject->display_shelf_life = $request->display_shelf_life;
         if($isEditFlow){
             $tableObject->updated_by = session('data')['id'];
@@ -218,6 +222,7 @@ class RecommendationEngineController extends Controller
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
+        $data['storage_condition'] = StorageCondition::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['packaging_material'] = PackagingMaterial::all();
@@ -256,7 +261,7 @@ class RecommendationEngineController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'engine_name' => 'required|string',
+            'packaging_solution' => 'required|string',
             'structure_type' => 'required|string', 
             'product' => 'required|integer',
             'min_shelf_life' => 'required|integer',
@@ -270,6 +275,7 @@ class RecommendationEngineController extends Controller
             'packaging_machine' => 'required|integer',
             'packaging_treatment' => 'required|integer',
             'packaging_material' => 'required|integer',
+            'storage_condition' => 'required|integer'
         ])->errors();
     }
 }

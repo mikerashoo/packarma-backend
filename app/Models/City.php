@@ -13,6 +13,16 @@ class City extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'state',
+        'city_name'
+    ];
+
+    /**
     * Developed By : Pradyumn Dwivedi
     * Created On : 22-mar-2022
     * uses : to to get data of state model in city model 

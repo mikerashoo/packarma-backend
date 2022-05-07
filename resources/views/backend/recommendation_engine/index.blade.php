@@ -12,12 +12,12 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-12 col-sm-7">
-                                            <h5 class="pt-2">Manage Recommendation Engine List</h5>
+                                            <h5 class="pt-2">Manage Packaging Solution List</h5>
                                         </div>
                                         <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                             <button class="btn btn-sm btn-outline-danger px-3 py-1 mr-2" id="listing-filter-toggle"><i class="fa fa-filter"></i> Filter</button>
-                                            @if($data['recommendation_engine_add'])
-                                                <a href="recommendation_engine_add" class="btn btn-sm btn-outline-primary px-3 py-1 src_data"><i class="fa fa-plus"></i> Add Recommendation Engine</a>
+                                            @if($data['packaging_solution_add'])
+                                                <a href="recommendation_engine_add" class="btn btn-sm btn-outline-primary px-3 py-1 src_data"><i class="fa fa-plus"></i> Add Packaging Solution</a>
                                             @endif
                                         </div>
                                     </div>
@@ -25,7 +25,7 @@
                             	<div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
                                         <div class="col-md-4">
-                                            <label>Recommendation Engine Name</label>
+                                            <label>Packaging Solution Name</label>
                                             <input class="form-control mb-3" type="text" id="search_recommendation_engine" name="search_recommendation_engine">
                                         </div>
                                         <div class="col-md-4">
@@ -38,10 +38,10 @@
 				                            <thead>
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
-                                                    <th id="engine_name" data-orderable="false" data-searchable="false">Recommendation Engine Name</th>
+                                                    <th id="engine_name" data-orderable="false" data-searchable="false">Packaging Solution Name</th>
                                                     <th id="structure_type" data-orderable="false" data-searchable="false">Structure Type</th>
                                                     <th id="product_name" data-orderable="false" data-searchable="false">Product Name</th>
-                                                    @if($data['recommendation_engine_view'] || $data['recommendation_engine_edit'] || $data['recommendation_engine_status'])
+                                                    @if($data['packaging_solution_view'] || $data['packaging_solution_edit'] || $data['packaging_solution_status'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

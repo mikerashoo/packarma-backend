@@ -56,8 +56,8 @@
                                                 <td>{{date('d-m-Y H:i:s', strtotime($data->quotation_expiry_datetime)) }}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>ETD</strong></td>
-                                                <td>{{date('d-m-Y', strtotime($data->etd)) }}</td>
+                                                <td><strong>Lead Time (Days)</strong></td>
+                                                <td>{{$data->lead_time}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Date Time</strong></td>

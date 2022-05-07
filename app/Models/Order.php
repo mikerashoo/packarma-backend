@@ -113,6 +113,16 @@ class Order extends Model
 
     /**
         * Developed By : Pradyumn Dwivedi
+        * Created On : 07-may-2022
+        * uses : to get data of packaging material in order table
+    */
+    public function packaging_material()
+    {
+        return $this->belongsTo('App\Models\PackagingMaterial');
+    }
+
+    /**
+        * Developed By : Pradyumn Dwivedi
         * Created On : 04-mar-2022
         * uses : to get data of country  in order table
     */
