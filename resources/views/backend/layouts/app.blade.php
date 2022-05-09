@@ -176,7 +176,7 @@
                                 {{ $lastParam ==  'packaging_treatment' ? 'open' : ''  }}
                                 {{ $lastParam ==  'product' ? 'open' : ''  }}
                                 {{ $lastParam ==  'packaging_material' ? 'open' : ''  }}
-                                {{ $lastParam ==  'recommendation_engine' ? 'open' : ''  }}
+                                {{ $lastParam ==  'packaging_solution' ? 'open' : ''  }}
                                 {{ $lastParam ==  'storage_condition' ? 'open' : ''  }}
                                 {{ $lastParam ==  'measurement_unit' ? 'open' : ''  }}
                             ">
@@ -232,9 +232,9 @@
                                             <a href="packaging_material" class="menu-item"><i class="fa fa-circle fs_i"></i>Packaging Material</a>
                                         </li>
                                     @endif
-                                    @if(in_array('recommendation_engine', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ $lastParam ==  'recommendation_engine' ? 'active' : ''  }}">
-                                            <a href="recommendation_engine" class="menu-item"><i class="fa fa-circle fs_i"></i>Recommendation Engine</a>
+                                    @if(in_array('packaging_solution', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ $lastParam ==  'packaging_solution' ? 'active' : ''  }}">
+                                            <a href="packaging_solution" class="menu-item"><i class="fa fa-circle fs_i"></i>Packaging Solution</a>
                                         </li>
                                     @endif
                                 </ul>

@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Category Language Lines
+    | Banner Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
@@ -13,5 +13,5 @@ return [
     |
     */
 
-    'category_not_found' => 'Category Not Found',
+    'banner_not_found' => 'Banner Not Found',
 ];

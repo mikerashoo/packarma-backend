@@ -15,7 +15,7 @@
                             </div>
                         </div>
                     	<div class="card-body">
-                    		<form id="addRecommendationEngine" method="post" action="saveRecommendationEngine">
+                    		<form id="addPackagingSolution" method="post" action="savePackagingSolution">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item">
                                         <a href="#engine_details" role="tab" id="engine_details-tab" class="nav-link d-flex align-items-center active" data-toggle="tab" aria-controls="engine_details" aria-selected="true">
@@ -145,7 +145,7 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="pull-right">
-                                                <button type="button" class="btn btn-success" onclick="submitForm('addRecommendationEngine','post')">Submit</button>
+                                                <button type="button" class="btn btn-success" onclick="submitForm('addPackagingSolution','post')">Submit</button>
                                                 <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
                                             </div>
                                         </div>

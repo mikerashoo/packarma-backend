@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Category Language Lines
+    | Packaging Treatment Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
@@ -13,5 +13,5 @@ return [
     |
     */
 
-    'category_not_found' => 'Category Not Found',
+    'packaging_treatment_not_found' => 'Packaging Treatment Not Found',
 ];

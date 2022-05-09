@@ -29,11 +29,19 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Subscription Start Date</strong></td>
-                                                <td>{{date('d-m-Y', strtotime($data->user->subscription_start)) }}</td>
+                                                @if (empty($data->user->subscription_start))
+                                                    <td></td>  
+                                                @else
+                                                    <td>{{date('d-m-Y', strtotime($data->user->subscription_start)) }}</td>
+                                                @endif
                                             </tr>
                                             <tr>
                                                 <td><strong>Subscription End Date</strong></td>
-                                                <td>{{date('d-m-Y', strtotime($data->user->subscription_end)) }}</td>
+                                                @if (empty($data->user->subscription_end))
+                                                    <td></td>  
+                                                @else
+                                                    <td>{{date('d-m-Y', strtotime($data->user->subscription_end)) }}</td>
+                                                @endif
                                             </tr>
                                             <tr>
                                                 <td><strong>Payment Mode</strong></td>

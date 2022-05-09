@@ -67,16 +67,16 @@ class RecommendationEngineController extends Controller
                         $packaging_solution_status = checkPermission('packaging_solution_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($packaging_solution_view) {
-                            $actions .= '<a href="recommendation_engine_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="packaging_solution_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($packaging_solution_edit) {
-                            $actions .= ' <a href="recommendation_engine_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                            $actions .= ' <a href="packaging_solution_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
                         if ($packaging_solution_status) {
                             if ($event->status == '1') {
-                                $actions .= ' <input type="checkbox" data-url="publishRecommendationEngine" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                                $actions .= ' <input type="checkbox" data-url="publishPackagingSolution" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
                             } else {
-                                $actions .= ' <input type="checkbox" data-url="publishRecommendationEngine" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                                $actions .= ' <input type="checkbox" data-url="publishPackagingSolution" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
                             }
                         }
                         $actions .= '</span>';

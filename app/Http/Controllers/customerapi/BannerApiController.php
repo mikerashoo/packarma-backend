@@ -4,15 +4,15 @@ namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\Banner;
 use Response;
 
-class CategoryApiController extends Controller
+class BannerApiController extends Controller
 {
     /**
      * Created By : Pradyumn Dwivedi
-     * Created at : 06-05-2022
-     * Uses : Display a listing of the category.
+     * Created at : 09-05-2022
+     * Uses : Display a listing of the banner.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -35,38 +35,33 @@ class CategoryApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-
-                $data = Category::where('status','1');
-
-                $categoryData = Category::whereRaw("1 = 1");
-                if($request->category_id)
+                
+                $data = Banner::where('status','1');
+                $bannerData = Banner::whereRaw("1 = 1");
+                if($request->banner_id)
                 {
-                    $categoryData = $categoryData->where('id',$request->category_id);
-                    $data = $data->where('id',$request->category_id);
+                    $bannerData = $bannerData->where('id', $request->banner_id);
+                    $data = $data->where('id',$request->banner_id);
                 }
-                if($request->category_name)
+                if($request->banner_title)
                 {
-                    $categoryData = $categoryData->where('category_name',$request->category_name);
-                    $data = $data->where('category_name',$request->category_name);
+                    $bannerData = $bannerData->where('title',$request->banner_title);
+                    $data = $data->where('title',$request->banner_title);
                 }
-                if(empty($categoryData->first()))
+                if(empty($bannerData->first()))
                 {
-                    errorMessage(__('category.category_not_found'), $msg_data);
+                    errorMessage(__('banner.banner_not_found'), $msg_data);
                 }
-
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = $this->fullSearchQuery($data, $request->search,'category_name');
+                    $data = $this->fullSearchQuery($data, $request->search,'title');
                 }
-
                 $total_records = $data->get()->count();
-
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-
                 $i=0;
                 foreach($data as $row)
                 {
-                    $data[$i]['category_image'] = getFile($row['category_image'], 'category');
-                    $data[$i]['category_thumb_image'] = getFile($row['category_thumb_image'], 'category',false,'thumb');
+                    $data[$i]['banner_image'] = getFile($row['banner_image'], 'banner');
+                    $data[$i]['banner_thumb_image'] = getFile($row['banner_thumb_image'], 'banner',false,'thumb');
                     $i++;
                 }
                 $responseData['result'] = $data;
@@ -80,7 +75,7 @@ class CategoryApiController extends Controller
         }
         catch(\Exception $e)
         {
-            \Log::error("Category fetching failed: " . $e->getMessage());
+            \Log::error("Banner fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

@@ -5,14 +5,15 @@ namespace App\Http\Controllers\customerapi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\SubCategory;
 use Response;
 
-class CategoryApiController extends Controller
+class SubCategoryApiController extends Controller
 {
     /**
      * Created By : Pradyumn Dwivedi
-     * Created at : 06-05-2022
-     * Uses : Display a listing of the category.
+     * Created at : 09-05-2022
+     * Uses : Display a listing of the sub category.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -36,26 +37,26 @@ class CategoryApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
 
-                $data = Category::where('status','1');
+                $data = SubCategory::where('status','1');
 
-                $categoryData = Category::whereRaw("1 = 1");
-                if($request->category_id)
+                $subCategoryData = SubCategory::whereRaw("1 = 1");
+                if($request->sub_category_id)
                 {
-                    $categoryData = $categoryData->where('id',$request->category_id);
-                    $data = $data->where('id',$request->category_id);
+                    $subCategoryData = $subCategoryData->where('id',$request->sub_category_id);
+                    $data = $data->where('id',$request->sub_category_id);
                 }
-                if($request->category_name)
+                if($request->sub_category_name)
                 {
-                    $categoryData = $categoryData->where('category_name',$request->category_name);
-                    $data = $data->where('category_name',$request->category_name);
+                    $subCategoryData = $subCategoryData->where('sub_category_name',$request->sub_category_name);
+                    $data = $data->where('sub_category_name',$request->sub_category_name);
                 }
-                if(empty($categoryData->first()))
+                if(empty($subCategoryData->first()))
                 {
-                    errorMessage(__('category.category_not_found'), $msg_data);
+                    errorMessage(__('sub_category.sub_category_not_found'), $msg_data);
                 }
 
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = $this->fullSearchQuery($data, $request->search,'category_name');
+                    $data = $this->fullSearchQuery($data, $request->search,'sub_category_name');
                 }
 
                 $total_records = $data->get()->count();
@@ -65,8 +66,8 @@ class CategoryApiController extends Controller
                 $i=0;
                 foreach($data as $row)
                 {
-                    $data[$i]['category_image'] = getFile($row['category_image'], 'category');
-                    $data[$i]['category_thumb_image'] = getFile($row['category_thumb_image'], 'category',false,'thumb');
+                    $data[$i]['sub_category_image'] = getFile($row['sub_category_image'], 'sub_category');
+                    $data[$i]['sub_category_thumb_image'] = getFile($row['sub_category_thumb_image'], 'sub_category',false,'thumb');
                     $i++;
                 }
                 $responseData['result'] = $data;
@@ -80,7 +81,7 @@ class CategoryApiController extends Controller
         }
         catch(\Exception $e)
         {
-            \Log::error("Category fetching failed: " . $e->getMessage());
+            \Log::error("Sub Category fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

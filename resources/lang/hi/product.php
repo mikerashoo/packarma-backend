@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Category Language Lines
+    | Product Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
@@ -13,5 +13,5 @@ return [
     |
     */
 
-    'category_not_found' => 'Category Not Found',
+    'product_not_found' => 'Product Not Found',
 ];

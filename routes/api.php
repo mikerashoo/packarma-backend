@@ -29,5 +29,17 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //Category
     	Route::post('/category/listing', 'CategoryApiController@index');
+
+        //Sub Category
+        Route::post('/sub_category/listing', 'SubCategoryApiController@index');
+
+        //Sub Category
+        Route::post('/sub_category/listing', 'SubCategoryApiController@index');
+
+        //Banner
+        Route::post('/banner/listing', 'BannerApiController@index');
+
+        //Packaging Treatment
+        Route::post('/packaging_treatment/listing', 'PackagingTreatmentApiController@index');
     });
 });
