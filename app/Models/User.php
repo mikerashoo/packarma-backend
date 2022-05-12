@@ -71,7 +71,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function phone_country()
     {
-        return $this->belongsTo('App\Models\Country','phone_country_id','id');
+        return $this->belongsTo('App\Models\Country', 'phone_country_id', 'id');
     }
 
     /**
@@ -81,7 +81,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function whatsapp_country()
     {
-        return $this->belongsTo('App\Models\Country','whatsapp_country_id','id');
+        return $this->belongsTo('App\Models\Country', 'whatsapp_country_id', 'id');
     }
 
     /**

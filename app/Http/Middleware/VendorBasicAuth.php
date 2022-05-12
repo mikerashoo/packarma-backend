@@ -5,18 +5,18 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class BasicAuth
+class VendorBasicAuth
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
     {
-        $AUTH_USER = 'admin';
+        $AUTH_USER = 'adminvendor';
         $AUTH_PASS = 'mypcot';
         header('Cache-Control: no-cache, must-revalidate, max-age=0');
         $has_supplied_credentials = !(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['PHP_AUTH_PW']));
@@ -35,6 +35,8 @@ class BasicAuth
         if (!empty($lang)) {
             \App::setLocale($lang);
         }
+
+
         return $next($request);
     }
 }

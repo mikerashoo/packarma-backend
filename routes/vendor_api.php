@@ -14,7 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware(['basicAuth'])->group(function () {
-//     Route::post('/register_api', 'RegisterApiController@index');
-//     Route::post('/request_otp', 'RegisterApiController@requestOtp');
-// });
+Route::middleware(['vendorbasicAuth'])->group(function () {
+    Route::post('/register_api', 'RegisterApiController@index');
+    Route::post('/request_otp', 'OtpApiController@requestOtp');
+    Route::post('/verify_otp', 'OtpApiController@verifyOtp');
+    Route::post('/login_api', 'LoginApiController@index');
+    Route::post('/forgot_password_api', 'ForgotPasswordApiController@index');
+    Route::middleware(['vendorTokenAuth'])->group(function () {
+        Route::post('/materials/listing', 'PackagingMaterialApiController@index');
+        Route::post('/orders/listing', 'OrderApiController@index');
+        Route::post('/enquiry/listing', 'EnquiryApiController@index');
+        Route::post('/quotation/listing', 'QuotationApiController@index');
+        Route::post('/payment/listing', 'PaymentApiController@index');
+    });
+});

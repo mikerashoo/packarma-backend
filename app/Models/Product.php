@@ -29,40 +29,40 @@ class Product extends Model
     ];
 
     /**
-        * Developed By : Pradyumn Dwivedi
-        * Created On : 30-mar-2022
-        * uses : to to get data of sub category in product 
-    */
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 30-mar-2022
+     * uses : to to get data of sub category in product 
+     */
     public function sub_category()
     {
         return $this->belongsTo('App\Models\SubCategory');
     }
 
     /**
-        * Developed By : Pradyumn Dwivedi
-        * Created On : 30-mar-2022
-        * uses : to to get data of category in product 
-    */
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 30-mar-2022
+     * uses : to to get data of category in product 
+     */
     public function category()
     {
         return $this->belongsTo('App\Models\Category');
     }
 
     /**
-        * Developed By : Pradyumn Dwivedi
-        * Created On : 30-mar-2022
-        * uses : to to get data of product form in product 
-    */
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 30-mar-2022
+     * uses : to to get data of product form in product 
+     */
     public function product_form()
     {
         return $this->belongsTo('App\Models\ProductForm');
     }
 
     /**
-        * Developed By : Pradyumn Dwivedi
-        * Created On : 30-mar-2022
-        * uses : to to get data of product treatment in product 
-    */
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 30-mar-2022
+     * uses : to to get data of product treatment in product 
+     */
     public function packaging_treatment()
     {
         return $this->belongsTo('App\Models\PackagingTreatment');

@@ -62,4 +62,14 @@ class VendorQuotation extends Model
     {
         return $this->belongsTo('App\Models\VendorWarehouse');
     }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 13-april-2022
+     * uses : to get warehouse data in vendor quotation table
+     */
+    public function Enquiry()
+    {
+        return $this->belongsTo('App\Models\CustomerEnquiry');
+    }
 }

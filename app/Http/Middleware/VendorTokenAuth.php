@@ -10,22 +10,22 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Session;
 
-class TokenAuth
+class VendorTokenAuth
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
+     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next)
     {
         $return_array = array();
         $return_array['success'] = '0';
         try {
-            $token = $request->header('access-token');
-            $data = JWTAuth::setToken($token)->getPayload();
+            $vendor_token = $request->header('access-token');
+            $data = JWTAuth::setToken($vendor_token)->getPayload();
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             $return_array['success'] = '4';
             $return_array['message'] = 'Token Expired';
@@ -38,7 +38,7 @@ class TokenAuth
             $return_array['message'] = 'Authentication Failed';
             return response()->json($return_array, 500);
         }
-        Session::flash('tokenData', $token);
+        Session::flash('vendorTokenData', $vendor_token);
         return $next($request);
     }
 }

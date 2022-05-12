@@ -21,5 +21,14 @@ class VendorPayment extends Model
         return $this->belongsTo('App\Models\Vendor');
     }
 
-    
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 06-April-2022
+     * uses : to get vendor model data  in vendor payment table
+     */
+    public function order()
+    {
+        return $this->belongsTo('App\Models\Order');
+    }
 }

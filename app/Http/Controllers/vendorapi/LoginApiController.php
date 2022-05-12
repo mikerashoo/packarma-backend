@@ -1,16 +1,10 @@
 <?php
 
-/**
- * Created By :Ankita Singh
- * Created On : 12 Apr 2022
- * Uses : This controller will be used to login user.
- */
-
-namespace App\Http\Controllers\customerapi;
+namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\Vendor;
 use Carbon\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -28,7 +22,7 @@ class LoginApiController extends Controller
     public function index(Request $request)
     {
         $msg_data = array();
-        \Log::info("Logging in user, starting at: " . Carbon::now()->format('H:i:s:u'));
+        \Log::info("Logging in vendor, starting at: " . Carbon::now()->format('H:i:s:u'));
         try {
             // Request Validation
             $validationErrors = $this->validateLogin($request);
@@ -36,16 +30,17 @@ class LoginApiController extends Controller
                 \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                 errorMessage(__('auth.validation_failed'), $validationErrors->all());
             }
-            $userData = User::where([['email', $request->email], ['password', md5($request->email . $request->password)], ['status', '1'], ['is_verified', 'Y']])->first();
-            if (empty($userData)) {
-                errorMessage(__('user.login_failed'), $msg_data);
+            $vendorData = Vendor::where([['vendor_email', $request->vendor_email], ['vendor_password', md5($request->vendor_email . $request->vendor_password)], ['status', '1'], ['is_verified', 'Y']])->first();
+            if (empty($vendorData)) {
+                errorMessage(__('vendor.login_failed'), $msg_data);
             }
-            $token = JWTAuth::fromUser($userData);
-            $users = User::find($userData->id);
-            $userData->last_login = $users->last_login = Carbon::now();
-            $userData->remember_token = $users->remember_token = $token;
-            $users->save();
-            successMessage(__('user.logged_in_successfully'), $userData->toArray());
+
+            $vendor_token = JWTAuth::fromUser($vendorData);
+            $vendors = Vendor::find($vendorData->id);
+            $vendorData->last_login = $vendors->last_login = Carbon::now();
+            $vendorData->remember_token = $vendors->remember_token = $vendor_token;
+            $vendors->save();
+            successMessage(__('vendor.logged_in_successfully'), $vendorData->toArray());
         } catch (\Exception $e) {
             \Log::error("Login failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
@@ -61,8 +56,8 @@ class LoginApiController extends Controller
     private function validateLogin(Request $request)
     {
         return \Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string|min:8'
+            'vendor_email' => 'required|email',
+            'vendor_password' => 'required|string|min:8'
         ])->errors();
     }
 }
