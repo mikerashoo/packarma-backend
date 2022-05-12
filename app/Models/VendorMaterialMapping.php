@@ -16,6 +16,16 @@ class VendorMaterialMapping extends Model
      * Created On : 01-april-2022
      * uses : to get vendor in vendor material map table
      */
+
+    protected $hidden = [
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+        'created_at',
+        'updated_at'
+    ];
+
     public function vendor()
     {
         return $this->belongsTo('App\Models\Vendor');
