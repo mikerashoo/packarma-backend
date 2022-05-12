@@ -28,7 +28,6 @@ class SubCategoryApiController extends Controller
             {
                 $page_no=1;
                 $limit=10;
-
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -54,15 +53,11 @@ class SubCategoryApiController extends Controller
                 {
                     errorMessage(__('sub_category.sub_category_not_found'), $msg_data);
                 }
-
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = $this->fullSearchQuery($data, $request->search,'sub_category_name');
+                    $data = fullSearchQuery($data, $request->search,'sub_category_name');
                 }
-
                 $total_records = $data->get()->count();
-
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-
                 $i=0;
                 foreach($data as $row)
                 {
@@ -84,19 +79,5 @@ class SubCategoryApiController extends Controller
             \Log::error("Sub Category fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
-    }
-
-    /**
-     * This function will be used to filter searched data.
-    */
-    private function fullSearchQuery($query, $word, $params)
-    {
-        $orwords = explode('|', $params);
-        $query = $query->where(function($query) use ($word, $orwords) {
-            foreach ($orwords as $key) {
-                $query->orWhere($key, 'like', '%' . $word . '%');
-            }
-        });
-        return $query;
     }
 }

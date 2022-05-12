@@ -1,20 +1,18 @@
 <?php
-/**
- * Created By :Ankita Singh
- * Created On : 12 Apr 2022
- * Uses : This controller will be used for Product related APIs.
-*/
+
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\Subscription;
 use Response;
 
-class ProductApiController extends Controller
+class SubscriptionApiController extends Controller
 {
     /**
-     * Display a listing of the products.
+     * Created By : Pradyumn Dwivedi
+     * Created at : 10-05-2022
+     * Uses : Display a listing of the subscription.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -36,38 +34,27 @@ class ProductApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = Product::with('category','sub_category')->where('status','1');
-                $productData = Product::whereRaw("1 = 1");
-                if($request->product_id)
+                $data = Subscription::whereRaw("1 = 1");
+                $subscriptionData = Subscription::whereRaw("1 = 1");
+                if($request->subscription_id)
                 {
-                    $productData = $productData->where('id',$request->product_id);
-                    $data = $data->where('id',$request->product_id);
+                    $subscriptionData = $subscriptionData->where('id', $request->subscription_id);
+                    $data = $data->where('id',$request->subscription_id);
                 }
-                if($request->product_name)
+                if($request->subscription_type)
                 {
-                    $productData = $productData->where('product_name',$request->product_name);
-                    $data = $data->where('product_name',$request->product_name);
+                    $subscriptionData = $subscriptionData->where('type',$request->subscription_type);
+                    $data = $data->where('type',$request->subscription_type);
                 }
-                if(empty($productData->first()))
+                if(empty($subscriptionData->first()))
                 {
-                    errorMessage(__('product.product_not_found'), $msg_data);
+                    errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
-                // if($request->id)
-                // {
-                //     $data = $data->where('id',$request->id);
-                // }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'product_name|product_description');
+                    $data = fullSearchQuery($data, $request->search,'type');
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                $i=0;
-                foreach($data as $row)
-                {
-                    $data[$i]['product_image'] = getFile($row['product_image'], 'product');
-                    $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product',false,'thumb');
-                    $i++;
-                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage('data_fetched_successfully', $responseData);
@@ -79,7 +66,7 @@ class ProductApiController extends Controller
         }
         catch(\Exception $e)
         {
-            \Log::error("Product fetching failed: " . $e->getMessage());
+            \Log::error("Subscription fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

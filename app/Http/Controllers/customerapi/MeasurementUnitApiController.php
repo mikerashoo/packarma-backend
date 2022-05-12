@@ -1,20 +1,18 @@
 <?php
-/**
- * Created By :Ankita Singh
- * Created On : 12 Apr 2022
- * Uses : This controller will be used for Product related APIs.
-*/
+
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\MeasurementUnit;
 use Response;
 
-class ProductApiController extends Controller
+class MeasurementUnitApiController extends Controller
 {
-    /**
-     * Display a listing of the products.
+   /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 12-05-2022
+     * Uses : Display a listing of the measurement unit.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -36,38 +34,33 @@ class ProductApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = Product::with('category','sub_category')->where('status','1');
-                $productData = Product::whereRaw("1 = 1");
-                if($request->product_id)
+                
+                $data = MeasurementUnit::where('status','1');
+                $unitData = MeasurementUnit::whereRaw("1 = 1");
+                if($request->unit_id)
                 {
-                    $productData = $productData->where('id',$request->product_id);
-                    $data = $data->where('id',$request->product_id);
+                    $unitData = $unitData->where('id', $request->unit_id);
+                    $data = $data->where('id',$request->unit_id);
                 }
-                if($request->product_name)
+                if($request->unit_name)
                 {
-                    $productData = $productData->where('product_name',$request->product_name);
-                    $data = $data->where('product_name',$request->product_name);
+                    $unitData = $unitData->where('unit_name',$request->unit_name);
+                    $data = $data->where('unit_name',$request->unit_name);
                 }
-                if(empty($productData->first()))
+                if($request->unit_symbol)
                 {
-                    errorMessage(__('product.product_not_found'), $msg_data);
+                    $unitData = $unitData->where('unit_symbol',$request->unit_symbol);
+                    $data = $data->where('unit_symbol',$request->unit_symbol);
                 }
-                // if($request->id)
-                // {
-                //     $data = $data->where('id',$request->id);
-                // }
+                if(empty($unitData->first()))
+                {
+                    errorMessage(__('measurement_unit.measurement_unit_not_found'), $msg_data);
+                }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'product_name|product_description');
+                    $data = fullSearchQuery($data, $request->search,'unit_name|unit_symbol');
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                $i=0;
-                foreach($data as $row)
-                {
-                    $data[$i]['product_image'] = getFile($row['product_image'], 'product');
-                    $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product',false,'thumb');
-                    $i++;
-                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage('data_fetched_successfully', $responseData);
@@ -79,7 +72,7 @@ class ProductApiController extends Controller
         }
         catch(\Exception $e)
         {
-            \Log::error("Product fetching failed: " . $e->getMessage());
+            \Log::error("Measurement Unit fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

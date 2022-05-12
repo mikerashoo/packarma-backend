@@ -15,6 +15,7 @@ use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\ProductForm;
 use App\Models\PackingType;
+use App\Models\MeasurementUnit;
 use App\Models\CustomerEnquiry;
 use App\Models\VendorQuotation;
 use App\Models\VendorWarehouse;
@@ -132,6 +133,7 @@ class CustomerEnquiryController extends Controller
         $data['sub_category'] = SubCategory::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
+        $data['measurement_unit'] = MeasurementUnit::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['storage_condition'] =StorageCondition::all();
         $data['packaging_treatment'] =PackagingTreatment::all();
@@ -166,12 +168,13 @@ class CustomerEnquiryController extends Controller
         $tblObj->product_id = $request->product;
         $tblObj->shelf_life = $request->shelf_life;
         $tblObj->product_weight = $request->product_weight;
+        $tblObj->measurement_unit_id = $request->measurement_unit;
+        $tblObj->product_quantity = $request->product_quantity;
         $tblObj->storage_condition_id = $request->storage_condition;
         $tblObj->packaging_machine_id = $request->packaging_machine;
         $tblObj->product_form_id = $request->product_form;
         $tblObj->packing_type_id = $request->packing_type;
         $tblObj->packaging_treatment_id = $request->packaging_treatment;
-        $tblObj->quantity = $request->quantity;
         $tblObj->quote_type = $request->quote_type;
         $tblObj->country_id = $request->country;
         $tblObj->state_id = $request->state;
@@ -298,14 +301,15 @@ class CustomerEnquiryController extends Controller
                 'category' => 'required|integer',
                 'sub_category' => 'required|integer',
                 'product' => 'required|integer',
-                'shelf_life' => 'required|integer',
                 'product_weight' => 'required|numeric',
+                'measurement_unit' => 'required|integer',
+                'shelf_life' => 'required|integer',
+                'product_quantity' => 'required|integer',
                 'storage_condition' => 'required|integer',
                 'packaging_machine' => 'required|integer',
                 'product_form' => 'required|integer',
                 'packing_type' => 'required|integer',
                 'packaging_treatment' => 'required|integer',
-                'quantity' => 'required|integer',
                 'quote_type' => 'required|string',
                 // 'country' => 'required|integer',
                 'state' => 'required|integer',

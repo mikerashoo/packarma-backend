@@ -17,6 +17,8 @@ class CreateVendorWarehousesTable extends Migration
             $table->id();
             $table->string('warehouse_name', 100)->nullable();
             $table->integer('vendor_id')->default(0);
+            $table->string('gstin',15)->nullable();
+            $table->string('mobile_no',20)->nullable();
             $table->integer('city_id')->default(0);
             $table->integer('state_id')->default(0);
             $table->integer('country_id')->default(1);

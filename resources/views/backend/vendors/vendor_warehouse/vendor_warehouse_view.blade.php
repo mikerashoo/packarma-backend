@@ -24,7 +24,36 @@
                                         </tr>
                                         <tr>
                                             <td><strong>Vendor Name</strong></td>
+                                            
                                             <td>{{$data->vendor->vendor_name}}</td>
+                                        </tr>
+                                        {{-- <tr>
+                                            <td><strong>GST Identification Number</strong></td>
+                                            @if (!empty($data->gstin))
+                                                    <td>{{ $data->gstin }}</td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                        </tr> --}}
+                                        <tr>
+                                            <td><strong>Mobile Number</strong></td>
+                                            @if (!empty($data->mobile_no))
+                                                <td>+{{$data->country->phone_code.' '.$data->mobile_no}}</td>
+                                            @else
+                                                <td>-</td> 
+                                            @endif
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Country</strong></td>
+                                            <td>{{$data->country->country_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>State</strong></td>
+                                            <td>{{$data->state->state_name}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>City</strong></td>
+                                            <td>{{$data->city->city_name}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Address</strong></td>
@@ -33,18 +62,6 @@
                                         <tr>
                                             <td><strong>Pincode</strong></td>
                                             <td>{{$data->pincode}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>City</strong></td>
-                                            <td>{{$data->city->city_name}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>State</strong></td>
-                                            <td>{{$data->state->state_name}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Country</strong></td>
-                                            <td>{{$data->country->country_name}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Warehouse Status</strong></td>

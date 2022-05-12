@@ -44,10 +44,10 @@
                                                 @foreach($data['city'] as $cities)
                                                     <option value="{{$cities->id}}">{{$cities->city_name}}</option>
                                                 @endforeach
-                                            </select><br/>
-                                        </div>
+                                            </select>
+                                        </div><br>
                                         <div class="col-md-4">
-                                            <label>&nbsp;</label><br/>
+                                            <label>&nbsp;</label>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
                                     </div>
@@ -58,9 +58,9 @@
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="warehouse_name" data-orderable="false" data-searchable="false">Warehouse Name</th>
                                                     <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>
-                                                    <th id="address" data-orderable="false" data-searchable="false">Address</th>
-                                                    <th id="city" data-orderable="false" data-searchable="false">City</th>
                                                     <th id="state" data-orderable="false" data-searchable="false">State</th>
+                                                    <th id="city" data-orderable="false" data-searchable="false">City</th>
+                                                    <th id="address" data-orderable="false" data-searchable="false">Address</th>
                                                     @if($data['vendor_warehouse_view'] || $data['vendor_warehouse_edit'] || $data['vendor_warehouse_status'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
@@ -78,6 +78,3 @@
     </div>
 </div>
 @endsection
-<script>
-    $('.select2').select2();
-</script>

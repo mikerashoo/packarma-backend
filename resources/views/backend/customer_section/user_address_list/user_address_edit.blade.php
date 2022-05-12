@@ -32,18 +32,43 @@
                                                     @endforeach
                                                 </select><br/><br>
                                             </div>
+                                            {{-- <div class="col-sm-6">
+                                                <label>GST Identification Number</label>
+                                                <input class="form-control" type="text" id="gstin" name="gstin" value="{{ $data->gstin }}"><br />
+                                            </div> --}}
                                             <div class="col-sm-6">
-                                                <label>City<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="city" name="city" style="width: 100% !important;">
+                                                <label>Address Name</label>
+                                                <input class="form-control" type="text" id="address_name" name="address_name" value="{{ $data->address_name }}"><br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Address Type</label>
+                                                <select class="select2" id="type" name="type" style="width: 100% !important;">
                                                     <option value="">Select</option>
-                                                    @foreach ($city as $cities)
-                                                        @if ($cities->id == $data->city_id)
-                                                            <option value="{{ $cities->id }}" selected>{{ $cities->city_name }}</option>
+                                                    @foreach($addressType as $key => $val)
+                                                        @if ($key == $data->type)
+                                                            <option value="{{$key}}" selected>{{$val}}</option>
                                                         @else
-                                                            <option value="{{ $cities->id }}">{{ $cities->city_name }}</option>
+                                                            <option value="{{$key}}">{{$val}}</option>
                                                         @endif
                                                     @endforeach
-                                                </select><br/><br>
+                                                </select><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Mobile Number</label>
+                                                <input class="form-control" type="text" id="mobile_no" name="mobile_no" value="{{ $data->mobile_no }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Country<span style="color:#ff0000">*</span></label>
+                                                <select class="select2 required" id="country" name="country" style="width: 100% !important;">
+                                                    <option value="">Select</option>
+                                                    @foreach ($country as $countries)
+                                                        @if ($countries->id == $data->country_id)
+                                                            <option value="{{ $countries->id }}" selected>{{ $countries->country_name }}</option>
+                                                        @else
+                                                            <option value="{{ $countries->id }}">{{ $countries->country_name }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                </select><br />
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>State<span style="color:#ff0000">*</span></label>
@@ -59,17 +84,17 @@
                                                 </select><br><br>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Country<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="country" name="country" style="width: 100% !important;">
+                                                <label>City<span style="color:#ff0000">*</span></label>
+                                                <select class="select2 required" id="city" name="city" style="width: 100% !important;">
                                                     <option value="">Select</option>
-                                                    @foreach ($country as $countries)
-                                                        @if ($countries->id == $data->country_id)
-                                                            <option value="{{ $countries->id }}" selected>{{ $countries->country_name }}</option>
+                                                    @foreach ($city as $cities)
+                                                        @if ($cities->id == $data->city_id)
+                                                            <option value="{{ $cities->id }}" selected>{{ $cities->city_name }}</option>
                                                         @else
-                                                            <option value="{{ $countries->id }}">{{ $countries->country_name }}</option>
+                                                            <option value="{{ $cities->id }}">{{ $cities->city_name }}</option>
                                                         @endif
                                                     @endforeach
-                                                </select><br />
+                                                </select><br/><br>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Address<span style="color:#ff0000">*</span></label>

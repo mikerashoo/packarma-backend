@@ -27,7 +27,6 @@ class CategoryApiController extends Controller
             {
                 $page_no=1;
                 $limit=10;
-
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -35,9 +34,7 @@ class CategoryApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-
                 $data = Category::where('status','1');
-
                 $categoryData = Category::whereRaw("1 = 1");
                 if($request->category_id)
                 {
@@ -53,15 +50,11 @@ class CategoryApiController extends Controller
                 {
                     errorMessage(__('category.category_not_found'), $msg_data);
                 }
-
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = $this->fullSearchQuery($data, $request->search,'category_name');
+                    $data = fullSearchQuery($data, $request->search,'category_name');
                 }
-
                 $total_records = $data->get()->count();
-
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-
                 $i=0;
                 foreach($data as $row)
                 {
@@ -83,19 +76,5 @@ class CategoryApiController extends Controller
             \Log::error("Category fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
-    }
-
-    /**
-     * This function will be used to filter searched data.
-    */
-    private function fullSearchQuery($query, $word, $params)
-    {
-        $orwords = explode('|', $params);
-        $query = $query->where(function($query) use ($word, $orwords) {
-            foreach ($orwords as $key) {
-                $query->orWhere($key, 'like', '%' . $word . '%');
-            }
-        });
-        return $query;
     }
 }

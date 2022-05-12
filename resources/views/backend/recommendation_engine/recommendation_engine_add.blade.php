@@ -44,6 +44,15 @@
                                                 <input class="form-control required" type="text" id="structure_type" name="structure_type"><br/>
                                             </div>
                                             <div class="col-sm-6">
+                                                <label>Storage Condition<span style="color:#ff0000">*</span></label>
+                                                <select class="select2 required" id="storage_condition" name="storage_condition" style="width: 100% !important;">
+                                                    <option value="">Select</option>
+                                                    @foreach($storage_condition as $conditions)
+                                                        <option value="{{$conditions->id}}">{{$conditions->storage_condition_title}}</option>
+                                                    @endforeach
+                                                </select><br/><br/>
+                                            </div>
+                                            <div class="col-sm-6">
                                                 <label>Minimum Shelf Life<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="min_shelf_life" name="min_shelf_life" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
@@ -64,11 +73,11 @@
                                                 <input class="form-control required" type="text" id="max_weight" name="max_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Storage Condition<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="storage_condition" name="storage_condition" style="width: 100% !important;">
+                                                <label>Measurement Unit<span style="color:#ff0000">*</span></label>
+                                                <select class="select2 required" id="measurement_unit" name="measurement_unit" style="width: 100% !important;">
                                                     <option value="">Select</option>
-                                                    @foreach($storage_condition as $conditions)
-                                                        <option value="{{$conditions->id}}">{{$conditions->storage_condition_title}}</option>
+                                                    @foreach($measurement_unit as $units)
+                                                        <option value="{{$units->id}}">{{$units->unit_symbol}}</option>
                                                     @endforeach
                                                 </select><br/><br/>
                                             </div>

@@ -52,7 +52,7 @@ class UserAddressController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = UserAddress::with('user', 'city');
+                $query = UserAddress::with('user', 'city')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user']) && !is_null($request['search']['search_user'])) {
@@ -81,7 +81,7 @@ class UserAddressController extends Controller
                         $user_address_status = checkPermission('user_address_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($user_address_view) {
-                            $actions .= '<a href="user_address_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View User Address Details" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="user_address_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($user_address_edit) {
                             $actions .= ' <a href="user_address_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
@@ -128,6 +128,7 @@ class UserAddressController extends Controller
         else {
             $data['user'] = User::all();
         }
+        $data['addressType'] = addressType();
         $data['state'] = State::all();
         $data['country'] = Country::all();
         return view('backend/customer_section/user_address_list/user_address_add', $data);
@@ -152,6 +153,7 @@ class UserAddressController extends Controller
         $data['user'] = User::all();
         $data['state'] = State::all();
         $data['country'] = Country::all();
+        $data['addressType'] = addressType();
         return view('backend/customer_section/user_address_list/user_address_edit', $data);
     }
 
@@ -175,31 +177,116 @@ class UserAddressController extends Controller
         $isUpdateFlow = false;
         if (isset($_GET['id'])) {
             $isUpdateFlow = true;
-            $response = UserAddress::where([['pincode', $request->pincode], ['id', '<>', $_GET['id']]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Pincode Already Exist', $msg_data);
+            $tableObject = UserAddress::find($_GET['id']);
+            if(isset($request->gstin)){
+                $response = UserAddress::where([['gstin', $request->gstin], ['id', '<>', $_GET['id']]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('GST Identification Number Already Exist', $msg_data);
+                } 
             }
-
+            if(isset($request->address_name)){
+                $response = UserAddress::where([['address_name', strtolower($request->address_name)], ['id', '<>', $_GET['id']]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('Address Name Already Exist', $msg_data);
+                } 
+            }
+            if(isset($request->mobile_no)){
+                $maxPhoneCodeLength = Country::where('id', $request->country)->get()->toArray();
+                $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
+                if(strlen($request->mobile_no) != $allowedPhoneLength){
+                    errorMessage("Mobile Number Should be $allowedPhoneLength digit long.", $msg_data);
+                }
+                $response = UserAddress::where([['mobile_no', $request->mobile_no], ['id', '<>', $_GET['id']]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('Mobile Number Already Exist', $msg_data);
+                } 
+            }
             $response = UserAddress::where([['address', strtolower($request->address)], ['id', '<>', $_GET['id']]])->get()->toArray();
             if (isset($response[0])) {
                 errorMessage('Address Already Exist', $msg_data);
             }
-            $tableObject = UserAddress::find($_GET['id']);
+            $response = UserAddress::where([['pincode', $request->pincode], ['id', '<>', $_GET['id']]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Pincode Already Exist', $msg_data);
+            }
+            $getKeys = true;
+            $addressType = addressType('',$getKeys);
+            if(isset($request->type)){
+                if (in_array( $request->type, $addressType))
+                {
+                    $msg = "Data Updated Successfully";
+                }else{
+                    errorMessage('Address Type Does not Exists.', $msg_data);
+                }
+            }
             $msg = "Data Updated Successfully";
         }
         else {
             $tableObject = new UserAddress;
-            $response = UserAddress::where([['pincode', $request->pincode]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Pincode Already Exist', $msg_data);
+            if(isset($request->gstin)){
+                $response = UserAddress::where([['gstin', $request->gstin]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('GST Information Number Already Exist', $msg_data);
+                } 
+            }
+            if(isset($request->address_name)){
+                $response = UserAddress::where([['address_name', strtolower($request->address_name)]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('Address Name Already Exist', $msg_data);
+                } 
+            }
+            if(isset($request->mobile_no)){
+                $maxPhoneCodeLength = Country::where('id', $request->country)->get()->toArray();
+                $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
+                if(strlen($request->mobile_no) != $allowedPhoneLength){
+                    errorMessage("Mobile Number Should be $allowedPhoneLength digit long.", $msg_data);
+                }
+                $response = UserAddress::where([['mobile_no', $request->mobile_no]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('Mobile Number Already Exist', $msg_data);
+                } 
             }
             $response = UserAddress::where([['address', strtolower($request->address)]])->get()->toArray();
             if (isset($response[0])) {
                 errorMessage('Address Already Exist', $msg_data);
             }
+            $response = UserAddress::where([['pincode', $request->pincode]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Pincode Already Exist', $msg_data);
+            }
+            $getKeys = true;
+            $addressType = addressType('',$getKeys);
+            if(isset($request->type)){
+                if (in_array( $request->type, $addressType))
+                {
+                    $msg = "Data Updated Successfully";
+                }else{
+                    errorMessage('Address Type Does not Exists.', $msg_data);
+                }
+            }
             $msg = "Data Saved Successfully";
         }
         $tableObject->user_id = $request->user;
+        if(isset($request->gstin)){
+            $tableObject->gstin = $request->gstin;
+        }
+        if(isset($request->address_name)){
+            $tableObject->address_name = $request->address_name;
+        }
+        if(isset($request->type)){
+            $getKeys = true;
+            $addressType = addressType('',$getKeys);
+            if (in_array( $request->type, $addressType))
+            {
+                $tableObject->type = $request->type;
+            }else{
+                errorMessage('Address Type Does Not Exists.', $msg_data);
+            }
+            
+        }
+        if(isset($request->mobile_no)){
+            $tableObject->mobile_no = $request->mobile_no;
+        }
         $tableObject->city_id = $request->city;
         $tableObject->state_id = $request->state;
         $tableObject->country_id = $request->country;
@@ -224,6 +311,7 @@ class UserAddressController extends Controller
     */
     public function view($id) {
         $data['data'] = UserAddress::with('user','city','state','country')->find($id);
+        $data['addressType'] = addressType();
         return view('backend/customer_section//user_address_list/user_address_view', $data);
     }
 

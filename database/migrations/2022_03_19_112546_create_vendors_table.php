@@ -25,6 +25,8 @@ class CreateVendorsTable extends Migration
             $table->string('whatsapp_no', 20)->nullable();
             $table->integer('currency_id')->default(1);
             $table->enum('is_featured', [1, 0])->default(0);
+            $table->string('gstin',15)->nullable();
+            $table->string('gst_certificate')->nullable();
             $table->string('approval_status', 255)->default('pending')->comment('pending|accepted|rejected');
             $table->datetime('approved_on')->nullable();
             $table->integer('approved_by')->default(0)->comment('Admin Id');

@@ -39,6 +39,14 @@
                                                 </tr>
                                             @endif
                                             <tr>
+                                                <td><strong>GST Information Number</strong></td>
+                                                @if (!empty($data->gstin))
+                                                    <td>{{ $data->gstin }}</td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                            </tr>
+                                            <tr>
                                                 <td><strong>Approval Status</strong></td>
                                                 <td>{{ approvalStatusArray($data->approval_status) }}</td>
                                             </tr>

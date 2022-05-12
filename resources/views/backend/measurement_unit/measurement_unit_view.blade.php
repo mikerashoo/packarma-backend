@@ -16,18 +16,18 @@
                                             <td><strong>Measurement Unit Symbol</strong></td>
                                             <td>{{$data->unit_symbol}}</td>
                                         </tr>
-                                        <tr>
+                                        {{-- <tr>
                                             <td><strong>Measurement Unit Form</strong></td>
                                             <td>{{measurementUnitForm($data->unit_form)}}</td>
-                                        </tr>
-                                        {{-- <tr>
-                                            <td><strong>Date Time</strong></td>
-                                            <td>{{ date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
                                         </tr> --}}
                                         <tr>
                                             <td><strong>Unit Status</strong></td>
                                             <td>{{displayStatus($data->status)}}</td>
                                         </tr>
+                                        {{-- <tr>
+                                            <td><strong>Date Time</strong></td>
+                                            <td>{{ date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
+                                        </tr> --}}
                                     </table>
                                 </div>
                             </div>

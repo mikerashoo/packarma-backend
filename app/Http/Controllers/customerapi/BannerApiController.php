@@ -27,7 +27,6 @@ class BannerApiController extends Controller
             {
                 $page_no=1;
                 $limit=10;
-
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -35,7 +34,6 @@ class BannerApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                
                 $data = Banner::where('status','1');
                 $bannerData = Banner::whereRaw("1 = 1");
                 if($request->banner_id)
@@ -53,7 +51,7 @@ class BannerApiController extends Controller
                     errorMessage(__('banner.banner_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = $this->fullSearchQuery($data, $request->search,'title');
+                    $data = fullSearchQuery($data, $request->search,'title');
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
@@ -78,19 +76,5 @@ class BannerApiController extends Controller
             \Log::error("Banner fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
-    }
-
-    /**
-     * This function will be used to filter searched data.
-    */
-    private function fullSearchQuery($query, $word, $params)
-    {
-        $orwords = explode('|', $params);
-        $query = $query->where(function($query) use ($word, $orwords) {
-            foreach ($orwords as $key) {
-                $query->orWhere($key, 'like', '%' . $word . '%');
-            }
-        });
-        return $query;
     }
 }

@@ -140,4 +140,14 @@ class Order extends Model
     {
         return $this->belongsTo('App\Models\Currency');
     }
+
+    /**
+        * Developed By : Pradyumn Dwivedi
+        * Created On : 11-may-2022
+        * uses : to get data of measurement unit in order table
+    */
+    public function measurement_unit()
+    {
+        return $this->belongsTo('App\Models\MeasurementUnit');
+    }
 }

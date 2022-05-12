@@ -53,15 +53,11 @@ class PackagingTreatmentApiController extends Controller
                 {
                     errorMessage(__('packaging_treatment.packaging_treatment_not_found'), $msg_data);
                 }
-
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = $this->fullSearchQuery($data, $request->search,'packaging_treatment_name|packaging_treatment_description');
+                    $data = fullSearchQuery($data, $request->search,'packaging_treatment_name|packaging_treatment_description');
                 }
-
                 $total_records = $data->get()->count();
-
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-
                 $i=0;
                 foreach($data as $row)
                 {
@@ -83,19 +79,5 @@ class PackagingTreatmentApiController extends Controller
             \Log::error("Packaging Treatment fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
-    }
-
-    /**
-     * This function will be used to filter searched data.
-    */
-    private function fullSearchQuery($query, $word, $params)
-    {
-        $orwords = explode('|', $params);
-        $query = $query->where(function($query) use ($word, $orwords) {
-            foreach ($orwords as $key) {
-                $query->orWhere($key, 'like', '%' . $word . '%');
-            }
-        });
-        return $query;
     }
 }
