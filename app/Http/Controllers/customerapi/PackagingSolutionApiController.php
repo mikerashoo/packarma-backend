@@ -4,15 +4,15 @@ namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\PackingType;
+use App\Models\RecommendationEngine;
 use Response;
 
-class PackingTypeApiController extends Controller
+class PackagingSolutionApiController extends Controller
 {
     /**
      * Created By : Pradyumn Dwivedi
      * Created at : 13-05-2022
-     * Uses : Display a listing of the packing types.
+     * Uses : Display a listing of the Packaging Solution (Recommendation engine).
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -27,7 +27,6 @@ class PackingTypeApiController extends Controller
             {
                 $page_no=1;
                 $limit=10;
-
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -35,26 +34,24 @@ class PackingTypeApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-
-                $data = PackingType::where('status','1');
-
-                $packingTypeData = PackingType::whereRaw("1 = 1");
-                if($request->packaging_type_id)
+                $data = RecommendationEngine::with('product','measurement_unit','category','product_form','packing_type','packaging_machine','packaging_treatment','packaging_material','storage_condition')->where('status','1');
+                $engineData = RecommendationEngine::with('product','measurement_unit','category','product_form','packing_type','packaging_machine','packaging_treatment','packaging_material','storage_condition')->whereRaw("1 = 1");
+                if($request->engine_id)
                 {
-                    $packingTypeData = $packingTypeData->where('id',$request->packaging_type_id);
-                    $data = $data->where('id',$request->packaging_type_id);
+                    $engineData = $engineData->where('id', $request->engine_id);
+                    $data = $data->where('id',$request->engine_id);
                 }
-                if($request->packaging_type_name)
+                if($request->engine_name)
                 {
-                    $packingTypeData = $packingTypeData->where('packing_name',$request->packaging_type_name);
-                    $data = $data->where('packing_name',$request->packaging_type_name);
+                    $engineData = $engineData->where('engine_name',$request->engine_name);
+                    $data = $data->where('engine_name',$request->engine_name);
                 }
-                if(empty($packingTypeData->first()))
+                if(empty($engineData->first()))
                 {
-                    errorMessage(__('packing_type.packaging_type_not_found'), $msg_data);
+                    errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'packing_name|packing_description');
+                    $data = fullSearchQuery($data, $request->search,'engine_name|structure_type');
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
@@ -69,7 +66,7 @@ class PackingTypeApiController extends Controller
         }
         catch(\Exception $e)
         {
-            \Log::error("Packaging Type fetching failed: " . $e->getMessage());
+            \Log::error("Packaging Solution fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

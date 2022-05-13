@@ -4,15 +4,15 @@ namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\PackingType;
+use App\Models\State;
 use Response;
 
-class PackingTypeApiController extends Controller
+class StateApiController extends Controller
 {
     /**
      * Created By : Pradyumn Dwivedi
      * Created at : 13-05-2022
-     * Uses : Display a listing of the packing types.
+     * Uses : Display a listing of the city.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -27,7 +27,6 @@ class PackingTypeApiController extends Controller
             {
                 $page_no=1;
                 $limit=10;
-
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -35,26 +34,24 @@ class PackingTypeApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-
-                $data = PackingType::where('status','1');
-
-                $packingTypeData = PackingType::whereRaw("1 = 1");
-                if($request->packaging_type_id)
+                $data = State::with('country')->where('status','1');
+                $stateData = State::with('country')->whereRaw("1 = 1");
+                if($request->state_id)
                 {
-                    $packingTypeData = $packingTypeData->where('id',$request->packaging_type_id);
-                    $data = $data->where('id',$request->packaging_type_id);
+                    $stateData = $stateData->where('id',$request->state_id);
+                    $data = $data->where('id',$request->state_id);
                 }
-                if($request->packaging_type_name)
+                if($request->state_name)
                 {
-                    $packingTypeData = $packingTypeData->where('packing_name',$request->packaging_type_name);
-                    $data = $data->where('packing_name',$request->packaging_type_name);
+                    $stateData = $stateData->where('state_name',$request->state_name);
+                    $data = $data->where('state_name',$request->state_name);
                 }
-                if(empty($packingTypeData->first()))
+                if(empty($stateData->first()))
                 {
-                    errorMessage(__('packing_type.packaging_type_not_found'), $msg_data);
+                    errorMessage(__('state.state_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'packing_name|packing_description');
+                    $data = fullSearchQuery($data, $request->search,'state_name');
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
@@ -69,7 +66,7 @@ class PackingTypeApiController extends Controller
         }
         catch(\Exception $e)
         {
-            \Log::error("Packaging Type fetching failed: " . $e->getMessage());
+            \Log::error("State fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
