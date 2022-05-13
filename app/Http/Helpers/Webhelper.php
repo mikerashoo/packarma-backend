@@ -1,6 +1,7 @@
 <?php
 use App\Models\DisplayMsg;
 use App\Models\User;
+use App\Models\Vendor;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Storage;
@@ -58,6 +59,25 @@ if (! function_exists('readHeaderToken')) {
             errorMessage('please_login_and_try_again', $msg_data, 4);
         }
         return $token;
+    }
+}
+
+/**
+ * Created by : Maaz Ansari
+ * Created on : 
+ * Uses : Created for vendor api token read 
+ */
+if (!function_exists('readVenderHeaderToken')) {
+    function readVenderHeaderToken()
+    {
+        $vendor_msg_data = array();
+        $vendorTokenData = Session::get('vendorTokenData');
+        $vendor_token = JWTAuth::setToken($vendorTokenData)->getPayload();
+        $vendorChk = Vendor::where([['id', $vendor_token['sub']]])->get();
+        if (count($vendorChk) == 0 || $vendorChk[0]->remember_token == '') {
+            errorMessage('please_login_and_try_again', $vendor_msg_data, 4);
+        }
+        return $vendor_token;
     }
 }
 
@@ -476,11 +496,12 @@ if (! function_exists('customerEnquiryType')) {
             return $returnArray;
         }
     }
-        /**
-         *   created by : Pradyumn Dwivedi
-         *   Created On : 11-May-2022
-         *   Uses :  To fetch value in user address       
-        */
+
+    /**
+        *   created by : Pradyumn Dwivedi
+        *   Created On : 11-May-2022
+        *   Uses :  To fetch value in user address       
+    */
     if (! function_exists('addressType')) {
         function addressType($displayValue="",$allKeys = false) {
             $returnArray = array(
@@ -500,7 +521,7 @@ if (! function_exists('customerEnquiryType')) {
     /**
      *   Created by : Pradyumn Dwivedi
      *   Created On : 11-May-2022
-     *   Uses: This function will be used to filter searched data in api.
+     *   Uses: This function will be used to full search data in api.
     */
     if (! function_exists('fullSearchQuery')) {
         function fullSearchQuery($query, $word, $params)

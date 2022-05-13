@@ -176,7 +176,7 @@ class CustomerEnquiryController extends Controller
         $tblObj->packing_type_id = $request->packing_type;
         $tblObj->packaging_treatment_id = $request->packaging_treatment;
         $tblObj->quote_type = $request->quote_type;
-        $tblObj->country_id = $request->country;
+        // $tblObj->country_id = $request->country;
         $tblObj->state_id = $request->state;
         $tblObj->city_id = $request->city;
         $tblObj->pincode = $request->pincode;
@@ -303,8 +303,8 @@ class CustomerEnquiryController extends Controller
                 'product' => 'required|integer',
                 'product_weight' => 'required|numeric',
                 'measurement_unit' => 'required|integer',
-                'shelf_life' => 'required|integer',
                 'product_quantity' => 'required|integer',
+                'shelf_life' => 'required|integer',
                 'storage_condition' => 'required|integer',
                 'packaging_machine' => 'required|integer',
                 'product_form' => 'required|integer',

@@ -42,10 +42,6 @@
                                             <div class="table-responsive">
                                                 <table class="table table-striped table-bordered">
                                                     <tr>
-                                                        <td><strong>Order ID</strong></td>
-                                                        <td>{{$data->description;}}</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td><strong>User Name</strong></td>
                                                         <td>{{$data['user']->name;}}</td>
                                                     </tr>
@@ -54,7 +50,7 @@
                                                         <td>{{$data->order_id;}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="col-sm-5"><strong>Description</strong></td>
+                                                        <td><strong>Description</strong></td>
                                                         <td>{{$data->description;}}</td>
                                                     </tr>
                                                     <tr>
@@ -62,24 +58,24 @@
                                                         <td>{{customerEnquiryQuoteType($data->quote_type); }}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><strong>Address</strong></td>
-                                                        <td>{{$data->address;}}</td>
-                                                    </tr> 
-                                                    <tr>
-                                                        <td><strong>City</strong></td>
-                                                        <td>{{$data['city']->city_name;}}</td>
+                                                        <td><strong>Country</strong></td>
+                                                        <td>{{$data['country']->country_name;}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>State</strong></td>
                                                         <td>{{$data['state']->state_name;}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><strong>Pincode</strong></td>
-                                                        <td>{{$data->pincode;}}</td>
+                                                        <td><strong>City</strong></td>
+                                                        <td>{{$data['city']->city_name;}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><strong>Country</strong></td>
-                                                        <td>{{$data['country']->country_name;}}</td>
+                                                        <td><strong>Address</strong></td>
+                                                        <td>{{$data->address;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Pincode</strong></td>
+                                                        <td>{{$data->pincode;}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Status</strong></td>
@@ -120,8 +116,8 @@
                                                         <td>{{$data->product_weight.' '.$data->measurement_unit->unit_symbol;}}</td>
                                                     </tr> 
                                                     <tr>
-                                                        <td><strong>Quantity</strong></td>
-                                                        <td>{{$data->quantity;}}</td>
+                                                        <td><strong>Product Quantity</strong></td>
+                                                        <td>{{$data->product_quantity;}}</td>
                                                     </tr> 
                                                     <tr>
                                                         <td><strong>Storage Condition</strong></td>
