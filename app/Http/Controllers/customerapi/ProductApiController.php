@@ -60,7 +60,7 @@ class ProductApiController extends Controller
                 // }
 
                 if (isset($request->search) && !empty($request->search)) {
-                    $data = $this->fullSearchQuery($data, $request->search, 'product_name|product_description');
+                    $data = fullSearchQuery($data, $request->search, 'product_name|product_description');
                 }
 
                 $total_records = $data->get()->count();
@@ -83,19 +83,5 @@ class ProductApiController extends Controller
             \Log::error("Product fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
-    }
-
-    /**
-     * This function will be used to filter searched data.
-     */
-    private function fullSearchQuery($query, $word, $params)
-    {
-        $orwords = explode('|', $params);
-        $query = $query->where(function ($query) use ($word, $orwords) {
-            foreach ($orwords as $key) {
-                $query->orWhere($key, 'like', '%' . $word . '%');
-            }
-        });
-        return $query;
     }
 }
