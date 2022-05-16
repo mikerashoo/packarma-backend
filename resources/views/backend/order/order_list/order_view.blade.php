@@ -45,7 +45,11 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Product Weight</strong></td>
-                                                <td>{{$data->product_weight}}</td>
+                                                <td>{{$data->product_weight.' '.$data->measurement_unit->unit_symbol}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Product Quantity</strong></td>
+                                                <td>{{$data->product_quantity}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Storage Condition</strong></td>

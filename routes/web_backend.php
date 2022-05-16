@@ -301,13 +301,13 @@ Route::group(['middleware'=>['customAuth']],function(){
 	Route::get('/packaging_material_view/{id}', 'PackagingMaterialController@view');
 
 	//recommendation engine
-	Route::get('/recommendation_engine', 'RecommendationEngineController@index');
-	Route::post('/recommendation_engine_data', 'RecommendationEngineController@fetch')->name('recommendation_engine_data');
-	Route::get('/recommendation_engine_add', 'RecommendationEngineController@add');
-	Route::post('/saveRecommendationEngine', 'RecommendationEngineController@saveFormData');
-	Route::get('/recommendation_engine_edit/{id}','RecommendationEngineController@edit');
-	Route::post('/publishRecommendationEngine', 'RecommendationEngineController@updateStatus');
-	Route::get('/recommendation_engine_view/{id}', 'RecommendationEngineController@view');
+	Route::get('/packaging_solution', 'RecommendationEngineController@index');
+	Route::post('/packaging_solution_data', 'RecommendationEngineController@fetch')->name('packaging_solution_data');
+	Route::get('/packaging_solution_add', 'RecommendationEngineController@add');
+	Route::post('/savePackagingSolution', 'RecommendationEngineController@saveFormData');
+	Route::get('/packaging_solution_edit/{id}','RecommendationEngineController@edit');
+	Route::post('/publishPackagingSolution', 'RecommendationEngineController@updateStatus');
+	Route::get('/packaging_solution_view/{id}', 'RecommendationEngineController@view');
 	Route::post('/getProductDetailsDropdown', 'RecommendationEngineController@getProductDetails');
 
 	//Order list

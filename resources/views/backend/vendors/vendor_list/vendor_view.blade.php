@@ -38,6 +38,14 @@
                                                 </tr>
                                             @endif
                                             <tr>
+                                                <td><strong>GST Information Number</strong></td>
+                                                @if (!empty($data->gstin))
+                                                    <td>{{ $data->gstin }}</td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                            </tr>
+                                            <tr>
                                                 <td><strong>Address</strong></td>
                                                 <td>{{$data->vendor_address}}</td>
                                             </tr>
@@ -63,10 +71,10 @@
                                             <thead>
                                                 <tr>
                                                     <th>Packaging Material Name</th>
-                                                    <th>Recommendation Engine Name</th>
-                                                    <th>Product Name</th>
+                                                    {{-- <th>Recommendation Engine Name</th> --}}
+                                                    {{-- <th>Product Name</th> --}}
                                                     <th>Commission Rate Per Kg</th>
-                                                    <th>Commission Rate Per Kg</th>
+                                                    {{-- <th>Commission Rate Per Quantity</th> --}}
                                                     <th>Vendor Price</th>
                                                     <th>Date Time</th>
                                                 </tr>
@@ -76,10 +84,10 @@
                                                 @foreach ($vendor_material_mapping as $value)
                                                     <tr>
                                                         <td>{{ $value->packaging_material->packaging_material_name }}</td>
-                                                        <td>{{ $value->recommendation_engine->engine_name }}</td>
-                                                        <td>{{ $value->product->product_name }}</td>
+                                                        {{-- <td>{{ $value->recommendation_engine->engine_name }}</td> --}}
+                                                        {{-- <td>{{ $value->product->product_name }}</td> --}}
                                                         <td>{{ $value->min_amt_profit }}</td>
-                                                        <td>{{ $value->min_stock_qty }}</td>
+                                                        {{-- <td>{{ $value->min_stock_qty }}</td> --}}
                                                         <td>{{ $value->vendor_price }}</td>
                                                         <td>{{ date('d-m-Y H:i A', strtotime($value->updated_at)) }}</td>
                                                     </tr>

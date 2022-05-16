@@ -47,9 +47,9 @@ class MeasurementUnitController extends Controller
                     ->editColumn('unit_symbol', function ($event) {
                         return $event->unit_symbol;
                     })
-                    ->editColumn('unit_form', function ($event) {
-	                    return measurementUnitForm($event->unit_form);                        
-	                })
+                    // ->editColumn('unit_form', function ($event) {
+	                //     return measurementUnitForm($event->unit_form);                        
+	                // })
                     ->editColumn('action', function ($event) {
                         $measurement_unit_view = checkPermission('measurement_unit_view');
                         $measurement_unit_edit = checkPermission('measurement_unit_edit');
@@ -72,7 +72,7 @@ class MeasurementUnitController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns([ 'unit_name','unit_symbol','unit_form', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns([ 'unit_name','unit_symbol', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -138,17 +138,19 @@ class MeasurementUnitController extends Controller
             if (isset($response[0])) {
                 errorMessage('Unit Symbol Already Exist', $msg_data);
             }
-            //unit_form  -  is actual unit_form
-            $getKeys = true;
-            $measurementUnitForm = measurementUnitForm('',$getKeys);
-            if (in_array( $request->unit_form, $measurementUnitForm))
-            {
-               $tableObject = MeasurementUnit::find($_GET['id']);
-               $msg = "Data Updated Successfully";
-            }
-            else{
-                errorMessage('Measurement Unit Form Does not Exists.', $msg_data);
-            }
+            // //unit_form  -  is actual unit_form
+            // $getKeys = true;
+            // $measurementUnitForm = measurementUnitForm('',$getKeys);
+            // if (in_array( $request->unit_form, $measurementUnitForm))
+            // {
+            //    $tableObject = MeasurementUnit::find($_GET['id']);
+            //    $msg = "Data Updated Successfully";
+            // }
+            // else{
+            //     errorMessage('Measurement Unit Form Does not Exists.', $msg_data);
+            // }
+            $tableObject = MeasurementUnit::find($_GET['id']);
+            $msg = "Data Updated Successfully";
         } else {
             $tableObject = new MeasurementUnit;
             $response = MeasurementUnit::where([['unit_name', strtolower($request->unit_name)]])->get()->toArray();
@@ -160,15 +162,16 @@ class MeasurementUnitController extends Controller
                 errorMessage('Unit Symbol Already Exist', $msg_data);
             }
             //unit_form  -  is actual unit_form
-            $getKeys = true;
-            $measurementUnitForm = measurementUnitForm('',$getKeys);
-            if (in_array( $request->unit_form, $measurementUnitForm))
-            {
-               $msg = "Data Updated Successfully";
-            }
-            else{
-                errorMessage('Measurement Unit Form Does not Exists.', $msg_data);
-            }
+            // $getKeys = true;
+            // $measurementUnitForm = measurementUnitForm('',$getKeys);
+            // if (in_array( $request->unit_form, $measurementUnitForm))
+            // {
+            //    $msg = "Data Updated Successfully";
+            // }
+            // else{
+            //     errorMessage('Measurement Unit Form Does not Exists.', $msg_data);
+            // }
+            $msg = "Data Updated Successfully";
         }
         $tableObject->unit_form = $request->unit_form;
         $tableObject->unit_name = $request->unit_name;

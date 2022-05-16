@@ -514,3 +514,21 @@ if (!function_exists('measurementUnitForm')) {
         return $returnArray;
     }
 }
+
+
+/**
+ * This function will be used to filter searched data.
+ */
+if (!function_exists('fullSearchQuery')) {
+
+    function fullSearchQuery($query, $word, $params)
+    {
+        $orwords = explode('|', $params);
+        $query = $query->where(function ($query) use ($word, $orwords) {
+            foreach ($orwords as $key) {
+                $query->orWhere($key, 'like', '%' . $word . '%');
+            }
+        });
+        return $query;
+    }
+}

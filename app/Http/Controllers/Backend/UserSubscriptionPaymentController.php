@@ -58,10 +58,18 @@ class UserSubscriptionPaymentController extends Controller
 	                    return subscriptionPaymentStatus($event->payment_status);
 	                })
                     ->editColumn('subscription_start', function ($event) {
-	                    return date('d-m-Y', strtotime($event->user->subscription_start));                        
+                        if(empty($event->user->subscription_start)){
+                            return " ";
+                        }else{
+                            return date('d-m-Y', strtotime($event->user->subscription_start));
+                        }
 	                })
                     ->editColumn('subscription_end', function ($event) {
-	                    return date('d-m-Y', strtotime($event->user->subscription_end));                        
+	                    if(empty($event->user->subscription_end)){
+                            return " ";
+                        }else{
+                            return date('d-m-Y', strtotime($event->user->subscription_end));
+                        }                        
 	                })
                     ->editColumn('action', function ($event) {
                         $user_subscription_payment_view = checkPermission('user_subscription_payment_view');

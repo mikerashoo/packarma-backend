@@ -40,11 +40,11 @@
                                         </tr>
                                         <tr>
                                             <td><strong>Minimum Weight</strong></td>
-                                            <td>{{$data->min_weight}}</td>
+                                            <td>{{$data->min_weight.' '.$data->measurement_unit->unit_symbol}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Maximum Weight</strong></td>
-                                            <td>{{$data->max_weight}}</td>
+                                            <td>{{$data->max_weight.' '.$data->measurement_unit->unit_symbol}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Product Name</strong></td>

@@ -20,13 +20,15 @@ class CreateVendorsTable extends Migration
             $table->string('vendor_email', 50);
             $table->string('vendor_password');
             $table->text('vendor_address')->nullable();
-            $table->string('pincode',10)->nullable();
+            $table->string('pincode', 10)->nullable();
             $table->integer('phone_country_id')->default(0)->comment('phone_code');
             $table->string('phone', 15);
             $table->integer('whatsapp_country_id')->default(0)->comment('whatsapp_phone_code');
             $table->string('whatsapp_no', 20)->nullable();
             $table->integer('currency_id')->default(1);
             $table->enum('is_featured', [1, 0])->default(0);
+            $table->string('gstin', 15)->nullable();
+            $table->string('gst_certificate')->nullable();
             $table->string('approval_status', 255)->default('pending')->comment('pending|accepted|rejected');
             $table->datetime('approved_on')->nullable();
             $table->integer('approved_by')->default(0)->comment('Admin Id');

@@ -32,12 +32,20 @@
                                             @endforeach
                                         </select><br/><br/>
                         			</div>
+                                    {{-- <div class="col-sm-6">
+                                        <label>GST Identification Number</label>
+                                        <input class="form-control" type="text" id="gstin" name="gstin"><br />
+                                    </div> --}}
                                     <div class="col-sm-6">
-                        				<label>City<span style="color:#ff0000">*</span></label>
-                        				<select class="select2 required" id="city" name="city" style="width: 100% !important;">
+                                        <label>Mobile Number</label>
+                                        <input class="form-control" type="text" id="mobile_no" name="mobile_no" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br />
+                                    </div>
+                                    <div class="col-sm-6">
+                        				<label>Country<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="country" name="country" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($city as $cities)
-                                                <option value="{{$cities->id}}">{{$cities->city_name}}</option>
+                                            @foreach($country as $countries)
+                                                <option value="{{$countries->id}}">{{$countries->country_name}}</option>
                                             @endforeach
                                         </select><br/><br/>
                         			</div>
@@ -51,11 +59,11 @@
                                         </select><br/><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Country<span style="color:#ff0000">*</span></label>
-                        				<select class="select2 required" id="country" name="country" style="width: 100% !important;">
+                        				<label>City<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="city" name="city" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($country as $countries)
-                                                <option value="{{$countries->id}}">{{$countries->country_name}}</option>
+                                            @foreach($city as $cities)
+                                                <option value="{{$cities->id}}">{{$cities->city_name}}</option>
                                             @endforeach
                                         </select><br/><br/>
                         			</div>

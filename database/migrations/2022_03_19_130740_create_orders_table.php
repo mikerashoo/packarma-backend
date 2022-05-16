@@ -21,7 +21,8 @@ class CreateOrdersTable extends Migration
             $table->integer('sub_category_id')->default(0);
             $table->integer('product_id')->default(0);
             $table->integer('shelf_life')->default(0);
-            $table->decimal('product_weight', $precision = 8, $scale = 3);
+            $table->decimal('product_weight', $precision = 8, $scale = 3)->default(0.000);
+            $table->integer('measurement_unit_id')->default(0);
             $table->integer('product_quantity')->default(0);
             $table->integer('measurement_unit_id')->default(0);
             $table->integer('storage_condition_id')->default(0);
