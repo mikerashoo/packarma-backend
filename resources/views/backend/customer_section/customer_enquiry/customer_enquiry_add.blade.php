@@ -77,6 +77,10 @@
                                         </select> 
                         			</div>
                                     <div class="col-sm-6 mb-3">
+                        				<label>Product Quantity<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" value=""  id="product_quantity" name="product_quantity" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
+                        			</div>
+                                    <div class="col-sm-6 mb-3">
                         				<label>Shelf Life<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" value=""  id="shelf_life" name="shelf_life" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'/>
                         			</div>

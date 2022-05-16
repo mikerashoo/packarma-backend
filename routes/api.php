@@ -57,7 +57,23 @@ Route::middleware(['basicAuth'])->group(function () {
         //Packaging Machine
         Route::post('/product_form/listing', 'ProductFormApiController@index');
 
+        //Packing Type (packaging type)
+        Route::post('/packaging_type/listing', 'PackingTypeApiController@index');
+
         //Customer enquiry
         // Route::post('/customer_enquiry/store', 'CustomerEnquiryApiController@index');
+
+        //Packaging Solution
+        Route::post('/packaging_solution/listing', 'PackagingSolutionApiController@index');
+
+        //Packaging Material
+        Route::post('/packaging_material/listing', 'PackagingMaterialApiController@index');
+
+        //City
+        Route::post('/city/listing', 'CityApiController@index');
+
+        //State
+        Route::post('/state/listing', 'StateApiController@index');
+        
     });
 });
