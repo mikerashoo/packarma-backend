@@ -13,13 +13,15 @@ class PackagingMaterial extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * Developed By : Maaz Ansari
-     * Created On : 11 may 2022
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 13/05/2022
      * Uses : The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
     protected $hidden = [
+        'packing_type',
+        'product_id',
         'status',
         'created_by',
         'updated_by',
@@ -27,24 +29,4 @@ class PackagingMaterial extends Model
         'created_at',
         'updated_at'
     ];
-
-    /**
-     * Developed By : Maaz Ansari
-     * Created On : 11 may 2022
-     * uses : to to get data of sub packing type in packaging material 
-     */
-    public function packing_type()
-    {
-        return $this->belongsTo('App\Models\PackingType');
-    }
-
-    /**
-     * Developed By : Maaz Ansari
-     * Created On : 11 may 2022
-     * uses : to to get data of product in packaging material 
-     */
-    public function product()
-    {
-        return $this->belongsTo('App\Models\Product');
-    }
 }

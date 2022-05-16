@@ -19,6 +19,7 @@ class EnquiryApiController extends Controller
     {
         $msg_data = array();
         try {
+            // vendor token
             $vendor_token = readVendorHeaderToken();
             if ($vendor_token) {
                 // print_r($vendor_token);
