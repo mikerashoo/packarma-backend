@@ -36,12 +36,33 @@
                                         @endforeach
                                         </select><br><br>
                                     </div>
+                                    {{-- <div class="col-sm-6">
+                                        <label>GST Identification Number</label>
+                                        <input class="form-control" type="text" id="gstin" name="gstin"><br />
+                                    </div> --}}
                                     <div class="col-sm-6">
-                                        <label>City<span style="color:#ff0000">*</span></label>
-                                        <select class="select2 required" id="city" name="city" style="width: 100% !important;">
+                                        <label>Address Name</label>
+                                        <input class="form-control" type="text" id="address_name" name="address_name"><br />
+                                    </div>
+                                    <div class="col-sm-6">
+                        				<label>Address Type</label>
+                        				<select class="select2" id="type" name="type" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach ($city as $val)
-                                                <option value="{{ $val->id }}">{{ $val->city_name }}</option>
+                                            @foreach($addressType as $key => $val)
+                                                <option value="{{$key}}">{{$val}}</option>
+                                            @endforeach
+                                        </select><br/>
+                        			</div>
+                                    <div class="col-sm-6">
+                                        <label>Mobile Number</label>
+                                        <input class="form-control" type="text" id="mobile_no" name="mobile_no" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br />
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Country<span style="color:#ff0000">*</span></label>
+                                        <select class="select2 required" id="country" name="country" style="width: 100% !important;" >
+                                            <option value="">Select</option>
+                                            @foreach ($country as $username)
+                                                <option value="{{ $username->id }}">{{ $username->country_name }}</option>
                                             @endforeach
                                         </select><br><br>
                                     </div>
@@ -56,17 +77,17 @@
                                         </select><br><br>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Country<span style="color:#ff0000">*</span></label>
-                                        <select class="select2 required" id="country" name="country" style="width: 100% !important;" >
+                                        <label>City<span style="color:#ff0000">*</span></label>
+                                        <select class="select2 required" id="city" name="city" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach ($country as $username)
-                                                <option value="{{ $username->id }}">{{ $username->country_name }}</option>
+                                            @foreach ($city as $val)
+                                                <option value="{{ $val->id }}">{{ $val->city_name }}</option>
                                             @endforeach
-                                        </select><br><br>
+                                        </select><br>
                                     </div>
                                     <div class="col-sm-6">
                                         <label>Address<span style="color:#ff0000">*</span></label>
-                                        <textarea class="form-control required" id="address" name="address" ></textarea><br><br>
+                                        <textarea class="form-control required" id="address" name="address" ></textarea><br>
                                     </div>
                                     <div class="col-sm-6">
                                         <label>Pincode<span style="color:#ff0000">*</span></label>

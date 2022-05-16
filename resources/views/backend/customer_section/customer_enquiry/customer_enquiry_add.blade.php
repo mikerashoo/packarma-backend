@@ -64,12 +64,21 @@
                                         </select>
                         			</div>
                                     <div class="col-sm-6 mb-3">
-                        				<label>Shelf Life<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" value=""  id="shelf_life" name="shelf_life" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'/>
+                                        <label>Product Weight<span style="color:#ff0000">*</span></label>
+                                        <input class="form-control required" type="text" value=""  id="product_weight" name="product_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'/>
+                                    </div>
+                                    <div class="col-sm-6 mb-3">
+                        				<label>Measurement Unit<span style="color:#ff0000">*</span></label>
+                                        <select class="form-control select2 required" id="measurement_unit" name="measurement_unit" value=""  style="width: 100% !important;">
+                                            <option value="">Select</option>
+                                            @foreach ($measurement_unit as $units)
+                                                <option value="{{ $units->id }}">{{ $units->unit_symbol }}</option>
+                                            @endforeach
+                                        </select> 
                         			</div>
                                     <div class="col-sm-6 mb-3">
-                        				<label>Product Weight<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" value=""  id="product_weight" name="product_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'/>
+                        				<label>Shelf Life<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" value=""  id="shelf_life" name="shelf_life" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'/>
                         			</div>
                                     <div class="col-sm-6 mb-3">
                         				<label>Storage Condition<span style="color:#ff0000">*</span></label>
@@ -117,10 +126,6 @@
                                         </select>
                         			</div>
                                     <div class="col-sm-6 mb-3">
-                        				<label>Quantity<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" value=""  id="quantity" name="quantity" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'/>
-                        			</div>
-                                    <div class="col-sm-6 mb-3">
                         				<label>Quote Type<span style="color:#ff0000">*</span></label>
                         				<select class="form-control select2 required" id="quote_type" name="quote_type" value=""  style="width: 100% !important;">
                                             <option value="">Select</option>
@@ -154,11 +159,11 @@
                                             @foreach ($city as $cities)
                                                     <option value="{{ $cities->id }}">{{ $cities->city_name }}</option>
                                             @endforeach
-                                        </select><br />
+                                        </select>
                         			</div>
                                     <div class="col-sm-6 mb-3">
                         				<label>Address<span style="color:#ff0000">*</span></label>
-                        				<textarea class="form-control required" id="address" value="" name="address"></textarea><br>
+                        				<textarea class="form-control required" id="address" value="" name="address"></textarea>
                         			</div>
                                     <div class="col-sm-6 mb-3">
                         				<label>Pincode<span style="color:#ff0000">*</span></label>

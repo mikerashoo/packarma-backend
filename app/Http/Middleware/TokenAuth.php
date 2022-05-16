@@ -29,14 +29,14 @@ class TokenAuth
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             $return_array['success'] = '4';
             $return_array['message'] = 'Token Expired';
-            return response()->json($return_array, 500);
+            return response()->json($return_array, 200);
             // echo json_encode($return_array);
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
             $return_array['message'] = 'Authentication Failed';
-            return response()->json($return_array, 500);
+            return response()->json($return_array, 200);
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
             $return_array['message'] = 'Authentication Failed';
-            return response()->json($return_array, 500);
+            return response()->json($return_array, 200);
         }
         Session::flash('tokenData', $token);
         return $next($request);

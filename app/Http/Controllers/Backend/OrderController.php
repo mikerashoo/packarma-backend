@@ -15,6 +15,7 @@ use App\Models\StorageCondition;
 use App\Models\PackagingMachine;
 use App\Models\ProductForm;
 use App\Models\PackingType;
+use App\Models\MeasurementUnit ;
 use App\Models\PackagingTreatment;
 use App\Models\PackagingMaterial;
 use App\Models\Country;
@@ -304,7 +305,7 @@ class OrderController extends Controller
     */    
     // 'storage_condition', table pending
     public function viewOrder($id) {
-        $data['data'] = Order::with('user','vendor','category','sub_category','product','packaging_machine','product_form','packing_type','packaging_treatment','country','currency')->find($id);
+        $data['data'] = Order::with('user','vendor','category','sub_category','product','packaging_machine','product_form','packing_type','packaging_treatment','country','currency','measurement_unit')->find($id);
         return view('backend/order/order_list/order_view', $data);
     }
 

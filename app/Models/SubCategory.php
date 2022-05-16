@@ -13,6 +13,17 @@ class SubCategory extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'sub_category_name',
+        'category_id',
+        'sub_category_image'
+    ];
+
+    /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 06/05/2022
      * Uses : The attributes that should be hidden for serialization.

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\VendorPayment;
+use App\Models\VendorQuotation;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class PaymentApiController extends Controller
@@ -34,6 +37,20 @@ class PaymentApiController extends Controller
                 $offset = ($page_no - 1) * $limit;
 
                 $data = VendorPayment::with('order')->where([['vendor_id', $vendor_id], ['payment_status', $request->payment_status]]);
+                $awaiting_payments = Order::where('vendor_id', $vendor_id)->sum('vendor_pending_payment');
+                $grand_total = Order::where('vendor_id', $vendor_id)->sum('grand_total');
+                $awaiting_orders =
+                    VendorQuotation::where('vendor_id', $vendor_id)->where(function ($query) {
+                        $query->where('enquiry_status', '=', 'quoted')
+                            ->orWhere('enquiry_status', '=', 'viewed')
+                            ->orWhere('enquiry_status', '=', 'requote');
+                    })->get()->count();
+
+                $payments_received = Order::selectRaw('SUM(grand_total - vendor_pending_payment) as payments_received')
+                    ->where('vendor_id', $vendor_id)
+                    ->first();
+
+
 
                 $paymentData = VendorPayment::whereRaw("1 = 1");
 
@@ -67,6 +84,10 @@ class PaymentApiController extends Controller
                 //     $i++;
                 // }
                 $responseData['result'] = $data;
+                $responseData['awaiting_payments'] = $awaiting_payments;
+                $responseData['payments_received'] = $payments_received->payments_received;
+                // $responseData['payments_received'] = $grand_total - $awaiting_payments;
+                $responseData['awaiting_orders'] = $awaiting_orders;
                 $responseData['total_records'] = $total_records;
                 successMessage('data_fetched_successfully', $responseData);
             } else {

@@ -38,7 +38,7 @@ class VendorWarehouseController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = VendorWarehouse::with('vendor','city','state');              
+	            $query = VendorWarehouse::with('vendor','city','state')->orderBy('updated_at','desc');              
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                                             
@@ -59,14 +59,14 @@ class VendorWarehouseController extends Controller
                     ->editColumn('vendor_name', function ($event) {
 	                    return $event->vendor->vendor_name;
 	                })
-                    ->editColumn('address', function ($event) {
-	                    return $event->address;
+                    ->editColumn('state', function ($event) {
+	                    return $event->state->state_name;
 	                })
                     ->editColumn('city', function ($event) {
 	                    return $event->city->city_name;
 	                })
-                    ->editColumn('state', function ($event) {
-	                    return $event->state->state_name;
+                    ->editColumn('address', function ($event) {
+	                    return $event->address;
 	                })
 	                ->editColumn('action', function ($event) {
                         $vendor_warehouse_view = checkPermission('vendor_warehouse_view');
@@ -90,7 +90,7 @@ class VendorWarehouseController extends Controller
                         return $actions;
 	                }) 
 	                ->addIndexColumn() 
-	                ->rawColumns(['warehouse_name', 'vendor_name', 'address', 'city', 'state', 'action'])->setRowId('id')->make(true);
+	                ->rawColumns(['warehouse_name', 'vendor_name', 'state', 'city', 'address', 'action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -159,6 +159,31 @@ class VendorWarehouseController extends Controller
             if(isset($response[0])){
                 errorMessage($request->warehouse_name.' warehouse is Already Exist to Selected Vendor', $msg_data);
             }
+            if(isset($request->gstin)){
+                $response = VendorWarehouse::where([['gstin', $request->gstin], ['id', '<>', $_GET['id']]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('GST Identification Number Already Exist', $msg_data);
+                } 
+            }
+            if(isset($request->mobile_no)){
+                $maxPhoneCodeLength = Country::where('id', $request->country)->get()->toArray();
+                $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
+                if(strlen($request->mobile_no) != $allowedPhoneLength){
+                    errorMessage("Mobile Number Should be $allowedPhoneLength digit long.", $msg_data);
+                }
+                $response = VendorWarehouse::where([['mobile_no', $request->mobile_no], ['id', '<>', $_GET['id']]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('Mobile Number Already Exist', $msg_data);
+                } 
+            }
+            $response = VendorWarehouse::where([['address', strtolower($request->address)], ['id', '<>', $_GET['id']]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Address Already Exist', $msg_data);
+            }
+            $response = VendorWarehouse::where([['pincode', $request->pincode], ['id', '<>', $_GET['id']]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Pincode Already Exist', $msg_data);
+            }
             $tblObj = VendorWarehouse::find($_GET['id']);
             $msg = "Data Updated Successfully";
         } else {
@@ -167,10 +192,41 @@ class VendorWarehouseController extends Controller
             if(isset($response[0])){
                 errorMessage($request->warehouse_name.' warehouse is Already Exist to Selected Vendor', $msg_data);
             }
+            if(isset($request->gstin)){
+                $response = VendorWarehouse::where([['gstin', $request->gstin]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('GST Information Number Already Exist', $msg_data);
+                } 
+            }
+            if(isset($request->mobile_no)){
+                $maxPhoneCodeLength = Country::where('id', $request->country)->get()->toArray();
+                $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
+                if(strlen($request->mobile_no) != $allowedPhoneLength){
+                    errorMessage("Mobile Number Should be $allowedPhoneLength digit long.", $msg_data);
+                }
+                $response = VendorWarehouse::where([['mobile_no', $request->mobile_no]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('Mobile Number Already Exist', $msg_data);
+                } 
+            }
+            $response = VendorWarehouse::where([['address', strtolower($request->address)]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Address Already Exist', $msg_data);
+            }
+            $response = VendorWarehouse::where([['pincode', $request->pincode]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Pincode Already Exist', $msg_data);
+            }
             $msg = "Data Saved Successfully";
         }
         $tblObj->warehouse_name = $request->warehouse_name;
         $tblObj->vendor_id = $request->vendor;
+        if(isset($request->gstin)){
+            $tblObj->gstin = $request->gstin;
+        }
+        if(isset($request->mobile_no)){
+            $tblObj->mobile_no = $request->mobile_no;
+        }
         $tblObj->city_id = $request->city;
         $tblObj->state_id = $request->state;
         $tblObj->country_id = $request->country;

@@ -19,25 +19,42 @@ class CustomerEnquiry extends Model
      */
     protected $fillable = [
         'description',
-        'user',
+        'user_id',
         'order_id',
         'category',
         'sub_category',
         'product',
         'shelf_life',
         'product_weight',
+        'measurement_unit_id',
         'storage_condition',
         'packaging_machine',
         'product_form',
         'packing_type',
         'packaging_treatment',
-        'quantity',
-        'quote_type',
+        // 'quantity',
+        // 'quote_type',
         // 'country,
-        'state',
-        'city',
+        // 'state',
+        // 'city',
         'pincode',
-        'address'
+        // 'address'
+    ];
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 11/05/2022
+     * Uses : The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -201,12 +218,12 @@ class CustomerEnquiry extends Model
     }
 
     /**
-     * Developed By : Maaz Ansari
-     * Created On : 12-may-2022
-     * uses : to get data of enquiry related to vendor orders
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 11-may-2022
+     * uses : to get data of measurement unit in customer enquiry table
      */
-    public function order_enquiry()
+    public function measurement_unit()
     {
-        return $this->hasOneThrough('App\Models\Order', 'App\Models\Vendor');
+        return $this->belongsTo('App\Models\MeasurementUnit');
     }
 }

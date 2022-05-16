@@ -29,8 +29,6 @@ class ProductApiController extends Controller
             if ($token) {
                 $page_no = 1;
                 $limit = 10;
-
-
                 if (isset($request->page_no) && !empty($request->page_no)) {
                     $page_no = $request->page_no;
                 }
@@ -38,9 +36,7 @@ class ProductApiController extends Controller
                     $limit = $request->limit;
                 }
                 $offset = ($page_no - 1) * $limit;
-
                 $data = Product::with('category', 'sub_category')->where('status', '1');
-
                 $productData = Product::whereRaw("1 = 1");
                 if ($request->product_id) {
                     $productData = $productData->where('id', $request->product_id);
@@ -53,20 +49,15 @@ class ProductApiController extends Controller
                 if (empty($productData->first())) {
                     errorMessage(__('product.product_not_found'), $msg_data);
                 }
-
                 // if($request->id)
                 // {
                 //     $data = $data->where('id',$request->id);
                 // }
-
                 if (isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search, 'product_name|product_description');
                 }
-
                 $total_records = $data->get()->count();
-
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-
                 $i = 0;
                 foreach ($data as $row) {
                     $data[$i]['product_image'] = getFile($row['product_image'], 'product');

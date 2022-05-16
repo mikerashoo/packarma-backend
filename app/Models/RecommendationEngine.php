@@ -100,4 +100,14 @@ class RecommendationEngine extends Model
     {
         return $this->belongsTo('App\Models\StorageCondition');
     }
+
+    /**
+        * Developed By : Pradyumn Dwivedi
+        * Created On : 11-may-2022
+        * uses : to get data of storage condition in recommendation engine
+    */
+    public function measurement_unit()
+    {
+        return $this->belongsTo('App\Models\MeasurementUnit');
+    }
 }

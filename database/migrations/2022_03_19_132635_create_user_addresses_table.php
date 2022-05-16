@@ -14,9 +14,13 @@ class CreateUserAddressesTable extends Migration
     public function up()
     {
         Schema::create('user_addresses', function (Blueprint $table) {
-            $table->id();  
+            $table->id();
             $table->integer('user_id');
-            $table->integer('city_id');
+            $table->string('address_name',100)->nullable();
+            $table->string('gstin', 15)->nullable();
+            $table->string('type', 255)->default('shipping')->comment('shipping|billing');
+            $table->string('mobile_no',20)->nullable();
+            $table->integer('city_id')->default(0);
             $table->integer('state_id')->default(0);
             $table->integer('country_id')->default(1);
             $table->text('address')->nullable();

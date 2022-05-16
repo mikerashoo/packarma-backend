@@ -52,9 +52,7 @@ class CategoryApiController extends Controller
                 if (isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search, 'category_name');
                 }
-
                 $total_records = $data->get()->count();
-
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
 
                 $i = 0;

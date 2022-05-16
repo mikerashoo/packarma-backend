@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\ProductForm;
 use App\Models\PackingType;
 use App\Models\StorageCondition;
+use App\Models\MeasurementUnit;
 use App\Models\PackagingTreatment;
 use App\Models\PackagingMachine;
 use App\Models\PackagingMaterial;
@@ -67,16 +68,16 @@ class RecommendationEngineController extends Controller
                         $packaging_solution_status = checkPermission('packaging_solution_status');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($packaging_solution_view) {
-                            $actions .= '<a href="recommendation_engine_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
+                            $actions .= '<a href="packaging_solution_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
                         if ($packaging_solution_edit) {
-                            $actions .= ' <a href="recommendation_engine_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                            $actions .= ' <a href="packaging_solution_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
                         if ($packaging_solution_status) {
                             if ($event->status == '1') {
-                                $actions .= ' <input type="checkbox" data-url="publishRecommendationEngine" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                                $actions .= ' <input type="checkbox" data-url="publishPackagingSolution" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
                             } else {
-                                $actions .= ' <input type="checkbox" data-url="publishRecommendationEngine" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                                $actions .= ' <input type="checkbox" data-url="publishPackagingSolution" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
                             }
                         }
                         $actions .= '</span>';
@@ -108,6 +109,7 @@ class RecommendationEngineController extends Controller
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
+        $data['measurement_unit'] = MeasurementUnit::all();
         $data['storage_condition'] = StorageCondition::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
@@ -139,15 +141,16 @@ class RecommendationEngineController extends Controller
     public function edit($id)
     {
         $data['data'] = RecommendationEngine::find($id);
+        $data['vendor'] = Vendor::all();
         $data['product'] = Product::all();
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
+        $data['measurement_unit'] = MeasurementUnit::all();
         $data['storage_condition'] = StorageCondition::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['packaging_material'] = PackagingMaterial::all();
-        $data['vendor'] = Vendor::all();
         return view('backend/recommendation_engine/recommendation_engine_edit', $data);
     }
 
@@ -191,6 +194,7 @@ class RecommendationEngineController extends Controller
         $tableObject->max_shelf_life = $request->max_shelf_life;
         $tableObject->min_weight = $request->min_weight;
         $tableObject->max_weight = $request->max_weight;
+        $tableObject->measurement_unit_id = $request->measurement_unit;
         $tableObject->category_id = $request->product_category;
         $tableObject->product_form_id = $request->product_form;
         $tableObject->packing_type_id = $request->packing_type;
@@ -222,6 +226,7 @@ class RecommendationEngineController extends Controller
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
+        $data['measurement_unit'] = MeasurementUnit::all();
         $data['storage_condition'] = StorageCondition::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
@@ -269,6 +274,7 @@ class RecommendationEngineController extends Controller
             'display_shelf_life' => 'required|integer',
             'min_weight' => 'required|numeric',
             'max_weight' => 'required|numeric',
+            'measurement_unit' => 'required|integer',
             'product_category' => 'required|integer',
             'product_form' => 'required|integer',
             'packing_type' => 'required|integer',

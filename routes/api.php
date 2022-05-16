@@ -29,5 +29,35 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //Category
         Route::post('/category/listing', 'CategoryApiController@index');
+
+        //Sub Category
+        Route::post('/sub_category/listing', 'SubCategoryApiController@index');
+
+        //Sub Category
+        Route::post('/sub_category/listing', 'SubCategoryApiController@index');
+
+        //Banner
+        Route::post('/banner/listing', 'BannerApiController@index');
+
+        //Packaging Treatment
+        Route::post('/packaging_treatment/listing', 'PackagingTreatmentApiController@index');
+
+        //Subscription
+        Route::post('/subscription/listing', 'SubscriptionApiController@index');
+
+        //Measurement Unit
+        Route::post('/measurement_unit/listing', 'MeasurementUnitApiController@index');
+
+        //Measurement Unit
+        Route::post('/storage_condition/listing', 'StorageConditionApiController@index');
+
+        //Packaging Machine
+        Route::post('/packaging_machine/listing', 'PackagingMachineApiController@index');
+
+        //Packaging Machine
+        Route::post('/product_form/listing', 'ProductFormApiController@index');
+
+        //Customer enquiry
+        // Route::post('/customer_enquiry/store', 'CustomerEnquiryApiController@index');
     });
 });
