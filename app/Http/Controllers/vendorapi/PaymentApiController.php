@@ -35,7 +35,7 @@ class PaymentApiController extends Controller
                     $limit = $request->limit;
                 }
                 $offset = ($page_no - 1) * $limit;
-
+                // vendor payment list
                 $data = VendorPayment::with('order')->where([['vendor_id', $vendor_id], ['payment_status', $request->payment_status]]);
                 $awaiting_payments = Order::where('vendor_id', $vendor_id)->sum('vendor_pending_payment');
                 $grand_total = Order::where('vendor_id', $vendor_id)->sum('grand_total');
