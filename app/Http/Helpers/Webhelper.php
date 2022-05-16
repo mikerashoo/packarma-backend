@@ -514,3 +514,21 @@ if (!function_exists('measurementUnitForm')) {
         return $returnArray;
     }
 }
+
+/**
+ *   Created by : Pradyumn Dwivedi
+ *   Created On : 11-May-2022
+ *   Uses: This function will be used to full search data in api.
+ */
+if (!function_exists('fullSearchQuery')) {
+    function fullSearchQuery($query, $word, $params)
+    {
+        $orwords = explode('|', $params);
+        $query = $query->where(function ($query) use ($word, $orwords) {
+            foreach ($orwords as $key) {
+                $query->orWhere($key, 'like', '%' . $word . '%');
+            }
+        });
+        return $query;
+    }
+}
