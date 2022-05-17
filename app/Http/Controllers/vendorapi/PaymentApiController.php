@@ -44,7 +44,10 @@ class PaymentApiController extends Controller
 
 
                 // vendor payment list
-                $data = VendorPayment::with('order')->where([['vendor_id', $vendor_id], ['payment_status', $status]]);
+                $data = VendorPayment::select('id', 'order_id', 'order_id', 'payment_mode', 'amount', 'remark', 'transaction_date')
+                    ->with(['order' => function ($query) {
+                        $query->select('id', 'product_weight', 'product_quantity', 'mrp', 'vendor_amount', 'vendor_pending_payment', 'vendor_payment_status', 'order_delivery_status');
+                    }])->where([['vendor_id', $vendor_id], ['payment_status', $status]]);
                 $awaiting_payments = Order::where('vendor_id', $vendor_id)->sum('vendor_pending_payment');
                 $grand_total = Order::where('vendor_id', $vendor_id)->sum('grand_total');
                 $awaiting_orders =

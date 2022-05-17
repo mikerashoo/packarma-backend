@@ -40,8 +40,10 @@ class PackagingMaterialApiController extends Controller
                 }
                 $offset = ($page_no - 1) * $limit;
 
-                $data = VendorMaterialMapping::with('vendor', 'packaging_material')->where('status', '1')->where('vendor_id', $vendor_id);
-                // $data = PackagingMaterial::with('product', 'packing_type')->where('status', '1');
+                // $data = VendorMaterialMapping::with('packaging_material')->where('status', '1')->where('vendor_id', $vendor_id);
+                $data = VendorMaterialMapping::select('id', 'vendor_price', 'packaging_material_id')->with(['packaging_material' => function ($query) {
+                    $query->select('id', 'packaging_material_name', 'shelf_life', 'wvtr', 'otr', 'cof', 'sit', 'gsm', 'special_feature');
+                }])->where('status', '1')->where('vendor_id', $vendor_id);
 
                 $materialData = VendorMaterialMapping::whereRaw("1 = 1");
                 // $materialData = PackagingMaterial::whereRaw("1 = 1");
@@ -74,6 +76,8 @@ class PackagingMaterialApiController extends Controller
                 // }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
+                // print_r($data);
+                // die();
                 successMessage('data_fetched_successfully', $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);

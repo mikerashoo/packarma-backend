@@ -48,8 +48,8 @@ class RegisterApiController extends Controller
                 \Log::info("Existing vendor updated with email id: " . $request->vendor_email . " and phone number: " . $request->phone);
             }
             $vendor = $vendorData->toArray();
-            $vendor['created_at'] = $vendorData->created_at->toDateTimeString();
-            $vendor['updated_at'] = $vendorData->updated_at->toDateTimeString();
+            $vendorData->created_at->toDateTimeString();
+            $vendorData->updated_at->toDateTimeString();
             // $input = array();
 
             // if (!empty($input)) {
