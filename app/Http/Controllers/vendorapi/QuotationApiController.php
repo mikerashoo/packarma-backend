@@ -48,10 +48,9 @@ class QuotationApiController extends Controller
                     errorMessage(__('quotation.quotation_not_found'), $msg_data);
                 }
 
-                // if($request->id)
-                // {
-                //     $data = $data->where('id',$request->id);
-                // }
+                if ($request->id) {
+                    $data = $data->where('id', $request->id);
+                }
 
                 if (isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search, 'vendor_price|commission_amt');

@@ -64,10 +64,9 @@ class PaymentApiController extends Controller
                     errorMessage(__('payment.payment_not_found'), $msg_data);
                 }
 
-                // if($request->id)
-                // {
-                //     $data = $data->where('id',$request->id);
-                // }
+                if ($request->id) {
+                    $data = $data->where('id', $request->id);
+                }
 
                 if (isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search, 'amount|remark');
