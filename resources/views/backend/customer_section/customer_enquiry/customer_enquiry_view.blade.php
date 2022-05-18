@@ -45,10 +45,10 @@
                                                         <td><strong>User Name</strong></td>
                                                         <td>{{$data['user']->name;}}</td>
                                                     </tr>
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <td><strong>Order ID</strong></td>
                                                         <td>{{$data->order_id;}}</td>
-                                                    </tr>
+                                                    </tr> --}}
                                                     <tr>
                                                         <td><strong>Description</strong></td>
                                                         <td>{{$data->description;}}</td>
@@ -58,24 +58,8 @@
                                                         <td>{{customerEnquiryQuoteType($data->quote_type); }}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><strong>Country</strong></td>
-                                                        <td>{{$data['country']->country_name;}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>State</strong></td>
-                                                        <td>{{$data['state']->state_name;}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>City</strong></td>
-                                                        <td>{{$data['city']->city_name;}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Address</strong></td>
-                                                        <td>{{$data->address;}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><strong>Pincode</strong></td>
-                                                        <td>{{$data->pincode;}}</td>
+                                                        <td><strong>Address Type</strong></td>
+                                                        <td>{{addressType($data['user_address']->type);}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Status</strong></td>
@@ -96,16 +80,16 @@
                                             <div class="table-responsive">
                                                 <table class="table table-striped table-bordered">
                                                     <tr>
-                                                        <td class="col-sm-5"><strong>Product Name</strong></td>
-                                                        <td>{{$data['product']->product_name;}}</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td><strong>Category</strong></td>
                                                         <td>{{$data['category']->category_name;}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Sub Category</strong></td>
                                                         <td>{{$data['sub_category']->sub_category_name }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="col-sm-5"><strong>Product Name</strong></td>
+                                                        <td>{{$data['product']->product_name;}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Shelf Life</strong></td>

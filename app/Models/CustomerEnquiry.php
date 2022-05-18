@@ -20,25 +20,20 @@ class CustomerEnquiry extends Model
     protected $fillable = [
         'description',
         'user_id',
-        'order_id',
-        'category',
-        'sub_category',
-        'product',
+        'category_id',
+        'sub_category_id',
+        'product_id',
         'shelf_life',
         'product_weight',
         'measurement_unit_id',
-        'storage_condition',
-        'packaging_machine',
-        'product_form',
-        'packing_type',
-        'packaging_treatment',
-        // 'quantity',
-        // 'quote_type',
-        // 'country,
-        // 'state',
-        // 'city',
-        'pincode',
-        // 'address'
+        'product_quantity',
+        'storage_condition_id',
+        'packaging_machine_id',
+        'product_form_id',
+        'packing_type_id',
+        'packaging_treatment_id',
+        'recommendation_engine_id',
+        'user_address_id',
     ];
 
     /**
@@ -225,5 +220,26 @@ class CustomerEnquiry extends Model
     public function measurement_unit()
     {
         return $this->belongsTo('App\Models\MeasurementUnit');
+    }
+
+    
+    /**
+        * Developed By : Pradyumn Dwivedi
+        * Created On : 11-may-2022
+        * uses : to get data of user address in customer enquiry table
+    */   
+    public function user_address()
+    {
+        return $this->belongsTo('App\Models\UserAddress');
+    }
+
+    /**
+        * Developed By : Pradyumn Dwivedi
+        * Created On : 17-may-2022
+        * uses : to get data of recommendation engine data customer enquiry table
+    */   
+    public function recommendation_engine()
+    {
+        return $this->belongsTo('App\Models\RecommendationEngine');
     }
 }

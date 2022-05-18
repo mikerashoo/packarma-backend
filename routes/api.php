@@ -22,13 +22,13 @@ Route::middleware(['basicAuth'])->group(function () {
     Route::post('/forgot_password_api', 'ForgotPasswordApiController@index');
     Route::middleware(['tokenAuth'])->group(function () {
         //Product
-        Route::post('/products/listing', 'ProductApiController@index');
-        // Route::post('/products/store', 'ProductApiController@store');
-        // Route::post('/products/update', 'ProductApiController@update');
-        // Route::post('/products/destroy', 'ProductApiController@destroy');
+    	Route::post('/products/listing', 'ProductApiController@index');
+    	// Route::post('/products/store', 'ProductApiController@store');
+    	// Route::post('/products/update', 'ProductApiController@update');
+    	// Route::post('/products/destroy', 'ProductApiController@destroy');
 
         //Category
-        Route::post('/category/listing', 'CategoryApiController@index');
+    	Route::post('/category/listing', 'CategoryApiController@index');
 
         //Sub Category
         Route::post('/sub_category/listing', 'SubCategoryApiController@index');
@@ -41,6 +41,7 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //Packaging Treatment
         Route::post('/packaging_treatment/listing', 'PackagingTreatmentApiController@index');
+        Route::post('/packaging_treatment/featured_listing', 'PackagingTreatmentApiController@featured_index');
 
         //Subscription
         Route::post('/subscription/listing', 'SubscriptionApiController@index');
@@ -60,11 +61,12 @@ Route::middleware(['basicAuth'])->group(function () {
         //Packing Type (packaging type)
         Route::post('/packaging_type/listing', 'PackingTypeApiController@index');
 
-        //Customer enquiry
-        // Route::post('/customer_enquiry/store', 'CustomerEnquiryApiController@index');
-
         //Packaging Solution
-        Route::post('/packaging_solution/listing', 'PackagingSolutionApiController@index');
+        Route::post('/packaging_solution/get_packaging_solution', 'PackagingSolutionApiController@index');
+
+        //Customer enquiry
+        Route::post('/customer_enquiry/my_place_enquiry', 'CustomerEnquiryApiController@store');
+        Route::post('/customer_enquiry/my_enquiry_listing', 'CustomerEnquiryApiController@index');
 
         //Packaging Material
         Route::post('/packaging_material/listing', 'PackagingMaterialApiController@index');
@@ -74,6 +76,9 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //State
         Route::post('/state/listing', 'StateApiController@index');
+
+        //User Address
+        Route::post('/user_address/my_listing', 'UserAddressApiController@index');
         
     });
 });

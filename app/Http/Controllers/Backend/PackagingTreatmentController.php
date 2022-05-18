@@ -49,6 +49,26 @@ class PackagingTreatmentController extends Controller
                     ->editColumn('packaging_treatment_description', function ($event) {
                         return $event->packaging_treatment_description;
                     })
+                    ->editColumn('mark_featured', function ($event) {
+                        $packaging_treatment_edit = checkPermission('packaging_treatment_edit');
+                        $featured = '';
+                        if($packaging_treatment_edit) {
+                            if($event->is_featured == '1') {
+                                $featured .= ' <input type="checkbox" data-url="featuredPackagingTreatment" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
+                            } else {
+                                $featured .= ' <input type="checkbox" data-url="featuredPackagingTreatment" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
+                            }
+                        }else{
+                            $db_featured = $event->is_featured;
+                            $bg_class = 'bg-light-danger';
+                            if($db_featured == '1'){
+                                $bg_class = 'bg-light-success';
+                            }
+                            $displayFeaturedStatus = displayFeatured($db_featured);
+                            $featured = '<span class=" badge badge-pill '.$bg_class.' mb-2 mr-2">'. $displayFeaturedStatus.'</span>'; 
+                        }
+	                    return $featured;
+	                })
                     ->editColumn('action', function ($event) {
                         $packaging_treatment_view = checkPermission('packaging_treatment_view');
                         $packaging_treatment_edit = checkPermission('packaging_treatment_edit');
@@ -71,7 +91,7 @@ class PackagingTreatmentController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['packaging_treatment_name', 'packaging_treatment_description', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['packaging_treatment_name', 'packaging_treatment_description','mark_featured','action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -207,6 +227,27 @@ class PackagingTreatmentController extends Controller
         }
         else {
         	successMessage('Unpublished', $msg_data);
+        }
+    }
+
+    /**
+       *   created by : Pradyumn Dwivedi
+       *   Created On : 18-May-2022
+       *   Uses :  To Mark Featured Packaging Treatment
+       *   @param Request request
+       *   @return Response
+    */
+    public function markFeatured(Request $request)
+    {
+        $msg_data = array();
+        $recordData = PackagingTreatment::find($request->id);
+        $recordData->is_featured = $request->status;
+        $recordData->save();
+        if($request->status == 1) {
+        	successMessage('Packaging Treatment mark as Featured', $msg_data);
+        }
+        else {
+        	successMessage('Packaging Treatment unmark as Featured', $msg_data);
         }
     }
 

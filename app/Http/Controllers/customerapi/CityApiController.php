@@ -5,6 +5,8 @@ namespace App\Http\Controllers\customerapi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\City;
+use App\Models\State;
+use App\Models\Country;
 use Response;
 
 class CityApiController extends Controller
@@ -25,8 +27,20 @@ class CityApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                $validationErrors = $this->validateRequest($request);
+                if (count($validationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                }
                 $page_no=1;
                 $limit=10;
+                
+                if(isset($request->country_id)){
+                    $country_id = $request->country_id;
+                }
+                else{
+                    $country_id = 1;
+                }
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -34,8 +48,8 @@ class CityApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = City::with('state','country')->where('status','1');
-                $cityData = City::with('state','country')->whereRaw("1 = 1");
+                $data = City::with('state','country')->where([['state_id', $request->state_id],['country_id', $country_id]]);
+                $cityData = City::whereRaw("1 = 1");
                 if($request->city_id)
                 {
                     $cityData = $cityData->where('id',$request->city_id);
@@ -69,5 +83,18 @@ class CityApiController extends Controller
             \Log::error("City fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
+    }
+
+    /**
+     * Validate request for login.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */
+    private function validateRequest(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'state_id' => 'required|numeric',
+        ])->errors();
     }
 }
