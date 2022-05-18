@@ -26,6 +26,11 @@ class SubCategoryApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                $validationErrors = $this->validateRequest($request);
+                if (count($validationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                }
                 $page_no=1;
                 $limit=10;
                 if(isset($request->page_no) && !empty($request->page_no)) {
@@ -79,5 +84,20 @@ class SubCategoryApiController extends Controller
             \Log::error("Sub Category fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
+    }
+
+    /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 17/05/2022
+     * Uses : Validate request for packaging solution.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */
+    private function validateRequest(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'category_id' => 'required|numeric',
+        ])->errors();
     }
 }
