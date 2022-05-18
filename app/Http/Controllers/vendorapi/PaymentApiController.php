@@ -7,6 +7,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\VendorPayment;
 use App\Models\VendorQuotation;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Response;
 
@@ -65,6 +66,12 @@ class PaymentApiController extends Controller
 
                 $paymentData = VendorPayment::whereRaw("1 = 1");
 
+
+                if ($request->last_no_of_days && is_numeric($request->last_no_of_days)) {
+                    $date_from_no_of_days = Carbon::now()->subDays($request->last_no_of_days);
+                    $paymentData = $paymentData->whereDate('created_at', '>=', $date_from_no_of_days);
+                    $data = $data->whereDate('created_at', '>=', $date_from_no_of_days);
+                }
                 // if ($request->payment_status) {
                 //     $paymentData = $paymentData->where('payment_status', $request->payment_status);
                 //     $data = $data->where('payment_status', $request->payment_status);

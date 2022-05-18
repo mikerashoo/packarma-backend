@@ -64,9 +64,9 @@ class QuotationApiController extends Controller
 
 
 
-                if ($request->product_id) {
-                    $quotationData = $quotationData->where($main_table . '' . '.product_id', $request->product_id);
-                    $data = $data->where($main_table . '' . '.product_id', $request->product_id);
+                if ($request->enquiry_status) {
+                    $quotationData = $quotationData->where($main_table . '' . '.enquiry_status', $request->enquiry_status);
+                    $data = $data->where($main_table . '' . '.enquiry_status', $request->enquiry_status);
                 }
 
                 if ($request->last_no_of_days && is_numeric($request->last_no_of_days)) {
@@ -117,7 +117,7 @@ class QuotationApiController extends Controller
                 }
 
                 if (isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search, 'vendor_price|commission_amt');
+                    $data = fullSearchQuery($data, $request->search, 'vendor_price|product_name');
                 }
 
                 $total_records = $data->get()->count();

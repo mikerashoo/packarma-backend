@@ -115,7 +115,7 @@ class EnquiryApiController extends Controller
                 }
 
                 if (isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search, 'vendor_price|commission_amt');
+                    $data = fullSearchQuery($data, $request->search, 'vendor_price|product_name');
                 }
 
                 $total_records = $data->get()->count();

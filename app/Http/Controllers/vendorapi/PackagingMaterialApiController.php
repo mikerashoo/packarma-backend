@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PackagingMaterial;
 use App\Models\VendorMaterialMapping;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class PackagingMaterialApiController extends Controller
@@ -39,29 +40,51 @@ class PackagingMaterialApiController extends Controller
                     $limit = $request->limit;
                 }
                 $offset = ($page_no - 1) * $limit;
+                $main_table = 'vendor_material_mappings';
+
+
+                $data = DB::table('vendor_material_mappings')->select(
+                    'vendor_material_mappings.id',
+                    'vendor_material_mappings.vendor_price',
+                    'packaging_materials.packaging_material_name',
+                    'packaging_materials.material_description',
+                    'packaging_materials.shelf_life',
+                    'packaging_materials.wvtr',
+                    'packaging_materials.otr',
+                    'packaging_materials.cof',
+                    'packaging_materials.sit',
+                    'packaging_materials.gsm',
+                    'products.product_name',
+                    'products.product_description',
+                )
+                    ->leftjoin('products', 'vendor_material_mappings.product_id', '=', 'products.id')
+                    ->leftjoin('packaging_materials', 'vendor_material_mappings.packaging_material_id', '=', 'packaging_materials.id')
+                    ->where($main_table . '' . '.status', '1')->where('vendor_id', $vendor_id);
+
+
 
                 // $data = VendorMaterialMapping::with('packaging_material')->where('status', '1')->where('vendor_id', $vendor_id);
-                $data = VendorMaterialMapping::select('id', 'vendor_price', 'packaging_material_id')->with(['packaging_material' => function ($query) {
-                    $query->select('id', 'packaging_material_name', 'shelf_life', 'wvtr', 'otr', 'cof', 'sit', 'gsm', 'special_feature');
-                }])->where('status', '1')->where('vendor_id', $vendor_id);
+                // $data = VendorMaterialMapping::select('id', 'vendor_price', 'packaging_material_id')->with(['packaging_material' => function ($query) {
+                //     $query->select('id', 'packaging_material_name', 'shelf_life', 'wvtr', 'otr', 'cof', 'sit', 'gsm', 'special_feature');
+                // }])->where('status', '1')->where('vendor_id', $vendor_id);
 
                 $materialData = VendorMaterialMapping::whereRaw("1 = 1");
                 // $materialData = PackagingMaterial::whereRaw("1 = 1");
 
                 if ($request->packaging_material_id) {
-                    $materialData = $materialData->where('packaging_material_id', $request->packaging_material_id);
-                    $data = $data->where('packaging_material_id', $request->packaging_material_id);
+                    $materialData = $materialData->where($main_table . '' . '.packaging_material_id', $request->packaging_material_id);
+                    $data = $data->where($main_table . '' . '.packaging_material_id', $request->packaging_material_id);
                 }
                 if (empty($materialData->first())) {
                     errorMessage(__('packagingmaterial.material_not_found'), $msg_data);
                 }
 
                 if ($request->id) {
-                    $data = $data->where('id', $request->id);
+                    $data = $data->where($main_table . '' . '.id', $request->id);
                 }
 
                 if (isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search, 'vendor_id|packaging_material_id');
+                    $data = fullSearchQuery($data, $request->search, 'vendor_price|packaging_material_name');
                 }
 
                 $total_records = $data->get()->count();
