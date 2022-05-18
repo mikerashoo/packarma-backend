@@ -65,7 +65,7 @@ class EnquiryApiController extends Controller
                 }
 
 
-                if ($request->last_no_of_days) {
+                if ($request->last_no_of_days && is_numeric($request->last_no_of_days)) {
                     $date_from_no_of_days = Carbon::now()->subDays($request->last_no_of_days);
                     $enquiryData = $enquiryData->whereDate($main_table . '' . '.created_at', '>=', $date_from_no_of_days);
                     $data = $data->whereDate($main_table . '' . '.created_at', '>=', $date_from_no_of_days);
@@ -88,7 +88,7 @@ class EnquiryApiController extends Controller
                         $from, $to
                     ]);
                     $data = $data->whereBetween($main_table . '' . '.created_at', [$from, $to]);
-                } elseif ($request->from_date) {
+                } elseif ($request->from_date && !isset($request->to_date)) {
                     $from_date = $request->from_date;
                     $old_from_date = explode('/', $from_date);
                     $new_from_data = $old_from_date[2] . '-' . $old_from_date[1] . '-' . $old_from_date[0];
@@ -96,7 +96,7 @@ class EnquiryApiController extends Controller
 
                     $enquiryData = $enquiryData->whereDate($main_table . '' . '.created_at', '>=', $from);
                     $data = $data->whereDate($main_table . '' . '.created_at', '>=', $from);
-                } elseif ($request->to_date) {
+                } elseif ($request->to_date && !isset($request->from_date)) {
                     $to_date = $request->to_date;
                     $old_to_date = explode('/', $to_date);
                     $new_to_data = $old_to_date[2] . '-' . $old_to_date[1] . '-' . $old_to_date[0];
@@ -130,7 +130,7 @@ class EnquiryApiController extends Controller
                 // }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }

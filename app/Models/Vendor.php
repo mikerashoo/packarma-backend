@@ -51,19 +51,19 @@ class Vendor extends Model implements JWTSubject
      */
     protected $hidden = [
         'vendor_password',
-        // 'is_featured',
-        // 'gstin',
-        // 'gst_certificate',
-        // 'admin_remark',
-        // 'meta_title',
-        // 'meta_description',
-        // 'meta_keyword',
-        // 'status',
-        // 'is_verified',
-        // 'fpwd_flag',
-        // 'last_login',
-        // 'approved_on',
-        // 'approved_by',
+        'is_featured',
+        'gstin',
+        'gst_certificate',
+        'admin_remark',
+        'meta_title',
+        'meta_description',
+        'meta_keyword',
+        'status',
+        'is_verified',
+        'fpwd_flag',
+        'last_login',
+        'approved_on',
+        'approved_by',
         // 'remember_token',
         'created_by',
         'updated_by',
@@ -107,7 +107,7 @@ class Vendor extends Model implements JWTSubject
      */
     public function currency()
     {
-        return $this->belongsTo('App\Models\Country');
+        return $this->belongsTo('App\Models\Currency');
     }
 
     /**

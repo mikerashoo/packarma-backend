@@ -22,6 +22,7 @@ class OtpApiController extends Controller
     {
         $msg_data = array();
         try {
+            $verify_count = 3;
             \Log::info("OTP sending process starts, starting at: " . Carbon::now()->format('H:i:s:u'));
             // Request Validation
             $vendorValidationErrors = $this->validateRequestOtp($request);
@@ -47,9 +48,9 @@ class OtpApiController extends Controller
                 $next_1_hour_time = (strtotime("$last_hitting_time +  1 hour"));
                 $current_time =  time();
                 $new_count = 0;
-                if ($current_time > $next_1_hour_time || $last_count < 3) {
+                if ($current_time > $next_1_hour_time || $last_count < $verify_count) {
                     $new_count = $last_count + 1;
-                    if ($new_count > 3) {
+                    if ($new_count > $verify_count) {
                         $new_count = 1;
                     }
                 }
@@ -82,6 +83,7 @@ class OtpApiController extends Controller
     {
         $msg_data = array();
         try {
+            $verify_count = 3;
             \Log::info("OTP verification process starts, starting at: " . Carbon::now()->format('H:i:s:u'));
             // Request Validation
             $vendorValidationErrors = $this->validateVerifyOtp($request);
@@ -99,7 +101,7 @@ class OtpApiController extends Controller
             $checkOtp = VendorOtp::where('otp_code', $request->otp_code)
                 ->where('workflow', $request->workflow)
                 ->where('mobile_no', $request->phone)
-                ->where('verify_count', '<=', 3)
+                ->where('verify_count', '<=', $verify_count)
                 ->first();
             if (!empty($checkOtp)) {
                 if (Carbon::now() > $checkOtp->expiry_time) {

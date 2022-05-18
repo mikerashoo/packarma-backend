@@ -35,29 +35,34 @@ class LoginApiController extends Controller
 
 
 
-            $vendorData = DB::table('vendors')->select(
-                'vendors.id',
-                'vendors.vendor_name',
-                'vendors.vendor_company_name',
-                'vendors.vendor_email',
-                'vendors.vendor_address',
-                'vendors.pincode',
-                'vendors.phone',
-                'vendors.approval_status',
-                'vendors.remember_token',
-                'currencies.currency_name',
-                'currencies.currency_symbol',
-                'currencies.currency_code',
-                'countries.phone_code',
-                'countries.country_name',
-            )
-                ->leftjoin('countries', 'vendors.phone_country_id', '=', 'countries.id')
-                ->leftjoin('currencies', 'vendors.currency_id', '=', 'currencies.id')
-                ->where([['vendor_email', $request->vendor_email], ['vendor_password', md5($request->vendor_email . $request->vendor_password)], ['vendors.status', '1'], ['vendors.is_verified', 'Y']])->first();
+            // $vendorData = DB::table('vendors')->select(
+            //     'vendors.id',
+            //     'vendors.vendor_name',
+            //     'vendors.vendor_company_name',
+            //     'vendors.vendor_email',
+            //     'vendors.vendor_address',
+            //     'vendors.pincode',
+            //     'vendors.phone',
+            //     'vendors.approval_status',
+            //     'vendors.remember_token',
+            //     'currencies.currency_name',
+            //     'currencies.currency_symbol',
+            //     'currencies.currency_code',
+            //     'countries.phone_code',
+            //     'countries.country_name',
+            // )
+            //     ->leftjoin('countries', 'vendors.phone_country_id', '=', 'countries.id')
+            //     ->leftjoin('currencies', 'vendors.currency_id', '=', 'currencies.id')
+            //     ->where([['vendor_email', $request->vendor_email], ['vendor_password', md5($request->vendor_email . $request->vendor_password)], ['vendors.status', '1'], ['vendors.is_verified', 'Y']])->first();
 
 
 
             // $vendorData = Vendor::where([['vendor_email', $request->vendor_email], ['vendor_password', md5($request->vendor_email . $request->vendor_password)], ['status', '1'], ['is_verified', 'Y']])->first();
+            $vendorData = Vendor::with(['currency' => function ($query) {
+                $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
+            }])->with(['phone_country' => function ($query) {
+                $query->select('id', 'phone_code', 'country_name');
+            }])->where([['vendor_email', $request->vendor_email], ['vendor_password', md5($request->vendor_email . $request->vendor_password)], ['status', '1'], ['is_verified', 'Y']])->first();
 
             // print_r($vendorData);
             // die();

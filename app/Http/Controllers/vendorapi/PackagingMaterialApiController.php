@@ -101,7 +101,7 @@ class PackagingMaterialApiController extends Controller
                 $responseData['total_records'] = $total_records;
                 // print_r($data);
                 // die();
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }

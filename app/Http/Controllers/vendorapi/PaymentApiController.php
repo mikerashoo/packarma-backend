@@ -106,7 +106,7 @@ class PaymentApiController extends Controller
                 // $responseData['payments_received'] = $grand_total - $awaiting_payments;
                 $responseData['awaiting_orders'] = $awaiting_orders;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }

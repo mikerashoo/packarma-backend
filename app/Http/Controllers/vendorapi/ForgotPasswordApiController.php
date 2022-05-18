@@ -21,6 +21,8 @@ class ForgotPasswordApiController extends Controller
         $msg_data = array();
         \Log::info("Forgot Password process, starting at: " . Carbon::now()->format('H:i:s:u'));
         try {
+            $verify_count = 3;
+
             // Request Validation
             $validationErrors = $this->validateForgotPassword($request);
             if (count($validationErrors)) {
@@ -36,7 +38,7 @@ class ForgotPasswordApiController extends Controller
             $checkVendorOtp = VendorOtp::where('otp_code', $request->otp_code)
                 ->where('workflow', $request->workflow)
                 ->where('mobile_no', $request->phone)
-                ->where('verify_count', '<=', 3)
+                ->where('verify_count', '<=', $verify_count)
                 ->first();
             if (!empty($checkVendorOtp)) {
                 if (Carbon::now() > $checkVendorOtp->expiry_time) {
