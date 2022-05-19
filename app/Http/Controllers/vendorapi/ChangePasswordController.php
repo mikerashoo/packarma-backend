@@ -46,7 +46,7 @@ class ChangePasswordController extends Controller
 
                 $updateVendorData['vendor_password'] = md5($vendorData->vendor_email . $request->new_password);
                 Vendor::where('id', $vendor_id)->update($updateVendorData);
-                successMessage(__('change_password.changed'), $updateVendorData);
+                successMessage(__('change_password.changed'), $msg_data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
