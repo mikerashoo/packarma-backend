@@ -40,6 +40,7 @@
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="packaging_treatment_name" data-orderable="false" data-searchable="false">Packaging Treatment Name</th>
                                                     <th id="packaging_treatment_description" data-orderable="false" data-searchable="false">Packaging Treatment Description</th>
+                                                    <th id="mark_featured" data-orderable="false" data-searchable="false">Mark Featured</th>
                                                     @if($data['packaging_treatment_edit'] || $data['packaging_treatment_status'] || $data['packaging_treatment_view'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif

@@ -57,8 +57,8 @@
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="description" data-orderable="false" data-searchable="false">Description</th>
-                                                    <th id="name" data-orderable="false" data-searchable="false">User Name</th>
-                                                    <th id="order_id" data-orderable="false" data-searchable="false">Order ID</th>
+                                                    <th id="product_name" data-orderable="false" data-searchable="false">Product Name</th>
+                                                    <th id="user_name" data-orderable="false" data-searchable="false">User Name</th>
                                                     <th id="enquiry_status" data-orderable="false" data-searchable="false">Enquiry Status</th>
                                                     <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>                                                    
                                                     @if($data['customer_enquiry_view'] || $data['customer_enquiry_edit'] || $data['customer_enquiry_map_to_vendor'])

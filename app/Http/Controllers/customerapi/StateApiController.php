@@ -27,6 +27,12 @@ class StateApiController extends Controller
             {
                 $page_no=1;
                 $limit=10;
+                if(isset($request->country_id)){
+                    $country_id = $request->country_id;
+                }
+                else{
+                    $country_id = 1;
+                }
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -34,7 +40,7 @@ class StateApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = State::with('country')->where('status','1');
+                $data = State::with('country')->where([['status','1'],['country_id', $country_id]]);
                 $stateData = State::with('country')->whereRaw("1 = 1");
                 if($request->state_id)
                 {

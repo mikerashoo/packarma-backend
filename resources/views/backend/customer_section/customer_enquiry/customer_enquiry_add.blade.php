@@ -32,10 +32,10 @@
                                             @endforeach
                                         </select>
                         			</div>
-                                    <div class="col-sm-6 mb-3">
+                                    {{-- <div class="col-sm-6 mb-3">
                         				<label>Order ID<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" value=""  id="order_id" name="order_id"/>
-                        			</div>
+                        			</div> --}}
                                     <div class="col-sm-6 mb-3">
                         				<label>Category<span style="color:#ff0000">*</span></label>
                         				<select class="form-control select2 required" id="category" value="" name="category" style="width: 100% !important;">

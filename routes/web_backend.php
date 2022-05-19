@@ -281,6 +281,8 @@ Route::group(['middleware' => ['customAuth']], function () {
 	Route::get('packaging_treatment_edit/{id}', 'PackagingTreatmentController@edit');
 	Route::post('/publishPackagingTreatment', 'PackagingTreatmentController@updateStatus');
 	Route::get('packaging_treatment_view/{id}', 'PackagingTreatmentController@view');
+	Route::post('/featuredPackagingTreatment', 'PackagingTreatmentController@markFeatured');
+
 
 	//Product
 	Route::get('/product', 'ProductController@index');

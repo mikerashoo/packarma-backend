@@ -8,6 +8,9 @@ class AddNewColumnsToCustomerEnquiriesTable extends Migration
 {
     /**
      * Run the migrations.
+     * Created By : Pradyumn Dwivedi
+     * Created at : 16/05/2022
+     * Uses : Creating new columns in customer enquiry table and deleting column from customer enquiry.
      *
      * @return void
      */

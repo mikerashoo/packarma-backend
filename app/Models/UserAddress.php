@@ -13,6 +13,22 @@ class UserAddress extends Model
     protected $dates = ['deleted_at'];
     /**
      * Developed By : Pradyumn Dwivedi
+     * Created On : 11/05/2022
+     * Uses : The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+        'created_at',
+        'updated_at'
+    ];
+
+    /**
+     * Developed By : Pradyumn Dwivedi
      * Created On : 24-mar-2022
      * uses : to to get data of city in user address table
      */
