@@ -27,5 +27,6 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
         Route::post('/quotation/listing', 'QuotationApiController@index');
         Route::post('/payment/listing', 'PaymentApiController@index');
         Route::post('/home', 'HomeApiController@index');
+        Route::post('/change_password', 'ChangePasswordController@index');
     });
 });

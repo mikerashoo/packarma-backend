@@ -26,9 +26,17 @@ class VendorBasicAuth
         );
         if ($is_not_authenticated) {
             $return_array = array();
-            $return_array['success'] = '0';
-            $return_array['message'] = 'Authentication Failed';
-            echo json_encode($return_array);
+            errorMessage(__('auth.authentication_failed'), $return_array);
+            exit;
+        }
+        if (!$request->header('platform')) {
+            $return_array = array();
+            errorMessage(__('auth.platform_require'), $return_array);
+            exit;
+        }
+        if (!in_array($request->header('platform'), config('global.PLATFORM'))) {
+            $return_array = array();
+            errorMessage(__('auth.invalid_platform'), $return_array);
             exit;
         }
         $lang = $request->header('Accept-Language', null);

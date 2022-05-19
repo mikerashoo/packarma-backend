@@ -24,5 +24,8 @@ return [
     'otp_verified' => 'OTP verified successfully!',
     'please_login_and_try_again' => 'Please login and try again!',
     'authentication_failed' => 'Authentication failed',
+    'platform_require' => 'Platform is required as a header parameter',
+    'invalid_platform' => 'Platform is Invalid',
+
 
 ];

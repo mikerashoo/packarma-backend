@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
    *   created by : Sagar Thokal
    *   Created On : 10-Feb-2022
@@ -34,7 +34,6 @@ return [
         "WHATSAPP_FILE" => "500000",
         "NOTIFICATION" => "500000"
     ],
+    'PLATFORM' => ['ios', 'android', 'web'],
     'MAX_IMAGE_SIZE' => '2048'
-]
-
-?>
+];
