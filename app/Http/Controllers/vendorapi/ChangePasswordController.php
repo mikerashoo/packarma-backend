@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vendor;
 use Carbon\Carbon;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ChangePasswordController extends Controller
 {
@@ -44,9 +45,12 @@ class ChangePasswordController extends Controller
                     errorMessage(__('change_password.password_mismatch'), $msg_data);
                 }
 
-                $updateVendorData['vendor_password'] = md5($vendorData->vendor_email . $request->new_password);
-                Vendor::where('id', $vendor_id)->update($updateVendorData);
-                successMessage(__('change_password.changed'), $msg_data);
+
+                $vendor_token = JWTAuth::fromUser($vendorData);
+                $vendor_password = md5($vendorData->vendor_email . $request->new_password);
+                $updateVendorData['remember_token'] = $vendor_token;
+                Vendor::where('id', $vendor_id)->update(['vendor_password' => $vendor_password, 'remember_token' => $updateVendorData['remember_token']]);
+                successMessage(__('change_password.changed'), $updateVendorData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }

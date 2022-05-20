@@ -75,7 +75,7 @@ if (!function_exists('readVenderHeaderToken')) {
         $vendor_token = JWTAuth::setToken($vendorTokenData)->getPayload();
         $vendorChk = Vendor::where([['id', $vendor_token['sub']]])->get();
         if (count($vendorChk) == 0 || $vendorChk[0]->remember_token == '') {
-            errorMessage('please_login_and_try_again', $vendor_msg_data, 4);
+            errorMessage(__('auth.please_login_and_try_again'), $vendor_msg_data, 4);
         }
         return $vendor_token;
     }
