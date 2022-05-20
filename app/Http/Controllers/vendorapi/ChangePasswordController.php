@@ -5,8 +5,10 @@ namespace App\Http\Controllers\vendorapi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vendor;
+use App\Models\VendorDevice;
 use Carbon\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Session;
 
 class ChangePasswordController extends Controller
 {
@@ -46,11 +48,12 @@ class ChangePasswordController extends Controller
                 }
 
 
-                $vendor_token = JWTAuth::fromUser($vendorData);
-                $vendor_password = md5($vendorData->vendor_email . $request->new_password);
-                $updateVendorData['remember_token'] = $vendor_token;
-                Vendor::where('id', $vendor_id)->update(['vendor_password' => $vendor_password, 'remember_token' => $updateVendorData['remember_token']]);
-                successMessage(__('change_password.changed'), $updateVendorData);
+
+                $imei_no = $request->header('imei-no');
+
+
+                VendorDevice::where([['vendor_id', $vendor_id], ['imei_no', '!=', $imei_no]])->update(['remember_token' => NULL]);
+                successMessage(__('change_password.changed'), $msg_data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }

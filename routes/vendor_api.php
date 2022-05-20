@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['vendorbasicAuth'])->group(function () {
+    Route::post('/version', 'VersionApiController@index');
     Route::post('/register_api', 'RegisterApiController@index');
     Route::post('/request_otp', 'OtpApiController@requestOtp');
     Route::post('/verify_otp', 'OtpApiController@verifyOtp');
