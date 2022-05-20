@@ -26,6 +26,7 @@ class UserAddressApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                $user_id = $token['sub'];
                 $page_no=1;
                 $limit=10;
                 if(isset($request->page_no) && !empty($request->page_no)) {
@@ -35,8 +36,7 @@ class UserAddressApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                
-                $data = UserAddress::with('user')->where('status','1');
+                $data = UserAddress::with('user')->where([['status','1'],['user_id', $user_id]]);
                 $userAddressData = UserAddress::with('user')->whereRaw("1 = 1");
                 if($request->address_id)
                 {
@@ -65,7 +65,7 @@ class UserAddressApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('Data Fetched Successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {

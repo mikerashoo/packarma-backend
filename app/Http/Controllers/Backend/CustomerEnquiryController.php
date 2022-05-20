@@ -134,6 +134,7 @@ class CustomerEnquiryController extends Controller
         $data['sub_category'] = SubCategory::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
+        $data['user_address'] = UserAddress::all();
         $data['measurement_unit'] = MeasurementUnit::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['storage_condition'] =StorageCondition::all();
@@ -163,7 +164,7 @@ class CustomerEnquiryController extends Controller
         $msg = "Data Saved Successfully";
         $tblObj->description = $request->description;
         $tblObj->user_id = $request->user;
-        $tblObj->order_id = $request->order_id;
+        // $tblObj->order_id = $request->order_id;
         $tblObj->category_id = $request->category;
         $tblObj->sub_category_id = $request->sub_category;
         $tblObj->product_id = $request->product;
@@ -177,11 +178,17 @@ class CustomerEnquiryController extends Controller
         $tblObj->packing_type_id = $request->packing_type;
         $tblObj->packaging_treatment_id = $request->packaging_treatment;
         $tblObj->quote_type = $request->quote_type;
-        // $tblObj->country_id = $request->country;
-        $tblObj->state_id = $request->state;
-        $tblObj->city_id = $request->city;
-        $tblObj->pincode = $request->pincode;
-        $tblObj->address = $request->address;
+        // getting user address 
+        if(isset($request->user_address)){
+            $userAddress = UserAddress::find($request->user_address);
+            $tblObj->user_address_id = $request->user_address;
+            $tblObj->country_id = $userAddress->country_id;
+            $tblObj->state_id = $userAddress->state_id;
+            $tblObj->city_id = $userAddress->city_id;
+            $tblObj->pincode = $userAddress->pincode;
+            $tblObj->address = $userAddress->address;
+        }
+        
         $tblObj->save();
         successMessage($msg , $msg_data);
     }
@@ -195,6 +202,7 @@ class CustomerEnquiryController extends Controller
     */
     public function customerEnquiryMapToVendor($id) {
         $data['data'] = CustomerEnquiry::find($id); 
+        $data['user_address'] = UserAddress::all();
         $data['addressType'] = addressType();
         $data['recommendation_engine'] = RecommendationEngine::where('product_id',$data['data']->product_id)->first()->toArray();
         $data['packaging_material'] = PackagingMaterial::where('id',$data['recommendation_engine']['packaging_material_id'])->first()->toArray();
@@ -273,6 +281,7 @@ class CustomerEnquiryController extends Controller
         $data['data'] = CustomerEnquiry::find($id);
         $data['addressType'] = addressType();
         $data['user_address'] = UserAddress::all();
+        
         $data['vendor_id'] = VendorQuotation::where('customer_enquiry_id', '=', $data['data']->id)->pluck('vendor_id')->toArray();
         $data['vendor'] = Vendor::whereIn('id', $data['vendor_id'])->get();
         return view('backend/customer_section/customer_enquiry/customer_enquiry_view', $data);
@@ -313,11 +322,7 @@ class CustomerEnquiryController extends Controller
                 'packing_type' => 'required|integer',
                 'packaging_treatment' => 'required|integer',
                 'quote_type' => 'required|string',
-                // 'country' => 'required|integer',
-                'state' => 'required|integer',
-                'city' => 'required|integer',
-                'pincode' => 'required|integer',
-                'address' => 'required|string'
+                'user_address' => 'required|integer'
                 ])->errors(); 
         }
         else{

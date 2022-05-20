@@ -377,4 +377,42 @@ class AdminController extends Controller
         	successMessage('Unpublished', $msg_data);
         }
     }
+
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 19-May-2022
+     *   Uses :  To check device platform and version
+     *   @param Request request
+     *   @return Response
+    */
+    public function checkVersion(Request $request) {
+        if(isset($request->platform) && !empty($request->platform) ) {
+            $platform = $request->platform;
+        } else {
+            echo json_encode(array('success' =>"0"));
+            exit();
+        }
+    
+        if(isset($request->version) && !empty($request->version) ) {
+            $version = $request->version;
+        } else {
+            echo json_encode(array('success' =>"0"));
+            exit();
+        }
+    
+        if($platform =='android') {
+            $dbVersionData = GeneralSetting::select('value')->where([['type','android_version']])->get();
+        } else {
+            $dbVersionData = GeneralSetting::select('value')->where([['type','ios_version']])->get();
+        }
+        $dbversion=json_decode($dbVersionData[0]['value'],true);
+        
+        if(!in_array($version,$dbversion)) {
+            echo json_encode(array('success' =>"0"));
+            exit();
+        } else {
+            echo json_encode(array('success' =>"1"));
+            exit();
+        }
+    }
 }

@@ -32,15 +32,11 @@ class AddColumnsToVendorsTable extends Migration
     public function down()
     {
         Schema::table('vendors', function (Blueprint $table) {
-<<<<<<< HEAD
-            //
-=======
             $table->dropColumn('is_verified');
             $table->dropColumn('fpwd_flag');
             $table->dropColumn('last_login');
             $table->dropColumn('remember_token');
             $table->dropColumn('vendor_company_name');
->>>>>>> maaz
         });
     }
 }

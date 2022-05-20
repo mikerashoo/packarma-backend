@@ -59,7 +59,23 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Address Type</strong></td>
-                                                        <td>{{addressType($data['user_address']->type);}}</td>
+                                                        <td>{{ addressType($data['user_address']->type);}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>State</strong></td>
+                                                        <td>{{ $data['state']->state_name;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>City</strong></td>
+                                                        <td>{{ $data['city']->city_name;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>User Address</strong></td>
+                                                        <td>{{ $data['user_address']->address;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Pincode</strong></td>
+                                                        <td>{{ $data->pincode;}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Status</strong></td>

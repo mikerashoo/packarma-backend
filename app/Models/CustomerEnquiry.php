@@ -34,6 +34,11 @@ class CustomerEnquiry extends Model
         'packaging_treatment_id',
         'recommendation_engine_id',
         'user_address_id',
+        'country_id',
+        'state_id',
+        'city_id',
+        'address',
+        'pincode'
     ];
 
     /**

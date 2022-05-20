@@ -185,9 +185,9 @@ class UserAddressController extends Controller
                 } 
             }
             if(isset($request->address_name)){
-                $response = UserAddress::where([['address_name', strtolower($request->address_name)], ['id', '<>', $_GET['id']]])->get()->toArray();
+                $response = UserAddress::where([['address_name', strtolower($request->address_name)], ['user_id', $request->user],['id', '<>', $_GET['id']]])->get()->toArray();
                 if (isset($response[0])) {
-                    errorMessage('Address Name Already Exist', $msg_data);
+                    errorMessage('Address Name Already Exist of Selected User', $msg_data);
                 } 
             }
             if(isset($request->mobile_no)){
@@ -201,13 +201,13 @@ class UserAddressController extends Controller
                     errorMessage('Mobile Number Already Exist', $msg_data);
                 } 
             }
-            $response = UserAddress::where([['address', strtolower($request->address)], ['id', '<>', $_GET['id']]])->get()->toArray();
+            $response = UserAddress::where([['address', strtolower($request->address)],['user_id', $request->user],['id', '<>', $_GET['id']]])->get()->toArray();
             if (isset($response[0])) {
-                errorMessage('Address Already Exist', $msg_data);
+                errorMessage('Address Already Exist of Selected User', $msg_data);
             }
-            $response = UserAddress::where([['pincode', $request->pincode], ['id', '<>', $_GET['id']]])->get()->toArray();
+            $response = UserAddress::where([['pincode', $request->pincode],['user_id', $request->user],['id', '<>', $_GET['id']]])->get()->toArray();
             if (isset($response[0])) {
-                errorMessage('Pincode Already Exist', $msg_data);
+                errorMessage('Pincode Already Exist of Selected', $msg_data);
             }
             $getKeys = true;
             $addressType = addressType('',$getKeys);
@@ -230,9 +230,9 @@ class UserAddressController extends Controller
                 } 
             }
             if(isset($request->address_name)){
-                $response = UserAddress::where([['address_name', strtolower($request->address_name)]])->get()->toArray();
+                $response = UserAddress::where([['address_name', strtolower($request->address_name)],['user_id', $request->user]])->get()->toArray();
                 if (isset($response[0])) {
-                    errorMessage('Address Name Already Exist', $msg_data);
+                    errorMessage('Address Name Already Exist of Selected User', $msg_data);
                 } 
             }
             if(isset($request->mobile_no)){
@@ -246,13 +246,13 @@ class UserAddressController extends Controller
                     errorMessage('Mobile Number Already Exist', $msg_data);
                 } 
             }
-            $response = UserAddress::where([['address', strtolower($request->address)]])->get()->toArray();
+            $response = UserAddress::where([['address', strtolower($request->address)],['user_id', $request->user]])->get()->toArray();
             if (isset($response[0])) {
-                errorMessage('Address Already Exist', $msg_data);
+                errorMessage('Address Already Exist of Selected User', $msg_data);
             }
-            $response = UserAddress::where([['pincode', $request->pincode]])->get()->toArray();
+            $response = UserAddress::where([['pincode', $request->pincode],['user_id', $request->user]])->get()->toArray();
             if (isset($response[0])) {
-                errorMessage('Pincode Already Exist', $msg_data);
+                errorMessage('Pincode Already Exist of Selected User', $msg_data);
             }
             $getKeys = true;
             $addressType = addressType('',$getKeys);

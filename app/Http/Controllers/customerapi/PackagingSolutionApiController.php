@@ -66,7 +66,7 @@ class PackagingSolutionApiController extends Controller
                     $data = $data->limit($limit)->offset($offset)->get()->toArray();
                     $responseData['result'] = $data;
                     $responseData['total_records'] = $total_records;
-                    successMessage('Data Fetched Successfully', $responseData);
+                    successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                 }
             }
             else
