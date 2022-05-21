@@ -73,12 +73,10 @@ if (!function_exists('readVenderHeaderToken')) {
     {
         $vendor_msg_data = array();
         $vendorTokenData = Session::get('vendorTokenData');
+        $vendorImeiNoData = Session::get('vendorImeiNoData');
         $vendor_token = JWTAuth::setToken($vendorTokenData)->getPayload();
+        $vendorChk = VendorDevice::where([['vendor_id', $vendor_token['sub']], ['imei_no', $vendorImeiNoData]])->get();
 
-        $vendorChk = VendorDevice::where([['vendor_id', $vendor_token['sub']], ['remember_token', '!=', NULL]])->get()->toArray();
-        print_r($vendorChk);
-        die();
-        // $vendorChk = Vendor::where([['id', $vendor_token['sub']]])->get();
         if (count($vendorChk) == 0 || $vendorChk[0]->remember_token == '') {
             errorMessage(__('auth.please_login_and_try_again'), $vendor_msg_data, 4);
         }

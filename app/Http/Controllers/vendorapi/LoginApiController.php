@@ -75,11 +75,10 @@ class LoginApiController extends Controller
             $vendor_token = JWTAuth::fromUser($vendorData);
             $vendors = Vendor::find($vendorData->id);
             $vendorData->last_login = $vendors->last_login = Carbon::now();
-            $vendorData->remember_token = $vendors->remember_token = $vendor_token;
+            $vendorData->remember_token  = $vendor_token;
             $vendors->save();
 
-
-            VendorDevice::updateOrInsert(
+            VendorDevice::updateOrCreate(
                 ['vendor_id' => $vendorData->id, 'imei_no' => $imei_no],
                 ['remember_token' => $vendor_token]
             );

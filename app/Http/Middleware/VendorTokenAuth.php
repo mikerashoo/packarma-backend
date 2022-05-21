@@ -25,6 +25,7 @@ class VendorTokenAuth
         // $return_array['success'] = '0';
         try {
             $vendor_token = $request->header('access-token');
+            $imei_number = $request->header('imei-no');
             $data = JWTAuth::setToken($vendor_token)->getPayload();
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             // $return_array['success'] = '4';
@@ -43,6 +44,7 @@ class VendorTokenAuth
             // return response()->json($return_array, 500);
         }
         Session::flash('vendorTokenData', $vendor_token);
+        Session::flash('vendorImeiNoData', $imei_number);
         return $next($request);
     }
 }

@@ -50,7 +50,8 @@ class ChangePasswordController extends Controller
 
 
                 $imei_no = $request->header('imei-no');
-
+                $new_password = md5($vendorData->vendor_email . $request->new_password);
+                Vendor::where('id', $vendor_id)->update(['vendor_password' => $new_password]);
 
                 VendorDevice::where([['vendor_id', $vendor_id], ['imei_no', '!=', $imei_no]])->update(['remember_token' => NULL]);
                 successMessage(__('change_password.changed'), $msg_data);

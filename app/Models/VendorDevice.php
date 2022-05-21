@@ -14,8 +14,16 @@ class VendorDevice extends Model
      * uses : to get vendor device
      */
 
-    protected $hidden = [
+    protected $fillable = [
+        'vendor_id',
+        'imei_no',
+        'remember_token',
         'created_at',
-        'updated_at'
+        'updated_at',
+    ];
+
+    protected $hidden = [
+        // 'created_at',
+        // 'updated_at'
     ];
 }
