@@ -26,6 +26,11 @@ return [
     'authentication_failed' => 'Authentication failed',
     'platform_require' => 'Platform is required as a header parameter',
     'invalid_platform' => 'Platform is Invalid',
+    'version_require' => 'Version is required as a header parameter',
+    'invalid_version' => 'Version is Invalid',
+    'imei_require' => 'Device id is required as a header parameter',
+    'invalid_imei' => 'Device id is Invalid',
+    'country_require' => 'Country is required',
 
 
 ];

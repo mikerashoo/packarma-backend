@@ -5,6 +5,7 @@ namespace App\Http\Controllers\vendorapi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vendor;
+use App\Models\VendorDevice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -70,12 +71,17 @@ class LoginApiController extends Controller
             if (empty($vendorData)) {
                 errorMessage(__('vendor.login_failed'), $msg_data);
             }
-
+            $imei_no = $request->header('imei-no');
             $vendor_token = JWTAuth::fromUser($vendorData);
             $vendors = Vendor::find($vendorData->id);
             $vendorData->last_login = $vendors->last_login = Carbon::now();
-            $vendorData->remember_token = $vendors->remember_token = $vendor_token;
+            $vendorData->remember_token  = $vendor_token;
             $vendors->save();
+
+            VendorDevice::updateOrCreate(
+                ['vendor_id' => $vendorData->id, 'imei_no' => $imei_no],
+                ['remember_token' => $vendor_token]
+            );
             successMessage(__('vendor.logged_in_successfully'), $vendorData->toArray());
         } catch (\Exception $e) {
             \Log::error("Login failed: " . $e->getMessage());

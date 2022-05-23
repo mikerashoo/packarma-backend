@@ -16,6 +16,8 @@ class VendorBasicAuth
      */
     public function handle(Request $request, Closure $next)
     {
+        $return_array = array();
+
         $AUTH_USER = 'adminvendor';
         $AUTH_PASS = 'mypcot';
         header('Cache-Control: no-cache, must-revalidate, max-age=0');
@@ -25,20 +27,44 @@ class VendorBasicAuth
             $_SERVER['PHP_AUTH_PW']   != $AUTH_PASS
         );
         if ($is_not_authenticated) {
-            $return_array = array();
             errorMessage(__('auth.authentication_failed'), $return_array);
             exit;
         }
         if (!$request->header('platform')) {
-            $return_array = array();
             errorMessage(__('auth.platform_require'), $return_array);
             exit;
         }
         if (!in_array($request->header('platform'), config('global.PLATFORM'))) {
-            $return_array = array();
             errorMessage(__('auth.invalid_platform'), $return_array);
             exit;
         }
+
+        if (!$request->header('version')) {
+            errorMessage(__('auth.version_require'), $return_array);
+            exit;
+        }
+
+        if (!is_numeric($request->header('version'))) {
+            errorMessage(__('auth.invalid_version'), $return_array);
+            exit;
+        }
+
+        if (!$request->header('imei-no')) {
+            errorMessage(__('auth.imei_require'), $return_array);
+            exit;
+        }
+
+        if (!ctype_digit($request->header('imei-no'))) {
+            errorMessage(__('auth.invalid_imei'), $return_array);
+            exit;
+        }
+
+        if (!$request->country_id) {
+            errorMessage(__('auth.country_require'), $return_array);
+            exit;
+        }
+        // errorMessage($request->currency_id, $return_array);
+
         $lang = $request->header('Accept-Language', null);
         if (!empty($lang)) {
             \App::setLocale($lang);
