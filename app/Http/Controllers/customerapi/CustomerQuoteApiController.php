@@ -4,17 +4,15 @@ namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\City;
-use App\Models\State;
-use App\Models\Country;
+use App\Models\VendorQuotation;
 use Response;
 
-class CityApiController extends Controller
+class CustomerQuoteApiController extends Controller
 {
     /**
      * Created By : Pradyumn Dwivedi
-     * Created at : 13-05-2022
-     * Uses : Display a listing of the city.
+     * Created at : 19-05-2022
+     * Uses : Display a listing of the Quotations in customer app.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -27,20 +25,17 @@ class CityApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                // Request Validation
                 $validationErrors = $this->validateRequest($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage(__('auth.validation_failed'), $validationErrors->all());
                 }
+
+                $user_id = $token['sub'];
                 $page_no=1;
                 $limit=10;
                 
-                if(isset($request->country_id)){
-                    $country_id = $request->country_id;
-                }
-                else{
-                    $country_id = 1;
-                }
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -48,24 +43,31 @@ class CityApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = City::with('state','country')->where([['state_id', $request->state_id],['country_id', $country_id]]);
-                $cityData = City::whereRaw("1 = 1");
-                if($request->city_id)
+                $data = VendorQuotation::with('enquiry','product','vendor','vendor_warehouse')
+                                ->where([['user_id', $user_id],['customer_enquiry_id',$request->customer_enquiry_id]])
+                                ->whereIn('enquiry_status',array('viewed','quoted'));
+                $quotationData = VendorQuotation::whereRaw("1 = 1");
+                if($request->customer_enquiry_id)
                 {
-                    $cityData = $cityData->where('id',$request->city_id);
-                    $data = $data->where('id',$request->city_id);
+                    $quotationData = $quotationData->where('customer_enquiry_id',$request->customer_enquiry_id);
+                    $data = $data->where('customer_enquiry_id',$request->customer_enquiry_id);
                 }
-                if($request->city_name)
+                if($request->product_id)
                 {
-                    $cityData = $cityData->where('city_name',$request->city_name);
-                    $data = $data->where('city_name',$request->city_name);
+                    $quotationData = $quotationData->where('product_id',$request->product_id);
+                    $data = $data->where('product_id',$request->product_id);
                 }
-                if(empty($cityData->first()))
+                if($request->vendor_warehouse_id)
                 {
-                    errorMessage(__('city.city_not_found'), $msg_data);
+                    $quotationData = $quotationData->where('vendor_warehouse_id',$request->vendor_warehouse_id);
+                    $data = $data->where('vendor_warehouse_id',$request->vendor_warehouse_id);
+                }
+                if(empty($quotationData->first()))
+                {
+                    errorMessage(__('customer_quote.quotation_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'city_name');
+                    $data = fullSearchQuery($data, $request->search,'vendor_price');
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
@@ -80,13 +82,13 @@ class CityApiController extends Controller
         }
         catch(\Exception $e)
         {
-            \Log::error("City fetching failed: " . $e->getMessage());
+            \Log::error("Quotation fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
 
     /**
-     * Validate request for City.
+     * Validate request for Customer Quote .
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -94,7 +96,7 @@ class CityApiController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'state_id' => 'required|numeric',
+            'customer_enquiry_id' => 'required|integer'
         ])->errors();
     }
 }

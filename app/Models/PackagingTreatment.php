@@ -20,6 +20,7 @@ class PackagingTreatment extends Model
      * @var array<int, string>
      */
     protected $hidden = [
+        'is_featured',
         'status',
         'created_by',
         'updated_by',

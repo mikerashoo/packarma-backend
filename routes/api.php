@@ -79,6 +79,9 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //User Address
         Route::post('/user_address/my_listing', 'UserAddressApiController@index');
+
+        //Customer Enquiry Quote 
+        Route::post('/customer_quote/my_listing', 'CustomerQuoteApiController@index');
         
     });
 });

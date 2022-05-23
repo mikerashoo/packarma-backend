@@ -33,8 +33,8 @@
                                                 <dd class="col-sm-8">{{ customerEnquiryType($data->enquiry_type); }}</dd>
                                             </dl> --}}
                                             <dl class="row">                                                                        
-                                                <dt class="col-sm-4 text-left">Address Type:</dt>
-                                                <dd class="col-sm-8">{{ addressType($data['user_address']->type) }}</dd>
+                                                <dt class="col-sm-4 text-left">User Address :</dt>
+                                                <dd class="col-sm-8">{{$data->address}}, {{$data['city']->city_name}}, {{$data['state']->state_name}}, {{$data->pincode}}</dd>
                                             </dl>
                                         </div>
                                         <div class="col-md-7">

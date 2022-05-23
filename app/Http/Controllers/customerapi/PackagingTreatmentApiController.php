@@ -139,7 +139,7 @@ class PackagingTreatmentApiController extends Controller
                 }
                 $responseData['result'] = $featureData;
                 $responseData['total_records'] = $total_records;
-                successMessage('Data Fetched Successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {

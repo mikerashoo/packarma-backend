@@ -19,6 +19,7 @@ class UserAddress extends Model
      * @var array<int, string>
      */
     protected $hidden = [
+        
         'status',
         'created_by',
         'updated_by',

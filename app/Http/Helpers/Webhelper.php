@@ -535,3 +535,24 @@ if (!function_exists('fullSearchQuery')) {
         return $query;
     }
 }
+
+/**
+    *   created by : Pradyumn Dwivedi
+    *   Created On : 11-May-2022
+    *   Uses :  To fetch value in user address       
+*/
+if (! function_exists('addressType')) {
+    function addressType($displayValue="",$allKeys = false) {
+        $returnArray = array(
+            'shipping' => 'Shipping',
+            'billing' => 'Billing'
+        );
+        if(!empty($displayValue)){
+            $returnArray = $returnArray[$displayValue];
+        }
+        if(empty($displayValue) && $allKeys){
+                $returnArray = array_keys($returnArray);
+        }
+        return $returnArray;
+    }
+}

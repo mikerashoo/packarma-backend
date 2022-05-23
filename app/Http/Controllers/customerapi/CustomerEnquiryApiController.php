@@ -5,6 +5,7 @@ namespace App\Http\Controllers\customerapi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CustomerEnquiry;
+use App\Models\UserAddress;
 use Carbon\Carbon;
 use Response;
 
@@ -61,7 +62,7 @@ class CustomerEnquiryApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('Data Fetched Successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {
@@ -98,6 +99,13 @@ class CustomerEnquiryApiController extends Controller
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage(__('auth.validation_failed'), $validationErrors->all());
                 }
+                //getting user address details from userAddress and putting value to request to store in cumstomer enquiry table
+                $userAddress = UserAddress::find($request->user_address_id);
+                $request['country_id'] = $userAddress->country_id;
+                $request['state_id'] = $userAddress->state_id;
+                $request['city_id'] = $userAddress->city_id;
+                $request['address'] = $userAddress->address;
+                $request['pincode'] = $userAddress->pincode;
                 // Store a new enquiry
                 $enquiryData = CustomerEnquiry::create($request->all());
                 \Log::info("Customer Enquiry Created successfully");
@@ -116,7 +124,7 @@ class CustomerEnquiryApiController extends Controller
     }
 
     /**
-     * Validate request for registeration.
+     * Validate request for Customer Enquiry.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
