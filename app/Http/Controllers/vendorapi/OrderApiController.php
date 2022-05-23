@@ -27,10 +27,6 @@ class OrderApiController extends Controller
                 $page_no = 1;
                 $limit = 10;
 
-
-
-
-
                 if (isset($request->page_no) && !empty($request->page_no)) {
                     $page_no = $request->page_no;
                 }
@@ -65,7 +61,7 @@ class OrderApiController extends Controller
                     ->leftjoin('measurement_units', 'orders.measurement_unit_id', '=', 'measurement_units.id')
                     ->leftjoin('countries', 'orders.country_id', '=', 'countries.id')
                     ->leftjoin('currencies', 'orders.currency_id', '=', 'currencies.id')
-                    ->where($main_table . '' . '.vendor_id', $vendor_id);
+                    ->where([[$main_table . '' . '.vendor_id', $vendor_id], [$main_table . '' . '.deleted_at', NULL]]);
 
 
 

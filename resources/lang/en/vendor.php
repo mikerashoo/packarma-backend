@@ -14,9 +14,11 @@ return [
     */
 
     'registered_successfully' => 'Vendor registered successfully!',
+    'update_successfully' => 'Vendor updated successfully!',
     'otp_sent' => 'OTP sent successfully.',
     'phone_already_exist' => 'Vendor has already been registered with this phone number.',
     'login_failed' => 'Invalid login credentials',
     'logged_in_successfully' => 'Logged in successfully!',
+    'same_phone_exist' => 'Same phone no exist with another account!',
 
 ];
