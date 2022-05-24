@@ -77,11 +77,15 @@ Route::middleware(['basicAuth'])->group(function () {
         //State
         Route::post('/state/listing', 'StateApiController@index');
 
+        //Country
+        Route::post('/country/listing', 'CountryApiController@index');
+
         //User Address
         Route::post('/user_address/my_listing', 'UserAddressApiController@index');
 
         //Customer Enquiry Quote 
         Route::post('/customer_quote/my_listing', 'CustomerQuoteApiController@index');
+        Route::post('/customer_quote/my_accepted_quotation', 'CustomerQuoteApiController@accepted_quote_details');
         
     });
 });

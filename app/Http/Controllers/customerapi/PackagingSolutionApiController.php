@@ -42,7 +42,7 @@ class PackagingSolutionApiController extends Controller
                     }
                     $offset=($page_no-1)*$limit;
 
-                    $data = RecommendationEngine::with('product','measurement_unit','category','product_form','packing_type','packaging_machine','packaging_treatment','packaging_material','storage_condition')
+                    $data = RecommendationEngine::select('id','engine_name','structure_type','display_shelf_life')
                                                         ->where([['status','1'],['category_id',$request->category_id],['product_id', $request->product_id],['storage_condition_id',$request->storage_condition_id],['product_form_id', $request->product_form_id],['packing_type_id',$request->packing_type_id]]);
                     $engineData = RecommendationEngine::whereRaw('1 = 1');
                     if($request->engine_id)

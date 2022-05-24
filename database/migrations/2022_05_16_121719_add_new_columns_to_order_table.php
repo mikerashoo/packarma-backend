@@ -18,7 +18,7 @@ class AddNewColumnsToOrderTable extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->decimal('mrp', $precision = 8, $scale = 2)->default(0.00)->after('currency_id');
             $table->decimal('gst_amount', $precision = 8, $scale = 2)->default(0.00)->after('sub_total');
-            $table->string('gst_type')->nullable()->comment('Cgst+Sgst|Igst')->after('gst_amount');
+            $table->string('gst_type')->nullable()->comment('cgst+sgst|igst')->after('gst_amount');
             $table->decimal('gst_percentage', $precision = 8, $scale = 2)->default(0.00)->after('gst_type');
             $table->decimal('freight_amount', $precision = 8, $scale = 2)->default(0.00)->after('gst_percentage');
             $table->decimal('commission', $precision = 8, $scale = 2)->default(0.00)->after('grand_total');
