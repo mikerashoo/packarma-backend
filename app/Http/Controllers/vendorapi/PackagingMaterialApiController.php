@@ -59,7 +59,7 @@ class PackagingMaterialApiController extends Controller
                 )
                     ->leftjoin('products', 'vendor_material_mappings.product_id', '=', 'products.id')
                     ->leftjoin('packaging_materials', 'vendor_material_mappings.packaging_material_id', '=', 'packaging_materials.id')
-                    ->where($main_table . '' . '.status', '1')->where('vendor_id', $vendor_id);
+                    ->where([[$main_table . '' . '.status', '1'], [$main_table . '' . '.deleted_at', NULL]])->where('vendor_id', $vendor_id);
 
 
 

@@ -53,7 +53,7 @@ class EnquiryApiController extends Controller
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
-                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped']]);
+                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped'], [$main_table . '' . '.deleted_at', NULL]]);
 
                 // $data = VendorQuotation::with('product', 'vendor', 'Enquiry')->where([['vendor_id', $vendor_id], ['enquiry_status', 'mapped']]);
 

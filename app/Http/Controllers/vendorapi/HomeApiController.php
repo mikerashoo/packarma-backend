@@ -89,7 +89,7 @@ class HomeApiController extends Controller
                     ->leftjoin('user_addresses', 'customer_enquiries.user_id', '=', 'user_addresses.user_id')
                     ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
                     ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
-                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped']])
+                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped'], ['vendor_quotations.deleted_at', NULL]])
                     ->orderBy('vendor_quotations.created_at', 'desc')->take(3)->get()->toArray();
 
 

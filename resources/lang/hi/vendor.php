@@ -14,9 +14,10 @@ return [
     */
 
     'registered_successfully' => 'उपयोगकर्ता सफलतापूर्वक पंजीकृत हो गया!',
+    'update_successfully' => 'Vendor updated successfully!',
     'otp_sent' => 'ओटीपी सफलतापूर्वक भेजा गया.',
     'phone_already_exist' => 'Vendor has already been registered with this phone number.',
     'login_failed' => 'Invalid login credentials',
     'logged_in_successfully' => 'Logged in successfully!',
-
+    'same_phone_exist' => 'Same phone no exist with another account!',
 ];
