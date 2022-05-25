@@ -44,6 +44,11 @@ class OrderApiController extends Controller
                     'orders.vendor_pending_payment',
                     'orders.vendor_payment_status',
                     'orders.order_delivery_status',
+                    'orders.product_quantity',
+                    'orders.mrp',
+                    'orders.gst_amount',
+                    'orders.grand_total',
+                    'orders.created_at',
                     'categories.category_name',
                     'sub_categories.sub_category_name',
                     'products.product_name',
@@ -54,6 +59,14 @@ class OrderApiController extends Controller
                     'countries.phone_code',
                     'currencies.currency_name',
                     'currencies.currency_symbol',
+                    'storage_conditions.storage_condition_title',
+                    'packaging_machines.packaging_machine_name',
+                    'product_forms.product_form_name',
+                    'packing_types.packing_name',
+                    'packaging_treatments.packaging_treatment_name',
+                    'user_addresses.pincode',
+                    'states.state_name',
+                    'cities.city_name',
                 )
                     ->leftjoin('categories', 'orders.category_id', '=', 'categories.id')
                     ->leftjoin('sub_categories', 'orders.sub_category_id', '=', 'sub_categories.id')
@@ -61,7 +74,15 @@ class OrderApiController extends Controller
                     ->leftjoin('measurement_units', 'orders.measurement_unit_id', '=', 'measurement_units.id')
                     ->leftjoin('countries', 'orders.country_id', '=', 'countries.id')
                     ->leftjoin('currencies', 'orders.currency_id', '=', 'currencies.id')
-                    ->where([[$main_table . '' . '.vendor_id', $vendor_id], [$main_table . '' . '.deleted_at', NULL]]);
+                    ->leftjoin('storage_conditions', 'orders.storage_condition_id', '=', 'storage_conditions.id')
+                    ->leftjoin('packaging_machines', 'orders.packaging_machine_id', '=', 'packaging_machines.id')
+                    ->leftjoin('product_forms', 'orders.product_form_id', '=', 'product_forms.id')
+                    ->leftjoin('packing_types', 'orders.packing_type_id', '=', 'packing_types.id')
+                    ->leftjoin('packaging_treatments', 'orders.packaging_treatment_id', '=', 'packaging_treatments.id')
+                    ->leftjoin('user_addresses', 'orders.user_id', '=', 'user_addresses.user_id')
+                    ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
+                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
+                    ->where([[$main_table . '' . '.vendor_id', $vendor_id], [$main_table . '' . '.deleted_at', NULL]])->distinct('user_addresses.user_id');
 
 
 
@@ -149,6 +170,60 @@ class OrderApiController extends Controller
             }
         } catch (\Exception $e) {
             \Log::error("Order fetching failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+
+
+    public function updateDeliveryStatus(Request $request)
+    {
+        $msg_data = array();
+        try {
+            $vendor_token = readVendorHeaderToken();
+            if ($vendor_token) {
+                $vendor_id = $vendor_token['sub'];
+
+
+                \Log::info("Order Delivery Status Update Started!");
+                $order_data = array();
+                if (!$request->id) {
+                    errorMessage(__('order.id_require'), $msg_data);
+                }
+
+                if (!$request->order_delivery_status) {
+                    errorMessage(__('order.delivery_status_require'), $msg_data);
+                }
+                $id = $request->id;
+                $staus = $request->order_delivery_status;
+
+                $status_array = ['pending', 'processing', 'out_for_delivery', 'delivered'];
+                if (!in_array($staus, $status_array)) {
+                    errorMessage(__('order.wrong_status'), $msg_data);
+                }
+
+                $checkOrder = Order::where([['id', $id], ['vendor_id', $vendor_id]])->first();
+                if (empty($checkOrder)) {
+                    errorMessage(__('order.order_not_found'), $msg_data);
+                }
+                $order_data = $request->all();
+                $order_data['vendor_id'] = $vendor_id;
+                unset($order_data['id']);
+                $checkOrder->update($order_data);
+                $orderData = $checkOrder;
+
+                $order = $orderData->toArray();
+                $orderData->created_at->toDateTimeString();
+                $orderData->updated_at->toDateTimeString();
+
+                \Log::info("Order delivery status Updated successfully!");
+
+                successMessage(__('order.updated'), $order);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Order delivery status Updation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

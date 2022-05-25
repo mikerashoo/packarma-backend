@@ -20,5 +20,6 @@ return [
     'login_failed' => 'Invalid login credentials',
     'logged_in_successfully' => 'Logged in successfully!',
     'same_phone_exist' => 'Same phone no exist with another account!',
+    'delete_successfully' => 'Vendor deleted successfuly',
 
 ];

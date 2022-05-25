@@ -4,6 +4,7 @@ namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Vendor;
+use App\Models\VendorDevice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,7 @@ class MyProfileController extends Controller
                     "terms_and_condition" => true,
                     "privacy_policy" => true,
                     "edit_vendor" => true,
+                    "delete_vendor" => true,
                 );
 
                 $msg_data['result'] = $data;
@@ -103,6 +105,31 @@ class MyProfileController extends Controller
             }
         } catch (\Exception $e) {
             \Log::error("My Profile Update failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    public function destroy()
+    {
+        $msg_data = array();
+        \Log::info("Delete Vendor Account, starting at: " . Carbon::now()->format('H:i:s:u'));
+        try {
+            $vendor_token = readVendorHeaderToken();
+            if ($vendor_token) {
+                $vendor_id = $vendor_token['sub'];
+
+                \Log::info("Delete Vendor Start!");
+
+                Vendor::destroy($vendor_id);
+                // VendorDevice::destroy(['vendor_id', $vendor_id]);
+                VendorDevice::where('vendor_id', $vendor_id)->delete();
+                \Log::info("Vendor deleted successfully! ");
+                successMessage(__('vendor.delete_successfully'), $msg_data);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Vendor Delete failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

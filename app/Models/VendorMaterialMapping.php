@@ -17,6 +17,10 @@ class VendorMaterialMapping extends Model
      * uses : to get vendor in vendor material map table
      */
 
+    protected $fillable = [
+        'vendor_price',
+    ];
+
     protected $hidden = [
         'status',
         'created_by',

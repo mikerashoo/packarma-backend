@@ -17,6 +17,10 @@ class Order extends Model
      * uses : to get data of user  in order table
      */
 
+    protected $fillable = [
+        'order_delivery_status',
+    ];
+
     protected $hidden = [
         'created_by',
         'updated_by',
@@ -152,10 +156,10 @@ class Order extends Model
     }
 
     /**
-        * Developed By : Pradyumn Dwivedi
-        * Created On : 11-may-2022
-        * uses : to get data of measurement unit in order table
-    */
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 11-may-2022
+     * uses : to get data of measurement unit in order table
+     */
     public function measurement_unit()
     {
         return $this->belongsTo('App\Models\MeasurementUnit');

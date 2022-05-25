@@ -23,8 +23,11 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
     Route::post('/forgot_password_api', 'ForgotPasswordApiController@index');
     Route::middleware(['vendorTokenAuth'])->group(function () {
         Route::post('/materials/listing', 'PackagingMaterialApiController@index');
+        Route::post('/material/price_update', 'PackagingMaterialApiController@updatePrice');
         Route::post('/orders/listing', 'OrderApiController@index');
+        Route::post('/order/update_delivery_status', 'OrderApiController@updateDeliveryStatus');
         Route::post('/enquiry/listing', 'EnquiryApiController@index');
+        Route::post('/enquiry/send_quotation', 'EnquiryApiController@sendQuotation');
         Route::post('/quotation/listing', 'QuotationApiController@index');
         Route::post('/payment/listing', 'PaymentApiController@index');
         Route::post('/home', 'HomeApiController@index');
@@ -32,5 +35,11 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
         Route::post('/general_info', 'GeneralInfoController@index');
         Route::post('/profile', 'MyProfileController@show');
         Route::post('/update_profile', 'MyProfileController@update');
+        Route::post('/delete_account', 'MyProfileController@destroy');
+        Route::post('/get_pincode_data', 'PincodeDetailController@index');
+        Route::post('/address/listing', 'MyAddressController@index');
+        Route::post('/address/create', 'MyAddressController@create');
+        Route::post('/address/update', 'MyAddressController@update');
+        Route::post('/address/delete', 'MyAddressController@destroy');
     });
 });

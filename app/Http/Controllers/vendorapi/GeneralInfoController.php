@@ -23,22 +23,24 @@ class GeneralInfoController extends Controller
             $vendor_token = readVendorHeaderToken();
             if ($vendor_token) {
                 $vendor_id = $vendor_token['sub'];
-                $validationErrors = $this->validateForgotPassword($request);
-                if (count($validationErrors)) {
-                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
-                }
+                // $validationErrors = $this->validateForgotPassword($request);
+                // if (count($validationErrors)) {
+                //     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                //     errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                // }
                 if ($request->info_type) {
-                    $type = 'vendor_' . $request->info_type;
+                    $type = array($request->info_type);
                 } else {
-                    $type = '';
+                    $type = array('vendor_about_us', 'vendor_terms_condition', 'vendor_privacy_policy', 'vendor_help_and_support');
                 }
-                $data = GeneralSetting::select('value')->where([['type', $type]])->get();
+                $data = GeneralSetting::select('type', 'value')->whereIn('type', $type)->get();
                 if (count($data) == 0) {
                     errorMessage(__('general_info.not_found'), $msg_data);
                 }
-                $msg_data['value'] = $data[0]['value'];
-                successMessage(__('general_info.info_fetch'), $msg_data);
+                // print_r($data[0]);
+                // die;
+
+                successMessage(__('general_info.info_fetch'), $data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }

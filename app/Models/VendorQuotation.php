@@ -17,10 +17,23 @@ class VendorQuotation extends Model
     protected $fillable = [
         'vendor.*',
         // 'warehouse.*',
-        'vendor_price.*',
+        // 'vendor_price.*',
         'commission_rate.*',
         'quotation_validity.*',
         'etd.*',
+        'vendor_price',
+        'enquiry_status',
+    ];
+
+
+
+    protected $hidden = [
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+        'created_at',
+        'updated_at'
     ];
 
     /**
