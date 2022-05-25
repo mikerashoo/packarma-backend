@@ -34,7 +34,7 @@ class ProductFormApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = ProductForm::where('status','1');
+                $data = ProductForm::select('id', 'product_form_name','short_description','product_form_image','product_form_thumb_image','meta_title','meta_description','meta_keyword')->where('status','1');
                 $productFormData = ProductForm::whereRaw("1 = 1");
                 if($request->form_id)
                 {

@@ -34,7 +34,7 @@ class SubscriptionApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = Subscription::whereRaw("1 = 1");
+                $data = Subscription::select('id','type','amount')->whereRaw("1 = 1");
                 $subscriptionData = Subscription::whereRaw("1 = 1");
                 if($request->subscription_id)
                 {

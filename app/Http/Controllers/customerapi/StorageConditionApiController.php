@@ -34,7 +34,7 @@ class StorageConditionApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = StorageCondition::where('status','1');
+                $data = StorageCondition::select('id','storage_condition_title','storage_condition_description','seo_url','meta_title','meta_description','meta_keyword')->where('status','1');
                 $storageConditionData = StorageCondition::whereRaw("1 = 1");
                 if($request->storage_condition_id)
                 {

@@ -36,7 +36,8 @@ class PackingTypeApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
 
-                $data = PackingType::where('status','1');
+                $data = PackingType::select('id','packing_name','packing_description','meta_title','meta_description','meta_keyword')
+                                    ->where('status','1');
 
                 $packingTypeData = PackingType::whereRaw("1 = 1");
                 if($request->packaging_type_id)

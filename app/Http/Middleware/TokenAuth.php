@@ -25,6 +25,7 @@ class TokenAuth
         $return_array['success'] = '0';
         try {
             $token = $request->header('access-token');
+            $imei_number = $request->header('imei-no');
             $data = JWTAuth::setToken($token)->getPayload();
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             $return_array['success'] = '4';
@@ -39,6 +40,7 @@ class TokenAuth
             return response()->json($return_array, 200);
         }
         Session::flash('tokenData', $token);
+        Session::flash('customerImeiNoData', $imei_number);
         return $next($request);
     }
 }

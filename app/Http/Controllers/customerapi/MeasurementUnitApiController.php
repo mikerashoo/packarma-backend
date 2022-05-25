@@ -35,7 +35,7 @@ class MeasurementUnitApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
                 
-                $data = MeasurementUnit::where('status','1');
+                $data = MeasurementUnit::select('id','unit_name','unit_symbol')->where('status','1');
                 $unitData = MeasurementUnit::whereRaw("1 = 1");
                 if($request->unit_id)
                 {

@@ -244,6 +244,25 @@ class CustomerEnquiryController extends Controller
             // $tblObj->vendor_warehouse_id= $request->warehouse[$k];
             $tblObj->vendor_price =  $request->vendor_price[$k];
             $tblObj->commission_amt =  $request->commission_rate[$k];
+            $tblObj->product_quantity = $request->product_quantity[$k];
+            $mrp_rate =  $request->commission_rate[$k] + $request->vendor_price[$k];
+            $tblObj->mrp = $mrp_rate;
+            $sub_total_amount = $request->product_quantity[$k] * $mrp_rate;
+            $tblObj->sub_total = $sub_total_amount;
+            if($request->gst_type == 'cgst+sgst' || $request->gst_type == 'igst'){
+                $tblObj->gst_type = $request->gst_type[$k];
+                $tblObj->gst_percentage = $request->gst_percentage[$k];
+                $tblObj->gst_amount = $mrp_rate * $request->gst_percentage[$k] / 100;
+            }else{
+                $gst_amount = 0;
+            }
+            if(isset($request->freight_amount[$k])){
+                $tblObj->freight_amount = $request->freight_amount[$k];
+            }else{
+                $freight_amount = 0;
+            }
+            $tblObj->total_amount = $sub_total_amount + $gst_amount + $freight_amount;
+            // print_r($balance);exit;
             //storing quotation validity in variable for increasing current time with validity hours
             $validity_hours =  $request->quotation_validity[$k];
             $currentDateTime = Carbon::now();
@@ -298,12 +317,13 @@ class CustomerEnquiryController extends Controller
     {
         if( $for == 'vendor'){
             return \Validator::make($request->all(), [    
-                'vendor.*' => 'required',
-                // 'warehouse.*' => 'required',
-                'vendor_price.*' => 'required',
-                'commission_rate.*' => 'required',
-                'quotation_validity.*' => 'required',
-                'lead_time.*' => 'required'
+                'vendor.*' => 'required|numeric',
+                // 'warehouse.*' => 'required|numeric',
+                'vendor_price.*' => 'required|numeric',
+                'commission_rate.*' => 'required|numeric',
+                'quotation_validity.*' => 'required|numeric',
+                'lead_time.*' => 'required|numeric',
+                'gst_type.*' => 'required|numeric'
             ])->errors(); 
         } elseif( $for == 'addEnquiry'){
             return \Validator::make($request->all(), [    

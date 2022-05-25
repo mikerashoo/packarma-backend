@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\State;
 use Response;
@@ -27,8 +28,8 @@ class StateApiController extends Controller
             {
                 $page_no=1;
                 $limit=10;
-                if(isset($request->country_id)){
-                    $country_id = $request->country_id;
+                if(isset($request->search_country_id)){
+                    $country_id = $request->search_country_id;
                 }
                 else{
                     $country_id = 1;
@@ -40,17 +41,24 @@ class StateApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = State::with('country')->where([['status','1'],['country_id', $country_id]]);
-                $stateData = State::with('country')->whereRaw("1 = 1");
+                $data = DB::table('states')->select(
+                    'states.id',
+                    'states.state_name',
+                    'countries.country_name',
+                )
+                    ->leftjoin('countries', 'countries.id', '=', 'states.country_id')
+                    ->where([['states.status', 1],['states.country_id',$country_id]]);
+
+                $stateData = State::whereRaw("1 = 1");
                 if($request->state_id)
                 {
-                    $stateData = $stateData->where('id',$request->state_id);
-                    $data = $data->where('id',$request->state_id);
+                    $stateData = $stateData->where('states.id',$request->state_id);
+                    $data = $data->where('states.id',$request->state_id);
                 }
                 if($request->state_name)
                 {
-                    $stateData = $stateData->where('state_name',$request->state_name);
-                    $data = $data->where('state_name',$request->state_name);
+                    $stateData = $stateData->where('states.state_name',$request->state_name);
+                    $data = $data->where('states.state_name',$request->state_name);
                 }
                 if(empty($stateData->first()))
                 {

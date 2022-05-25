@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\CustomerEnquiry;
 use App\Models\UserAddress;
@@ -38,18 +39,39 @@ class CustomerEnquiryApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = CustomerEnquiry::with('user','category','sub_category','product','measurement_unit','storage_condition','packaging_machine','product_form','packing_type','packaging_treatment','recommendation_engine','user_address')
-                                ->where([['user_id', $user_id]]);
+
+                $data = DB::table('customer_enquiries')->select(
+                    'customer_enquiries.id',
+                    'categories.category_name',
+                    'products.product_name',
+                    'customer_enquiries.product_weight',
+                    'customer_enquiries.shelf_life',
+                    'storage_conditions.storage_condition_title',
+                    'storage_conditions.storage_condition_description',
+                    'product_forms.product_form_name',
+                    'packing_types.packing_name',
+                    'packaging_treatments.packaging_treatment_name',
+                    'packaging_treatments.packaging_treatment_description',
+                    'user_addresses.address',
+                    'user_addresses.pincode'
+                )
+                    ->leftjoin('categories', 'categories.id', '=', 'customer_enquiries.category_id')
+                    ->leftjoin('products', 'products.id', '=', 'customer_enquiries.product_id')
+                    ->leftjoin('storage_conditions', 'storage_conditions.id', '=', 'customer_enquiries.storage_condition_id')
+                    ->leftjoin('product_forms', 'product_forms.id', '=', 'customer_enquiries.product_form_id')
+                    ->leftjoin('packing_types', 'packing_types.id', '=', 'customer_enquiries.packing_type_id')
+                    ->leftjoin('packaging_treatments', 'packaging_treatments.id', '=', 'customer_enquiries.packaging_treatment_id')
+                    ->leftjoin('user_addresses', 'user_addresses.id', '=', 'customer_enquiries.user_address_id')
+                    ->where('customer_enquiries.user_id', $user_id);
+
                 $customerEnquiryData = CustomerEnquiry::whereRaw("1 = 1");
-                if($request->enquiry_id)
-                {
-                    $customerEnquiryData = $customerEnquiryData->where('id',$request->enquiry_id);
-                    $data = $data->where('id',$request->enquiry_id);
+                if ($request->enquiry_id) {
+                    $customerEnquiryData = $customerEnquiryData->where($main_table . '' . '.id', $request->enquiry_id);
+                    $data = $data->where($main_table . '' . '.id', $request->enquiry_id);
                 }
-                if($request->product_id)
-                {
-                    $customerEnquiryData = $customerEnquiryData->where('product_id',$request->product_id);
-                    $data = $data->where('product_id',$request->product_id);
+                if ($request->product_id) {
+                    $customerEnquiryData = $customerEnquiryData->where($main_table . '' . '.product_id', $request->product_id);
+                    $data = $data->where($main_table . '' . '.product_id', $request->product_id);
                 }
                 if(empty($customerEnquiryData->first()))
                 {
@@ -132,7 +154,6 @@ class CustomerEnquiryApiController extends Controller
     private function validateEnquiry(Request $request)
     {
         return \Validator::make($request->all(), [
-            'description' => 'required|string',
             'user_id' => 'required|numeric',
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',

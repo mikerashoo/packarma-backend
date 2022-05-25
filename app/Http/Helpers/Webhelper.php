@@ -4,6 +4,7 @@ use App\Models\DisplayMsg;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorDevice;
+use App\Models\CustomerDevice;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Storage;
@@ -59,8 +60,10 @@ if (!function_exists('readHeaderToken')) {
     {
         $msg_data = array();
         $tokenData = Session::get('tokenData');
+        $customerImeiNoData = Session::get('customerImeiNoData');
         $token = JWTAuth::setToken($tokenData)->getPayload();
-        $userChk = User::where([['id', $token['sub']]])->get();
+        // $userChk = User::where([['id', $token['sub']]])->get();
+        $userChk = CustomerDevice::where([['user_id', $token['sub']], ['imei_no', $customerImeiNoData]])->get();
         if (count($userChk) == 0 || $userChk[0]->remember_token == '') {
             errorMessage('please_login_and_try_again', $msg_data, 4);
         }
@@ -546,6 +549,28 @@ if (! function_exists('addressType')) {
         $returnArray = array(
             'shipping' => 'Shipping',
             'billing' => 'Billing'
+        );
+        if(!empty($displayValue)){
+            $returnArray = $returnArray[$displayValue];
+        }
+        if(empty($displayValue) && $allKeys){
+                $returnArray = array_keys($returnArray);
+        }
+        return $returnArray;
+    }
+}
+
+/**
+    *   created by : Pradyumn Dwivedi
+    *   Created On : 21-May-2022
+    *   Uses :  To fetch value in gst type dropdown in customer enquiry map to vendor       
+*/
+if (! function_exists('gstType')) {
+    function gstType($displayValue="",$allKeys = false) {
+        $returnArray = array(
+            'not_applicable' => 'Not Applicable',
+            'cgst+sgst' => 'CGST+SGST',
+            'igst' => 'IGST'
         );
         if(!empty($displayValue)){
             $returnArray = $returnArray[$displayValue];

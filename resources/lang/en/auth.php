@@ -27,7 +27,7 @@ return [
     'verify_mobile_to_reset_password' => 'First verify your mobile number to reset password.',
     'platform_require' => 'Platform is required as a header parameter',
     'invalid_platform' => 'Platform is Invalid',
-    'token_expired' => 'Token Expireds',
+    'token_expired' => 'Token Expired',
     'version_require' => 'Version is required as a header parameter',
     'invalid_version' => 'Version is Invalid',
     'imei_require' => 'Device id is required as a header parameter',
