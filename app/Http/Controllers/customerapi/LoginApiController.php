@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\CustomerDevice;
+use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Session;
 use Response;
@@ -36,15 +38,26 @@ class LoginApiController extends Controller
                 \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                 errorMessage(__('auth.validation_failed'), $validationErrors->all());
             }
-            $userData = User::where([['email', $request->email], ['password', md5($request->email . $request->password)], ['status', '1'], ['is_verified', 'Y']])->first();
+            $userData = User::with(['currency' => function ($query) {
+                $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
+            }])->with(['phone_country' => function ($query) {
+                $query->select('id', 'phone_code', 'country_name');
+            }])->where([['email', $request->email], ['password', md5($request->email.$request->password)], ['status', '1'], ['is_verified', 'Y']])->first();
+            
             if (empty($userData)) {
                 errorMessage(__('user.login_failed'), $msg_data);
             }
+            $imei_no = $request->header('imei-no');
             $token = JWTAuth::fromUser($userData);
             $users = User::find($userData->id);
             $userData->last_login = $users->last_login = Carbon::now();
-            $userData->remember_token = $users->remember_token = $token;
+            $userData->remember_token = $token;
             $users->save();
+            // print_r($userData);exit;
+            CustomerDevice::updateOrCreate(
+                ['user_id' => $userData->id, 'imei_no' => $imei_no],
+                ['remember_token' => $token]
+            );
             successMessage(__('user.logged_in_successfully'), $userData->toArray());
         } catch (\Exception $e) {
             \Log::error("Login failed: " . $e->getMessage());

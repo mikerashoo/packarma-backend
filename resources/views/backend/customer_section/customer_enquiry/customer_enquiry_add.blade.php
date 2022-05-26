@@ -138,40 +138,14 @@
                                             @endforeach
                                         </select>
                         			</div>
-                                    {{-- <div class="col-sm-6 mb-3">
-                        				<label>Country Name<span style="color:#ff0000">*</span></label>
-                        				<select class="form-control select2 required" id="country" value="" name="country" style="width: 100% !important;">
+                                    <div class="col-sm-6 mb-3">
+                        				<label>User Address<span style="color:#ff0000">*</span></label>
+                        				<select class="form-control select2 required" id="user_address" value="" name="user_address" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach ($country as $countries)
-                                                    <option value="{{ $countries->id }}">{{ $countries->country_name }}</option>
+                                            @foreach ($user_address as $userAddress)
+                                                    <option value="{{ $userAddress->id }}">{{ $userAddress->address }}</option>
                                             @endforeach
                                         </select>
-                        			</div> --}}
-                                    <div class="col-sm-6 mb-3">
-                        				<label>State Name<span style="color:#ff0000">*</span></label>
-                        				<select class="form-control select2 required" id="state" value="" name="state" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach ($state as $states)
-                                                    <option value="{{ $states->id }}">{{ $states->state_name }}</option>
-                                            @endforeach
-                                        </select><br />
-                        			</div>
-                                    <div class="col-sm-6 mb-3">
-                        				<label>City Name<span style="color:#ff0000">*</span></label>
-                        				<select class="form-control select2 required" id="city" value="" name="city" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach ($city as $cities)
-                                                    <option value="{{ $cities->id }}">{{ $cities->city_name }}</option>
-                                            @endforeach
-                                        </select>
-                        			</div>
-                                    <div class="col-sm-6 mb-3">
-                        				<label>Address<span style="color:#ff0000">*</span></label>
-                        				<textarea class="form-control required" id="address" value="" name="address"></textarea>
-                        			</div>
-                                    <div class="col-sm-6 mb-3">
-                        				<label>Pincode<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" value=""  id="pincode" name="pincode" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br>
                         			</div>
                         		</div>
                         		<hr>

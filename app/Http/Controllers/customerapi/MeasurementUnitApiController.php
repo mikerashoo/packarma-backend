@@ -35,7 +35,7 @@ class MeasurementUnitApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
                 
-                $data = MeasurementUnit::where('status','1');
+                $data = MeasurementUnit::select('id','unit_name','unit_symbol')->where('status','1');
                 $unitData = MeasurementUnit::whereRaw("1 = 1");
                 if($request->unit_id)
                 {
@@ -63,7 +63,7 @@ class MeasurementUnitApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {

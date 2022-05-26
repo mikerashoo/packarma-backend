@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\City;
 use App\Models\State;
@@ -35,8 +36,8 @@ class CityApiController extends Controller
                 $page_no=1;
                 $limit=10;
                 
-                if(isset($request->country_id)){
-                    $country_id = $request->country_id;
+                if(isset($request->search_country_id)){
+                    $country_id = $request->search_country_id;
                 }
                 else{
                     $country_id = 1;
@@ -48,17 +49,27 @@ class CityApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = City::with('state','country')->where([['state_id', $request->state_id],['country_id', $country_id]]);
+
+                $data = DB::table('cities')->select(
+                    'cities.id',
+                    'cities.city_name',
+                    'states.state_name',
+                    'countries.country_name',
+                )
+                    ->leftjoin('states', 'states.id', '=', 'cities.state_id')
+                    ->leftjoin('countries', 'countries.id', '=', 'cities.country_id')
+                    ->where([['cities.status', 1],['cities.state_id',$request->state_id],['cities.country_id',$country_id]]);
+
                 $cityData = City::whereRaw("1 = 1");
                 if($request->city_id)
                 {
-                    $cityData = $cityData->where('id',$request->city_id);
-                    $data = $data->where('id',$request->city_id);
+                    $cityData = $cityData->where('cities.id',$request->city_id);
+                    $data = $data->where('cities.id',$request->city_id);
                 }
                 if($request->city_name)
                 {
-                    $cityData = $cityData->where('city_name',$request->city_name);
-                    $data = $data->where('city_name',$request->city_name);
+                    $cityData = $cityData->where('cities.city_name',$request->city_name);
+                    $data = $data->where('cities.city_name',$request->city_name);
                 }
                 if(empty($cityData->first()))
                 {
@@ -71,7 +82,7 @@ class CityApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {
@@ -86,7 +97,7 @@ class CityApiController extends Controller
     }
 
     /**
-     * Validate request for login.
+     * Validate request for City.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response

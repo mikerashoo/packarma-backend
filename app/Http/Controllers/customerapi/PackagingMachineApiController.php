@@ -34,7 +34,7 @@ class PackagingMachineApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = PackagingMachine::where('status','1');
+                $data = PackagingMachine::select('id','packaging_machine_name','packaging_machine_description','packaging_machine_image','packaging_machine_thumb_image','meta_title','meta_description','meta_keyword')->where('status','1');
                 $machineData = PackagingMachine::whereRaw("1 = 1");
                 if($request->machine_id)
                 {
@@ -64,7 +64,7 @@ class PackagingMachineApiController extends Controller
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {

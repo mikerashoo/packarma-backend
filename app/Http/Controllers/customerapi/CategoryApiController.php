@@ -34,7 +34,7 @@ class CategoryApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = Category::where('status','1');
+                $data = Category::select('id','category_name','category_image','category_thumb_image','seo_url','meta_title','meta_description','meta_keyword')->where('status','1');
                 $categoryData = Category::whereRaw("1 = 1");
                 if($request->category_id)
                 {
@@ -64,7 +64,7 @@ class CategoryApiController extends Controller
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }

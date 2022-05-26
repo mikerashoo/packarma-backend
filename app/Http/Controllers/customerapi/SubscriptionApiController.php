@@ -34,7 +34,7 @@ class SubscriptionApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = Subscription::whereRaw("1 = 1");
+                $data = Subscription::select('id','type','amount')->whereRaw("1 = 1");
                 $subscriptionData = Subscription::whereRaw("1 = 1");
                 if($request->subscription_id)
                 {
@@ -57,7 +57,7 @@ class SubscriptionApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {

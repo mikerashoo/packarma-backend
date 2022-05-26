@@ -33,8 +33,8 @@
                                                 <dd class="col-sm-8">{{ customerEnquiryType($data->enquiry_type); }}</dd>
                                             </dl> --}}
                                             <dl class="row">                                                                        
-                                                <dt class="col-sm-4 text-left">Address Type:</dt>
-                                                <dd class="col-sm-8">{{ addressType($data['user_address']->type) }}</dd>
+                                                <dt class="col-sm-4 text-left">User Address :</dt>
+                                                <dd class="col-sm-8">{{$data->address}}, {{$data['city']->city_name}}, {{$data['state']->state_name}}, {{$data->pincode}}</dd>
                                             </dl>
                                         </div>
                                         <div class="col-md-7">
@@ -116,6 +116,7 @@ $(document).on('click', '#addStock', function(event){
     $('#vendorMapTbl').append('<tr id="vendorMapTblTr'+i+'" data-key="'+i+'">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->id; ?>" id="customer_enquiry_id'+i+'" name="customer_enquiry_id[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->product_id; ?>" id="product'+i+'" name="product[]">'+
+        '<input class="form-control" type="hidden"  value="<?php echo $data->product_quantity; ?>" id="product_quantity'+i+'" name="product_quantity[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->user_id; ?>" id="user'+i+'" name="user[]">'+
         '<td>'+
             '<select class="select2" id="vendor'+i+'" value="" name="vendor[]" onchange="getVendorWarehouse(this.value,'+i+')">'+

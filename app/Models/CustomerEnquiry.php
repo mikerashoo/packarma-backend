@@ -34,22 +34,11 @@ class CustomerEnquiry extends Model
         'packaging_treatment_id',
         'recommendation_engine_id',
         'user_address_id',
-    ];
-
-    /**
-     * Developed By : Pradyumn Dwivedi
-     * Created On : 11/05/2022
-     * Uses : The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'status',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'created_at',
-        'updated_at'
+        'country_id',
+        'state_id',
+        'city_id',
+        'address',
+        'pincode'
     ];
 
     /**

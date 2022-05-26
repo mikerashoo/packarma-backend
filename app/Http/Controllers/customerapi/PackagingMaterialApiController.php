@@ -5,6 +5,7 @@ namespace App\Http\Controllers\customerapi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PackagingMaterial;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class PackagingMaterialApiController extends Controller
@@ -25,6 +26,12 @@ class PackagingMaterialApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                // Request Validation
+                $validationErrors = $this->validateMaterial($request);
+                if (count($validationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                }
                 $page_no=1;
                 $limit=10;
                 if(isset($request->page_no) && !empty($request->page_no)) {
@@ -34,17 +41,29 @@ class PackagingMaterialApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = PackagingMaterial::where('status','1');
+
+                $data = DB::table('recommendation_engines')->select(
+                    'packaging_materials.id',
+                    'packaging_materials.packaging_material_name',
+                    'packaging_materials.material_description',
+                    'packaging_materials.wvtr',
+                    'packaging_materials.otr',
+                    'packaging_materials.cof',
+                    'packaging_materials.sit',
+                    'packaging_materials.gsm',
+                    'packaging_materials.special_feature'
+                )
+                    ->leftjoin('packaging_materials', 'recommendation_engines.packaging_material_id', '=', 'packaging_materials.id')
+                    ->where([['recommendation_engines.id', $request->packaging_solution_id],['packaging_materials.status', '=', 1]]);
+
                 $materialData = PackagingMaterial::whereRaw("1 = 1");
-                if($request->material_id)
-                {
-                    $materialData = $materialData->where('id', $request->material_id);
-                    $data = $data->where('id',$request->material_id);
+
+                if ($request->packaging_material_name) {
+                    $materialData = $materialData->where('packaging_materials' . '' . '.packaging_material_name', $request->packaging_material_name);
+                    $data = $data->where('packaging_materials' . '' . '.packaging_material_name', $request->packaging_material_name);
                 }
-                if($request->material_name)
-                {
-                    $materialData = $materialData->where('packaging_material_name',$request->material_name);
-                    $data = $data->where('packaging_material_name',$request->material_name);
+                if ($request->material_id) {
+                    $data = $data->where('packaging_materials' . '' . '.id', $request->material_id);
                 }
                 if(empty($materialData->first()))
                 {
@@ -55,9 +74,10 @@ class PackagingMaterialApiController extends Controller
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
+
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {
@@ -69,5 +89,18 @@ class PackagingMaterialApiController extends Controller
             \Log::error("Packaging Material fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
+    }
+
+    /**
+     * Validate request for Customer Enquiry.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */
+    private function validateMaterial(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'packaging_solution_id' => 'required|integer'
+        ])->errors();
     }
 }

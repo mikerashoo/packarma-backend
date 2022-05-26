@@ -41,9 +41,15 @@ class SubCategoryApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
 
-                $data = SubCategory::where('status','1');
+                $data = SubCategory::select('id','sub_category_name','sub_category_image','sub_category_thumb_image','seo_url','meta_title','meta_description','meta_keyword')
+                                        ->where([['status','1'],['category_id',$request->category_id]]);
 
                 $subCategoryData = SubCategory::whereRaw("1 = 1");
+                if($request->category_id)
+                {
+                    $subCategoryData = $subCategoryData->where('category_id',$request->category_id);
+                    $data = $data->where('category_id',$request->category_id);
+                }
                 if($request->sub_category_id)
                 {
                     $subCategoryData = $subCategoryData->where('id',$request->sub_category_id);
@@ -72,7 +78,7 @@ class SubCategoryApiController extends Controller
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {

@@ -34,7 +34,7 @@ class BannerApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = Banner::where('status','1');
+                $data = Banner::select('id','title','banner_image','banner_thumb_image','seo_url','meta_title','meta_description','meta_keyword')->where('status','1');
                 $bannerData = Banner::whereRaw("1 = 1");
                 if($request->banner_id)
                 {
@@ -64,7 +64,7 @@ class BannerApiController extends Controller
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage('data_fetched_successfully', $responseData); 
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData); 
             }
             else
             {

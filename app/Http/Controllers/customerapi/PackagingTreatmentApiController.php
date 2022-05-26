@@ -36,7 +36,7 @@ class PackagingTreatmentApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
 
-                $data = PackagingTreatment::where('status','1');
+                $data = PackagingTreatment::select('id','packaging_treatment_name','packaging_treatment_description','packaging_treatment_image','packaging_treatment_thumb_image','meta_title','meta_description','meta_keyword')->where('status','1');
 
                 $treatmentData = PackagingTreatment::whereRaw("1 = 1");
                 if($request->treatment_id)
@@ -108,7 +108,8 @@ class PackagingTreatmentApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
 
-                $featureData = PackagingTreatment::where([['status','1'],['is_featured','1']]);
+                $featureData = PackagingTreatment::select('id','packaging_treatment_name','packaging_treatment_description','packaging_treatment_image','packaging_treatment_thumb_image','meta_title','meta_description','meta_keyword')
+                                ->where([['status','1'],['is_featured','1']]);
 
                 $featuredTreatmentData = PackagingTreatment::whereRaw("1 = 1");
                 if($request->treatment_id)
@@ -139,7 +140,7 @@ class PackagingTreatmentApiController extends Controller
                 }
                 $responseData['result'] = $featureData;
                 $responseData['total_records'] = $total_records;
-                successMessage('Data Fetched Successfully', $responseData);
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
             {
