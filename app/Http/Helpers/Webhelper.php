@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\CustomerDevice;
 use App\Models\DisplayMsg;
 use App\Models\User;
 use App\Models\Vendor;
@@ -100,7 +101,7 @@ if (!function_exists('getPincodeDetails')) {
         $vendor_msg_data['city'] = $data[0]['PostOffice'][0]['District'];
         $vendor_msg_data['state'] = $data[0]['PostOffice'][0]['State'];
         $vendor_msg_data['pin_code'] = $data[0]['PostOffice'][0]['Pincode'];
-        // return $vendor_msg_data;
+        return $vendor_msg_data;
     }
 }
 
