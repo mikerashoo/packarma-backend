@@ -34,14 +34,18 @@ class PincodeDetailController extends Controller
                     $pincode = $request->pin_code;
                 }
 
-                $data = Http::get('https://api.postalpincode.in/pincode/' . $pincode)->json();
-                if (empty($data[0]['PostOffice'])) {
-                    errorMessage(__('pin_code.not_found'), $msg_data);
-                }
+                $getPincodeDetails = getPincodeDetails($pincode);
+                print_r($getPincodeDetails);
+                die;
 
-                $msg_data['city'] = $data[0]['PostOffice'][0]['District'];
-                $msg_data['state'] = $data[0]['PostOffice'][0]['State'];
-                $msg_data['pin_code'] = $data[0]['PostOffice'][0]['Pincode'];
+                // $data = Http::get('https://api.postalpincode.in/pincode/' . $pincode)->json();
+                // if (empty($data[0]['PostOffice'])) {
+                //     errorMessage(__('pin_code.not_found'), $msg_data);
+                // }
+
+                // $msg_data['city'] = $data[0]['PostOffice'][0]['District'];
+                // $msg_data['state'] = $data[0]['PostOffice'][0]['State'];
+                // $msg_data['pin_code'] = $data[0]['PostOffice'][0]['Pincode'];
 
                 successMessage(__('pin_code.details_found'), $msg_data);
             } else {
