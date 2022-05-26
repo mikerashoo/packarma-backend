@@ -42,6 +42,7 @@ class QuotationApiController extends Controller
                     'vendor_quotations.id',
                     'vendor_quotations.vendor_price',
                     'vendor_quotations.enquiry_status',
+                    'vendor_quotations.created_at',
                     'customer_enquiries.description',
                     'customer_enquiries.enquiry_type',
                     'customer_enquiries.product_weight',

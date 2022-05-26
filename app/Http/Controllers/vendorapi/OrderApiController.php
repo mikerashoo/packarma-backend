@@ -48,6 +48,8 @@ class OrderApiController extends Controller
                     'orders.mrp',
                     'orders.gst_amount',
                     'orders.grand_total',
+                    'orders.shipping_details',
+                    'orders.billing_details',
                     'orders.created_at',
                     'categories.category_name',
                     'sub_categories.sub_category_name',
