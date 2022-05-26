@@ -33,10 +33,14 @@ class PincodeDetailController extends Controller
                 if ($request->pin_code) {
                     $pincode = $request->pin_code;
                 }
-
+                \Log::info("Pincode details api starts here");
                 $getPincodeDetails = getPincodeDetails($pincode);
-                print_r($getPincodeDetails);
-                die;
+                if (!$getPincodeDetails) {
+                    \Log::info("There is problem with api");
+                    errorMessage(__('pin_code.api_error'), $msg_data);
+                }
+                // print_r($getPincodeDetails);
+                // die;
 
                 // $data = Http::get('https://api.postalpincode.in/pincode/' . $pincode)->json();
                 // if (empty($data[0]['PostOffice'])) {
@@ -47,7 +51,7 @@ class PincodeDetailController extends Controller
                 // $msg_data['state'] = $data[0]['PostOffice'][0]['State'];
                 // $msg_data['pin_code'] = $data[0]['PostOffice'][0]['Pincode'];
 
-                successMessage(__('pin_code.details_found'), $msg_data);
+                successMessage(__('pin_code.details_found'), $getPincodeDetails);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
