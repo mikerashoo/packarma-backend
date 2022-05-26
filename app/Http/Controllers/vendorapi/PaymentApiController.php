@@ -37,11 +37,7 @@ class PaymentApiController extends Controller
                 }
                 $offset = ($page_no - 1) * $limit;
 
-                if ($request->payment_status) {
-                    $status = $request->payment_status;
-                } else {
-                    $status = 'semi_paid';
-                }
+
                 $main_table = 'orders';
 
 
@@ -62,7 +58,7 @@ class PaymentApiController extends Controller
                     ->leftjoin('user_addresses', 'orders.user_id', '=', 'user_addresses.user_id')
                     ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
                     ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
-                    ->where([['vendor_id', $vendor_id], ['vendor_payment_status', $status]]);
+                    ->where([['vendor_id', $vendor_id]]);
 
                 // vendor payment list
                 // $data = VendorPayment::select('id', 'order_id', 'order_id', 'payment_mode', 'amount', 'remark', 'transaction_date')
@@ -98,10 +94,10 @@ class PaymentApiController extends Controller
                     $paymentData = $paymentData->whereDate($main_table . '' . '.created_at', '>=', $date_from_no_of_days);
                     $data = $data->whereDate($main_table . '' . '.created_at', '>=', $date_from_no_of_days);
                 }
-                // if ($request->payment_status) {
-                //     $paymentData = $paymentData->where('payment_status', $request->payment_status);
-                //     $data = $data->where('payment_status', $request->payment_status);
-                // }
+                if ($request->payment_status) {
+                    $paymentData = $paymentData->where($main_table . '' . '.vendor_payment_status', $request->payment_status);
+                    $data = $data->where($main_table . '' . '.vendor_payment_status', $request->payment_status);
+                }
 
 
                 if (empty($paymentData->first())) {
