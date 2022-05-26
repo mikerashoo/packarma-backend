@@ -54,10 +54,10 @@ class VendorBasicAuth
             exit;
         }
 
-        if (!ctype_digit($request->header('imei-no'))) {
-            errorMessage(__('auth.invalid_imei'), $return_array);
-            exit;
-        }
+        // if (!ctype_digit($request->header('imei-no'))) {
+        //     errorMessage(__('auth.invalid_imei'), $return_array);
+        //     exit;
+        // }
 
         if (!$request->country_id) {
             errorMessage(__('auth.country_require'), $return_array);

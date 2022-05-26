@@ -14,4 +14,8 @@
     */
 
         'quotation_not_found' => 'Quotation Not Found',
+        'id_require' => 'Quotation id is require',
+        'vendor_price_require' => 'Vendor price is require',
+        'enquiry_not_found_to_quote' => 'No enquiry found to quote',
+        'sent' => 'Quotation sent successfully',
     ];

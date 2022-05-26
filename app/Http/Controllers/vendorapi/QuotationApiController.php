@@ -42,16 +42,22 @@ class QuotationApiController extends Controller
                     'vendor_quotations.id',
                     'vendor_quotations.vendor_price',
                     'vendor_quotations.enquiry_status',
+                    'vendor_quotations.created_at',
                     'customer_enquiries.description',
                     'customer_enquiries.enquiry_type',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.product_quantity',
                     'products.product_name',
                     'products.product_description',
+                    'states.state_name',
+                    'cities.city_name',
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
-                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', '!=', 'mapped'], [$main_table . '' . '.deleted_at', NULL]]);
+                    ->leftjoin('user_addresses', 'vendor_quotations.user_id', '=', 'user_addresses.user_id')
+                    ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
+                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
+                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', '!=', 'mapped']])->distinct('user_addresses.user_id');
 
 
                 // $data = VendorQuotation::select('vendor_price', 'id', 'product_id', 'customer_enquiry_id')->with(['product' => function ($query) {

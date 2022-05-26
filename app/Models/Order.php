@@ -11,6 +11,24 @@ class Order extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 04-mar-2022
+     * uses : to get data of user  in order table
+     */
+
+    protected $fillable = [
+        'order_delivery_status',
+    ];
+
+    protected $hidden = [
+        'created_by',
+        'updated_by',
+        'deleted_at',
+        'created_at',
+        'updated_at'
+    ];
+
 
     public function user()
     {
@@ -138,10 +156,10 @@ class Order extends Model
     }
 
     /**
-        * Developed By : Pradyumn Dwivedi
-        * Created On : 11-may-2022
-        * uses : to get data of measurement unit in order table
-    */
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 11-may-2022
+     * uses : to get data of measurement unit in order table
+     */
     public function measurement_unit()
     {
         return $this->belongsTo('App\Models\MeasurementUnit');

@@ -1,0 +1,116 @@
+[2022-05-23 11:48:24] local.INFO: Initiating registeration process, starting at: 11:48:24:309642  
+[2022-05-23 11:48:25] local.INFO: Vendor creation started!  
+[2022-05-23 11:49:28] local.INFO: OTP verification process starts, starting at: 11:49:28:825670  
+[2022-05-23 11:49:58] local.INFO: Logging in vendor, starting at: 11:49:58:378577  
+[2022-05-23 13:00:14] local.INFO: Fetch General Info process, starting at: 13:00:14:620616  
+[2022-05-23 13:00:49] local.INFO: Fetch General Info process, starting at: 13:00:49:180476  
+[2022-05-23 13:00:49] local.ERROR: Auth Exception: The info type field is required.  
+[2022-05-23 13:03:21] local.INFO: Fetch General Info process, starting at: 13:03:21:671829  
+[2022-05-23 13:03:21] local.ERROR: Auth Exception: The info type field is required.  
+[2022-05-23 13:03:24] local.INFO: Fetch General Info process, starting at: 13:03:24:816217  
+[2022-05-23 13:03:31] local.ERROR: Allowed memory size of 536870912 bytes exhausted (tried to allocate 264245248 bytes) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Allowed memory size of 536870912 bytes exhausted (tried to allocate 264245248 bytes) at E:\\xampp\\htdocs\\packult-web\\app\\Http\\Controllers\\vendorapi\\GeneralInfoController.php:39)
+[stacktrace]
+#0 {main}
+"} 
+[2022-05-23 13:04:05] local.INFO: Fetch General Info process, starting at: 13:04:05:651650  
+[2022-05-23 13:05:15] local.INFO: Fetch General Info process, starting at: 13:05:15:389899  
+[2022-05-23 13:05:41] local.INFO: Fetch General Info process, starting at: 13:05:41:436123  
+[2022-05-23 13:07:04] local.INFO: Fetch General Info process, starting at: 13:07:04:480228  
+[2022-05-23 13:53:13] local.INFO: Fetch General Info process, starting at: 13:53:13:527001  
+[2022-05-23 13:53:13] local.ERROR: Change Password failed: count(): Parameter must be an array or an object that implements Countable  
+[2022-05-23 13:53:39] local.INFO: Fetch General Info process, starting at: 13:53:39:540730  
+[2022-05-23 13:53:39] local.ERROR: Change Password failed: count(): Parameter must be an array or an object that implements Countable  
+[2022-05-23 13:54:15] local.INFO: Fetch General Info process, starting at: 13:54:15:768460  
+[2022-05-23 13:54:31] local.INFO: Fetch General Info process, starting at: 13:54:31:021234  
+[2022-05-23 13:58:29] local.INFO: Fetch General Info process, starting at: 13:58:29:560958  
+[2022-05-23 13:58:41] local.INFO: Fetch General Info process, starting at: 13:58:41:116465  
+[2022-05-23 13:59:27] local.INFO: Fetch General Info process, starting at: 13:59:27:345299  
+[2022-05-23 13:59:27] local.ERROR: Change Password failed: Property [value] does not exist on this collection instance.  
+[2022-05-23 13:59:59] local.INFO: Fetch General Info process, starting at: 13:59:59:879947  
+[2022-05-23 13:59:59] local.ERROR: Change Password failed: Property [value] does not exist on this collection instance.  
+[2022-05-23 14:00:27] local.INFO: Fetch General Info process, starting at: 14:00:27:689814  
+[2022-05-23 14:00:54] local.INFO: Fetch General Info process, starting at: 14:00:54:440072  
+[2022-05-23 14:01:16] local.INFO: Fetch General Info process, starting at: 14:01:16:763962  
+[2022-05-23 14:02:10] local.INFO: Fetch General Info process, starting at: 14:02:10:159195  
+[2022-05-23 14:05:03] local.INFO: Fetch General Info process, starting at: 14:05:03:945118  
+[2022-05-23 14:05:22] local.INFO: Fetch General Info process, starting at: 14:05:22:264695  
+[2022-05-23 14:05:50] local.INFO: Fetch General Info process, starting at: 14:05:50:824535  
+[2022-05-23 14:06:03] local.INFO: Fetch General Info process, starting at: 14:06:03:129044  
+[2022-05-23 14:06:16] local.INFO: Fetch General Info process, starting at: 14:06:16:963043  
+[2022-05-23 14:06:26] local.INFO: Fetch General Info process, starting at: 14:06:26:477197  
+[2022-05-23 14:06:40] local.INFO: Fetch General Info process, starting at: 14:06:40:204198  
+[2022-05-23 14:06:40] local.ERROR: Auth Exception: The info type field is required.  
+[2022-05-23 14:18:30] local.INFO: Initiating Version check, starting at: 14:18:30:219264  
+[2022-05-23 14:18:30] local.INFO: Version Check started!  
+[2022-05-23 14:19:34] local.INFO: Initiating Version check, starting at: 14:19:34:847255  
+[2022-05-23 14:19:34] local.INFO: Version Check started!  
+[2022-05-23 14:23:11] local.INFO: Initiating Version check, starting at: 14:23:11:992745  
+[2022-05-23 14:23:11] local.INFO: Version Check started!  
+[2022-05-23 14:29:09] local.INFO: Initiating Version check, starting at: 14:29:09:720870  
+[2022-05-23 14:29:09] local.INFO: Version Check started!  
+[2022-05-23 14:31:10] local.INFO: Initiating Version check, starting at: 14:31:10:437737  
+[2022-05-23 14:31:10] local.INFO: Version Check started!  
+[2022-05-23 14:31:26] local.INFO: Initiating Version check, starting at: 14:31:26:952721  
+[2022-05-23 14:31:26] local.INFO: Version Check started!  
+[2022-05-23 14:31:42] local.INFO: Initiating Version check, starting at: 14:31:42:337244  
+[2022-05-23 14:31:42] local.INFO: Version Check started!  
+[2022-05-23 14:31:55] local.INFO: Initiating Version check, starting at: 14:31:55:707188  
+[2022-05-23 14:31:55] local.INFO: Version Check started!  
+[2022-05-23 14:33:02] local.INFO: Initiating Version check, starting at: 14:33:02:676337  
+[2022-05-23 14:33:02] local.INFO: Version Check started!  
+[2022-05-23 14:33:02] local.ERROR: Version Check failed: in_array() expects parameter 2 to be array, string given  
+[2022-05-23 14:33:59] local.INFO: Initiating Version check, starting at: 14:33:59:708465  
+[2022-05-23 14:33:59] local.INFO: Version Check started!  
+[2022-05-23 14:33:59] local.ERROR: Version Check failed: Property [value] does not exist on this collection instance.  
+[2022-05-23 14:34:34] local.INFO: Initiating Version check, starting at: 14:34:34:591317  
+[2022-05-23 14:34:34] local.INFO: Version Check started!  
+[2022-05-23 14:37:28] local.INFO: Initiating Version check, starting at: 14:37:28:003568  
+[2022-05-23 14:37:28] local.INFO: Version Check started!  
+[2022-05-23 14:37:36] local.INFO: Initiating Version check, starting at: 14:37:36:143502  
+[2022-05-23 14:37:36] local.INFO: Version Check started!  
+[2022-05-23 14:37:40] local.INFO: Initiating Version check, starting at: 14:37:40:182403  
+[2022-05-23 14:37:40] local.INFO: Version Check started!  
+[2022-05-23 14:37:47] local.INFO: Initiating Version check, starting at: 14:37:47:013957  
+[2022-05-23 14:37:47] local.INFO: Version Check started!  
+[2022-05-23 14:37:54] local.INFO: Initiating Version check, starting at: 14:37:54:510268  
+[2022-05-23 14:37:54] local.INFO: Version Check started!  
+[2022-05-23 14:39:45] local.INFO: Initiating Version check, starting at: 14:39:45:100762  
+[2022-05-23 14:39:45] local.INFO: Version Check started!  
+[2022-05-23 14:39:50] local.INFO: Initiating Version check, starting at: 14:39:50:683417  
+[2022-05-23 14:39:50] local.INFO: Version Check started!  
+[2022-05-23 14:39:56] local.INFO: Initiating Version check, starting at: 14:39:56:171900  
+[2022-05-23 14:39:56] local.INFO: Version Check started!  
+[2022-05-23 15:24:54] local.INFO: My Profile Show, starting at: 15:24:54:724173  
+[2022-05-23 15:24:54] local.ERROR: Fetching Info failed: count(): Parameter must be an array or an object that implements Countable  
+[2022-05-23 15:25:28] local.INFO: My Profile Show, starting at: 15:25:28:327594  
+[2022-05-23 15:27:46] local.INFO: My Profile Show, starting at: 15:27:46:186005  
+[2022-05-23 15:27:46] local.ERROR: Fetching Info failed: Trying to access array offset on value of type null  
+[2022-05-23 15:29:44] local.INFO: My Profile Show, starting at: 15:29:44:588463  
+[2022-05-23 15:35:32] local.INFO: My Profile Show, starting at: 15:35:32:538584  
+[2022-05-23 15:36:44] local.INFO: My Profile Show, starting at: 15:36:44:139140  
+[2022-05-23 15:38:28] local.INFO: My Profile Show, starting at: 15:38:28:232389  
+[2022-05-23 15:39:03] local.INFO: My Profile Show, starting at: 15:39:03:712825  
+[2022-05-23 15:44:14] local.INFO: My Profile Show, starting at: 15:44:14:899789  
+[2022-05-23 15:46:44] local.INFO: My Profile Show, starting at: 15:46:44:678701  
+[2022-05-23 17:06:45] local.INFO: My Profile Update, starting at: 17:06:45:110217  
+[2022-05-23 17:06:51] local.INFO: My Profile Update, starting at: 17:06:51:265635  
+[2022-05-23 17:06:51] local.INFO: Vendor Update Start!  
+[2022-05-23 17:06:51] local.INFO: Existing vendor updated with email id: newv@mail.com and phone number: 9898989898  
+[2022-05-23 17:07:27] local.INFO: My Profile Update, starting at: 17:07:27:691743  
+[2022-05-23 17:07:27] local.ERROR: Auth Exception: The vendor name field is required.  
+[2022-05-23 17:08:21] local.INFO: My Profile Update, starting at: 17:08:21:248549  
+[2022-05-23 17:08:21] local.INFO: Vendor Update Start!  
+[2022-05-23 17:08:21] local.INFO: Existing vendor updated with email id: newv@mail.com and phone number: 9898989898  
+[2022-05-23 17:16:22] local.INFO: My Profile Update, starting at: 17:16:22:922831  
+[2022-05-23 17:16:22] local.INFO: Vendor Update Start!  
+[2022-05-23 17:16:22] local.INFO: Existing vendor updated with email id: newv@mail.com and phone number: 9898989898  
+[2022-05-23 17:16:42] local.INFO: My Profile Update, starting at: 17:16:42:775600  
+[2022-05-23 17:16:42] local.INFO: Vendor Update Start!  
+[2022-05-23 17:16:58] local.INFO: My Profile Update, starting at: 17:16:58:155894  
+[2022-05-23 17:16:58] local.INFO: Vendor Update Start!  
+[2022-05-23 17:16:58] local.INFO: Existing vendor updated with email id: newv@mail.com and phone number: 9898989899  
+[2022-05-23 17:22:04] local.INFO: My Profile Update, starting at: 17:22:04:449966  
+[2022-05-23 17:22:04] local.ERROR: Auth Exception: The phone must be a number.  
+[2022-05-23 17:22:09] local.INFO: My Profile Update, starting at: 17:22:09:654480  
+[2022-05-23 17:22:09] local.INFO: Vendor Update Start!  
+[2022-05-23 17:22:09] local.INFO: Existing vendor updated with email id: newv@mail.com and phone number: 98989898991  

@@ -1,0 +1,53 @@
+[2022-05-25 10:43:46] local.INFO: My address deletion started!  
+[2022-05-25 10:47:21] local.INFO: My address deletion started!  
+[2022-05-25 10:47:21] local.INFO: My adress deleted successfully!  
+[2022-05-25 10:47:46] local.INFO: My address deletion started!  
+[2022-05-25 10:47:46] local.INFO: My adress deleted successfully!  
+[2022-05-25 10:48:00] local.INFO: My address deletion started!  
+[2022-05-25 10:58:44] local.INFO: My address deletion started!  
+[2022-05-25 10:58:44] local.INFO: My adress deleted successfully!  
+[2022-05-25 11:30:40] local.INFO: Fetch General Info process, starting at: 11:30:40:889806  
+[2022-05-25 11:50:10] local.INFO: Fetch pincode data, starting at: 11:50:10:347630  
+[2022-05-25 11:50:30] local.INFO: Fetch pincode data, starting at: 11:50:30:773328  
+[2022-05-25 11:50:42] local.INFO: Fetch pincode data, starting at: 11:50:42:429551  
+[2022-05-25 11:54:33] local.INFO: Fetch pincode data, starting at: 11:54:33:115655  
+[2022-05-25 11:54:45] local.INFO: Fetch pincode data, starting at: 11:54:45:902466  
+[2022-05-25 12:56:24] local.ERROR: Home Page Data Fetch failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'vendor_quotations.deleted_at' in 'where clause' (SQL: select `vendor_quotations`.`id`, `vendor_quotations`.`vendor_price`, `vendor_quotations`.`enquiry_status`, `vendor_quotations`.`created_at`, `customer_enquiries`.`description`, `customer_enquiries`.`enquiry_type`, `customer_enquiries`.`product_weight`, `customer_enquiries`.`product_quantity`, `customer_enquiries`.`shelf_life`, `products`.`product_name`, `products`.`product_description`, `cities`.`city_name`, `states`.`state_name` from `vendor_quotations` left join `products` on `vendor_quotations`.`product_id` = `products`.`id` left join `customer_enquiries` on `vendor_quotations`.`customer_enquiry_id` = `customer_enquiries`.`id` left join `user_addresses` on `customer_enquiries`.`user_id` = `user_addresses`.`user_id` left join `cities` on `user_addresses`.`city_id` = `cities`.`id` left join `states` on `user_addresses`.`state_id` = `states`.`id` where (`vendor_quotations`.`vendor_id` = 16 and `enquiry_status` = mapped and `vendor_quotations`.`deleted_at` is null) order by `vendor_quotations`.`created_at` desc limit 3)  
+[2022-05-25 13:48:27] local.ERROR: Enquiry fetching failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'vendor_quotations.deleted_at' in 'where clause' (SQL: select `vendor_quotations`.`id`, `vendor_quotations`.`vendor_price`, `vendor_quotations`.`enquiry_status`, `customer_enquiries`.`description`, `customer_enquiries`.`enquiry_type`, `customer_enquiries`.`product_weight`, `customer_enquiries`.`product_quantity`, `products`.`product_name`, `products`.`product_description` from `vendor_quotations` left join `products` on `vendor_quotations`.`product_id` = `products`.`id` left join `customer_enquiries` on `vendor_quotations`.`customer_enquiry_id` = `customer_enquiries`.`id` where (`vendor_quotations`.`vendor_id` = 16 and `enquiry_status` = mapped and `vendor_quotations`.`deleted_at` is null))  
+[2022-05-25 13:49:33] local.ERROR: Enquiry fetching failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'vendor_quotations.deleted_at' in 'where clause' (SQL: select `vendor_quotations`.`id`, `vendor_quotations`.`vendor_price`, `vendor_quotations`.`enquiry_status`, `customer_enquiries`.`description`, `customer_enquiries`.`enquiry_type`, `customer_enquiries`.`product_weight`, `customer_enquiries`.`product_quantity`, `products`.`product_name`, `products`.`product_description` from `vendor_quotations` left join `products` on `vendor_quotations`.`product_id` = `products`.`id` left join `customer_enquiries` on `vendor_quotations`.`customer_enquiry_id` = `customer_enquiries`.`id` where (`vendor_quotations`.`vendor_id` = 16 and `enquiry_status` = mapped and `vendor_quotations`.`deleted_at` is null))  
+[2022-05-25 14:45:58] local.INFO: Material Price Update Started!  
+[2022-05-25 14:46:02] local.INFO: Material Price Update Started!  
+[2022-05-25 14:46:32] local.INFO: Material Price Update Started!  
+[2022-05-25 14:46:57] local.INFO: Material Price Update Started!  
+[2022-05-25 14:47:15] local.INFO: Material Price Update Started!  
+[2022-05-25 14:48:18] local.INFO: Material Price Update Started!  
+[2022-05-25 14:48:18] local.ERROR: Material Price Updation failed: Add [vendor_price] to fillable property to allow mass assignment on [App\Models\VendorMaterialMapping].  
+[2022-05-25 14:49:35] local.INFO: Material Price Update Started!  
+[2022-05-25 14:49:35] local.INFO: Material Price Update successfully!  
+[2022-05-25 15:21:45] local.INFO: Order Delivery Status Update Started!  
+[2022-05-25 15:21:48] local.INFO: Order Delivery Status Update Started!  
+[2022-05-25 15:21:53] local.INFO: Order Delivery Status Update Started!  
+[2022-05-25 15:22:13] local.INFO: Order Delivery Status Update Started!  
+[2022-05-25 15:22:13] local.ERROR: Order delivery status Updation failed: Add [order_delivery_status] to fillable property to allow mass assignment on [App\Models\Order].  
+[2022-05-25 15:23:04] local.INFO: Order Delivery Status Update Started!  
+[2022-05-25 15:23:05] local.INFO: Order delivery status Updated successfully!  
+[2022-05-25 15:23:21] local.INFO: Order Delivery Status Update Started!  
+[2022-05-25 15:58:26] local.INFO: Sending Quotation Started!  
+[2022-05-25 15:58:34] local.INFO: Sending Quotation Started!  
+[2022-05-25 15:59:02] local.INFO: Sending Quotation Started!  
+[2022-05-25 15:59:30] local.INFO: Sending Quotation Started!  
+[2022-05-25 15:59:41] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:00:46] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:01:18] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:01:22] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:01:22] local.INFO: Quotation sent successfully!  
+[2022-05-25 16:02:32] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:02:32] local.INFO: Quotation sent successfully!  
+[2022-05-25 16:03:34] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:06:02] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:06:14] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:06:14] local.INFO: Quotation sent successfully!  
+[2022-05-25 16:06:58] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:07:32] local.INFO: Sending Quotation Started!  
+[2022-05-25 16:07:32] local.INFO: Quotation sent successfully!  
+[2022-05-25 16:24:56] local.ERROR: Order fetching failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'orders.state_id' in 'on clause' (SQL: select `orders`.`id`, `orders`.`product_weight`, `orders`.`vendor_amount`, `orders`.`vendor_pending_payment`, `orders`.`vendor_payment_status`, `orders`.`order_delivery_status`, `orders`.`created_at`, `categories`.`category_name`, `sub_categories`.`sub_category_name`, `products`.`product_name`, `products`.`product_description`, `measurement_units`.`unit_name`, `measurement_units`.`unit_symbol`, `countries`.`country_name`, `countries`.`phone_code`, `currencies`.`currency_name`, `currencies`.`currency_symbol`, `states`.`state_name`, `cities`.`city_name` from `orders` left join `categories` on `orders`.`category_id` = `categories`.`id` left join `sub_categories` on `orders`.`sub_category_id` = `sub_categories`.`id` left join `products` on `orders`.`product_id` = `products`.`id` left join `measurement_units` on `orders`.`measurement_unit_id` = `measurement_units`.`id` left join `countries` on `orders`.`country_id` = `countries`.`id` left join `currencies` on `orders`.`currency_id` = `currencies`.`id` left join `user_addresses` on `orders`.`user_id` = `user_addresses`.`user_id` left join `states` on `orders`.`state_id` = `states`.`id` left join `cities` on `orders`.`city_id` = `cities`.`id` where (`orders`.`vendor_id` = 16 and `orders`.`deleted_at` is null))  

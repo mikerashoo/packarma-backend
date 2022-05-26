@@ -11,6 +11,24 @@ class VendorMaterialMapping extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 01-april-2022
+     * uses : to get vendor in vendor material map table
+     */
+
+    protected $fillable = [
+        'vendor_price',
+    ];
+
+    protected $hidden = [
+        'status',
+        'created_by',
+        'updated_by',
+        'deleted_at',
+        'created_at',
+        'updated_at'
+    ];
 
     public function vendor()
     {

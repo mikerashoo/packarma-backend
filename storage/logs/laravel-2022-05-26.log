@@ -1,0 +1,121 @@
+[2022-05-26 10:25:04] local.INFO: Initiating registeration process, starting at: 10:25:04:177323  
+[2022-05-26 10:25:04] local.INFO: Vendor creation started!  
+[2022-05-26 11:18:36] local.ERROR: Enquiry fetching failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'categories.category_id' in 'on clause' (SQL: select distinct `vendor_quotations`.`id`, `vendor_quotations`.`vendor_price`, `vendor_quotations`.`enquiry_status`, `vendor_quotations`.`created_at`, `customer_enquiries`.`description`, `customer_enquiries`.`enquiry_type`, `customer_enquiries`.`product_weight`, `customer_enquiries`.`product_quantity`, `customer_enquiries`.`shelf_life`, `measurement_units`.`unit_name`, `measurement_units`.`unit_symbol`, `storage_conditions`.`storage_condition_title`, `packaging_machines`.`packaging_machine_name`, `product_forms`.`product_form_name`, `packing_types`.`packing_name`, `packaging_treatments`.`packaging_treatment_name`, `products`.`product_name`, `products`.`product_description`, `categories`.`category_name`, `states`.`state_name`, `cities`.`city_name` from `vendor_quotations` left join `products` on `vendor_quotations`.`product_id` = `products`.`id` left join `categories` on `categories`.`category_id` = `products`.`id` left join `customer_enquiries` on `vendor_quotations`.`customer_enquiry_id` = `customer_enquiries`.`id` left join `measurement_units` on `customer_enquiries`.`measurement_unit_id` = `measurement_units`.`id` left join `storage_conditions` on `customer_enquiries`.`storage_condition_id` = `storage_conditions`.`id` left join `packaging_machines` on `customer_enquiries`.`packaging_machine_id` = `packaging_machines`.`id` left join `product_forms` on `customer_enquiries`.`product_form_id` = `product_forms`.`id` left join `packing_types` on `customer_enquiries`.`packing_type_id` = `packing_types`.`id` left join `packaging_treatments` on `customer_enquiries`.`packaging_treatment_id` = `packaging_treatments`.`id` left join `user_addresses` on `vendor_quotations`.`user_id` = `user_addresses`.`user_id` left join `states` on `user_addresses`.`state_id` = `states`.`id` left join `cities` on `user_addresses`.`city_id` = `cities`.`id` where (`vendor_quotations`.`vendor_id` = 16 and `enquiry_status` = mapped))  
+[2022-05-26 12:22:02] local.ERROR: Payment fetching failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'orders.created_at' in 'where clause' (SQL: select * from `vendor_payments` where 1 = 1 and date(`orders`.`created_at`) >= 2022-05-01 and `vendor_payments`.`deleted_at` is null limit 1)  
+[2022-05-26 12:24:39] local.ERROR: Payment fetching failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'orders.created_at' in 'where clause' (SQL: select * from `vendor_payments` where 1 = 1 and date(`orders`.`created_at`) >= 2022-05-01 and `vendor_payments`.`deleted_at` is null limit 1)  
+[2022-05-26 12:25:15] local.ERROR: Payment fetching failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'orders.created_at' in 'where clause' (SQL: select * from `vendor_payments` where 1 = 1 and date(`orders`.`created_at`) >= 2022-05-01 and `vendor_payments`.`deleted_at` is null limit 1)  
+[2022-05-26 12:27:02] local.ERROR: Payment fetching failed: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'amount' in 'where clause' (SQL: select `orders`.`id`, `orders`.`product_weight`, `orders`.`product_quantity`, `orders`.`mrp`, `orders`.`vendor_amount`, `orders`.`vendor_pending_payment`, `orders`.`vendor_payment_status`, `orders`.`order_delivery_status`, `orders`.`created_at`, `states`.`state_name`, `cities`.`city_name` from `orders` left join `user_addresses` on `orders`.`user_id` = `user_addresses`.`user_id` left join `states` on `user_addresses`.`state_id` = `states`.`id` left join `cities` on `user_addresses`.`city_id` = `cities`.`id` where (`vendor_id` = 16 and `vendor_payment_status` = semi_paid) and (`amount` like %asasdasdasd% or `remark` like %asasdasdasd%))  
+[2022-05-26 12:31:36] local.INFO: Initiating registeration process, starting at: 12:31:36:436513  
+[2022-05-26 12:31:36] local.ERROR: Auth Exception: The vendor name field is required., The vendor company name field is required., The phone country id field is required., The phone field is required., The vendor email field is required., The vendor password field is required.  
+[2022-05-26 12:31:47] local.INFO: Initiating registeration process, starting at: 12:31:47:746142  
+[2022-05-26 12:31:47] local.ERROR: Auth Exception: The vendor name field is required., The vendor company name field is required., The phone country id field is required., The phone field is required., The vendor email field is required., The vendor password field is required.  
+[2022-05-26 12:32:40] local.INFO: Initiating registeration process, starting at: 12:32:40:195536  
+[2022-05-26 12:32:40] local.ERROR: Auth Exception: The phone country id field is required., The vendor email field is required., The vendor password field is required.  
+[2022-05-26 12:32:49] local.INFO: Initiating registeration process, starting at: 12:32:49:043296  
+[2022-05-26 12:32:49] local.ERROR: Auth Exception: The vendor email field is required., The vendor password field is required.  
+[2022-05-26 12:33:01] local.INFO: Initiating registeration process, starting at: 12:33:01:519568  
+[2022-05-26 12:33:01] local.ERROR: Auth Exception: The vendor password field is required.  
+[2022-05-26 12:33:09] local.INFO: Initiating registeration process, starting at: 12:33:09:625085  
+[2022-05-26 12:33:09] local.INFO: Vendor creation started!  
+[2022-05-26 12:33:33] local.INFO: Initiating registeration process, starting at: 12:33:33:383801  
+[2022-05-26 12:33:33] local.INFO: Vendor creation started!  
+[2022-05-26 12:33:33] local.INFO: Vendor registered successfully with email id: patel@mail.com and phone number: 4444444444  
+[2022-05-26 12:34:27] local.INFO: Logging in vendor, starting at: 12:34:27:871640  
+[2022-05-26 12:35:12] local.INFO: OTP sending process starts, starting at: 12:35:12:747657  
+[2022-05-26 12:35:12] local.INFO: OTP saved.  
+[2022-05-26 12:35:12] local.INFO: OTP sent successfully to mobile number: 4444444444  
+[2022-05-26 12:35:21] local.INFO: OTP verification process starts, starting at: 12:35:21:987443  
+[2022-05-26 12:35:29] local.INFO: Logging in vendor, starting at: 12:35:29:279502  
+[2022-05-26 12:36:06] local.INFO: Logging in vendor, starting at: 12:36:06:986078  
+[2022-05-26 12:36:35] local.INFO: Forgot Password process, starting at: 12:36:35:748483  
+[2022-05-26 12:36:45] local.INFO: OTP sending process starts, starting at: 12:36:45:405849  
+[2022-05-26 12:36:45] local.INFO: OTP updated.  
+[2022-05-26 12:36:45] local.INFO: OTP sent successfully to mobile number: 4444444444  
+[2022-05-26 12:36:49] local.INFO: OTP verification process starts, starting at: 12:36:49:193941  
+[2022-05-26 12:37:02] local.INFO: Forgot Password process, starting at: 12:37:02:676860  
+[2022-05-26 12:38:39] local.INFO: OTP sending process starts, starting at: 12:38:39:033405  
+[2022-05-26 12:38:39] local.INFO: OTP saved.  
+[2022-05-26 12:38:39] local.INFO: OTP sent successfully to mobile number: 4444444444  
+[2022-05-26 12:38:46] local.INFO: OTP verification process starts, starting at: 12:38:46:266229  
+[2022-05-26 12:38:52] local.INFO: Forgot Password process, starting at: 12:38:52:541427  
+[2022-05-26 12:39:03] local.INFO: Logging in vendor, starting at: 12:39:03:834523  
+[2022-05-26 12:46:54] local.INFO: Material Price Update Started!  
+[2022-05-26 12:47:49] local.INFO: Material Price Update Started!  
+[2022-05-26 12:47:50] local.INFO: Material Price Updated successfully!  
+[2022-05-26 12:49:55] local.INFO: Material Price Update Started!  
+[2022-05-26 12:49:59] local.INFO: Material Price Update Started!  
+[2022-05-26 12:50:04] local.INFO: Material Price Update Started!  
+[2022-05-26 12:50:04] local.INFO: Material Price Updated successfully!  
+[2022-05-26 12:50:18] local.INFO: Material Price Update Started!  
+[2022-05-26 12:50:18] local.INFO: Material Price Updated successfully!  
+[2022-05-26 12:57:01] local.INFO: Order Delivery Status Update Started!  
+[2022-05-26 12:57:10] local.INFO: Order Delivery Status Update Started!  
+[2022-05-26 12:57:32] local.INFO: Order Delivery Status Update Started!  
+[2022-05-26 12:57:32] local.INFO: Order delivery status Updated successfully!  
+[2022-05-26 12:57:41] local.INFO: Order Delivery Status Update Started!  
+[2022-05-26 12:57:49] local.INFO: Order Delivery Status Update Started!  
+[2022-05-26 12:57:49] local.INFO: Order delivery status Updated successfully!  
+[2022-05-26 13:42:32] local.INFO: Sending Quotation Started!  
+[2022-05-26 13:42:51] local.INFO: Sending Quotation Started!  
+[2022-05-26 13:42:51] local.INFO: Quotation sent successfully!  
+[2022-05-26 13:43:21] local.INFO: Sending Quotation Started!  
+[2022-05-26 14:02:48] local.INFO: Initiating Version check, starting at: 14:02:48:077087  
+[2022-05-26 14:02:48] local.INFO: Version Check started!  
+[2022-05-26 14:02:56] local.INFO: Initiating Version check, starting at: 14:02:56:498183  
+[2022-05-26 14:02:56] local.INFO: Version Check started!  
+[2022-05-26 14:03:01] local.INFO: Initiating Version check, starting at: 14:03:01:891794  
+[2022-05-26 14:03:01] local.INFO: Version Check started!  
+[2022-05-26 14:05:09] local.INFO: Fetch General Info process, starting at: 14:05:09:726137  
+[2022-05-26 14:05:31] local.INFO: Fetch General Info process, starting at: 14:05:31:661970  
+[2022-05-26 14:05:34] local.INFO: Fetch General Info process, starting at: 14:05:34:661858  
+[2022-05-26 14:06:21] local.INFO: Fetch General Info process, starting at: 14:06:21:273563  
+[2022-05-26 14:06:25] local.INFO: Fetch General Info process, starting at: 14:06:25:555415  
+[2022-05-26 14:06:53] local.INFO: My Profile Show, starting at: 14:06:53:703738  
+[2022-05-26 14:07:48] local.INFO: My Profile Update, starting at: 14:07:48:832750  
+[2022-05-26 14:07:48] local.INFO: Vendor Update Start!  
+[2022-05-26 14:07:48] local.INFO: Existing vendor updated with email id: newv@mail.com and phone number: 4040404040  
+[2022-05-26 14:08:18] local.INFO: My Profile Update, starting at: 14:08:18:221861  
+[2022-05-26 14:08:18] local.INFO: Vendor Update Start!  
+[2022-05-26 14:08:18] local.INFO: Existing vendor updated with email id: patel@mail.com and phone number: 4444444444  
+[2022-05-26 14:08:58] local.INFO: Fetch pincode data, starting at: 14:08:58:383514  
+[2022-05-26 14:09:07] local.INFO: Fetch pincode data, starting at: 14:09:07:886272  
+[2022-05-26 14:09:22] local.INFO: Fetch pincode data, starting at: 14:09:22:029222  
+[2022-05-26 14:10:50] local.INFO: My address creation started!  
+[2022-05-26 14:10:50] local.INFO: My adress created successfully!  
+[2022-05-26 14:15:26] local.INFO: My address creation started!  
+[2022-05-26 14:15:26] local.INFO: My adress created successfully!  
+[2022-05-26 14:18:44] local.INFO: My address creation started!  
+[2022-05-26 14:19:03] local.INFO: My address creation started!  
+[2022-05-26 14:19:16] local.INFO: My address creation started!  
+[2022-05-26 14:19:51] local.INFO: My address creation started!  
+[2022-05-26 14:19:54] local.INFO: My address creation started!  
+[2022-05-26 14:20:02] local.INFO: My address creation started!  
+[2022-05-26 14:20:02] local.INFO: My adress Updated successfully!  
+[2022-05-26 14:20:34] local.INFO: My address deletion started!  
+[2022-05-26 14:20:46] local.INFO: My address deletion started!  
+[2022-05-26 14:20:46] local.INFO: My adress deleted successfully!  
+[2022-05-26 14:25:13] local.INFO: Change Password process, starting at: 14:25:13:892272  
+[2022-05-26 14:25:53] local.INFO: Change Password process, starting at: 14:25:53:393254  
+[2022-05-26 14:26:02] local.INFO: Change Password process, starting at: 14:26:02:158684  
+[2022-05-26 14:26:08] local.INFO: Change Password process, starting at: 14:26:08:835533  
+[2022-05-26 14:26:14] local.INFO: Change Password process, starting at: 14:26:14:423684  
+[2022-05-26 14:26:17] local.INFO: Change Password process, starting at: 14:26:17:549775  
+[2022-05-26 14:26:21] local.INFO: Change Password process, starting at: 14:26:21:013681  
+[2022-05-26 14:26:43] local.INFO: Delete Vendor Account, starting at: 14:26:43:419745  
+[2022-05-26 14:27:05] local.INFO: Delete Vendor Account, starting at: 14:27:05:896532  
+[2022-05-26 14:27:05] local.INFO: Delete Vendor Start!  
+[2022-05-26 14:27:06] local.INFO: Vendor deleted successfully!   
+[2022-05-26 14:35:44] local.INFO: Initiating registeration process, starting at: 14:35:44:070498  
+[2022-05-26 14:35:44] local.INFO: Vendor creation started!  
+[2022-05-26 14:35:44] local.INFO: Vendor registered successfully with email id: patel@mail.com and phone number: 4444444444  
+[2022-05-26 14:49:55] local.INFO: Fetch pincode data, starting at: 14:49:55:211154  
+[2022-05-26 14:51:13] local.INFO: Fetch pincode data, starting at: 14:51:13:726858  
+[2022-05-26 15:15:05] local.INFO: Fetch pincode data, starting at: 15:15:05:055031  
+[2022-05-26 15:15:05] local.INFO: Pincode detils api starts here  
+[2022-05-26 15:15:33] local.INFO: Fetch pincode data, starting at: 15:15:33:088319  
+[2022-05-26 15:15:33] local.INFO: Pincode detils api starts here  
+[2022-05-26 15:16:46] local.INFO: Fetch pincode data, starting at: 15:16:46:416430  
+[2022-05-26 15:16:46] local.INFO: Pincode details api starts here  
+[2022-05-26 15:17:13] local.INFO: Fetch pincode data, starting at: 15:17:13:396207  
+[2022-05-26 15:17:13] local.INFO: Pincode details api starts here  
+[2022-05-26 15:17:14] local.INFO: There is problem with api  

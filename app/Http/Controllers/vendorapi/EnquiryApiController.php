@@ -44,16 +44,38 @@ class EnquiryApiController extends Controller
                     'vendor_quotations.id',
                     'vendor_quotations.vendor_price',
                     'vendor_quotations.enquiry_status',
+                    'vendor_quotations.created_at',
                     'customer_enquiries.description',
                     'customer_enquiries.enquiry_type',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.product_quantity',
+                    'customer_enquiries.shelf_life',
+                    'measurement_units.unit_name',
+                    'measurement_units.unit_symbol',
+                    'storage_conditions.storage_condition_title',
+                    'packaging_machines.packaging_machine_name',
+                    'product_forms.product_form_name',
+                    'packing_types.packing_name',
+                    'packaging_treatments.packaging_treatment_name',
                     'products.product_name',
                     'products.product_description',
+                    'categories.category_name',
+                    'states.state_name',
+                    'cities.city_name',
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
-                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped'], [$main_table . '' . '.deleted_at', NULL]]);
+                    ->leftjoin('categories', 'customer_enquiries.category_id', '=', 'products.id')
+                    ->leftjoin('measurement_units', 'customer_enquiries.measurement_unit_id', '=', 'measurement_units.id')
+                    ->leftjoin('storage_conditions', 'customer_enquiries.storage_condition_id', '=', 'storage_conditions.id')
+                    ->leftjoin('packaging_machines', 'customer_enquiries.packaging_machine_id', '=', 'packaging_machines.id')
+                    ->leftjoin('product_forms', 'customer_enquiries.product_form_id', '=', 'product_forms.id')
+                    ->leftjoin('packing_types', 'customer_enquiries.packing_type_id', '=', 'packing_types.id')
+                    ->leftjoin('packaging_treatments', 'customer_enquiries.packaging_treatment_id', '=', 'packaging_treatments.id')
+                    ->leftjoin('user_addresses', 'vendor_quotations.user_id', '=', 'user_addresses.user_id')
+                    ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
+                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
+                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped']])->distinct('user_addresses.user_id');
 
                 // $data = VendorQuotation::with('product', 'vendor', 'Enquiry')->where([['vendor_id', $vendor_id], ['enquiry_status', 'mapped']]);
 
@@ -136,6 +158,57 @@ class EnquiryApiController extends Controller
             }
         } catch (\Exception $e) {
             \Log::error("Enquiry fetching failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+
+    public function sendQuotation(Request $request)
+    {
+        $msg_data = array();
+        try {
+            $vendor_token = readVendorHeaderToken();
+            if ($vendor_token) {
+                $vendor_id = $vendor_token['sub'];
+
+                \Log::info("Sending Quotation Started!");
+                $quotation_data = array();
+                if (!$request->id) {
+                    errorMessage(__('quotation.id_require'), $msg_data);
+                }
+
+                if (!$request->vendor_price) {
+                    errorMessage(__('quotation.vendor_price_require'), $msg_data);
+                }
+                $id = $request->id;
+                $staus = $request->vendor_price;
+
+
+                $checkQuotation = VendorQuotation::where([['id', $id], ['vendor_id', $vendor_id], ['enquiry_status', 'mapped']])->first();
+                if (empty($checkQuotation)) {
+                    errorMessage(__('quotation.enquiry_not_found_to_quote'), $msg_data);
+                }
+                $quotation_data = $request->all();
+                $quotation_data['vendor_id'] = $vendor_id;
+                $quotation_data['enquiry_status'] = 'quoted';
+                unset($quotation_data['id']);
+                // print_r($quotation_data);
+                // die;
+                $checkQuotation->update($quotation_data);
+                $quotationData = $checkQuotation;
+
+                $quotation = $quotationData->toArray();
+                $quotationData->created_at->toDateTimeString();
+                $quotationData->updated_at->toDateTimeString();
+
+                \Log::info("Quotation sent successfully!");
+
+                successMessage(__('quotation.sent'), $quotation);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Quotation sending failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

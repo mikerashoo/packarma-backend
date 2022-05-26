@@ -42,13 +42,39 @@ class PaymentApiController extends Controller
                 } else {
                     $status = 'semi_paid';
                 }
+                $main_table = 'orders';
 
+
+                $data = DB::table('orders')->select(
+                    'orders.id',
+                    'orders.product_weight',
+                    'orders.product_quantity',
+                    'orders.mrp',
+                    'orders.vendor_amount',
+                    'orders.vendor_pending_payment',
+                    'orders.vendor_payment_status',
+                    'orders.order_delivery_status',
+                    'orders.created_at',
+                    'states.state_name',
+                    'cities.city_name',
+                )
+
+                    ->leftjoin('user_addresses', 'orders.user_id', '=', 'user_addresses.user_id')
+                    ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
+                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
+                    ->where([['vendor_id', $vendor_id], ['vendor_payment_status', $status]]);
 
                 // vendor payment list
-                $data = VendorPayment::select('id', 'order_id', 'order_id', 'payment_mode', 'amount', 'remark', 'transaction_date')
-                    ->with(['order' => function ($query) {
-                        $query->select('id', 'product_weight', 'product_quantity', 'mrp', 'vendor_amount', 'vendor_pending_payment', 'vendor_payment_status', 'order_delivery_status');
-                    }])->where([['vendor_id', $vendor_id], ['payment_status', $status]]);
+                // $data = VendorPayment::select('id', 'order_id', 'order_id', 'payment_mode', 'amount', 'remark', 'transaction_date')
+                //     ->with(['order' => function ($query) {
+                //         $query->select('id', 'product_weight', 'product_quantity', 'mrp', 'vendor_amount', 'vendor_pending_payment', 'vendor_payment_status', 'order_delivery_status');
+                //     }])->where([['vendor_id', $vendor_id], ['payment_status', $status]]);
+
+                // $data = Order::select('id', 'product_weight', 'product_quantity', 'mrp', 'vendor_amount', 'vendor_pending_payment', 'vendor_payment_status', 'order_delivery_status', 'created_at')
+                //     ->where([['vendor_id', $vendor_id], ['vendor_payment_status', $status]]);
+
+
+
                 $awaiting_payments = Order::where('vendor_id', $vendor_id)->sum('vendor_pending_payment');
                 $grand_total = Order::where('vendor_id', $vendor_id)->sum('grand_total');
                 $awaiting_orders =
@@ -64,13 +90,13 @@ class PaymentApiController extends Controller
 
 
 
-                $paymentData = VendorPayment::whereRaw("1 = 1");
+                $paymentData = Order::whereRaw("1 = 1");
 
 
                 if ($request->last_no_of_days && is_numeric($request->last_no_of_days)) {
                     $date_from_no_of_days = Carbon::now()->subDays($request->last_no_of_days);
-                    $paymentData = $paymentData->whereDate('created_at', '>=', $date_from_no_of_days);
-                    $data = $data->whereDate('created_at', '>=', $date_from_no_of_days);
+                    $paymentData = $paymentData->whereDate($main_table . '' . '.created_at', '>=', $date_from_no_of_days);
+                    $data = $data->whereDate($main_table . '' . '.created_at', '>=', $date_from_no_of_days);
                 }
                 // if ($request->payment_status) {
                 //     $paymentData = $paymentData->where('payment_status', $request->payment_status);
@@ -87,7 +113,7 @@ class PaymentApiController extends Controller
                 }
 
                 if (isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search, 'amount|remark');
+                    $data = fullSearchQuery($data, $request->search, 'vendor_pending_payment|vendor_amount');
                 }
 
                 $total_records = $data->get()->count();

@@ -54,6 +54,7 @@ class PackagingMaterialApiController extends Controller
                     'packaging_materials.cof',
                     'packaging_materials.sit',
                     'packaging_materials.gsm',
+                    'packaging_materials.special_feature',
                     'products.product_name',
                     'products.product_description',
                 )
@@ -107,6 +108,56 @@ class PackagingMaterialApiController extends Controller
             }
         } catch (\Exception $e) {
             \Log::error("Material fetching failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+
+    public function updatePrice(Request $request)
+    {
+        $msg_data = array();
+        try {
+            $vendor_token = readVendorHeaderToken();
+            if ($vendor_token) {
+                $vendor_id = $vendor_token['sub'];
+
+
+                \Log::info("Material Price Update Started!");
+                $packaging_material_data = array();
+                if (!$request->id) {
+                    errorMessage(__('packagingmaterial.id_require'), $msg_data);
+                }
+
+                if (!$request->vendor_price) {
+                    errorMessage(__('packagingmaterial.vendor_price_require'), $msg_data);
+                }
+                $id = $request->id;
+                $vendor_price = $request->vendor_price;
+
+                // Store a new vendor address
+
+                $checkPackagingMaterial = VendorMaterialMapping::where([['id', $id], ['vendor_id', $vendor_id]])->first();
+                if (empty($checkPackagingMaterial)) {
+                    errorMessage(__('packagingmaterial.material_not_found'), $msg_data);
+                }
+                $packaging_material_data = $request->all();
+                $packaging_material_data['vendor_id'] = $vendor_id;
+                unset($packaging_material_data['id']);
+                $checkPackagingMaterial->update($packaging_material_data);
+                $packagingMaterialData = $checkPackagingMaterial;
+
+                $packagingMaterial = $packagingMaterialData->toArray();
+                $packagingMaterialData->created_at->toDateTimeString();
+                $packagingMaterialData->updated_at->toDateTimeString();
+
+                \Log::info("Material Price Updated successfully!");
+
+                successMessage(__('packagingmaterial.updated'), $packagingMaterial);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Material Price Updation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
