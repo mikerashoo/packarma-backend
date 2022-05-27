@@ -22,6 +22,9 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
     Route::post('/login_api', 'LoginApiController@index');
     Route::post('/forgot_password_api', 'ForgotPasswordApiController@index');
     Route::middleware(['vendorTokenAuth'])->group(function () {
+        Route::post('/country/listing', 'CountryController@index');
+        Route::post('/state/listing', 'StateController@index');
+        Route::post('/city/listing', 'CityController@index');
         Route::post('/materials/listing', 'PackagingMaterialApiController@index');
         Route::post('/material/price_update', 'PackagingMaterialApiController@updatePrice');
         Route::post('/orders/listing', 'OrderApiController@index');

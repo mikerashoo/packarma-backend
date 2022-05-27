@@ -1,0 +1,343 @@
+[2022-05-27 11:49:43] local.ERROR: Call to a member function first() on array {"exception":"[object] (Error(code: 0): Call to a member function first() on array at E:\\xampp\\htdocs\\packult-web\\app\\Http\\Controllers\\vendorapi\\CountryController.php:74)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php(54): App\\Http\\Controllers\\vendorapi\\CountryController->index(Object(Illuminate\\Http\\Request))
+#1 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php(45): Illuminate\\Routing\\Controller->callAction('index', Array)
+#2 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(262): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(App\\Http\\Controllers\\vendorapi\\CountryController), 'index')
+#3 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php(205): Illuminate\\Routing\\Route->runController()
+#4 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(721): Illuminate\\Routing\\Route->run()
+#5 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(128): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#6 E:\\xampp\\htdocs\\packult-web\\app\\Http\\Middleware\\VendorTokenAuth.php(48): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#7 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): App\\Http\\Middleware\\VendorTokenAuth->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#8 E:\\xampp\\htdocs\\packult-web\\app\\Http\\Middleware\\VendorBasicAuth.php(74): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#9 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): App\\Http\\Middleware\\VendorBasicAuth->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#10 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#11 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#12 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(127): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#13 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(103): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequest(Object(Illuminate\\Http\\Request), Object(Closure), Array)
+#14 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php(55): Illuminate\\Routing\\Middleware\\ThrottleRequests->handleRequestUsingNamedLimiter(Object(Illuminate\\Http\\Request), Object(Closure), 'api', Object(Closure))
+#15 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): Illuminate\\Routing\\Middleware\\ThrottleRequests->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'api')
+#16 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#17 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(723): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#18 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(698): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#19 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(662): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#20 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php(651): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#21 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(167): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#22 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(128): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#23 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#24 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#25 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#26 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#27 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#28 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#29 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php(86): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#32 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#33 E:\\xampp\\htdocs\\packult-web\\vendor\\fruitcake\\laravel-cors\\src\\HandleCors.php(38): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#34 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): Fruitcake\\Cors\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 E:\\xampp\\htdocs\\packult-web\\vendor\\fideloper\\proxy\\src\\TrustProxies.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(167): Fideloper\\Proxy\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php(103): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(142): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#39 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php(111): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#40 E:\\xampp\\htdocs\\packult-web\\public\\index.php(52): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#41 E:\\xampp\\htdocs\\packult-web\\index.php(21): require_once('E:\\\\xampp\\\\htdocs...')
+#42 {main}
+"} 
+[2022-05-27 12:44:11] local.ERROR: Auth Exception: The state id field is required.  
+[2022-05-27 14:20:31] local.ERROR: Auth Exception: The state id field is required.  
+[2022-05-27 14:35:24] local.ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'recommendation_engine_id' in 'customer_enquiries' (SQL: alter table `customer_enquiries` add `packaging_material_id` int not null default '0' after `recommendation_engine_id`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'recommendation_engine_id' in 'customer_enquiries' (SQL: alter table `customer_enquiries` add `packaging_material_id` int not null default '0' after `recommendation_engine_id`) at E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:712)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(672): Illuminate\\Database\\Connection->runQueryCallback('alter table `cu...', Array, Object(Closure))
+#1 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(502): Illuminate\\Database\\Connection->run('alter table `cu...', Array, Object(Closure))
+#2 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(109): Illuminate\\Database\\Connection->statement('alter table `cu...')
+#3 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(364): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#4 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(211): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#5 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(261): Illuminate\\Database\\Schema\\Builder->table('customer_enquir...', Object(Closure))
+#6 E:\\xampp\\htdocs\\packult-web\\database\\migrations\\2022_05_26_221256_add_packaging_material_id_columns_to_customer_enquiry_table.php(21): Illuminate\\Support\\Facades\\Facade::__callStatic('table', Array)
+#7 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(472): AddPackagingMaterialIdColumnsToCustomerEnquiryTable->up()
+#8 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(394): Illuminate\\Database\\Migrations\\Migrator->runMethod(Object(Illuminate\\Database\\MySqlConnection), Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#9 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(403): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#10 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(202): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#11 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(167): Illuminate\\Database\\Migrations\\Migrator->runUp('E:\\\\xampp\\\\htdocs...', 69, false)
+#12 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(112): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#13 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(86): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#14 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(606): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#15 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(98): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#16 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#17 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#18 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#19 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#20 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(653): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#21 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(136): Illuminate\\Container\\Container->call(Array)
+#22 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Command\\Command.php(298): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#23 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#24 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(1015): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#25 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(299): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#26 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#27 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(94): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#28 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#29 E:\\xampp\\htdocs\\packult-web\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#30 {main}
+
+[previous exception] [object] (Doctrine\\DBAL\\Driver\\PDO\\Exception(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'recommendation_engine_id' in 'customer_enquiries' at E:\\xampp\\htdocs\\packult-web\\vendor\\doctrine\\dbal\\lib\\Doctrine\\DBAL\\Driver\\PDO\\Exception.php:18)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\packult-web\\vendor\\doctrine\\dbal\\lib\\Doctrine\\DBAL\\Driver\\PDOStatement.php(119): Doctrine\\DBAL\\Driver\\PDO\\Exception::new(Object(PDOException))
+#1 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(501): Doctrine\\DBAL\\Driver\\PDOStatement->execute()
+#2 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(705): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('alter table `cu...', Array)
+#3 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(672): Illuminate\\Database\\Connection->runQueryCallback('alter table `cu...', Array, Object(Closure))
+#4 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(502): Illuminate\\Database\\Connection->run('alter table `cu...', Array, Object(Closure))
+#5 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(109): Illuminate\\Database\\Connection->statement('alter table `cu...')
+#6 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(364): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#7 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(211): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#8 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(261): Illuminate\\Database\\Schema\\Builder->table('customer_enquir...', Object(Closure))
+#9 E:\\xampp\\htdocs\\packult-web\\database\\migrations\\2022_05_26_221256_add_packaging_material_id_columns_to_customer_enquiry_table.php(21): Illuminate\\Support\\Facades\\Facade::__callStatic('table', Array)
+#10 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(472): AddPackagingMaterialIdColumnsToCustomerEnquiryTable->up()
+#11 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(394): Illuminate\\Database\\Migrations\\Migrator->runMethod(Object(Illuminate\\Database\\MySqlConnection), Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#12 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(403): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#13 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(202): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#14 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(167): Illuminate\\Database\\Migrations\\Migrator->runUp('E:\\\\xampp\\\\htdocs...', 69, false)
+#15 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(112): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#16 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(86): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#17 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(606): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#18 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(98): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#19 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#20 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#21 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#22 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#23 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(653): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#24 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(136): Illuminate\\Container\\Container->call(Array)
+#25 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Command\\Command.php(298): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#26 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#27 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(1015): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#28 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(299): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#29 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#30 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(94): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#31 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#32 E:\\xampp\\htdocs\\packult-web\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#33 {main}
+
+[previous exception] [object] (PDOException(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'recommendation_engine_id' in 'customer_enquiries' at E:\\xampp\\htdocs\\packult-web\\vendor\\doctrine\\dbal\\lib\\Doctrine\\DBAL\\Driver\\PDOStatement.php:117)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\packult-web\\vendor\\doctrine\\dbal\\lib\\Doctrine\\DBAL\\Driver\\PDOStatement.php(117): PDOStatement->execute(NULL)
+#1 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(501): Doctrine\\DBAL\\Driver\\PDOStatement->execute()
+#2 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(705): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('alter table `cu...', Array)
+#3 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(672): Illuminate\\Database\\Connection->runQueryCallback('alter table `cu...', Array, Object(Closure))
+#4 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(502): Illuminate\\Database\\Connection->run('alter table `cu...', Array, Object(Closure))
+#5 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(109): Illuminate\\Database\\Connection->statement('alter table `cu...')
+#6 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(364): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#7 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(211): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#8 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(261): Illuminate\\Database\\Schema\\Builder->table('customer_enquir...', Object(Closure))
+#9 E:\\xampp\\htdocs\\packult-web\\database\\migrations\\2022_05_26_221256_add_packaging_material_id_columns_to_customer_enquiry_table.php(21): Illuminate\\Support\\Facades\\Facade::__callStatic('table', Array)
+#10 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(472): AddPackagingMaterialIdColumnsToCustomerEnquiryTable->up()
+#11 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(394): Illuminate\\Database\\Migrations\\Migrator->runMethod(Object(Illuminate\\Database\\MySqlConnection), Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#12 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(403): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#13 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(202): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#14 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(167): Illuminate\\Database\\Migrations\\Migrator->runUp('E:\\\\xampp\\\\htdocs...', 69, false)
+#15 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(112): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#16 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(86): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#17 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(606): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#18 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(98): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#19 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#20 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#21 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#22 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#23 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(653): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#24 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(136): Illuminate\\Container\\Container->call(Array)
+#25 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Command\\Command.php(298): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#26 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#27 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(1015): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#28 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(299): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#29 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#30 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(94): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#31 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#32 E:\\xampp\\htdocs\\packult-web\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#33 {main}
+"} 
+[2022-05-27 14:36:57] local.ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'recommendation_engine_id' in 'customer_enquiries' (SQL: alter table `customer_enquiries` add `packaging_material_id` int not null default '0' after `recommendation_engine_id`) {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'recommendation_engine_id' in 'customer_enquiries' (SQL: alter table `customer_enquiries` add `packaging_material_id` int not null default '0' after `recommendation_engine_id`) at E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php:712)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(672): Illuminate\\Database\\Connection->runQueryCallback('alter table `cu...', Array, Object(Closure))
+#1 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(502): Illuminate\\Database\\Connection->run('alter table `cu...', Array, Object(Closure))
+#2 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(109): Illuminate\\Database\\Connection->statement('alter table `cu...')
+#3 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(364): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#4 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(211): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#5 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(261): Illuminate\\Database\\Schema\\Builder->table('customer_enquir...', Object(Closure))
+#6 E:\\xampp\\htdocs\\packult-web\\database\\migrations\\2022_05_26_221256_add_packaging_material_id_columns_to_customer_enquiry_table.php(21): Illuminate\\Support\\Facades\\Facade::__callStatic('table', Array)
+#7 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(472): AddPackagingMaterialIdColumnsToCustomerEnquiryTable->up()
+#8 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(394): Illuminate\\Database\\Migrations\\Migrator->runMethod(Object(Illuminate\\Database\\MySqlConnection), Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#9 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(403): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#10 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(202): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#11 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(167): Illuminate\\Database\\Migrations\\Migrator->runUp('E:\\\\xampp\\\\htdocs...', 70, false)
+#12 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(112): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#13 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(86): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#14 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(606): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#15 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(98): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#16 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#17 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#18 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#19 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#20 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(653): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#21 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(136): Illuminate\\Container\\Container->call(Array)
+#22 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Command\\Command.php(298): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#23 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#24 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(1015): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#25 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(299): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#26 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#27 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(94): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#28 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#29 E:\\xampp\\htdocs\\packult-web\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#30 {main}
+
+[previous exception] [object] (Doctrine\\DBAL\\Driver\\PDO\\Exception(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'recommendation_engine_id' in 'customer_enquiries' at E:\\xampp\\htdocs\\packult-web\\vendor\\doctrine\\dbal\\lib\\Doctrine\\DBAL\\Driver\\PDO\\Exception.php:18)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\packult-web\\vendor\\doctrine\\dbal\\lib\\Doctrine\\DBAL\\Driver\\PDOStatement.php(119): Doctrine\\DBAL\\Driver\\PDO\\Exception::new(Object(PDOException))
+#1 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(501): Doctrine\\DBAL\\Driver\\PDOStatement->execute()
+#2 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(705): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('alter table `cu...', Array)
+#3 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(672): Illuminate\\Database\\Connection->runQueryCallback('alter table `cu...', Array, Object(Closure))
+#4 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(502): Illuminate\\Database\\Connection->run('alter table `cu...', Array, Object(Closure))
+#5 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(109): Illuminate\\Database\\Connection->statement('alter table `cu...')
+#6 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(364): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#7 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(211): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#8 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(261): Illuminate\\Database\\Schema\\Builder->table('customer_enquir...', Object(Closure))
+#9 E:\\xampp\\htdocs\\packult-web\\database\\migrations\\2022_05_26_221256_add_packaging_material_id_columns_to_customer_enquiry_table.php(21): Illuminate\\Support\\Facades\\Facade::__callStatic('table', Array)
+#10 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(472): AddPackagingMaterialIdColumnsToCustomerEnquiryTable->up()
+#11 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(394): Illuminate\\Database\\Migrations\\Migrator->runMethod(Object(Illuminate\\Database\\MySqlConnection), Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#12 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(403): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#13 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(202): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#14 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(167): Illuminate\\Database\\Migrations\\Migrator->runUp('E:\\\\xampp\\\\htdocs...', 70, false)
+#15 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(112): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#16 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(86): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#17 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(606): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#18 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(98): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#19 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#20 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#21 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#22 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#23 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(653): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#24 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(136): Illuminate\\Container\\Container->call(Array)
+#25 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Command\\Command.php(298): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#26 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#27 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(1015): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#28 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(299): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#29 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#30 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(94): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#31 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#32 E:\\xampp\\htdocs\\packult-web\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#33 {main}
+
+[previous exception] [object] (PDOException(code: 42S22): SQLSTATE[42S22]: Column not found: 1054 Unknown column 'recommendation_engine_id' in 'customer_enquiries' at E:\\xampp\\htdocs\\packult-web\\vendor\\doctrine\\dbal\\lib\\Doctrine\\DBAL\\Driver\\PDOStatement.php:117)
+[stacktrace]
+#0 E:\\xampp\\htdocs\\packult-web\\vendor\\doctrine\\dbal\\lib\\Doctrine\\DBAL\\Driver\\PDOStatement.php(117): PDOStatement->execute(NULL)
+#1 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(501): Doctrine\\DBAL\\Driver\\PDOStatement->execute()
+#2 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(705): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('alter table `cu...', Array)
+#3 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(672): Illuminate\\Database\\Connection->runQueryCallback('alter table `cu...', Array, Object(Closure))
+#4 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Connection.php(502): Illuminate\\Database\\Connection->run('alter table `cu...', Array, Object(Closure))
+#5 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Blueprint.php(109): Illuminate\\Database\\Connection->statement('alter table `cu...')
+#6 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(364): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#7 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Schema\\Builder.php(211): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#8 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Support\\Facades\\Facade.php(261): Illuminate\\Database\\Schema\\Builder->table('customer_enquir...', Object(Closure))
+#9 E:\\xampp\\htdocs\\packult-web\\database\\migrations\\2022_05_26_221256_add_packaging_material_id_columns_to_customer_enquiry_table.php(21): Illuminate\\Support\\Facades\\Facade::__callStatic('table', Array)
+#10 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(472): AddPackagingMaterialIdColumnsToCustomerEnquiryTable->up()
+#11 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(394): Illuminate\\Database\\Migrations\\Migrator->runMethod(Object(Illuminate\\Database\\MySqlConnection), Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#12 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(403): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#13 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(202): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(AddPackagingMaterialIdColumnsToCustomerEnquiryTable), 'up')
+#14 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(167): Illuminate\\Database\\Migrations\\Migrator->runUp('E:\\\\xampp\\\\htdocs...', 70, false)
+#15 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(112): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#16 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(86): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#17 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Migrations\\Migrator.php(606): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#18 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Database\\Console\\Migrations\\MigrateCommand.php(98): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#19 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#20 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#21 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#22 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#23 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(653): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#24 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(136): Illuminate\\Container\\Container->call(Array)
+#25 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Command\\Command.php(298): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#26 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#27 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(1015): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#28 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(299): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#29 E:\\xampp\\htdocs\\packult-web\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#30 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(94): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#31 E:\\xampp\\htdocs\\packult-web\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#32 E:\\xampp\\htdocs\\packult-web\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#33 {main}
+"} 
+[2022-05-27 16:57:59] local.INFO: Initiating registeration process, starting at: 16:57:59:292779  
+[2022-05-27 16:57:59] local.INFO: Vendor creation started!  
+[2022-05-27 16:57:59] local.INFO: Existing vendor updated with email id: patel@mail.com and phone number: 4444444444  
+[2022-05-27 16:58:16] local.INFO: Logging in vendor, starting at: 16:58:16:288284  
+[2022-05-27 16:58:37] local.INFO: OTP sending process starts, starting at: 16:58:37:646651  
+[2022-05-27 16:58:37] local.INFO: OTP updated.  
+[2022-05-27 16:58:37] local.INFO: OTP sent successfully to mobile number: 4444444444  
+[2022-05-27 16:58:52] local.INFO: OTP verification process starts, starting at: 16:58:52:248930  
+[2022-05-27 16:59:06] local.INFO: Logging in vendor, starting at: 16:59:05:998682  
+[2022-05-27 16:59:50] local.INFO: Logging in vendor, starting at: 16:59:50:148706  
+[2022-05-27 17:00:00] local.INFO: Change Password process, starting at: 17:00:00:065790  
+[2022-05-27 17:00:04] local.INFO: Change Password process, starting at: 17:00:04:676181  
+[2022-05-27 17:00:09] local.INFO: Change Password process, starting at: 17:00:09:208253  
+[2022-05-27 17:00:11] local.INFO: Change Password process, starting at: 17:00:11:173554  
+[2022-05-27 17:00:23] local.INFO: Forgot Password process, starting at: 17:00:23:968597  
+[2022-05-27 17:00:34] local.INFO: OTP sending process starts, starting at: 17:00:34:479735  
+[2022-05-27 17:00:34] local.INFO: OTP updated.  
+[2022-05-27 17:00:34] local.INFO: OTP sent successfully to mobile number: 4444444444  
+[2022-05-27 17:00:42] local.INFO: OTP verification process starts, starting at: 17:00:42:363445  
+[2022-05-27 17:12:56] local.INFO: Forgot Password process, starting at: 17:12:56:807577  
+[2022-05-27 17:13:03] local.INFO: OTP sending process starts, starting at: 17:13:03:049442  
+[2022-05-27 17:13:03] local.INFO: OTP updated.  
+[2022-05-27 17:13:03] local.INFO: OTP sent successfully to mobile number: 4444444444  
+[2022-05-27 17:13:06] local.INFO: OTP verification process starts, starting at: 17:13:06:568129  
+[2022-05-27 17:13:10] local.INFO: Forgot Password process, starting at: 17:13:10:643004  
+[2022-05-27 17:15:03] local.INFO: Material Price Update Started!  
+[2022-05-27 17:15:03] local.INFO: Material Price Updated successfully!  
+[2022-05-27 17:15:25] local.INFO: Material Price Update Started!  
+[2022-05-27 17:15:26] local.INFO: Material Price Updated successfully!  
+[2022-05-27 17:17:06] local.INFO: Order Delivery Status Update Started!  
+[2022-05-27 17:17:06] local.INFO: Order delivery status Updated successfully!  
+[2022-05-27 17:17:13] local.INFO: Order Delivery Status Update Started!  
+[2022-05-27 17:18:47] local.INFO: Order Delivery Status Update Started!  
+[2022-05-27 17:18:58] local.INFO: Order Delivery Status Update Started!  
+[2022-05-27 17:18:58] local.INFO: Order delivery status Updated successfully!  
+[2022-05-27 17:20:02] local.INFO: Sending Quotation Started!  
+[2022-05-27 17:20:02] local.INFO: Quotation sent successfully!  
+[2022-05-27 17:20:30] local.INFO: Sending Quotation Started!  
+[2022-05-27 17:26:01] local.INFO: Initiating Version check, starting at: 17:26:01:153186  
+[2022-05-27 17:26:01] local.INFO: Version Check started!  
+[2022-05-27 17:26:06] local.INFO: Fetch General Info process, starting at: 17:26:06:374116  
+[2022-05-27 17:26:12] local.INFO: Fetch General Info process, starting at: 17:26:12:354136  
+[2022-05-27 17:26:18] local.INFO: My Profile Show, starting at: 17:26:18:920472  
+[2022-05-27 17:26:30] local.INFO: My Profile Update, starting at: 17:26:30:346406  
+[2022-05-27 17:26:30] local.INFO: Vendor Update Start!  
+[2022-05-27 17:28:14] local.INFO: My Profile Update, starting at: 17:28:14:987352  
+[2022-05-27 17:28:15] local.INFO: Vendor Update Start!  
+[2022-05-27 17:28:15] local.INFO: Existing vendor updated with email id: patel@mail.com and phone number: 7777777778  
+[2022-05-27 17:28:22] local.INFO: Fetch pincode data, starting at: 17:28:22:655685  
+[2022-05-27 17:28:22] local.INFO: Pincode details api starts here  
+[2022-05-27 17:28:48] local.INFO: My address creation started!  
+[2022-05-27 17:28:48] local.INFO: My adress created successfully!  
+[2022-05-27 17:29:16] local.INFO: My address creation started!  
+[2022-05-27 17:29:34] local.INFO: My address creation started!  
+[2022-05-27 17:30:04] local.INFO: My address creation started!  
+[2022-05-27 17:30:04] local.INFO: My adress Updated successfully!  
+[2022-05-27 17:30:19] local.INFO: My address deletion started!  
+[2022-05-27 17:30:19] local.INFO: My adress deleted successfully!  
+[2022-05-27 17:30:40] local.INFO: Delete Vendor Account, starting at: 17:30:40:070622  
+[2022-05-27 17:30:40] local.INFO: Delete Vendor Start!  
+[2022-05-27 17:30:40] local.INFO: Vendor deleted successfully!   
+[2022-05-27 17:50:00] local.INFO: Logging in vendor, starting at: 17:50:00:145478  
+[2022-05-27 17:50:21] local.INFO: Logging in vendor, starting at: 17:50:21:394998  
+[2022-05-27 17:50:44] local.INFO: Logging in vendor, starting at: 17:50:44:311821  
+[2022-05-27 17:50:52] local.INFO: Logging in vendor, starting at: 17:50:52:325508  
+[2022-05-27 17:51:15] local.INFO: Logging in vendor, starting at: 17:51:15:118667  
+[2022-05-27 17:51:30] local.INFO: Initiating registeration process, starting at: 17:51:30:737126  
+[2022-05-27 17:51:30] local.INFO: Vendor creation started!  
+[2022-05-27 17:51:42] local.INFO: Initiating registeration process, starting at: 17:51:42:230026  
+[2022-05-27 17:51:42] local.INFO: Vendor creation started!  
+[2022-05-27 17:51:42] local.INFO: Vendor registered successfully with email id: patel@mail.com and phone number: 5555555555  
+[2022-05-27 17:52:04] local.INFO: OTP sending process starts, starting at: 17:52:04:320977  
+[2022-05-27 17:52:04] local.ERROR: Auth Exception: phone does not exist.  
+[2022-05-27 17:52:12] local.INFO: OTP sending process starts, starting at: 17:52:12:001393  
+[2022-05-27 17:52:12] local.INFO: OTP saved.  
+[2022-05-27 17:52:12] local.INFO: OTP sent successfully to mobile number: 5555555555  
+[2022-05-27 17:52:25] local.INFO: OTP verification process starts, starting at: 17:52:25:136305  
+[2022-05-27 17:52:48] local.INFO: Logging in vendor, starting at: 17:52:48:398889  
+[2022-05-27 17:53:02] local.INFO: Logging in vendor, starting at: 17:53:02:331936  

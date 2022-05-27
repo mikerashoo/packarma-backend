@@ -50,6 +50,7 @@ class OrderApiController extends Controller
                     'orders.grand_total',
                     'orders.shipping_details',
                     'orders.billing_details',
+                    'orders.shelf_life',
                     'orders.created_at',
                     'categories.category_name',
                     'sub_categories.sub_category_name',
@@ -66,7 +67,11 @@ class OrderApiController extends Controller
                     'product_forms.product_form_name',
                     'packing_types.packing_name',
                     'packaging_treatments.packaging_treatment_name',
-                    'user_addresses.pincode',
+                    'recommendation_engines.engine_name',
+                    'recommendation_engines.structure_type',
+                    'recommendation_engines.min_shelf_life',
+                    'recommendation_engines.max_shelf_life',
+                    'customer_enquiries.address',
                     'states.state_name',
                     'cities.city_name',
                 )
@@ -81,10 +86,11 @@ class OrderApiController extends Controller
                     ->leftjoin('product_forms', 'orders.product_form_id', '=', 'product_forms.id')
                     ->leftjoin('packing_types', 'orders.packing_type_id', '=', 'packing_types.id')
                     ->leftjoin('packaging_treatments', 'orders.packaging_treatment_id', '=', 'packaging_treatments.id')
-                    ->leftjoin('user_addresses', 'orders.user_id', '=', 'user_addresses.user_id')
-                    ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
-                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
-                    ->where([[$main_table . '' . '.vendor_id', $vendor_id], [$main_table . '' . '.deleted_at', NULL]])->distinct('user_addresses.user_id');
+                    ->leftjoin('recommendation_engines', 'orders.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->leftjoin('customer_enquiries', 'orders.customer_enquiry_id', '=', 'customer_enquiries.id')
+                    ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
+                    ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
+                    ->where([[$main_table . '' . '.vendor_id', $vendor_id], [$main_table . '' . '.deleted_at', NULL]]);
 
 
 
@@ -158,6 +164,9 @@ class OrderApiController extends Controller
 
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
 
+                if (empty($data)) {
+                    errorMessage(__('order.order_not_found'), $msg_data);
+                }
                 // $i = 0;
                 // foreach ($data as $row) {
                 //     $data[$i]['product_image'] = getFile($row['product_image'], 'product');
@@ -199,7 +208,7 @@ class OrderApiController extends Controller
                 $id = $request->id;
                 $staus = $request->order_delivery_status;
 
-                $status_array = ['pending', 'processing', 'out_for_delivery', 'delivered'];
+                $status_array = ['pending', 'processing', 'out_for_delivery', 'delivered', 'cancelled'];
                 if (!in_array($staus, $status_array)) {
                     errorMessage(__('order.wrong_status'), $msg_data);
                 }

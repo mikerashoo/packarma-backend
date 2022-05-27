@@ -17,5 +17,5 @@
         'id_require' => 'Order id is require',
         'delivery_status_require' => 'Delivery status require',
         'updated' => 'Order delivery status updated successfully!',
-        'wrong_status' => 'Status is Wrong please Update with These status. pending|processing|out_for_delivery|delivered',
+        'wrong_status' => 'Status is Wrong please Update with These status. pending|processing|out_for_delivery|delivered|cancelled',
     ];

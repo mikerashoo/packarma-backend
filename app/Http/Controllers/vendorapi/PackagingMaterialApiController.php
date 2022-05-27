@@ -98,6 +98,10 @@ class PackagingMaterialApiController extends Controller
                 //     $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
                 //     $i++;
                 // }
+
+                if (empty($data)) {
+                    errorMessage(__('packagingmaterial.material_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 // print_r($data);
