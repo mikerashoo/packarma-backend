@@ -50,6 +50,7 @@ class EnquiryApiController extends Controller
                     'customer_enquiries.product_weight',
                     'customer_enquiries.product_quantity',
                     'customer_enquiries.shelf_life',
+                    'customer_enquiries.address',
                     'measurement_units.unit_name',
                     'measurement_units.unit_symbol',
                     'storage_conditions.storage_condition_title',
@@ -57,6 +58,10 @@ class EnquiryApiController extends Controller
                     'product_forms.product_form_name',
                     'packing_types.packing_name',
                     'packaging_treatments.packaging_treatment_name',
+                    'recommendation_engines.engine_name',
+                    'recommendation_engines.structure_type',
+                    'recommendation_engines.min_shelf_life',
+                    'recommendation_engines.max_shelf_life',
                     'products.product_name',
                     'products.product_description',
                     'categories.category_name',
@@ -72,10 +77,10 @@ class EnquiryApiController extends Controller
                     ->leftjoin('product_forms', 'customer_enquiries.product_form_id', '=', 'product_forms.id')
                     ->leftjoin('packing_types', 'customer_enquiries.packing_type_id', '=', 'packing_types.id')
                     ->leftjoin('packaging_treatments', 'customer_enquiries.packaging_treatment_id', '=', 'packaging_treatments.id')
-                    ->leftjoin('user_addresses', 'vendor_quotations.user_id', '=', 'user_addresses.user_id')
-                    ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
-                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
-                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped']])->distinct('user_addresses.user_id');
+                    ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
+                    ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
+                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped']]);
 
                 // $data = VendorQuotation::with('product', 'vendor', 'Enquiry')->where([['vendor_id', $vendor_id], ['enquiry_status', 'mapped']]);
 
@@ -150,6 +155,10 @@ class EnquiryApiController extends Controller
                 //     $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
                 //     $i++;
                 // }
+
+                if (empty($data)) {
+                    errorMessage(__('enquiry.enquiry_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);

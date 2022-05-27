@@ -79,6 +79,7 @@ class HomeApiController extends Controller
                     'customer_enquiries.product_weight',
                     'customer_enquiries.product_quantity',
                     'customer_enquiries.shelf_life',
+                    'customer_enquiries.address',
                     'products.product_name',
                     'products.product_description',
                     'cities.city_name',
@@ -86,9 +87,8 @@ class HomeApiController extends Controller
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
-                    ->leftjoin('user_addresses', 'customer_enquiries.user_id', '=', 'user_addresses.user_id')
-                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
-                    ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
+                    ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
+                    ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
                     ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped']])
                     ->orderBy('vendor_quotations.created_at', 'desc')->take(3)->get()->toArray();
 

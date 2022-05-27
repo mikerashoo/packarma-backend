@@ -54,10 +54,9 @@ class QuotationApiController extends Controller
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
-                    ->leftjoin('user_addresses', 'vendor_quotations.user_id', '=', 'user_addresses.user_id')
-                    ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
-                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
-                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', '!=', 'mapped']])->distinct('user_addresses.user_id');
+                    ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
+                    ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
+                    ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', '!=', 'mapped']]);
 
 
                 // $data = VendorQuotation::select('vendor_price', 'id', 'product_id', 'customer_enquiry_id')->with(['product' => function ($query) {
@@ -136,6 +135,10 @@ class QuotationApiController extends Controller
                 //     $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
                 //     $i++;
                 // }
+
+                if (empty($data)) {
+                    errorMessage(__('quotation.quotation_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);

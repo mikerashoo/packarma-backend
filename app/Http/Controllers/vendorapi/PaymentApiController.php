@@ -51,13 +51,14 @@ class PaymentApiController extends Controller
                     'orders.vendor_payment_status',
                     'orders.order_delivery_status',
                     'orders.created_at',
+                    'customer_enquiries.address',
                     'states.state_name',
                     'cities.city_name',
                 )
 
-                    ->leftjoin('user_addresses', 'orders.user_id', '=', 'user_addresses.user_id')
-                    ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
-                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
+                    ->leftjoin('customer_enquiries', 'orders.customer_enquiry_id', '=', 'customer_enquiries.id')
+                    ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
+                    ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
                     ->where([['vendor_id', $vendor_id]]);
 
                 // vendor payment list
@@ -122,12 +123,20 @@ class PaymentApiController extends Controller
                 //     $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
                 //     $i++;
                 // }
+
+
                 $responseData['result'] = $data;
                 $responseData['awaiting_payments'] = $awaiting_payments;
                 $responseData['payments_received'] = $payments_received->payments_received;
                 // $responseData['payments_received'] = $grand_total - $awaiting_payments;
                 $responseData['awaiting_orders'] = $awaiting_orders;
                 $responseData['total_records'] = $total_records;
+
+                if (empty($data)) {
+                    errorMessage(__('payment.payment_not_found'), $responseData);
+                }
+
+
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
