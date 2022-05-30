@@ -37,7 +37,7 @@ class UserAddressApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-
+                $main_table = 'user_addresses';
                 $data = DB::table('user_addresses')->select(
                     'user_addresses.id',
                     'user_addresses.address_name',
@@ -47,14 +47,18 @@ class UserAddressApiController extends Controller
                     'user_addresses.mobile_no',
                     'countries.country_name',
                     'states.state_name',
-                    'cities.city_name',
+                    // 'cities.city_name',
                     'user_addresses.address',
                     'user_addresses.pincode',
+                    'user_addresses.flat',
+                    'user_addresses.area',
+                    'user_addresses.land_mark',
+                    'user_addresses.city_name'
                 )
                     ->leftjoin('countries', 'user_addresses.country_id', '=', 'countries.id')
                     ->leftjoin('states', 'user_addresses.state_id', '=', 'states.id')
-                    ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
-                    ->where('user_addresses.user_id', $user_id);
+                    // ->leftjoin('cities', 'user_addresses.city_id', '=', 'cities.id')
+                    ->where([[$main_table . '' . '.status', '1'], [$main_table . '' . '.deleted_at', NULL]])->where('user_id', $user_id);
                     
                 $userAddressData = UserAddress::with('user')->whereRaw("1 = 1");
                 if($request->address_id)
@@ -78,7 +82,7 @@ class UserAddressApiController extends Controller
                     errorMessage(__('user_address.address_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'address_name|type|address|pincode');
+                    $data = fullSearchQuery($data, $request->search,'address_name|type|address|pincode|city_name|flat|area|land_mark');
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
@@ -99,13 +103,50 @@ class UserAddressApiController extends Controller
     }
 
     /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 30/05/2022
+     * Uses : To create new address of user
+     * 
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $msg_data = array();
+        try {
+            $token = readHeaderToken();
+            if ($token) {
+                $user_id = $token['sub'];
+
+                // Request Validation
+                $addressValidationErrors = $this->validateAddressRegister($request);
+                if (count($addressValidationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $addressValidationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $addressValidationErrors->all());
+                }
+                \Log::info("User address creation started!");
+                $user_address_data = array();
+                $user_address_data = $request->all();
+                $user_address_data['user_id'] = $user_id;
+
+                // Store a new vendor address
+                $userAddressData = UserAddress::create($user_address_data);
+                \Log::info("My address created successfully!");
+
+                $userAddress = $userAddressData->toArray();
+                $userAddressData->created_at->toDateTimeString();
+                $userAddressData->updated_at->toDateTimeString();
+
+
+                successMessage(__('user_address.my_address_created_successfully'), $userAddress);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("My address Creation failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
     }
 
     /**
@@ -142,25 +183,151 @@ class UserAddressApiController extends Controller
     }
 
     /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 30/05/2022
+     * Uses : Store Updated user address
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $msg_data = array();
+        try {
+            $token = readHeaderToken();
+            if ($token) {
+                $user_id = $token['sub'];
+
+                // Request Validation
+                $addressValidationErrors = $this->validateAddressUpdate($request);
+                if (count($addressValidationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $addressValidationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $addressValidationErrors->all());
+                }
+                \Log::info("User Address Update started!");
+                $user_address_data = array();
+                if (!$request->id) {
+                    errorMessage(__('user_address.id_required'), $msg_data);
+                }
+                $id = $request->id;
+
+                // Store a updated user address
+                $checkUserAddress = UserAddress::where([['id', $id], ['user_id', $user_id]])->first();
+                if (empty($checkUserAddress)) {
+                    errorMessage(__('user_address.address_not_found'), $msg_data);
+                }
+                $user_address_data = $request->all();
+                $user_address_data['user_id'] = $user_id;
+                unset($user_address_data['id']);
+                $checkUserAddress->update($user_address_data);
+                $userAddressData = $checkUserAddress;
+
+                $userAddress = $userAddressData->toArray();
+                $userAddressData->created_at->toDateTimeString();
+                $userAddressData->updated_at->toDateTimeString();
+
+                \Log::info("My address Updated successfully!");
+
+                successMessage(__('user_address.my_address_updated_successfully'), $userAddress);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("My Address Updation failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
     }
 
     /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 30/05/2022
+     * Uses : Delete user address of selected id
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $msg_data = array();
+        try {
+            $token = readHeaderToken();
+            if ($token) {
+                $user_id = $token['sub'];
+
+                \Log::info("My address deletion started!");
+                if (!$request->id) {
+                    errorMessage(__('user_address.id_required'), $msg_data);
+                }
+                $id = $request->id;
+
+                $checkUserAddress = UserAddress::where([['id', $id], ['user_id', $user_id]])->first();
+                if (empty($checkUserAddress)) {
+                    errorMessage(__('user_address.address_not_found'), $msg_data);
+                }
+                $checkUserAddress->delete();
+                \Log::info("My address deleted successfully!");
+                successMessage(__('user_address.deleted_successfully'), $msg_data);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("My Address deletion failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    /**
+     * 
+     * Created By : Pradyumn Dwivedi
+     * Created at : 30/05/2022
+     * Uses : 30/05/2022
+     * 
+     * Validate request for registeration.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    private function validateAddressRegister(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'country_id' => 'required|numeric',
+            'address_name' => 'required|string',
+            'mobile_no' => 'required|digits:10',
+            'pincode' => 'required|digits:6',
+            'flat' => 'required|string',
+            'area' => 'required|string',
+            'land_mark' => 'required|string',
+            'city_name' => 'required|string',
+            'state_id' => 'required|numeric'
+        ])->errors();
+    }
+
+    /**
+     * 
+     * Created By : Pradyumn Dwivedi
+     * Created at : 30/05/2022
+     * Uses : 30/05/2022
+     * 
+     * Validate request for registeration.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    private function validateAddressUpdate(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'id' => 'required|numeric',
+            'country_id' => 'required|numeric',
+            'address_name' => 'required|string',
+            'mobile_no' => 'required|digits:10',
+            'pincode' => 'required|digits:6',
+            'flat' => 'required|string',
+            'area' => 'required|string',
+            'land_mark' => 'required|string',
+            'city_name' => 'required|string',
+            'state_id' => 'required|numeric'
+        ])->errors();
     }
 }

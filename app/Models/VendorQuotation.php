@@ -15,25 +15,7 @@ class VendorQuotation extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'vendor.*',
-        // 'warehouse.*',
-        // 'vendor_price.*',
-        'commission_rate.*',
-        'quotation_validity.*',
-        'etd.*',
-        'vendor_price',
-        'enquiry_status',
-    ];
-
-
-
-    protected $hidden = [
-        'status',
-        'created_by',
-        'updated_by',
-        'deleted_at',
-        'created_at',
-        'updated_at'
+        'enquiry_status'
     ];
 
     /**
