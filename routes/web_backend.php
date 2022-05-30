@@ -35,10 +35,15 @@ Route::group(['middleware' => ['customAuth']], function () {
 
 	//General Settings
 	Route::get('/generalSetting', 'AdminController@fetchSetting');
+	Route::get('/vendorGeneralSetting', 'AdminController@fetchVendorSetting');
 	Route::post('/updateSettingInfo', 'AdminController@updateSetting');
+	Route::post('/updateVendorSettingInfo', 'AdminController@updateVendorSetting');
 	Route::post('/publishEmailNotification', 'AdminController@updateEmailNotification');
 	Route::post('/publishWhatsappNotification', 'AdminController@updateWhatsappNotification');
 	Route::post('/publishSMSNotification', 'AdminController@updateSMSNotification');
+	Route::post('/publishVendorEmailNotification', 'AdminController@updateVendorEmailNotification');
+	Route::post('/publishVendorWhatsappNotification', 'AdminController@updateVendorWhatsappNotification');
+	Route::post('/publishVendorSMSNotification', 'AdminController@updateVendorSMSNotification');
 
 	//ContactUs
 	Route::get('/contactus', 'ContactusController@index');
