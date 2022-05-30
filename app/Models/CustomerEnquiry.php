@@ -33,6 +33,7 @@ class CustomerEnquiry extends Model
         'packing_type_id',
         'packaging_treatment_id',
         'recommendation_engine_id',
+        'packaging_material_id',
         'user_address_id',
         'country_id',
         'state_id',

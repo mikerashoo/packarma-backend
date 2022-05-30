@@ -82,10 +82,25 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //User Address
         Route::post('/user_address/my_listing', 'UserAddressApiController@index');
+        Route::post('/user_address/add_my_address', 'UserAddressApiController@create');
+        Route::post('/user_address/update_my_address', 'UserAddressApiController@update');
+        Route::post('/user_address/delete_my_address', 'UserAddressApiController@destroy');
+
+        //Change Password
+        Route::post('/my_profile/change_password_api', 'ChangePasswordApiController@index');
 
         //Customer Enquiry Quote 
         Route::post('/customer_quote/my_listing', 'CustomerQuoteApiController@index');
-        Route::post('/customer_quote/my_accepted_quotation', 'CustomerQuoteApiController@accepted_quote_details');
-        
+        Route::post('/customer_quote/my_accept_quotation', 'CustomerQuoteApiController@accept_quotation');
+        Route::post('/customer_quote/my_reject_quotation', 'CustomerQuoteApiController@reject_quotation');        
+        Route::post('/customer_quote/my_accepted_quotation_details', 'CustomerQuoteApiController@accepted_quotation_details');        
+
+        //Order
+        Route::post('/order/my_order_listing', 'OrderApiController@index');
+        Route::post('/order/my_selected_order_details', 'OrderApiController@show');
+        Route::post('/order/my_completed_order_listing', 'OrderApiController@completed_orders');
+
+        //Order
+        Route::post('/feedback/send_feedback', 'FeedbackApiController@store');
     });
 });

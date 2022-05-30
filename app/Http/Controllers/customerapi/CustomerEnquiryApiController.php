@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\CustomerEnquiry;
 use App\Models\UserAddress;
+use App\Models\VendorQuotation;
 use Carbon\Carbon;
 use Response;
 
@@ -39,29 +40,52 @@ class CustomerEnquiryApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-
+                $main_table = 'customer_enquiries';
                 $data = DB::table('customer_enquiries')->select(
                     'customer_enquiries.id',
+                    'customer_enquiries.category_id',
                     'categories.category_name',
+                    'customer_enquiries.sub_category_id',
+                    'sub_categories.sub_category_name',
+                    'customer_enquiries.product_id',
                     'products.product_name',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.shelf_life',
+                    'customer_enquiries.storage_condition_id',
                     'storage_conditions.storage_condition_title',
-                    'storage_conditions.storage_condition_description',
+                    // 'storage_conditions.storage_condition_description',
+                    'customer_enquiries.packaging_machine_id',
+                    'packaging_machines.packaging_machine_name',
+                    // 'packaging_machines.packaging_machine_description',
+                    'customer_enquiries.product_form_id',
                     'product_forms.product_form_name',
+                    // 'product_forms.short_descrip[tion',
+                    'customer_enquiries.packing_type_id',
                     'packing_types.packing_name',
+                    // 'packing_types.packaging_description',
+                    'customer_enquiries.packaging_treatment_id',
                     'packaging_treatments.packaging_treatment_name',
-                    'packaging_treatments.packaging_treatment_description',
+                    // 'packaging_treatments.packaging_treatment_description',
+                    'customer_enquiries.user_address_id',
                     'user_addresses.address',
-                    'user_addresses.pincode'
+                    'user_addresses.pincode',
+                    'customer_enquiries.recommendation_engine_id',
+                    'recommendation_engines.engine_name',
+                    'recommendation_engines.structure_type',
+                    'recommendation_engines.display_shelf_life',
+                    'customer_enquiries.packaging_material_id',
+                    'customer_enquiries.created_at'
                 )
                     ->leftjoin('categories', 'categories.id', '=', 'customer_enquiries.category_id')
+                    ->leftjoin('sub_categories', 'sub_categories.id', '=', 'customer_enquiries.sub_category_id')
                     ->leftjoin('products', 'products.id', '=', 'customer_enquiries.product_id')
                     ->leftjoin('storage_conditions', 'storage_conditions.id', '=', 'customer_enquiries.storage_condition_id')
+                    ->leftjoin('packaging_machines', 'packaging_machines.id', '=', 'customer_enquiries.packaging_machine_id')
                     ->leftjoin('product_forms', 'product_forms.id', '=', 'customer_enquiries.product_form_id')
                     ->leftjoin('packing_types', 'packing_types.id', '=', 'customer_enquiries.packing_type_id')
                     ->leftjoin('packaging_treatments', 'packaging_treatments.id', '=', 'customer_enquiries.packaging_treatment_id')
                     ->leftjoin('user_addresses', 'user_addresses.id', '=', 'customer_enquiries.user_address_id')
+                    ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'customer_enquiries.recommendation_engine_id')
                     ->where('customer_enquiries.user_id', $user_id);
 
                 $customerEnquiryData = CustomerEnquiry::whereRaw("1 = 1");
@@ -82,6 +106,15 @@ class CustomerEnquiryApiController extends Controller
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
+                $i=0;
+                foreach($data as $row)
+                {
+                    $quotationCount= VendorQuotation::where([['user_id',$user_id],['customer_enquiry_id',$row->id]])
+                                                        ->whereIn('enquiry_status',['quoted','viewed'])->get()->count();
+                    // print_r($quotationCount);exit;
+                    $data[$i]->quotation_count = $quotationCount;
+                    $i++;
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
@@ -161,13 +194,14 @@ class CustomerEnquiryApiController extends Controller
             'shelf_life' => 'required|numeric',
             'product_weight' => 'required|numeric',
             'measurement_unit_id' => 'required|numeric',
-            'product_quantity' => 'required|numeric',
+            // 'product_quantity' => 'required|numeric',
             'storage_condition_id' => 'required|numeric',
             'packaging_machine_id' => 'required|numeric',
             'product_form_id' => 'required|numeric',
             'packing_type_id' => 'required|numeric',
             'packaging_treatment_id' => 'required|numeric',
             'recommendation_engine_id' => 'required|numeric',
+            'packaging_material_id' => 'required|numeric',
             'user_address_id' => 'required|numeric'
         ])->errors();
     }

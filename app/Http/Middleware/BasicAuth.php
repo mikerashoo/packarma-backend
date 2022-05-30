@@ -56,15 +56,15 @@ class BasicAuth
             exit;
         }
 
-        if (!$request->header('imei-no')) {
-            errorMessage(__('auth.imei_require'), $return_array);
+        if (!$request->header('device-id')) {
+            errorMessage(__('auth.device_id_require'), $return_array);
             exit;
         }
 
-        if (!ctype_digit($request->header('imei-no'))) {
-            errorMessage(__('auth.invalid_imei'), $return_array);
-            exit;
-        }
+        // if (!ctype_digit($request->header('imei-no'))) {
+        //     errorMessage(__('auth.invalid_imei'), $return_array);
+        //     exit;
+        // }
 
         if (!$request->country_id) {
             errorMessage(__('auth.country_require'), $return_array);

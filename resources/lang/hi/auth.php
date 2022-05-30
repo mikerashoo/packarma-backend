@@ -28,8 +28,8 @@ return [
     'invalid_platform' => 'Platform is Invalid',
     'version_require' => 'Version is required as a header parameter',
     'invalid_version' => 'Version is Invalid',
-    'imei_require' => 'Device id is required as a header parameter',
-    'invalid_imei' => 'Device id is Invalid',
+    'device_id_require' => 'Device id is required as a header parameter',
+    'invalid_device_id' => 'Device id is Invalid',
     'country_require' => 'Country is required',
 
 
