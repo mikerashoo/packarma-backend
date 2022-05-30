@@ -374,9 +374,23 @@
                         <li class="nav-item {{$lastParam ==  'contactus' ? 'active' : ''  }}">
                             <a href="contactus"><i class="ft-phone"></i><span class="menu-title" data-i18n="Documentation">Contact us</span></a>
                         </li>
-                        <li class="nav-item {{ $lastParam ==  'generalSetting' ? 'active' : ''  }}">
-                            <a href="generalSetting"><i class="ft-settings"></i><span class="menu-title" >General Setting</span></a>
+
+                        <li class="has-sub nav-item {{ $lastParam ==  'generalSetting' ? 'open' : ''  }} {{ $lastParam ==  'vendorGeneralSetting' ? 'open' : ''  }}">
+                                <a href="javascript:;" class="dropdown-parent"><i class="icon-users"></i><span data-i18n="" class="menu-title">General Settings</span></a>
+                                <ul class="menu-content">
+                                    <li class="nav-item {{ $lastParam ==  'generalSetting' ? 'active' : ''  }}">
+                            <a href="generalSetting"><i class="ft-settings"></i><span class="menu-title" >Customer</span></a>
                         </li>
+                                     <li class="nav-item {{ $lastParam ==  'vendorGeneralSetting' ? 'active' : ''  }}">
+                            <a href="vendorGeneralSetting"><i class="ft-settings"></i><span class="menu-title" >Vendor</span></a>
+                        </li>
+                                </ul>
+                            </li>
+
+
+                      
+                        
+                       
                         <li class="nav-item {{ $lastParam ==  'logout' ? 'active' : ''  }}">
                             <a href="logout"><i class="fa fa-power-off"></i><span class="menu-title" >Logout</span></a>
                         </li>
