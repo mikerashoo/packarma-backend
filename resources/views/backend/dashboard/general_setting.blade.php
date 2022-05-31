@@ -10,7 +10,7 @@
                         <div class="card">
                             <div class="card-content">
                             <div class="card-header">
-                                    <h4 class="card-title text-center">Manage General Setting</h4>
+                                    <h4 class="card-title text-center">Manage Customer General Setting</h4>
                                 </div>
                                 <!-- <hr class="mb-0"> -->
                                 <div class="card-body">
@@ -90,19 +90,19 @@
                                                                         <div class="col-12 form-group">
                                                                             <label for="meta_title">Meta Title</label>
                                                                             <div class="controls">
-                                                                                <input type="text" id="meta_title" name="meta_title"  class="form-control" placeholder="" aria-invalid="false">
+                                                                                <input type="text" id="meta_title" name="meta_title"  class="form-control" placeholder="" value="{{$data['meta_title']}}" aria-invalid="false">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 form-group">
                                                                             <label for="meta_keywords">Meta Keywords</label>
                                                                             <div class="controls">
-                                                                                <input type="text" id="meta_keywords" name="meta_keywords" class="form-control" placeholder="" aria-invalid="false">
+                                                                                <input type="text" id="meta_keywords" name="meta_keywords" class="form-control" placeholder="" value="{{$data['meta_keywords']}}" aria-invalid="false">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 form-group">
                                                                             <label for="meta_description">Meta Description</label>
                                                                             <div class="controls">
-                                                                                <input type="text" id="meta_description" name="meta_description" class="form-control" placeholder="" aria-invalid="false">
+                                                                                <input type="text" id="meta_description" name="meta_description" class="form-control" placeholder="" value="{{$data['meta_description']}}" aria-invalid="false">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
