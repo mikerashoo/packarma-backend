@@ -111,9 +111,11 @@ class CustomerEnquiryApiController extends Controller
                 {
                     $quotationCount= VendorQuotation::where([['user_id',$user_id],['customer_enquiry_id',$row->id]])
                                                         ->whereIn('enquiry_status',['quoted','viewed'])->get()->count();
-                    // print_r($quotationCount);exit;
                     $data[$i]->quotation_count = $quotationCount;
                     $i++;
+                }
+                if(empty($data)) {
+                    errorMessage(__('customer_enquiry.customer_enquiry_not_found'), $msg_data);
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;

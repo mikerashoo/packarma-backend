@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['basicAuth'])->group(function () {
+    Route::post('/customer_app_version', 'CustomerVersionControlApiController@index');
     Route::post('/register_api', 'RegisterApiController@index');
     Route::post('/request_otp', 'OtpApiController@requestOtp');
     Route::post('/verify_otp', 'OtpApiController@verifyOtp');
@@ -99,8 +100,12 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/order/my_order_listing', 'OrderApiController@index');
         Route::post('/order/my_selected_order_details', 'OrderApiController@show');
         Route::post('/order/my_completed_order_listing', 'OrderApiController@completed_orders');
+        Route::post('/order/cancel_my_order', 'OrderApiController@cancel_order');
 
-        //Order
+        //Feedback
         Route::post('/feedback/send_feedback', 'FeedbackApiController@store');
+
+        //General Info
+        Route::post('/customer_general_info', 'CustomerGeneralInfoApiController@index');
     });
 });

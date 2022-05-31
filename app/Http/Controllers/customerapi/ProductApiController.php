@@ -68,6 +68,9 @@ class ProductApiController extends Controller
                     $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
                     $i++;
                 }
+                if(empty($data)) {
+                    errorMessage(__('product.product_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);

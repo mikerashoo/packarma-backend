@@ -62,6 +62,9 @@ class BannerApiController extends Controller
                     $data[$i]['banner_thumb_image'] = getFile($row['banner_thumb_image'], 'banner',false,'thumb');
                     $i++;
                 }
+                if(empty($data)) {
+                    errorMessage(__('banner.banner_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData); 
