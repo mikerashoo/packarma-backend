@@ -47,17 +47,43 @@ class QuotationApiController extends Controller
                     'customer_enquiries.enquiry_type',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.product_quantity',
+                    'customer_enquiries.shelf_life',
+                    'customer_enquiries.address',
+                    'measurement_units.unit_name',
+                    'measurement_units.unit_symbol',
+                    'storage_conditions.storage_condition_title',
+                    'packaging_machines.packaging_machine_name',
+                    'product_forms.product_form_name',
+                    'packing_types.packing_name',
+                    'packaging_treatments.packaging_treatment_name',
+                    'recommendation_engines.engine_name',
+                    'recommendation_engines.structure_type',
+                    'recommendation_engines.min_shelf_life',
+                    'recommendation_engines.max_shelf_life',
                     'packaging_materials.packaging_material_name',
                     'products.product_name',
                     'products.product_description',
+                    'categories.category_name',
                     'states.state_name',
                     'cities.city_name',
+                    'currencies.currency_symbol',
+                    'currencies.currency_code',
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
+                    ->leftjoin('categories', 'customer_enquiries.category_id', '=', 'products.id')
+                    ->leftjoin('measurement_units', 'customer_enquiries.measurement_unit_id', '=', 'measurement_units.id')
+                    ->leftjoin('storage_conditions', 'customer_enquiries.storage_condition_id', '=', 'storage_conditions.id')
+                    ->leftjoin('packaging_machines', 'customer_enquiries.packaging_machine_id', '=', 'packaging_machines.id')
+                    ->leftjoin('product_forms', 'customer_enquiries.product_form_id', '=', 'product_forms.id')
+                    ->leftjoin('packing_types', 'customer_enquiries.packing_type_id', '=', 'packing_types.id')
+                    ->leftjoin('packaging_treatments', 'customer_enquiries.packaging_treatment_id', '=', 'packaging_treatments.id')
+                    ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
                     ->leftjoin('packaging_materials', 'customer_enquiries.packaging_material_id', '=', 'packaging_materials.id')
                     ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
                     ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
+                    ->leftjoin('countries', 'customer_enquiries.country_id', '=', 'countries.id')
+                    ->leftjoin('currencies', 'countries.currency_id', '=', 'currencies.id')
                     ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', '!=', 'mapped']]);
 
 
