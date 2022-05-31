@@ -47,6 +47,7 @@ class QuotationApiController extends Controller
                     'customer_enquiries.enquiry_type',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.product_quantity',
+                    'packaging_materials.packaging_material_name',
                     'products.product_name',
                     'products.product_description',
                     'states.state_name',
@@ -54,6 +55,7 @@ class QuotationApiController extends Controller
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
+                    ->leftjoin('packaging_materials', 'customer_enquiries.packaging_material_id', '=', 'packaging_materials.id')
                     ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
                     ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
                     ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', '!=', 'mapped']]);

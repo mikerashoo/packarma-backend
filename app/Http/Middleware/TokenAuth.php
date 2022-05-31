@@ -25,7 +25,7 @@ class TokenAuth
         $return_array['success'] = '0';
         try {
             $token = $request->header('access-token');
-            $imei_number = $request->header('imei-no');
+            $imei_number = $request->header('device-id');
             $data = JWTAuth::setToken($token)->getPayload();
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             $return_array['success'] = '4';

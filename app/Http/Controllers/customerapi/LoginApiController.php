@@ -47,7 +47,7 @@ class LoginApiController extends Controller
             if (empty($userData)) {
                 errorMessage(__('user.login_failed'), $msg_data);
             }
-            $imei_no = $request->header('imei-no');
+            $imei_no = $request->header('device-id');
             $token = JWTAuth::fromUser($userData);
             $users = User::find($userData->id);
             $userData->last_login = $users->last_login = Carbon::now();

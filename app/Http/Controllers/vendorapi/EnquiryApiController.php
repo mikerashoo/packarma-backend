@@ -62,6 +62,7 @@ class EnquiryApiController extends Controller
                     'recommendation_engines.structure_type',
                     'recommendation_engines.min_shelf_life',
                     'recommendation_engines.max_shelf_life',
+                    'packaging_materials.packaging_material_name',
                     'products.product_name',
                     'products.product_description',
                     'categories.category_name',
@@ -78,6 +79,7 @@ class EnquiryApiController extends Controller
                     ->leftjoin('packing_types', 'customer_enquiries.packing_type_id', '=', 'packing_types.id')
                     ->leftjoin('packaging_treatments', 'customer_enquiries.packaging_treatment_id', '=', 'packaging_treatments.id')
                     ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->leftjoin('packaging_materials', 'customer_enquiries.packaging_material_id', '=', 'packaging_materials.id')
                     ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
                     ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
                     ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped']]);

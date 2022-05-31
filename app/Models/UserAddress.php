@@ -13,6 +13,26 @@ class UserAddress extends Model
     protected $dates = ['deleted_at'];
 
     /**
+     * Created By : Pradyumn Dwivedi
+     * Created On : 30/05/2022
+     * uses : The attributes that are mass assignable.
+     */
+
+    protected $fillable = [
+        'user_id',
+        'country_id',
+        'address_name',
+        'gstin',
+        'mobile_no',
+        'pincode',
+        'flat',
+        'area',
+        'land_mark',
+        'city_name',
+        'state_id'
+    ];
+
+    /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 24-mar-2022
      * uses : to to get data of city in user address table

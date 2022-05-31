@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\CustomerDevice;
 use App\Models\DisplayMsg;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorDevice;
-use Illuminate\Support\Facades\Http;
+use App\Models\CustomerDevice;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Storage;
@@ -85,23 +84,6 @@ if (!function_exists('readVenderHeaderToken')) {
             errorMessage(__('auth.please_login_and_try_again'), $vendor_msg_data, 4);
         }
         return $vendor_token;
-    }
-}
-
-
-if (!function_exists('getPincodeDetails')) {
-    function getPincodeDetails($pincode = '1')
-    {
-        $vendor_msg_data = array();
-        $data = Http::get('https://api.postalpincode.in/pincode/' . $pincode)->json();
-        if (empty($data[0]['PostOffice'])) {
-            errorMessage(__('pin_code.not_found'), $vendor_msg_data);
-        }
-
-        $vendor_msg_data['city'] = $data[0]['PostOffice'][0]['District'];
-        $vendor_msg_data['state'] = $data[0]['PostOffice'][0]['State'];
-        $vendor_msg_data['pin_code'] = $data[0]['PostOffice'][0]['Pincode'];
-        return $vendor_msg_data;
     }
 }
 
@@ -245,7 +227,8 @@ if (!function_exists('customerEnquiryQuoteType')) {
             'enquired' => 'Enquired',
             'map_to_vendor' => 'Map To Vendor',
             'accept_cust' => 'Accept By Customer',
-            'closed' => 'Closed'
+            'closed' => 'Closed',
+            'auto_reject' => 'Auto Reject'
 
         );
         if (!empty($displayValue)) {
@@ -273,6 +256,7 @@ if (!function_exists('vendorEnquiryStatus')) {
             'accept' => 'Accept',
             'reject' => 'Reject',
             'requote' => 'Requote',
+            'auto_reject' => 'Auto Reject'
         );
         if (!empty($displayValue)) {
             $returnArray = $returnArray[$displayValue];
@@ -558,45 +542,43 @@ if (!function_exists('fullSearchQuery')) {
 }
 
 /**
- *   created by : Pradyumn Dwivedi
- *   Created On : 11-May-2022
- *   Uses :  To fetch value in user address       
- */
-if (!function_exists('addressType')) {
-    function addressType($displayValue = "", $allKeys = false)
-    {
+    *   created by : Pradyumn Dwivedi
+    *   Created On : 11-May-2022
+    *   Uses :  To fetch value in user address       
+*/
+if (! function_exists('addressType')) {
+    function addressType($displayValue="",$allKeys = false) {
         $returnArray = array(
             'shipping' => 'Shipping',
             'billing' => 'Billing'
         );
-        if (!empty($displayValue)) {
+        if(!empty($displayValue)){
             $returnArray = $returnArray[$displayValue];
         }
-        if (empty($displayValue) && $allKeys) {
-            $returnArray = array_keys($returnArray);
+        if(empty($displayValue) && $allKeys){
+                $returnArray = array_keys($returnArray);
         }
         return $returnArray;
     }
 }
 
 /**
- *   created by : Pradyumn Dwivedi
- *   Created On : 21-May-2022
- *   Uses :  To fetch value in gst type dropdown in customer enquiry map to vendor       
- */
-if (!function_exists('gstType')) {
-    function gstType($displayValue = "", $allKeys = false)
-    {
+    *   created by : Pradyumn Dwivedi
+    *   Created On : 21-May-2022
+    *   Uses :  To fetch value in gst type dropdown in customer enquiry map to vendor       
+*/
+if (! function_exists('gstType')) {
+    function gstType($displayValue="",$allKeys = false) {
         $returnArray = array(
             'not_applicable' => 'Not Applicable',
             'cgst+sgst' => 'CGST+SGST',
             'igst' => 'IGST'
         );
-        if (!empty($displayValue)) {
+        if(!empty($displayValue)){
             $returnArray = $returnArray[$displayValue];
         }
-        if (empty($displayValue) && $allKeys) {
-            $returnArray = array_keys($returnArray);
+        if(empty($displayValue) && $allKeys){
+                $returnArray = array_keys($returnArray);
         }
         return $returnArray;
     }

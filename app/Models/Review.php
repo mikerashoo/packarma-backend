@@ -11,6 +11,22 @@ class Review extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+
+    /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 27/05/2022
+     * Uses : The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'order_id',
+        'product_id',
+        'rating',
+        'review'   
+    ];
+
     /**
         * Developed By : Pradyumn Dwivedi
         * Created On : 11-april-2022
