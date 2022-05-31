@@ -70,8 +70,18 @@ class QuotationApiController extends Controller
 
 
                 if ($request->enquiry_status) {
-                    $quotationData = $quotationData->where($main_table . '' . '.enquiry_status', $request->enquiry_status);
-                    $data = $data->where($main_table . '' . '.enquiry_status', $request->enquiry_status);
+
+
+                    if ($request->enquiry_status == 'requested') {
+                        $quotationData = $quotationData->whereIn($main_table . '' . '.enquiry_status', ['quoted', 'viewed', 'accept', 'requote']);
+                        $data = $data->whereIn($main_table . '' . '.enquiry_status', ['quoted', 'viewed', 'accept', 'requote']);
+                    } elseif ($request->enquiry_status == 'closed') {
+                        $quotationData = $quotationData->whereIn($main_table . '' . '.enquiry_status', ['auto_reject', 'reject']);
+                        $data = $data->whereIn($main_table . '' . '.enquiry_status', ['auto_reject', 'reject']);
+                    } else {
+                        $quotationData = $quotationData->whereIn($main_table . '' . '.enquiry_status', $request->enquiry_status);
+                        $data = $data->whereIn($main_table . '' . '.enquiry_status', $request->enquiry_status);
+                    }
                 }
 
                 if ($request->last_no_of_days && is_numeric($request->last_no_of_days)) {
