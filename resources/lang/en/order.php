@@ -14,4 +14,7 @@
     */
 
         'order_not_found' => 'Order Not Found',
+        'order_cancelled_successfully' => 'Order Cancelled Successfully',
+        'order_already_cancelled' => 'Order Already Cancelled',
+        'order_already_delivered' => 'Order Already Delivered'
     ];

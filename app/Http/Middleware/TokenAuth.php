@@ -28,15 +28,18 @@ class TokenAuth
             $imei_number = $request->header('device-id');
             $data = JWTAuth::setToken($token)->getPayload();
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            $return_array['success'] = '4';
-            $return_array['message'] = 'Token Expired';
-            return response()->json($return_array, 200);
+            // $return_array['success'] = '4';
+            // $return_array['message'] = 'Token Expired';
+            // return response()->json($return_array, 200);
+            errorMessage(__('auth.token_expired'), $return_array);
             // echo json_encode($return_array);
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            $return_array['message'] = 'Authentication Failed';
+            // $return_array['message'] = 'Authentication Failed';
+            errorMessage(__('auth.authentication_failed'), $return_array);
             return response()->json($return_array, 200);
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            $return_array['message'] = 'Authentication Failed';
+            // $return_array['message'] = 'Authentication Failed';
+            errorMessage(__('auth.authentication_failed'), $return_array);
             return response()->json($return_array, 200);
         }
         Session::flash('tokenData', $token);

@@ -55,6 +55,9 @@ class SubscriptionApiController extends Controller
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
+                if(empty($data)) {
+                    errorMessage(__('subscription.subscription_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);

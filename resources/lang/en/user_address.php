@@ -18,5 +18,4 @@ return [
     'id_required' => 'Address Id Required',
     'my_address_updated_successfully' => 'My address Updated Successfully',
     'my_address_created_successfully' => 'My addrerss Created Successfully'
-
 ];

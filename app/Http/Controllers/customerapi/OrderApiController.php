@@ -80,6 +80,9 @@ class OrderApiController extends Controller
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
+                if(empty($data)) {
+                    errorMessage(__('order.order_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
@@ -166,6 +169,9 @@ class OrderApiController extends Controller
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
+                if(empty($data)) {
+                    errorMessage(__('order.order_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
@@ -274,8 +280,56 @@ class OrderApiController extends Controller
 
     /**
      * Created By : Pradyumn Dwivedi
+     * Created at : 30-05-2022
+     * Uses : Update cancelled order data in order table.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function cancel_order(Request $request)
+    {
+        $msg_data = array();
+        try
+        {
+            $token = readHeaderToken();
+            if($token)
+            {
+                $user_id = $token['sub'];
+                // Request Validation
+                $validationErrors = $this->validateCancelOrder($request);
+                if (count($validationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                }
+                $statusData = Order::where('id',$request->order_id)->first();
+                if($statusData->order_delivery_status == "delivered"){
+                    errorMessage(__('order.order_already_delivered'), $msg_data);
+                }
+                if($statusData->order_delivery_status == "cancelled"){
+                    errorMessage(__('order.order_already_cancelled'), $msg_data);
+                }
+                if($request->order_delivery_status == "cancelled"){
+                    $orderStatusData = Order::find($request->order_id)->update($request->all());
+                    \Log::info("Order Cancelled Successfully");
+                    successMessage(__('order.order_cancelled_successfully'));
+                }
+            }
+            else
+            {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        }
+        catch(\Exception $e)
+        {
+            \Log::error("Quotation Reject failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    /**
+     * Created By : Pradyumn Dwivedi
      * Created on : 25/05/2022
-     * Uses : Validate showing specific order request for Customer Enquiry.
+     * Uses : Validate showing specific order request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -286,4 +340,21 @@ class OrderApiController extends Controller
             'order_id' => 'required|integer'
         ])->errors();
     }
+
+    /**
+     * Created By : Pradyumn Dwivedi
+     * Created on : 30/05/2022
+     * Uses : Validate cancel order request for order.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */
+    private function validateCancelOrder(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'order_id' => 'required|integer',
+            'order_delivery_status' => 'required|string'
+        ])->errors();
+    }
+
 }

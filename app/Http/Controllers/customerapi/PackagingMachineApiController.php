@@ -62,6 +62,9 @@ class PackagingMachineApiController extends Controller
                     $data[$i]['packaging_machine_thumb_image'] = getFile($row['packaging_machine_thumb_image'], 'packaging_machine',false,'thumb');
                     $i++;
                 }
+                if(empty($data)) {
+                    errorMessage(__('packaging_machine.packaging_machine_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
