@@ -376,13 +376,13 @@
                         </li>
 
                         <li class="has-sub nav-item {{ $lastParam ==  'generalSetting' ? 'open' : ''  }} {{ $lastParam ==  'vendorGeneralSetting' ? 'open' : ''  }}">
-                                <a href="javascript:;" class="dropdown-parent"><i class="icon-users"></i><span data-i18n="" class="menu-title">General Settings</span></a>
+                                <a href="javascript:;" class="dropdown-parent"><i class="icon-settings"></i><span data-i18n="" class="menu-title">General Settings</span></a>
                                 <ul class="menu-content">
                                     <li class="nav-item {{ $lastParam ==  'generalSetting' ? 'active' : ''  }}">
-                            <a href="generalSetting"><i class="ft-settings"></i><span class="menu-title" >Customer</span></a>
+                            <a href="generalSetting"><i class="fa fa-circle fs_i"></i><span class="menu-title" >Customer</span></a>
                         </li>
                                      <li class="nav-item {{ $lastParam ==  'vendorGeneralSetting' ? 'active' : ''  }}">
-                            <a href="vendorGeneralSetting"><i class="ft-settings"></i><span class="menu-title" >Vendor</span></a>
+                            <a href="vendorGeneralSetting"><i class="fa fa-circle fs_i"></i><span class="menu-title" >Vendor</span></a>
                         </li>
                                 </ul>
                             </li>

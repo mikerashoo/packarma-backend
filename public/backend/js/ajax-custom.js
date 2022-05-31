@@ -68,7 +68,7 @@ $(document).ready(function () {
         var dataTable = $('#dataTable').DataTable({
             processing: true,
             serverSide: true,
-            scrollX: true,
+            scrollX: false,
             autoWidth: true,
             scrollCollapse: true,
             searching: false,

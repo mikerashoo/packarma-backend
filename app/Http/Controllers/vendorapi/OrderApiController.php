@@ -105,8 +105,14 @@ class OrderApiController extends Controller
                 $orderData = Order::whereRaw("1 = 1");
 
                 if ($request->order_delivery_status) {
-                    $orderData = $orderData->where($main_table . '' . '.order_delivery_status', $request->order_delivery_status);
-                    $data = $data->where($main_table . '' . '.order_delivery_status', $request->order_delivery_status);
+
+                    if ($request->order_delivery_status == 'ongoing') {
+                        $orderData = $orderData->whereIn($main_table . '' . '.order_delivery_status', ['processing', 'out_for_delivery']);
+                        $data = $data->whereIn($main_table . '' . '.order_delivery_status', ['processing', 'out_for_delivery']);
+                    } else {
+                        $orderData = $orderData->where($main_table . '' . '.order_delivery_status', $request->order_delivery_status);
+                        $data = $data->where($main_table . '' . '.order_delivery_status', $request->order_delivery_status);
+                    }
                 }
 
                 if ($request->last_no_of_days && is_numeric($request->last_no_of_days)) {
