@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorDevice;
 use App\Models\CustomerDevice;
+use Illuminate\Support\Facades\Http;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Storage;
@@ -583,5 +584,22 @@ if (!function_exists('gstType')) {
             $returnArray = array_keys($returnArray);
         }
         return $returnArray;
+    }
+}
+
+if (!function_exists('getPincodeDetails')) {
+    function getPincodeDetails($pincode)
+    {
+        $msg_data = array();
+
+        $data = Http::get('https://api.postalpincode.in/pincode/' . $pincode)->json();
+        if (empty($data[0]['PostOffice'])) {
+            errorMessage(__('pin_code.not_found'), $msg_data);
+        }
+
+        $msg_data['city'] = $data[0]['PostOffice'][0]['District'];
+        $msg_data['state'] = $data[0]['PostOffice'][0]['State'];
+        $msg_data['pin_code'] = $data[0]['PostOffice'][0]['Pincode'];
+        return $msg_data;
     }
 }
