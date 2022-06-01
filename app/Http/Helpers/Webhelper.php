@@ -65,7 +65,7 @@ if (!function_exists('readHeaderToken')) {
         // $userChk = User::where([['id', $token['sub']]])->get();
         $userChk = CustomerDevice::where([['user_id', $token['sub']], ['imei_no', $customerImeiNoData]])->get();
         if (count($userChk) == 0 || $userChk[0]->remember_token == '') {
-            errorMessage('please_login_and_try_again', $msg_data, 4);
+            errorMessage(__('auth.please_login_and_try_again'), $msg_data, 4);
         }
         return $token;
     }

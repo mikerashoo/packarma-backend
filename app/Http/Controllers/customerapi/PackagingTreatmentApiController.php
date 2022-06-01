@@ -65,6 +65,9 @@ class PackagingTreatmentApiController extends Controller
                     $data[$i]['packaging_treatment_thumb_image'] = getFile($row['packaging_treatment_thumb_image'], 'packaging_treatment',false,'thumb');
                     $i++;
                 }
+                if(empty($data)) {
+                    errorMessage(__('packaging_treatment.packaging_treatment_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage('data_fetched_successfully', $responseData);
@@ -137,6 +140,9 @@ class PackagingTreatmentApiController extends Controller
                     $featureData[$i]['packaging_treatment_image'] = getFile($row['packaging_treatment_image'], 'packaging_treatment');
                     $featureData[$i]['packaging_treatment_thumb_image'] = getFile($row['packaging_treatment_thumb_image'], 'packaging_treatment',false,'thumb');
                     $i++;
+                }
+                if(empty($data)) {
+                    errorMessage(__('packaging_treatment.packaging_treatment_not_found'), $msg_data);
                 }
                 $responseData['result'] = $featureData;
                 $responseData['total_records'] = $total_records;

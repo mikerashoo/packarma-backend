@@ -76,6 +76,9 @@ class SubCategoryApiController extends Controller
                     $data[$i]['sub_category_thumb_image'] = getFile($row['sub_category_thumb_image'], 'sub_category',false,'thumb');
                     $i++;
                 }
+                if(empty($data)) {
+                    errorMessage(__('sub_category.sub_category_not_found'), $msg_data);
+                }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
