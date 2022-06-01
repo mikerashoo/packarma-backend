@@ -1,8 +1,8 @@
-+<?php
+<?php
 
-    return [
+return [
 
-        /*
+    /*
     |--------------------------------------------------------------------------
     | Product Language Lines
     |--------------------------------------------------------------------------
@@ -13,5 +13,5 @@
     |
     */
 
-        'enquiry_not_found' => 'Enquiry Not Found',
-    ];
+    'enquiry_not_found' => 'Enquiry Not Found',
+];

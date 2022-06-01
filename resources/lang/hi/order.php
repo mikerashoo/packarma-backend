@@ -1,8 +1,8 @@
-+<?php
+<?php
 
-    return [
+return [
 
-        /*
+    /*
     |--------------------------------------------------------------------------
     | Product Language Lines
     |--------------------------------------------------------------------------
@@ -13,9 +13,9 @@
     |
     */
 
-        'order_not_found' => 'Order Not Found',
-        'id_require' => 'Order id is require',
-        'delivery_status_require' => 'Delivery status require',
-        'updated' => 'Order delivery status updated successfully!',
-        'wrong_status' => 'Status is Wrong please Update with These status. pending|processing|out_for_delivery|delivered|cancelled',
-    ];
+    'order_not_found' => 'Order Not Found',
+    'id_require' => 'Order id is require',
+    'delivery_status_require' => 'Delivery status require',
+    'updated' => 'Order delivery status updated successfully!',
+    'wrong_status' => 'Status is Wrong please Update with These status. pending|processing|out_for_delivery|delivered|cancelled',
+];

@@ -128,7 +128,9 @@ class PackagingMaterialApiController extends Controller
 
                 \Log::info("Material Price Update Started!");
                 $packaging_material_data = array();
+
                 if (!$request->id) {
+
                     errorMessage(__('packagingmaterial.id_require'), $msg_data);
                 }
 

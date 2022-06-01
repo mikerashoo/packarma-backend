@@ -1,8 +1,8 @@
-+<?php
+<?php
 
-    return [
+return [
 
-        /*
+    /*
     |--------------------------------------------------------------------------
     | Product Language Lines
     |--------------------------------------------------------------------------
@@ -13,8 +13,8 @@
     |
     */
 
-        'material_not_found' => 'Packaging Material Not Found',
-        'id_require' => 'Material id Require To Update Price',
-        'vendor_price_require' => 'Price is require',
-        'updated' => 'Packaging Material Price Updated',
-    ];
+    'material_not_found' => 'Packaging Material Not Found',
+    'id_require' => 'Material id Require To Update Price',
+    'vendor_price_require' => 'Price is require',
+    'updated' => 'Packaging Material Price Updated',
+];
