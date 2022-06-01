@@ -1,8 +1,8 @@
-+<?php
+<?php
 
-    return [
+return [
 
-        /*
+    /*
     |--------------------------------------------------------------------------
     | Product Language Lines
     |--------------------------------------------------------------------------
@@ -13,5 +13,5 @@
     |
     */
 
-        'payment_not_found' => 'Payment Not Found',
-    ];
+    'payment_not_found' => 'Payment Not Found',
+];
