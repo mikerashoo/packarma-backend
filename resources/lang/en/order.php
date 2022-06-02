@@ -20,5 +20,7 @@ return [
     'wrong_status' => 'Status is Wrong please Update with These status. pending|processing|out_for_delivery|delivered|cancelled',
     'order_cancelled_successfully' => 'Order Cancelled Successfully',
     'order_already_cancelled' => 'Order Already Cancelled',
-    'order_already_delivered' => 'Order Already Delivered'
+    'order_already_delivered' => 'Order Already Delivered',
+    'my_order_created_successfully' => 'My Order Created Successfully',
+    'billing_details_calculated_successfully' => 'Billing Details Calculated Successfully',
 ];

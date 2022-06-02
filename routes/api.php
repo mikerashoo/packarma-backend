@@ -101,11 +101,19 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/order/my_selected_order_details', 'OrderApiController@show');
         Route::post('/order/my_completed_order_listing', 'OrderApiController@completed_orders');
         Route::post('/order/cancel_my_order', 'OrderApiController@cancel_order');
+        Route::post('/order/get_final_quantity', 'OrderApiController@final_quantity');
+        Route::post('/order/my_new_order', 'OrderApiController@new_order');
 
         //Feedback
         Route::post('/feedback/send_feedback', 'FeedbackApiController@store');
 
         //General Info
         Route::post('/customer_general_info', 'CustomerGeneralInfoApiController@index');
+
+        //Update vendor quotation
+        Route::post('/vendor_quotation/update_product_quantity', 'VendorQuotationApiController@update_quantity');
+
+        //Get pincode data
+        Route::post('/get_pincode_data', 'PincodeDetailApiController@index');
     });
 });

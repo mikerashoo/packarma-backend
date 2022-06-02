@@ -160,10 +160,6 @@ class CustomerQuoteApiController extends Controller
                             'vendors.vendor_name',
                             'vendor_quotations.vendor_warehouse_id',
                             'vendor_warehouses.warehouse_name',
-                            'vendor_quotations.product_quantity',
-                            'vendor_quotations.mrp',
-                            'vendor_quotations.gst_amount',
-                            'vendor_quotations.total_amount'
                         )
                             ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                             ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
@@ -272,10 +268,6 @@ class CustomerQuoteApiController extends Controller
                     'vendors.vendor_name',
                     'vendor_quotations.vendor_warehouse_id',
                     'vendor_warehouses.warehouse_name',
-                    'vendor_quotations.product_quantity',
-                    'vendor_quotations.mrp',
-                    'vendor_quotations.gst_amount',
-                    'vendor_quotations.total_amount'
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')

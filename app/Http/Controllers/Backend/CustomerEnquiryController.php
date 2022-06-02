@@ -242,6 +242,7 @@ class CustomerEnquiryController extends Controller
             $tblObj->product_id = $request->product[$k];
             $tblObj->vendor_id = $val;
             // $tblObj->vendor_warehouse_id= $request->warehouse[$k];
+            //amount calculation section started
             $tblObj->vendor_price =  $request->vendor_price[$k];
             $tblObj->commission_amt =  $request->commission_rate[$k];
             $tblObj->product_quantity = $request->product_quantity[$k];
