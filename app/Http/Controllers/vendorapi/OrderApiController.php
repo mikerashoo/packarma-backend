@@ -71,6 +71,8 @@ class OrderApiController extends Controller
                     'recommendation_engines.structure_type',
                     'recommendation_engines.min_shelf_life',
                     'recommendation_engines.max_shelf_life',
+                    'packaging_materials.packaging_material_name',
+                    'packaging_materials.material_description',
                     'customer_enquiries.address',
                     'states.state_name',
                     'cities.city_name',
@@ -87,6 +89,7 @@ class OrderApiController extends Controller
                     ->leftjoin('packing_types', 'orders.packing_type_id', '=', 'packing_types.id')
                     ->leftjoin('packaging_treatments', 'orders.packaging_treatment_id', '=', 'packaging_treatments.id')
                     ->leftjoin('recommendation_engines', 'orders.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->leftjoin('packaging_materials', 'orders.packaging_material_id', '=', 'packaging_materials.id')
                     ->leftjoin('customer_enquiries', 'orders.customer_enquiry_id', '=', 'customer_enquiries.id')
                     ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
                     ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
@@ -173,12 +176,14 @@ class OrderApiController extends Controller
                 if (empty($data)) {
                     errorMessage(__('order.order_not_found'), $msg_data);
                 }
-                // $i = 0;
-                // foreach ($data as $row) {
-                //     $data[$i]['product_image'] = getFile($row['product_image'], 'product');
-                //     $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
-                //     $i++;
-                // }
+                $i = 0;
+                foreach ($data as $row) {
+                    $data[$i]->shipping_details = json_decode($data[$i]->shipping_details, TRUE);
+                    $data[$i]->billing_details = json_decode($data[$i]->billing_details, TRUE);
+                    $i++;
+                }
+
+
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);

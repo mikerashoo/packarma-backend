@@ -82,11 +82,14 @@ class HomeApiController extends Controller
                     'customer_enquiries.address',
                     'products.product_name',
                     'products.product_description',
+                    'measurement_units.unit_name',
+                    'measurement_units.unit_symbol',
                     'cities.city_name',
                     'states.state_name',
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
+                    ->leftjoin('measurement_units', 'customer_enquiries.measurement_unit_id', '=', 'measurement_units.id')
                     ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
                     ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
                     ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped']])
