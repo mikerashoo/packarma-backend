@@ -101,8 +101,12 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/order/my_selected_order_details', 'OrderApiController@show');
         Route::post('/order/my_completed_order_listing', 'OrderApiController@completed_orders');
         Route::post('/order/cancel_my_order', 'OrderApiController@cancel_order');
-        Route::post('/order/get_final_quantity', 'OrderApiController@final_quantity');
-        Route::post('/order/my_new_order', 'OrderApiController@new_order');
+        Route::post('/order/enter_final_quantity', 'OrderApiController@final_quantity');
+        Route::post('/order/create_new_order', 'OrderApiController@new_order');
+
+        //Order payment
+        Route::post('/order_payment/new_payment', 'OrderPaymentApiController@new_order_payment');
+        Route::post('/order_payment/payment_success', 'OrderPaymentApiController@order_payment_success');
 
         //Feedback
         Route::post('/feedback/send_feedback', 'FeedbackApiController@store');
