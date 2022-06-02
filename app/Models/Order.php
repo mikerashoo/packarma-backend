@@ -11,14 +11,41 @@ class Order extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+
     /**
      * Developed By : Pradyumn Dwivedi
-     * Created On : 04-mar-2022
-     * uses : to get data of user  in order table
+     * Created On : 30-05-2022
+     * uses : The attributes that are mass assignable.
      */
-
     protected $fillable = [
         'order_delivery_status',
+        'user_id',
+        'vendor_id',
+        'vendor_warehouse_id',
+        'customer_enquiry_id',
+        'category_id',
+        'sub_category_id',
+        'product_id',
+        'shelf_life',
+        'product_weight',
+        'measurement_unit_id',
+        'product_quantity',
+        'storage_condition_id',
+        'packaging_machine_id',
+        'product-form_id',
+        'packing_type_id',
+        'packaging_treatment_id',
+        'recommendation_engine_id',
+        'packaging_material_id',
+        'country_id',
+        'currency_id',
+        'mrp',
+        'sub_total',
+        'gst_amount',
+        'gst_type',
+        'gst_percentage',
+        'freight_amount',
+        'grand_total',
     ];
 
     protected $hidden = [

@@ -15,7 +15,10 @@ class VendorQuotation extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'enquiry_status'
+        'enquiry_status',
+        'product_quantity',
+        'sub_total',
+        'total_amount'
     ];
 
     /**

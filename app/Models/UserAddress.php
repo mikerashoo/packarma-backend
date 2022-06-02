@@ -22,6 +22,7 @@ class UserAddress extends Model
         'user_id',
         'country_id',
         'address_name',
+        'type',
         'gstin',
         'mobile_no',
         'pincode',

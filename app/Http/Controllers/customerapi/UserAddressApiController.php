@@ -311,7 +311,7 @@ class UserAddressApiController extends Controller
      * 
      * Created By : Pradyumn Dwivedi
      * Created at : 30/05/2022
-     * Uses : 30/05/2022
+     * Uses : to validate address update request
      * 
      * Validate request for registeration.
      *
