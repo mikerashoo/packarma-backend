@@ -346,22 +346,6 @@ class OrderApiController extends Controller
 
     /**
      * Created By : Pradyumn Dwivedi
-     * Created on : 30/05/2022
-     * Uses : Validate cancel order request for order.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-    */
-    private function validateCancelOrder(Request $request)
-    {
-        return \Validator::make($request->all(), [
-            'order_id' => 'required|integer',
-            'order_delivery_status' => 'required|string'
-        ])->errors();
-    }
-
-    /**
-     * Created By : Pradyumn Dwivedi
      * Created at : 02/06/2022
      * Uses : To get product quantity, calculate the amountband return value to customer.
      * 
@@ -463,41 +447,52 @@ class OrderApiController extends Controller
                 $gst_amount_price = $vendor_quotation_data->gst_amount;
                 $freight_amount_price = $vendor_quotation_data->freight_amount;
 
-                $commission = $vendor_quotation_data->commission_amt;
-                $vendor_amount = $vendor_quotation_data->vendor_price;
+                $commission_price = $vendor_quotation_data->commission_amt;
+                $vendor_amount_price = $vendor_quotation_data->vendor_price;
                 $vendor_warehouse_id = $vendor_quotation_data->vendor_warehouse_id;
                 $gst_type = $vendor_quotation_data->gst_type;
                 $gst_percentage = $vendor_quotation_data->gst_percentage;
 
-                //calculate amount and store in variable
+                //calculate sub total amount and store in variable
                 $sub_total_price = $product_quantity * $mrp_rate_price;
+
+                //calculate gst amount
+                if($gst_percentage != 0){
+                    $gst_amount_price = $sub_total_price * $gst_percentage / 100;
+                }else{
+                    $gst_amount_price = 0;
+                }
+
+                //calculate total amount
                 $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price;
+
+                //calculate commision and vendor price
+                $commission = $commission_price * $product_quantity;
+                $vendor_amount = $vendor_amount_price * $product_quantity;
 
                 //adding additional data in request order
                 $order_request_data = $request->all();
-                $quotation_request_data['user_id'] = $user_id;
+                $order_request_data['user_id'] = $user_id;
+                $order_request_data['product_quantity'] = $product_quantity;
                 $order_request_data['mrp'] = $mrp_rate_price;
-                $order_request_data['sub_total'] = $mrp_rate_price;
+                $order_request_data['sub_total'] = $sub_total_price;
                 $order_request_data['gst_amount'] = $gst_amount_price;
                 $order_request_data['gst_type'] = $gst_type;
                 $order_request_data['gst_percentage'] = $gst_percentage;
                 $order_request_data['freight_amount'] = $freight_amount_price;
-                $order_request_data['product_quantity'] = $product_quantity;
-                $order_request_data['sub_total'] = $sub_total_price;
-                $order_request_data['total_amount'] = $total_amount_price;
+                $order_request_data['grand_total'] = $total_amount_price;
                 $order_request_data['commission'] = $commission;
                 $order_request_data['vendor_amount'] = $vendor_amount;
                 $order_request_data['customer_pending_payment'] = $total_amount_price;
-                $order_request_data['vendor_pending_payment'] = $vendor_amount;
+                $order_request_data['vendor_pending_payment'] = 0;
 
-                //order details in json array
+                //order details in json array, pending
 
-                //store product details in json array
+                //store product details in json array, pending
 
-                //store shipping details in json array
+                //store shipping details in json array, pending
 
-                //store billing details in json array
-
+                //store billing details in json array, pending
 
                 //Store new order data in order table
                 $newOrderData = Order::create($order_request_data);
@@ -520,116 +515,7 @@ class OrderApiController extends Controller
 
 
 
-    public function paymentSuccess(Request $request){
-        $msg_data = array();
-        try {
-            $token = readHeaderToken();
-            if ($token) {
-                $user_id = $token['sub'];
-
-                $validationErrors = $this->validatepaymentSuccess($request);
-                if (count($validationErrors)) {
-                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
-                }
-                $user = User::find($user_id);
-
-                $api = new Api('rzp_live_bR8azqSzFdzMBU','c9emzzGMOhWxXsACsEKfQKwi');
-                try{
-                    $payment = $api->payment->fetch($request->payment_id);
-                }catch (\Exception $e) {
-                    return response()->json(['msg' => 'Payment ID given not correct, Payment failed'],400);
-                }
-                    
-                if($payment){
-                    $orderPayment = OrderPayment::where('order_id',$request->order_id)->first();
-                    if($order){
-                        $orderPayment->gateway_id = $payment->id;
-                        $orderPayment->payment_status = 'fully_paid';
-                        $orderPayment->save();
-                        return response()->json(['msg' => 'Order placed successfully'],200);
-                    }else{
-                        return response()->json(['msg' => 'Order not found'],400);
-                    }
-                }else{
-                    return response()->json(['msg' => 'Payment failed'],400);
-                }            
-            } else {
-                    errorMessage(__('auth.authentication_failed'), $msg_data);
-            }
-        } catch (\Exception $e) {
-                \Log::error("My Order Creation failed: " . $e->getMessage());
-                errorMessage(__('auth.something_went_wrong'), $msg_data);
-        }
-    }
-
-
-    public function progress(Request $request){
-        $rules = [
-            'module_id' => 'required|numeric',
-            'chapter_id' => 'required|numeric',
-            'time' => 'required|numeric',
-            'status' => 'in:completed'
-        ];
-        $customMessages = [
-            'module_id.required' => 'Please enter module id',
-            'module_id.numeric' => 'Please enter valid module id',
-            'chapter_id.required' => 'Please enter chapter id',
-            'chapter_id.numeric' => 'Please enter valid chapter id',
-            'time.required' => 'Please enter time',
-            'time.numeric' => 'Please enter valid time',
-            'status.in' => 'Please enter valid status',
-        ];
-        $validator = \Validator::make($request->all(),$rules,$customMessages);
-        
-        if($validator->fails()) {
-            return response()->json(['errors' => $validator->messages()],400);
-        }else{
-            $user = User::find(auth('api')->user()->id);
-            $chapter = Chapter::where('id',$request->chapter_id)->where('module_id',$request->module_id)->first();
-            $module = Module::find($request->module_id);
-            if(!$module){
-                return response()->json(['msg' => 'Module not found'],400);
-            }
-            if(!$chapter){
-                return response()->json(['msg' => 'Chapter not found'],400);
-            }
-            
-            $order = Order::where('user_id',$user->id)->where('module_id',$module->id)->where('status','!=','pending')->first();
-            if($order){
-                $old_completed_chapter = CompletedChapter::where('order_id',$order->id)->where('module_id',$module->id)->where('chapter_id',$chapter->id)->first();
-
-                if($old_completed_chapter){
-                    $old_completed_chapter->time = $request->time;
-                    $old_completed_chapter->status = $request->status;
-                    $old_completed_chapter->save();
-                    return response()->json(['msg' => 'Chapter progress updated successfully'],200);
-                }else{
-                    $completed_chapter = new CompletedChapter;
-                    $completed_chapter->order_id = $order->id;
-                    $completed_chapter->module_id = $module->id;
-                    $completed_chapter->chapter_id = $chapter->id;
-                    $completed_chapter->chapter_id = $chapter->id;
-                    $completed_chapter->chapter_id = $chapter->id;
-                    $completed_chapter->time = $request->time;
-                    $completed_chapter->status = $request->status;
-                    $completed_chapter->save();
-
-                    $completed_chapters_count = CompletedChapter::where('order_id',$order->id)->count();
-                    $module_chapters_count = $module->chapters->count();
-                    $progress =  (100 * $completed_chapters_count) / $module_chapters_count;
-                    $order->progress = round($progress);
-                    $order->save();
-                    return response()->json(['msg' => 'Chapter progress added successfully'],200);
-                }
-            }else{
-                return response()->json(['msg' => 'Order related to this module & chapter not found'],400);
-            }
-        }
-    }
-
     /**
-     * 
      * Created By : Pradyumn Dwivedi
      * Created at : 31/05/2022
      * Uses : To validate order creation request
@@ -642,9 +528,11 @@ class OrderApiController extends Controller
     private function validateNewOrder(Request $request)
     {
         return \Validator::make($request->all(), [
+            'vendor_quotation_id' => 'required|numeric',
             'vendor_id' => 'required|numeric',
             'vendor_warehouse_id' => 'required|numeric',
             'customer_enquiry_id' => 'required|numeric',
+            'user_address_id' => 'required|numeric',
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
@@ -659,13 +547,7 @@ class OrderApiController extends Controller
             'packaging_treatment_id' => 'required|numeric',
             'recommendation_engine_id' => 'required|numeric',
             'packaging_material_id' => 'required|numeric',
-            'country_id' => 'required|numeric',
             'currency_id' => 'required|numeric',
-            'mrp' => 'required|numeric',
-            'gst_type' => 'required|string',
-            'gst_percentage' => 'required|numeric',
-            'freight_amount' => 'required|numeric',
-            'commission'=> 'required|numeric'
         ])->errors();
     }
 
@@ -686,6 +568,22 @@ class OrderApiController extends Controller
             'customer_enquiry_id' => 'required|numeric',
             'vendor_quotation_id' => 'required|numeric',
             'product_quantity' => 'required|numeric'
+        ])->errors();
+    }
+
+    /**
+     * Created By : Pradyumn Dwivedi
+     * Created on : 30/05/2022
+     * Uses : Validate cancel order request for order.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+    */
+    private function validateCancelOrder(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'order_id' => 'required|integer',
+            'order_delivery_status' => 'required|string'
         ])->errors();
     }
 

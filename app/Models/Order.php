@@ -18,11 +18,12 @@ class Order extends Model
      * uses : The attributes that are mass assignable.
      */
     protected $fillable = [
-        'order_delivery_status',
         'user_id',
+        'vendor_quotation_id',
         'vendor_id',
         'vendor_warehouse_id',
         'customer_enquiry_id',
+        'user_address_id',
         'category_id',
         'sub_category_id',
         'product_id',
@@ -32,12 +33,11 @@ class Order extends Model
         'product_quantity',
         'storage_condition_id',
         'packaging_machine_id',
-        'product-form_id',
+        'product_form_id',
         'packing_type_id',
         'packaging_treatment_id',
         'recommendation_engine_id',
         'packaging_material_id',
-        'country_id',
         'currency_id',
         'mrp',
         'sub_total',
@@ -46,6 +46,13 @@ class Order extends Model
         'gst_percentage',
         'freight_amount',
         'grand_total',
+        'commission',
+        'vendor_amount',
+        'customer_pending_payment',
+        'customer_payment_status',
+        'vendor_pending_payment',
+        'vendor_payment_status',
+        'order_delivery_status',
     ];
 
     protected $hidden = [
@@ -53,7 +60,8 @@ class Order extends Model
         'updated_by',
         'deleted_at',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'commission',
     ];
 
 
