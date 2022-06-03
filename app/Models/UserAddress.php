@@ -30,7 +30,7 @@ class UserAddress extends Model
         'area',
         'land_mark',
         'city_name',
-        'state_id'
+        'state_id',
     ];
 
     /**

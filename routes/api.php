@@ -46,6 +46,12 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //Subscription
         Route::post('/subscription/listing', 'SubscriptionApiController@index');
+        Route::post('/subscription/buy_new_subscription', 'SubscriptionApiController@buy_subscription');
+        Route::post('/subscription/my_subscription', 'SubscriptionApiController@my_subscription');
+
+        //Subscription payment
+        Route::post('/subscription_payment/new_payment', 'UserSubscriptionPaymentApiController@new_subscription_payment');
+        Route::post('/subscription_payment/payment_success', 'UserSubscriptionPaymentApiController@subscription_payment_success');
 
         //Measurement Unit
         Route::post('/measurement_unit/listing', 'MeasurementUnitApiController@index');
@@ -119,5 +125,10 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //Get pincode data
         Route::post('/get_pincode_data', 'PincodeDetailApiController@index');
+
+        //My profile
+        Route::post('/user/my_profile', 'MyProfileApiController@show');
+        Route::post('/user/update_my_profile', 'MyProfileApiController@update');
+        Route::post('/user/delete_my_account', 'MyProfileApiController@destroy');
     });
 });
