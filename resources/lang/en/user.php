@@ -18,5 +18,9 @@ return [
     'phone_already_exist' => 'User has already been registered with this phone number.',
     'login_failed' => 'Invalid login credentials',
     'logged_in_successfully' => 'Logged in successfully!',
+    'update_successfully' => 'User Updated Successfully',
+    'same_phone_exist' => 'Phone number Already Exist',
+    'delete_successfully' => 'User Deleted Successfully',
+    
 
 ];

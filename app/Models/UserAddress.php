@@ -22,6 +22,7 @@ class UserAddress extends Model
         'user_id',
         'country_id',
         'address_name',
+        'type',
         'gstin',
         'mobile_no',
         'pincode',
@@ -29,7 +30,7 @@ class UserAddress extends Model
         'area',
         'land_mark',
         'city_name',
-        'state_id'
+        'state_id',
     ];
 
     /**

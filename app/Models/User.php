@@ -44,6 +44,10 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'visiting_card_front',
         'visiting_card_back',
+        'subscription_id',
+        'subscription_start',
+        'subscription_end',
+        'type',
     ];
 
     /**
@@ -53,6 +57,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
+        'fpwd_flag',
     ];
 
     /**

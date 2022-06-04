@@ -46,6 +46,12 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //Subscription
         Route::post('/subscription/listing', 'SubscriptionApiController@index');
+        Route::post('/subscription/buy_new_subscription', 'SubscriptionApiController@buy_subscription');
+        Route::post('/subscription/my_subscription', 'SubscriptionApiController@my_subscription');
+
+        //Subscription payment
+        Route::post('/subscription_payment/new_payment', 'UserSubscriptionPaymentApiController@new_subscription_payment');
+        Route::post('/subscription_payment/payment_success', 'UserSubscriptionPaymentApiController@subscription_payment_success');
 
         //Measurement Unit
         Route::post('/measurement_unit/listing', 'MeasurementUnitApiController@index');
@@ -101,11 +107,28 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/order/my_selected_order_details', 'OrderApiController@show');
         Route::post('/order/my_completed_order_listing', 'OrderApiController@completed_orders');
         Route::post('/order/cancel_my_order', 'OrderApiController@cancel_order');
+        Route::post('/order/enter_final_quantity', 'OrderApiController@final_quantity');
+        Route::post('/order/create_new_order', 'OrderApiController@new_order');
+
+        //Order payment
+        Route::post('/order_payment/new_payment', 'OrderPaymentApiController@new_order_payment');
+        Route::post('/order_payment/payment_success', 'OrderPaymentApiController@order_payment_success');
 
         //Feedback
         Route::post('/feedback/send_feedback', 'FeedbackApiController@store');
 
         //General Info
         Route::post('/customer_general_info', 'CustomerGeneralInfoApiController@index');
+
+        //Update vendor quotation
+        Route::post('/vendor_quotation/update_product_quantity', 'VendorQuotationApiController@update_quantity');
+
+        //Get pincode data
+        Route::post('/get_pincode_data', 'PincodeDetailApiController@index');
+
+        //My profile
+        Route::post('/user/my_profile', 'MyProfileApiController@show');
+        Route::post('/user/update_my_profile', 'MyProfileApiController@update');
+        Route::post('/user/delete_my_account', 'MyProfileApiController@destroy');
     });
 });

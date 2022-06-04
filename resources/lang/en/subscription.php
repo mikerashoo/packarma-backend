@@ -14,4 +14,6 @@ return [
     */
 
     'subscription_not_found' => 'Subscription Not Found',
+    'subscription_payment_entry_created_successfully' => 'Subscription Payment Entery Created Successfull',
+    'you_have_successfully_subscribed' => 'You have Successfully Subscribed'
 ];

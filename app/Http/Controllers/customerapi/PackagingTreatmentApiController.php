@@ -113,8 +113,9 @@ class PackagingTreatmentApiController extends Controller
 
                 $featureData = PackagingTreatment::select('id','packaging_treatment_name','packaging_treatment_description','packaging_treatment_image','packaging_treatment_thumb_image','meta_title','meta_description','meta_keyword')
                                 ->where([['status','1'],['is_featured','1']]);
-
                 $featuredTreatmentData = PackagingTreatment::whereRaw("1 = 1");
+                // print_r($featuredTreatmentData);exit;
+
                 if($request->treatment_id)
                 {
                     $featuredTreatmentData = $featuredTreatmentData->where('id',$request->treatment_id);
@@ -125,7 +126,7 @@ class PackagingTreatmentApiController extends Controller
                     $featuredTreatmentData = $featuredTreatmentData->where('packaging_treatment_name',$request->treatment_name);
                     $featureData = $featureData->where('packaging_treatment_name',$request->treatment_name);
                 }
-                if(empty($featuredTreatmentData->first()))
+                if(empty($featureData->first()))
                 {
                     errorMessage(__('packaging_treatment.packaging_treatment_not_found'), $msg_data);
                 }
@@ -141,7 +142,7 @@ class PackagingTreatmentApiController extends Controller
                     $featureData[$i]['packaging_treatment_thumb_image'] = getFile($row['packaging_treatment_thumb_image'], 'packaging_treatment',false,'thumb');
                     $i++;
                 }
-                if(empty($data)) {
+                if(empty($featureData)) {
                     errorMessage(__('packaging_treatment.packaging_treatment_not_found'), $msg_data);
                 }
                 $responseData['result'] = $featureData;

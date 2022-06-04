@@ -11,6 +11,25 @@ class UserSubscriptionPayment extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+
+    /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 03/06/2022
+     * uses :  The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id',
+        'subscription_id',
+        'amount',
+        'subscription_type',
+        'payment_reference',
+        'payment_unique_id',
+        'payment_detais',
+        'payment_status',
+        'created_by'
+    ];
     /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 24-mar-2022
