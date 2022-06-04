@@ -29,6 +29,7 @@ class VendorWarehouse extends Model
         'pincode',
         'flat',
         'area',
+        'land_mark',
         'city_name',
     ];
 
