@@ -57,10 +57,16 @@ class PackagingMaterialApiController extends Controller
                     'packaging_materials.special_feature',
                     'products.product_name',
                     'products.product_description',
+                    'recommendation_engines.engine_name',
+                    'recommendation_engines.structure_type',
+                    'measurement_units.unit_name',
+                    'measurement_units.unit_symbol',
                 )
                     ->leftjoin('products', 'vendor_material_mappings.product_id', '=', 'products.id')
+                    ->leftjoin('recommendation_engines', 'vendor_material_mappings.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->leftjoin('measurement_units', 'recommendation_engines.measurement_unit_id', '=', 'measurement_units.id')
                     ->leftjoin('packaging_materials', 'vendor_material_mappings.packaging_material_id', '=', 'packaging_materials.id')
-                    ->where([[$main_table . '' . '.status', '1'], [$main_table . '' . '.deleted_at', NULL]])->where('vendor_id', $vendor_id);
+                    ->where([[$main_table . '' . '.status', '1'], [$main_table . '' . '.deleted_at', NULL]])->where($main_table . '' . '.vendor_id', $vendor_id);
 
 
 
