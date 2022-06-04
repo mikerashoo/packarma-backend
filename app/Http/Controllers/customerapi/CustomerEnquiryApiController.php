@@ -150,6 +150,7 @@ class CustomerEnquiryApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                $user_id = $token['sub'];
                 // Request Validation
                 $validationErrors = $this->validateEnquiry($request);
                 if (count($validationErrors)) {
@@ -163,6 +164,7 @@ class CustomerEnquiryApiController extends Controller
                 $request['city_id'] = $userAddress->city_id;
                 $request['address'] = $userAddress->address;
                 $request['pincode'] = $userAddress->pincode;
+                $request['user_id'] = $user_id;
                 // Store a new enquiry
                 $enquiryData = CustomerEnquiry::create($request->all());
                 \Log::info("Customer Enquiry Created successfully");
@@ -189,7 +191,6 @@ class CustomerEnquiryApiController extends Controller
     private function validateEnquiry(Request $request)
     {
         return \Validator::make($request->all(), [
-            'user_id' => 'required|numeric',
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',

@@ -153,39 +153,6 @@ class UserAddressApiController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Created By : Pradyumn Dwivedi
      * Created at : 30/05/2022
      * Uses : Store Updated user address
@@ -303,7 +270,8 @@ class UserAddressApiController extends Controller
             'area' => 'required|string',
             'land_mark' => 'required|string',
             'city_name' => 'required|string',
-            'state_id' => 'required|numeric'
+            'state_id' => 'required|numeric',
+            'gstin' => 'required|string|min:15|max:15'
         ])->errors();
     }
 
@@ -330,7 +298,8 @@ class UserAddressApiController extends Controller
             'area' => 'required|string',
             'land_mark' => 'required|string',
             'city_name' => 'required|string',
-            'state_id' => 'required|numeric'
+            'state_id' => 'required|numeric',
+            'gstin' => 'required|string|min:15|max:15'
         ])->errors();
     }
 }

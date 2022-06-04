@@ -3,30 +3,30 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserSubscriptionPayment;
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
-use App\Models\Order;
 use App\Models\User;
 use Response;
 
-class OrderPaymentApiController extends Controller
+class UserSubscriptionPaymentApiController extends Controller
 {
     /**
      * Created By Pradyumn Dwivedi
-     * Created at : 02/06/2022
-     * Uses : To start payment process and store in table
+     * Created at : 03/06/2022
+     * Uses : To start subscription payment process and store in table
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function new_order_payment(Request $request){
+    public function new_subscription_payment(Request $request){
         $msg_data = array();
         try {
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
 
-                $validationErrors = $this->validateNewOrderPayment($request);
+                $validationErrors = $this->validateNewSubscriptionPayment($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage(__('auth.validation_failed'), $validationErrors->all());
@@ -34,37 +34,34 @@ class OrderPaymentApiController extends Controller
                 \Log::info("My order payment started!");
 
                 // $user = User::find(auth('api')->user()->id);
-                $order = Order::find($request->order_id);
-                if($order){
+                $subscription_payment_data = UserSubscriptionPayment::find($request->user_subscription_payment_id);
+                if($subscription_payment_data){
                     $data =[];
                     
-                    if($order->customer_pending_payment == 0){
-                        $payment_status = 'fully_paid';
+                    if($subscription_payment_data->amount == 0){
+                        $payment_status = 'paid';
                         $razorpay_order_id = NULL;
                     }else{
                         $payment_status = 'pending';
                         $api = new Api('rzp_live_bR8azqSzFdzMBU','c9emzzGMOhWxXsACsEKfQKwi');
-                        $razorpay_order = $api->order_payment->create(array(
-                            'amount' => $order->customer_pending_payment * 100,
+                        $razorpay_order = $api->subscription_payment->create(array(
+                            'amount' => $subscription_payment_data->amount * 100,
                             'currency' => 'INR'
                             )
                         );
                         $razorpay_order_id = $razorpay_order['id'];
                     }
 
-                    $orderPayment = new OrderPayment;
-                    $orderPayment->user_id = $user_id;
-                    $orderPayment->order_id = $order->id;
-                    $orderPayment->amount = $order->customer_pending_payment;
-                    $orderPayment->gateway_id = $razorpay_order_id;
-                    $orderPayment->payment_status = $payment_status;
-                    $orderPayment->save();
+                    $userSubscriptionPayment = new UserSubscriptionPayment;
+                    $userSubscriptionPayment->payment_reference = $razorpay_order_id;
+                    $userSubscriptionPayment->payment_status = $payment_status;
+                    $userSubscriptionPayment->save();
 
-                    if($order->customer_pending_payment == 0){
+                    if($subscription_payment_data->amount == 0){
                         $data['gateway_id'] = '';
                         $data['razorpay_api_key'] = '';
                         $data['currency'] = '';
-                        $data['amount'] = $order->customer_pending_payment;
+                        $data['amount'] = $subscription_payment_data->amount;
                         $data['gateway_call'] = 'no';
                         $data['msg'] = 'Thank you, you have successfully completed your Payment';
                     }else{
@@ -83,20 +80,20 @@ class OrderPaymentApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("My new Order payment failed: " . $e->getMessage());
+            \Log::error("My new Subscription payment failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
 
     /**
      * Created By Pradyumn Dwivedi
-     * Created at : 02/06/2022
+     * Created at : 03/06/2022
      * Uses : To check payment success status
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function order_payment_success(Request $request){
+    public function subscription_payment_success(Request $request){
         $msg_data = array();
         try {
             $token = readHeaderToken();
@@ -120,21 +117,15 @@ class OrderPaymentApiController extends Controller
                 }
                     
                 if($payment){
-                    $orderPayment = OrderPayment::where('gateway_id',$request->gateway_id)->first();
-                    if($orderPayment){
-                        $orderPayment->gateway_key = $payment->id;
-                        $orderPayment->status = 'fully_paid';
-                        $orderPayment->save();
+                    $subscriptionPayment = UserSubscriptionPayment::where('gateway_id',$request->gateway_id)->first();
+                    if($subscriptionPayment){
+                        $subscriptionPayment->payment_reference = $payment->id;
+                        $subscriptionPayment->payment_status = 'paid';
+                        $subscriptionPayment->save();
 
-                        //update customer pending payment and vendor pending payment 
-                        $orderTable = new Order;
-                        $orderTable->customer_pending_payment = 0;
-                        $orderTable->vendor_pending_payment = $order->vendor_price;
-                        $orderTable->save();
-
-                        return response()->json(['msg' => 'Order placed successfully'],200);
+                        return response()->json(['msg' => 'Subscribed successfully'],200);
                     }else{
-                        return response()->json(['msg' => 'Order not found'],400);
+                        return response()->json(['msg' => 'Subscription not found'],400);
                     }
                 }else{
                     return response()->json(['msg' => 'Payment failed'],400);
@@ -143,7 +134,7 @@ class OrderPaymentApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("My new Order payment success checking failed: " . $e->getMessage());
+            \Log::error("My subscription payment success checking failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
@@ -159,10 +150,10 @@ class OrderPaymentApiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    private function validateNewOrderPayment(Request $request)
+    private function validateNewSubscriptionPayment(Request $request)
     {
         return \Validator::make($request->all(), [
-            'order_id' => 'required|numeric'
+            'user_subscription_payment_id' => 'required|numeric'
         ])->errors();
     }
 
