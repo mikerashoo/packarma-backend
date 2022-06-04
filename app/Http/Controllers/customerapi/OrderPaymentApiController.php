@@ -4,6 +4,7 @@ namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+// require_once __DIR__ . "Razorpay/Razorpay.php";
 use Razorpay\Api\Api;
 use App\Models\Order;
 use App\Models\User;
@@ -44,12 +45,25 @@ class OrderPaymentApiController extends Controller
                     }else{
                         $payment_status = 'pending';
                         $api = new Api('rzp_live_bR8azqSzFdzMBU','c9emzzGMOhWxXsACsEKfQKwi');
-                        $razorpay_order = $api->order_payment->create(array(
-                            'amount' => $order->customer_pending_payment * 100,
-                            'currency' => 'INR'
-                            )
-                        );
-                        $razorpay_order_id = $razorpay_order['id'];
+
+                        print_r($api->order->fetch('order_JdMgJNcDrkslK8')); exit;
+
+                        $payment_data = $api->order->create(array('receipt' => '123', 'amount' => 100, 'currency' => 'INR', 'notes'=> array('key1'=> 'value3','key2'=> 'value2')));
+                        print_r($payment_data); exit;
+                        // $api = new Api('rzp_live_bR8azqSzFdzMBU','c9emzzGMOhWxXsACsEKfQKwi');
+                        // $input = array(
+                        //     'amount' => $order->customer_pending_payment * 100,
+                        //     'currency' => 'INR'
+                        // );
+                        // $api = new Api('rzp_live_bR8azqSzFdzMBU','c9emzzGMOhWxXsACsEKfQKwi');
+  
+                        // $payment = $api->payment->fetch('*');
+                        // return $payment;
+                        // if(count($input)  && !empty($input['razorpay_payment_id'])) {
+                        //     $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount'=>$order->customer_pending_payment)); 
+                        // }
+
+                        // $razorpay_order_id = $input['razorpay_payment_id'];
                     }
 
                     $orderPayment = new OrderPayment;

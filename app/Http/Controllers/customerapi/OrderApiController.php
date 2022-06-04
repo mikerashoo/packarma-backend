@@ -51,7 +51,8 @@ class OrderApiController extends Controller
                     'orders.order_delivery_status',
                     'orders.product_quantity',
                     'measurement_units.unit_symbol',
-                    'orders.created_at'
+                    'orders.created_at',
+                    'orders.order_details'
                 )
                     ->leftjoin('packaging_materials', 'packaging_materials.id', '=', 'orders.packaging_material_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
@@ -85,6 +86,15 @@ class OrderApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 if(empty($data)) {
                     errorMessage(__('order.order_not_found'), $msg_data);
+                }
+                $i=0;
+                foreach($data as $row) {
+                    if(!empty($row->order_details)) {
+                        $data[$i]->order_details = json_decode($row->order_details,true);
+                    } else {
+                        $data[$i]->order_details = null;
+                    }
+                    $i++;
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
@@ -485,6 +495,11 @@ class OrderApiController extends Controller
                 $order_request_data['vendor_amount'] = $vendor_amount;
                 $order_request_data['customer_pending_payment'] = $total_amount_price;
                 $order_request_data['vendor_pending_payment'] = 0;
+                $order_detail=array(
+                    "product_id"=> $request->product_id,
+                    "category_id"=> $request->category_id
+                );
+                $order_request_data['order_details'] = json_encode($order_detail);
 
                 //order details in json array, pending
 
@@ -495,6 +510,7 @@ class OrderApiController extends Controller
                 //store billing details in json array, pending
 
                 //Store new order data in order table
+                // return $order_request_data;
                 $newOrderData = Order::create($order_request_data);
                 \Log::info("My new order created successfully!");
 
