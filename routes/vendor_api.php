@@ -44,5 +44,7 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
         Route::post('/address/create', 'MyAddressController@create');
         Route::post('/address/update', 'MyAddressController@update');
         Route::post('/address/delete', 'MyAddressController@destroy');
+        Route::post('/show_gst_detils', 'GstDetailsController@show');
+        Route::post('/store_gst_details', 'GstDetailsController@store');
     });
 });
