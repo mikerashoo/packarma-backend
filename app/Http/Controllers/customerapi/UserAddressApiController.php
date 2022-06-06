@@ -121,7 +121,7 @@ class UserAddressApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
-
+                
                 // Request Validation
                 $addressValidationErrors = $this->validateAddressRegister($request);
                 if (count($addressValidationErrors)) {
@@ -168,7 +168,7 @@ class UserAddressApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
-
+                
                 // Request Validation
                 $addressValidationErrors = $this->validateAddressUpdate($request);
                 if (count($addressValidationErrors)) {
@@ -264,14 +264,15 @@ class UserAddressApiController extends Controller
         return \Validator::make($request->all(), [
             'country_id' => 'required|numeric',
             'address_name' => 'required|string',
-            'mobile_no' => 'required|digits:10',
+            'mobile_no' => 'required|digits:10|unique:user_addresses,mobile_no',
             'pincode' => 'required|digits:6',
             'flat' => 'required|string',
             'area' => 'required|string',
             'land_mark' => 'required|string',
             'city_name' => 'required|string',
             'state_id' => 'required|numeric',
-            'gstin' => 'required|string|min:15|max:15'
+            'type' => 'required|in:shipping,billing',
+            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|unique:user_addresses,gstin',
         ])->errors();
     }
 
@@ -292,14 +293,15 @@ class UserAddressApiController extends Controller
             'id' => 'required|numeric',
             'country_id' => 'required|numeric',
             'address_name' => 'required|string',
-            'mobile_no' => 'required|digits:10',
+            'mobile_no' => 'required|digits:10|unique:user_addresses,mobile_no' . ($request->id ? ",$request->id" : ''),
             'pincode' => 'required|digits:6',
             'flat' => 'required|string',
             'area' => 'required|string',
             'land_mark' => 'required|string',
             'city_name' => 'required|string',
             'state_id' => 'required|numeric',
-            'gstin' => 'required|string|min:15|max:15'
+            'type' => 'required|in:shipping,billing',
+            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|unique:user_addresses,gstin' . ($request->id ? ",$request->id" : ''),
         ])->errors();
     }
 }
