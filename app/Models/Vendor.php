@@ -42,6 +42,8 @@ class Vendor extends Model implements JWTSubject
         'phone',
         'vendor_email',
         'vendor_password',
+        'gstin',
+        'gst_certificate',
     ];
 
     /**

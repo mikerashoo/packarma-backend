@@ -21,4 +21,7 @@ return [
     'logged_in_successfully' => 'Logged in successfully!',
     'same_phone_exist' => 'Same phone no exist with another account!',
     'delete_successfully' => 'Vendor deleted successfuly',
+    'gst_certificate_not_found' => 'Gst Certificate Not Found Please Upload',
+    'gst_details_fetched' => 'Gst Details Fetched Successfully',
+
 ];
