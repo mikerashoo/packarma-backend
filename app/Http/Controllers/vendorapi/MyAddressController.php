@@ -44,6 +44,7 @@ class MyAddressController extends Controller
                     'vendor_warehouses.area',
                     'vendor_warehouses.land_mark',
                     'vendor_warehouses.city_name',
+                    'vendor_warehouses.pincode',
                     'states.state_name',
                     'countries.country_name',
                     'countries.phone_code',
