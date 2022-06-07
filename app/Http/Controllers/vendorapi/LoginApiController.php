@@ -82,6 +82,14 @@ class LoginApiController extends Controller
                 ['vendor_id' => $vendorData->id, 'imei_no' => $imei_no],
                 ['remember_token' => $vendor_token]
             );
+
+            if (empty($vendorData->gstin)) {
+                $vendorData->load_page = 'home';
+            } else {
+                $vendorData->load_page = 'gst';
+            }
+
+
             successMessage(__('vendor.logged_in_successfully'), $vendorData->toArray());
         } catch (\Exception $e) {
             \Log::error("Login failed: " . $e->getMessage());

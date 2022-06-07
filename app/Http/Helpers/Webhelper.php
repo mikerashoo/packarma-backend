@@ -602,4 +602,26 @@ if (!function_exists('getPincodeDetails')) {
         $msg_data['pin_code'] = $data[0]['PostOffice'][0]['Pincode'];
         return $msg_data;
     }
+
+    if (!function_exists('getFormatid')) {
+        function getFormatid($id, $from_table = '')
+        {
+            switch ($from_table) {
+                case 'orders':
+                    $prefix = '#PAC';
+                    break;
+
+                case 'vendor_quotations':
+                    $prefix = '#PEQ';
+                    break;
+
+                default:
+                    $prefix = '#MYP';
+                    break;
+            }
+            $formatId = str_pad($id, 6, 0, STR_PAD_LEFT);
+            $formatId = $prefix . $formatId;
+            return $formatId;
+        }
+    }
 }
