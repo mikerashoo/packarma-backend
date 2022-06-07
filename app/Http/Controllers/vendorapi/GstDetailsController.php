@@ -36,7 +36,7 @@ class GstDetailsController extends Controller
                 $vendor_id = $vendor_token['sub'];
 
                 // Request Validation
-                $gstDetailsValidationErrors = $this->validateGstDetailsRegister($request);
+                $gstDetailsValidationErrors = $this->validateGstDetailsRegister($request, $vendor_id);
                 if (count($gstDetailsValidationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $gstDetailsValidationErrors->all()));
                     errorMessage(__('auth.validation_failed'), $gstDetailsValidationErrors->all());
@@ -157,10 +157,10 @@ class GstDetailsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    private function validateGstDetailsRegister(Request $request)
+    private function validateGstDetailsRegister(Request $request, $id)
     {
         return \Validator::make($request->all(), [
-            'gstin' => 'required|string',
+            'gstin' => 'required|string|unique:vendors,gstin,' . $id . ',id,deleted_at,NULL',
             'gst_certificate' => 'max:' . config('global.MAX_IMAGE_SIZE'),
 
         ])->errors();

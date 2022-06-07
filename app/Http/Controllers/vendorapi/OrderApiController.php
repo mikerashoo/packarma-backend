@@ -178,8 +178,9 @@ class OrderApiController extends Controller
                 }
                 $i = 0;
                 foreach ($data as $row) {
-                    $data[$i]->shipping_details = json_decode($data[$i]->shipping_details, TRUE);
-                    $data[$i]->billing_details = json_decode($data[$i]->billing_details, TRUE);
+                    $data[$i]->id = getFormatid($row->id, $main_table);
+                    $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);
+                    $data[$i]->billing_details = json_decode($row->billing_details, TRUE);
                     $i++;
                 }
 
