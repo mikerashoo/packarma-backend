@@ -18,7 +18,7 @@ class SubCategoryController extends Controller
 
     public function index()
     {
-        $data['add_sub_category'] = checkPermission('add_sub_category');
+        $data['sub_category_add'] = checkPermission('sub_category_add');
         $data['sub_category_edit'] = checkPermission('sub_category_edit');
         $data['sub_category_view'] = checkPermission('sub_category_edit');
         $data['sub_category_status'] = checkPermission('sub_category_status');

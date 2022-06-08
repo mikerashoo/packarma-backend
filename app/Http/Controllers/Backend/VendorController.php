@@ -273,8 +273,8 @@ class VendorController extends Controller
     public function indexApprovalList()
     {
         $data['data'] = Vendor::all();
-        $data['vendor_approval_list_view'] = checkPermission('vendor_approval_list_view');
-        $data['vendor_approval_list_update'] = checkPermission('vendor_approval_list_update');
+        $data['vendor_approval_view'] = checkPermission('vendor_approval_view');
+        $data['vendor_approval_update'] = checkPermission('vendor_approval_update');
         return view('backend/vendors/vendor_approval_list/index', ["data" => $data]);
     }
 

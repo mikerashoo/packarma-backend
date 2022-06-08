@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrderPayment;
 use App\Models\Order;
+use App\Models\UserAddress;
 use App\Models\VendorQuotation;
 use App\Models\User;
 use Response;
@@ -495,21 +496,88 @@ class OrderApiController extends Controller
                 $order_request_data['vendor_amount'] = $vendor_amount;
                 $order_request_data['customer_pending_payment'] = $total_amount_price;
                 $order_request_data['vendor_pending_payment'] = 0;
+                $order_request_data['created_by'] = $user_id;
+                $order_request_data['currency_id'] = $vendor_quotation_data->currency_id;
+
+                //checking address checkbox
+                if($request->same_address_checkbox == 'yes'){
+                    $billing_address_data = UserAddress::find($request->user_billing_address_id);
+                    $shipping_address_data = $billing_address_data;
+                    // print_r($billing_address_data);exit;
+                }else{
+                    $billing_address_data = UserAddress::find($request->user_billing_address_id);
+                    $shipping_address_data = UserAddress::find($request->user_shipping_address_id);
+                }
+                //store order details in json array
                 $order_detail=array(
-                    "product_id"=> $request->product_id,
-                    "category_id"=> $request->category_id
+                    'user_id' => $user_id,
+                    'product_quantity' => $product_quantity,
+                    'mrp' => $mrp_rate_price,
+                    'sub_total' => $sub_total_price,
+                    'gst_amount' => $gst_amount_price,
+                    'gst_type' => $gst_type,
+                    'gst_percentage' => $gst_percentage,
+                    'freight_amount' => $freight_amount_price,
+                    'grand_total' => $total_amount_price,
+                    'commission' => $commission,
+                    'vendor_amount' => $vendor_amount,
+                    'customer_pending_payment' => $total_amount_price,
+                    'vendor_pending_payment' => 0,
                 );
+                //store product details in json array
+                $product_detail=array(
+                    "category_id"=> $request->category_id,
+                    "sub_category_id"=> $request->sub_category_id,
+                    "product_id" => $request->product_id,
+                    "shelf_life" => $request->shelf_life,
+                    "product_weight" => $request->product_weight,
+                    "measurement_unit_id" => $request->measurement_unit_id,
+                    "product_quantity" => $request->product_weight,
+                    "storage_condition_id" => $request->storage_condition_id,
+                    "packaging_machine_id" => $request->packaging_machine_id,
+                    "product_form_id" => $request->product_form_id,
+                    "packing_type_id" => $request->packing_type_id,
+                    "packaging_treatment_id" => $request->packaging_treatment_id,
+                    "recommendation_engine_id" => $request->recommendation_engine_id,
+                    "packaging_material_id" => $request->packaging_material_id,
+                );
+                //store shipping details in json array
+                $shipping_detail=array(
+                    "id" => $shipping_address_data->id,
+                    "user_id"=> $user_id,
+                    "address_name"=> $shipping_address_data->address_name,
+                    "type" => $shipping_address_data->type,
+                    "mobile_no" => $shipping_address_data->mobile_no,
+                    "country_id" => $shipping_address_data->country_id,
+                    "state_id" => $shipping_address_data->state_id,
+                    "city_name" => $shipping_address_data->city_name,
+                    "flat" => $shipping_address_data->flat,
+                    "area" => $shipping_address_data->area,
+                    "land_mark" => $shipping_address_data->land_mark,
+                    "pincode" => $shipping_address_data->pincode
+                );
+                //store billing details in json array
+                $billing_detail=array(
+                    "id"=> $billing_address_data->id,
+                    "user_id"=> $user_id,
+                    "address_name"=> $billing_address_data->address_name,
+                    "type" => $billing_address_data->type,
+                    "mobile_no" => $billing_address_data->mobile_no,
+                    "country_id" => $billing_address_data->country_id,
+                    "state_id" => $billing_address_data->state_id,
+                    "city_name" => $billing_address_data->city_name,
+                    "flat" => $billing_address_data->flat,
+                    "area" => $billing_address_data->area,
+                    "land_mark" => $billing_address_data->land_mark,
+                    "pincode" => $billing_address_data->pincode,
+                    "gstin" => $billing_address_data->gstin
+                );
+                //jason array in jason columns
                 $order_request_data['order_details'] = json_encode($order_detail);
+                $order_request_data['product_details'] = json_encode($product_detail);
+                $order_request_data['shipping_details'] = json_encode($shipping_detail);
+                $order_request_data['billing_details'] = json_encode($billing_detail);
 
-                //order details in json array, pending
-
-                //store product details in json array, pending
-
-                //store shipping details in json array, pending
-
-                //store billing details in json array, pending
-
-                //Store new order data in order table
                 // return $order_request_data;
                 $newOrderData = Order::create($order_request_data);
                 \Log::info("My new order created successfully!");
@@ -548,7 +616,6 @@ class OrderApiController extends Controller
             'vendor_id' => 'required|numeric',
             'vendor_warehouse_id' => 'required|numeric',
             'customer_enquiry_id' => 'required|numeric',
-            'user_address_id' => 'required|numeric',
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
@@ -563,7 +630,9 @@ class OrderApiController extends Controller
             'packaging_treatment_id' => 'required|numeric',
             'recommendation_engine_id' => 'required|numeric',
             'packaging_material_id' => 'required|numeric',
-            'currency_id' => 'required|numeric',
+            'same_address_checkbox' => 'required|in:yes,no',
+            'user_billing_address_id' => 'required|numeric',
+            'user_shipping_address_id' => 'required_if:same_address_checkbox,==,no',
         ])->errors();
     }
 

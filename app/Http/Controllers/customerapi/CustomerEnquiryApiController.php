@@ -50,6 +50,8 @@ class CustomerEnquiryApiController extends Controller
                     'customer_enquiries.product_id',
                     'products.product_name',
                     'customer_enquiries.product_weight',
+                    'customer_enquiries.measurement_unit_id',
+                    'measurement_units.unit_symbol',
                     'customer_enquiries.shelf_life',
                     'customer_enquiries.storage_condition_id',
                     'storage_conditions.storage_condition_title',
@@ -79,6 +81,7 @@ class CustomerEnquiryApiController extends Controller
                     ->leftjoin('categories', 'categories.id', '=', 'customer_enquiries.category_id')
                     ->leftjoin('sub_categories', 'sub_categories.id', '=', 'customer_enquiries.sub_category_id')
                     ->leftjoin('products', 'products.id', '=', 'customer_enquiries.product_id')
+                    ->leftjoin('measurement_units', 'measurement_units.id', '=', 'customer_enquiries.measurement_unit_id')
                     ->leftjoin('storage_conditions', 'storage_conditions.id', '=', 'customer_enquiries.storage_condition_id')
                     ->leftjoin('packaging_machines', 'packaging_machines.id', '=', 'customer_enquiries.packaging_machine_id')
                     ->leftjoin('product_forms', 'product_forms.id', '=', 'customer_enquiries.product_form_id')

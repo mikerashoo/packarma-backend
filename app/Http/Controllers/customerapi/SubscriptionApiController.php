@@ -207,7 +207,37 @@ class SubscriptionApiController extends Controller
                 if(empty($data)) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
-                $responseData['result'] = $data;
+                
+                //subscription listing 
+                $subscription_list = Subscription::select('id','subscription_type','amount');
+                $subscriptionData = Subscription::whereRaw("1 = 1");
+                if($request->subscription_id)
+                {
+                    $subscriptionData = $subscriptionData->where('id', $request->subscription_id);
+                    $subscription_list = $subscription_list->where('id',$request->subscription_id);
+                }
+                if($request->subscription_type)
+                {
+                    $subscriptionData = $subscriptionData->where('subscription_type',$request->subscription_type);
+                    $subscription_list = $subscription_list->where('subscription_type',$request->subscription_type);
+                }
+                if(empty($subscriptionData->first()))
+                {
+                    errorMessage(__('subscription.subscription_not_found'), $msg_data);
+                }
+                if(isset($request->search) && !empty($request->search)) {
+                    $data = fullSearchQuery($data, $request->search,'subscription_type');
+                }
+                $subscription_total_records = $subscription_list->get()->count();
+                $subscription_list = $subscription_list->get()->toArray();
+                if(empty($subscription_list)) {
+                    errorMessage(__('subscription.subscription_not_found'), $msg_data);
+                }
+                $responseData['subscription_listing'] = $subscription_list;
+                $responseData['total_records'] = $subscription_total_records;
+                // successMessage(__('success_msg.data_fetched_successfully'), $responseData);
+
+                $responseData['my_subscription'] = $data;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
             else
