@@ -71,21 +71,23 @@ class CityController extends Controller
                     $cityData = $cityData->where('cities.city_name', $request->city_name);
                     $data = $data->where('cities.city_name', $request->city_name);
                 }
-                if (empty($cityData->first())) {
-                    errorMessage(__('city.city_not_found'), $msg_data);
-                }
+                // if (empty($cityData->first())) {
+                //     errorMessage(__('city.city_not_found'), $msg_data);
+                // }
                 if (isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search, 'city_name');
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
 
-                if (empty($data)) {
-                    errorMessage(__('city.city_not_found'), $msg_data);
-                }
-
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
+
+
+                // if (empty($data)) {
+                //     errorMessage(__('city.city_not_found'), $responseData);
+                // }
+
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);

@@ -71,7 +71,7 @@ class EnquiryApiController extends Controller
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
-                    ->leftjoin('categories', 'customer_enquiries.category_id', '=', 'products.id')
+                    ->leftjoin('categories', 'customer_enquiries.category_id', '=', 'categories.id')
                     ->leftjoin('measurement_units', 'customer_enquiries.measurement_unit_id', '=', 'measurement_units.id')
                     ->leftjoin('storage_conditions', 'customer_enquiries.storage_condition_id', '=', 'storage_conditions.id')
                     ->leftjoin('packaging_machines', 'customer_enquiries.packaging_machine_id', '=', 'packaging_machines.id')
@@ -135,9 +135,9 @@ class EnquiryApiController extends Controller
                 }
 
 
-                if (empty($enquiryData->first())) {
-                    errorMessage(__('enquiry.enquiry_not_found'), $msg_data);
-                }
+                // if (empty($enquiryData->first())) {
+                //     errorMessage(__('enquiry.enquiry_not_found'), $msg_data);
+                // }
 
                 if ($request->id) {
                     $data = $data->where($main_table . '' . '.id', $request->id);
@@ -157,11 +157,14 @@ class EnquiryApiController extends Controller
                     $i++;
                 }
 
-                if (empty($data)) {
-                    errorMessage(__('enquiry.enquiry_not_found'), $msg_data);
-                }
+
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
+
+                // if (empty($data)) {
+                //     errorMessage(__('enquiry.enquiry_not_found'), $responseData);
+                // }
+
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);

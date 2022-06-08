@@ -82,9 +82,9 @@ class PackagingMaterialApiController extends Controller
                     $materialData = $materialData->where($main_table . '' . '.packaging_material_id', $request->packaging_material_id);
                     $data = $data->where($main_table . '' . '.packaging_material_id', $request->packaging_material_id);
                 }
-                if (empty($materialData->first())) {
-                    errorMessage(__('packagingmaterial.material_not_found'), $msg_data);
-                }
+                // if (empty($materialData->first())) {
+                //     errorMessage(__('packagingmaterial.material_not_found'), $msg_data);
+                // }
 
                 if ($request->id) {
                     $data = $data->where($main_table . '' . '.id', $request->id);
@@ -105,13 +105,14 @@ class PackagingMaterialApiController extends Controller
                 //     $i++;
                 // }
 
-                if (empty($data)) {
-                    errorMessage(__('packagingmaterial.material_not_found'), $msg_data);
-                }
+
+
+
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                // print_r($data);
-                // die();
+                // if (empty($data)) {
+                //     errorMessage(__('packagingmaterial.material_not_found'), $responseData);
+                // }
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);

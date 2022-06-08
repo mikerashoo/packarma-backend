@@ -56,9 +56,9 @@ class MyAddressController extends Controller
 
                 $myAddressData = VendorWarehouse::whereRaw("1 = 1");
 
-                if (empty($myAddressData->first())) {
-                    errorMessage(__('vendor_address.address_not_found'), $msg_data);
-                }
+                // if (empty($myAddressData->first())) {
+                //     errorMessage(__('vendor_address.address_not_found'), $msg_data);
+                // }
 
                 if ($request->id) {
                     $data = $data->where($main_table . '' . '.id', $request->id);
@@ -71,14 +71,13 @@ class MyAddressController extends Controller
                 $total_records = $data->get()->count();
 
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                if (empty($data)) {
-                    errorMessage(__('vendor_address.address_not_found'), $msg_data);
-                }
+
 
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                // print_r($data);
-                // die();
+                // if (empty($data)) {
+                //     errorMessage(__('vendor_address.address_not_found'), $responseData);
+                // }
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);

@@ -71,7 +71,7 @@ class QuotationApiController extends Controller
                 )
                     ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
-                    ->leftjoin('categories', 'customer_enquiries.category_id', '=', 'products.id')
+                    ->leftjoin('categories', 'customer_enquiries.category_id', '=', 'categories.id')
                     ->leftjoin('measurement_units', 'customer_enquiries.measurement_unit_id', '=', 'measurement_units.id')
                     ->leftjoin('storage_conditions', 'customer_enquiries.storage_condition_id', '=', 'storage_conditions.id')
                     ->leftjoin('packaging_machines', 'customer_enquiries.packaging_machine_id', '=', 'packaging_machines.id')
@@ -107,8 +107,8 @@ class QuotationApiController extends Controller
                         $quotationData = $quotationData->whereIn($main_table . '' . '.enquiry_status', ['auto_reject', 'reject']);
                         $data = $data->whereIn($main_table . '' . '.enquiry_status', ['auto_reject', 'reject']);
                     } else {
-                        $quotationData = $quotationData->whereIn($main_table . '' . '.enquiry_status', $request->enquiry_status);
-                        $data = $data->whereIn($main_table . '' . '.enquiry_status', $request->enquiry_status);
+                        $quotationData = $quotationData->whereIn($main_table . '' . '.enquiry_status', [$request->enquiry_status]);
+                        $data = $data->whereIn($main_table . '' . '.enquiry_status', [$request->enquiry_status]);
                     }
                 }
 
@@ -151,9 +151,9 @@ class QuotationApiController extends Controller
                 }
 
 
-                if (empty($quotationData->first())) {
-                    errorMessage(__('quotation.quotation_not_found'), $msg_data);
-                }
+                // if (empty($quotationData->first())) {
+                //     errorMessage(__('quotation.quotation_not_found'), $msg_data);
+                // }
 
                 if ($request->id) {
                     $data = $data->where($main_table . '' . '.id', $request->id);
@@ -168,17 +168,19 @@ class QuotationApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
 
                 $i = 0;
-                // foreach ($data as $row) {
-                //     $data[$i]['product_image'] = getFile($row['product_image'], 'product');
-                //     $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
-                //     $i++;
-                // }
-
-                if (empty($data)) {
-                    errorMessage(__('quotation.quotation_not_found'), $msg_data);
+                foreach ($data as $row) {
+                    $data[$i]->id = getFormatid($row->id, $main_table);
+                    $i++;
                 }
+
+
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
+
+                // if (empty($data)) {
+                //     errorMessage(__('quotation.quotation_not_found'), $responseData);
+                // }
+
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
