@@ -75,9 +75,9 @@ class MyAddressController extends Controller
 
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                if (empty($data)) {
-                    errorMessage(__('vendor_address.address_not_found'), $responseData);
-                }
+                // if (empty($data)) {
+                //     errorMessage(__('vendor_address.address_not_found'), $responseData);
+                // }
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);

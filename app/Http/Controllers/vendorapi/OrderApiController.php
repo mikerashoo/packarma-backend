@@ -187,9 +187,9 @@ class OrderApiController extends Controller
                 $responseData['total_records'] = $total_records;
 
 
-                if (empty($data)) {
-                    errorMessage(__('order.order_not_found'), $responseData);
-                }
+                // if (empty($data)) {
+                //     errorMessage(__('order.order_not_found'), $responseData);
+                // }
 
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
