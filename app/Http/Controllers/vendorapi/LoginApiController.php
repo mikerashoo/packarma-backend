@@ -84,9 +84,9 @@ class LoginApiController extends Controller
             );
 
             if (empty($vendorData->gstin)) {
-                $vendorData->load_page = 'home';
-            } else {
                 $vendorData->load_page = 'gst';
+            } else {
+                $vendorData->load_page = 'home';
             }
 
 
