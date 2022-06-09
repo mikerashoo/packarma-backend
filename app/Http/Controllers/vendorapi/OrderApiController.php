@@ -176,7 +176,7 @@ class OrderApiController extends Controller
 
                 $i = 0;
                 foreach ($data as $row) {
-                    $data[$i]->id = getFormatid($row->id, $main_table);
+                    $data[$i]->odr_id = getFormatid($row->id, $main_table);
                     $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);
                     $data[$i]->billing_details = json_decode($row->billing_details, TRUE);
                     $i++;
@@ -187,9 +187,9 @@ class OrderApiController extends Controller
                 $responseData['total_records'] = $total_records;
 
 
-                // if (empty($data)) {
-                //     errorMessage(__('order.order_not_found'), $responseData);
-                // }
+                if (empty($data)) {
+                    errorMessage(__('order.order_not_found'), $responseData);
+                }
 
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {

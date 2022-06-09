@@ -169,7 +169,7 @@ class QuotationApiController extends Controller
 
                 $i = 0;
                 foreach ($data as $row) {
-                    $data[$i]->id = getFormatid($row->id, $main_table);
+                    $data[$i]->quote_id = getFormatid($row->id, $main_table);
                     $i++;
                 }
 
@@ -177,9 +177,9 @@ class QuotationApiController extends Controller
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
 
-                // if (empty($data)) {
-                //     errorMessage(__('quotation.quotation_not_found'), $responseData);
-                // }
+                if (empty($data)) {
+                    errorMessage(__('quotation.quotation_not_found'), $responseData);
+                }
 
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
