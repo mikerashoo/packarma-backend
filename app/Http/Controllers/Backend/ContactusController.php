@@ -58,18 +58,18 @@ class ContactusController extends Controller
                     return $event->contact_no;
                 })
                     ->editColumn('action', function ($event) {
-                    $category_edit = checkPermission('category_edit');
-                    $category_status = checkPermission('category_status');
+                    $contact_us_edit = checkPermission('contact_us_edit');
+                    $contact_us_status = checkPermission('contact_us_status');
                     $actions = '';
-                    if ($category_edit) {
-                        $actions .= ' <a href="newsCategory_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                    if ($contact_us_edit) {
+                        $actions .= ' <a href="contact_us_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                     }
-                    if ($category_status) {
+                    if ($contact_us_status) {
                         if ($event->status == '1') {
-                            $actions .= ' <input type="checkbox" data-url=publishnewsCategory" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                            $actions .= ' <input type="checkbox" data-url=publishContactUs" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
                         }
                         else {
-                            $actions .= ' <input type="checkbox" data-url="publishnewsCategory" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                            $actions .= ' <input type="checkbox" data-url="publishContactUs" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
                         }
                     }
                     return $actions;

@@ -38,7 +38,7 @@ class FeedbackApiController extends Controller
                 }
                 $feedbackData = Review::create($request->all());
                 \Log::info("Feedback Submitted Successfully");
-                successMessage(__('feedback.feedback_send_successfully'), $feedbackData->toArray());
+                successMessage(__('feedback.feedback_sent_successfully'), $feedbackData->toArray());
              }
             else
             {

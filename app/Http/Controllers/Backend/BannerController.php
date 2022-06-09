@@ -29,7 +29,7 @@ class BannerController extends Controller
         $data['add_banner'] = checkPermission('add_banner');
         $data['banner_edit'] = checkPermission('banner_edit');
         $data['banner_status'] = checkPermission('banner_status');
-        $data['add_view'] = checkPermission('add_view');
+        $data['banner_view'] = checkPermission('banner_view');
         return view('backend/banners/index', ["data" => $data]);
     }
 

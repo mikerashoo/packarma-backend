@@ -30,11 +30,11 @@ class UserController extends Controller
     public function indexUserList($id = "")
     {
         $data['data'] = User::all();
-        $data['user_list_add'] = checkPermission('user_list_add');
-        $data['user_list_view'] = checkPermission('user_list_view');
-        $data['user_list_edit'] = checkPermission('user_list_edit');
-        $data['user_list_status'] = checkPermission('user_list_status');
-        $data['user_list_add_address'] = checkPermission('user_list_add_address');
+        $data['user_add'] = checkPermission('user_add');
+        $data['user_view'] = checkPermission('user_view');
+        $data['user_edit'] = checkPermission('user_edit');
+        $data['user_status'] = checkPermission('user_status');
+        $data['user_add_address'] = checkPermission('user_add_address');
         return view('backend/customer_section/user_list/index', ["data" => $data]);
     }
 
@@ -76,18 +76,18 @@ class UserController extends Controller
                     //     return '+' . $event->whatsapp_country->phone_code . ' ' . $event->whatsapp_no;
                     // })
                     ->editColumn('action', function ($event) {
-                    $user_list_view = checkPermission('user_list_view');
-                    $user_list_edit = checkPermission('user_list_edit');
-                    $user_list_status = checkPermission('user_list_status');
-                    $user_list_add_address = checkPermission('user_list_add_address');
+                    $user_view = checkPermission('user_list_view');
+                    $user_edit = checkPermission('user_list_edit');
+                    $user_status = checkPermission('user_list_status');
+                    $user_add_address = checkPermission('user_list_add_address');
                     $actions = '<span style="white-space:nowrap;">';
-                    if ($user_list_view) {
+                    if ($user_view) {
                         $actions .= '<a href="user_list_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                     }
-                    if ($user_list_edit) {
+                    if ($user_edit) {
                         $actions .= ' <a href="user_list_edit/' . $event->id.  '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                     }
-                    if ($user_list_status) {
+                    if ($user_status) {
                         if ($event->status == '1') {
                             $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked data-url="publishUserList">';
                         }
@@ -95,7 +95,7 @@ class UserController extends Controller
                             $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" data-url="publishUserList">';
                         }
                     }
-                    if ($user_list_add_address) {
+                    if ($user_add_address) {
                         $actions .= ' <a href="user_address_list?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="User Address"><i class="fa ft-plus-square"></i></a>';
                     }
                     $actions .= '</span>';
@@ -308,8 +308,8 @@ class UserController extends Controller
     public function indexApprovalList()
     {
         $data['data'] = User::all();
-        $data['user_approval_list_view'] = checkPermission('user_approval_list_view');
-        $data['user_approval_list_update'] = checkPermission('user_approval_list_update');
+        $data['user_approval_view'] = checkPermission('user_approval_view');
+        $data['user_approval_update'] = checkPermission('user_approval_update');
         return view('backend/customer_section/user_approval_list/index',["data"=>$data]);
     }
 
@@ -364,13 +364,13 @@ class UserController extends Controller
                         return date('d-m-Y H:i A', strtotime($event->created_at));
                     })
                     ->editColumn('action', function ($event) {
-                        $user_approval_list_view = checkPermission('user_approval_list_view');
-                        $user_approval_list_update = checkPermission('user_approval_list_update');
+                        $user_approval_view = checkPermission('user_approval_view');
+                        $user_approval_update = checkPermission('user_approval_update');
                         $actions = '<span style="white-space:nowrap;">';
-                        if ($user_approval_list_view) {
+                        if ($user_approval_view) {
                             $actions .= '<a href="user_approval_list_view/' . $event->id . '" class="btn btn-primary btn-sm modal_src_data" data-size="large" data-title="View User Details" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if ($user_approval_list_update) {
+                        if ($user_approval_update) {
                             $actions .= ' <a href="user_approval_list_update/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update Approval"><i class="fa fa-edit"></i></a>';
                         }
                         $actions .= '</span>';

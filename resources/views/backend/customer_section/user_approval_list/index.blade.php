@@ -44,7 +44,7 @@
                                                         <th id="phone" data-orderable="false" class="col-md-2" data-searchable="false">Phone</th>
                                                         <th id="approval_status" data-orderable="false" data-searchable="false">Approval Status</th>
                                                         <th id="created_at" data-orderable="false" data-searchable="false">Datetime</th>
-                                                        @if ($data['user_approval_list_view'] || $data['user_approval_list_update'] )
+                                                        @if ($data['user_approval_view'] || $data['user_approval_update'] )
                                                             <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                         @endif
                                                     </tr>
