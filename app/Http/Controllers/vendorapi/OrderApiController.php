@@ -157,9 +157,9 @@ class OrderApiController extends Controller
                 }
 
 
-                if (empty($orderData->first())) {
-                    errorMessage(__('order.order_not_found'), $msg_data);
-                }
+                // if (empty($orderData->first())) {
+                //     errorMessage(__('order.order_not_found'), $msg_data);
+                // }
 
                 if ($request->id) {
                     $data = $data->where($main_table . '' . '.id', $request->id);
@@ -173,9 +173,7 @@ class OrderApiController extends Controller
 
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
 
-                if (empty($data)) {
-                    errorMessage(__('order.order_not_found'), $msg_data);
-                }
+
                 $i = 0;
                 foreach ($data as $row) {
                     $data[$i]->id = getFormatid($row->id, $main_table);
@@ -187,6 +185,12 @@ class OrderApiController extends Controller
 
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
+
+
+                // if (empty($data)) {
+                //     errorMessage(__('order.order_not_found'), $responseData);
+                // }
+
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
