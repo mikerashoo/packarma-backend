@@ -113,7 +113,7 @@ class AdminController extends Controller
         $data['role_permissions'] = $permissions;
         $permissionArr = Permission::where([['to_be_considered', 'Yes']])->get()->toArray();
         $formatedPermissions = array();
-        $permisstion_type = array('List', 'Add', 'Edit', 'View', 'Status', 'Delete');
+        $permisstion_type = array('List', 'Add', 'Edit', 'View', 'Status', 'Delete','Map To Vendor','Material Map','Delivery Status Update','Customer Payment Update','Vendor Payment Update');
         foreach ($permissionArr as $key => $value) {
             if ($value['parent_status'] == 'parent') {
                 if (!isset($formatedPermissions[$value['id']])) {
@@ -173,9 +173,9 @@ class AdminController extends Controller
         $roles = Role::find($id);
         $roles->permission = $permissions;
         $roles->save();
-        successMessage('permission_updated_successfully', $msg_data);
+        successMessage('Permission Updated Successfully', $msg_data);
     }
-
+    
 
     /**
      *   created by : Sagar Thokal

@@ -53,6 +53,11 @@ class Order extends Model
         'vendor_pending_payment',
         'vendor_payment_status',
         'order_delivery_status',
+        'order_details',
+        'product_details',
+        'shipping_details',
+        'billing_details',
+        'created_by'
     ];
 
     protected $hidden = [

@@ -230,7 +230,6 @@ if (!function_exists('customerEnquiryQuoteType')) {
             'accept_cust' => 'Accept By Customer',
             'closed' => 'Closed',
             'auto_reject' => 'Auto Reject'
-
         );
         if (!empty($displayValue)) {
             $returnArray = $returnArray[$displayValue];
@@ -305,7 +304,8 @@ if (!function_exists('deliveryStatus')) {
             'pending' => 'Pending',
             'processing' => 'Processing',
             'out_for_delivery' => 'Out For Delivery',
-            'delivered' => 'Delivered'
+            'delivered' => 'Delivered',
+            'cancelled' => 'Cancelled'
         );
         if (!empty($displayValue)) {
             $returnArray = $returnArray[$displayValue];

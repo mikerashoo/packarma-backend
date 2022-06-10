@@ -19,6 +19,7 @@ class ReviewController extends Controller
     public function index() 
     {
         $data['review_edit'] = checkPermission('review_edit');
+        $data['review_view'] = checkPermission('review_view');
         $data['review_status'] = checkPermission('review_status');      
         return view('backend/review/index',["data"=>$data]); 
     }

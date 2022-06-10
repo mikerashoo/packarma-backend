@@ -16,7 +16,7 @@
                                             </div>
                                             <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                                 <button class="btn btn-sm btn-outline-danger px-3 py-1 mr-2" id="listing-filter-toggle"><i class="fa fa-filter"></i>Filter</button>
-                                                {{-- @if ($data['user_list_add'])
+                                                {{-- @if ($data['user_add'])
                                                     <a href="user_list_add" class="btn btn-sm btn-outline-primary px-3 py-1 src_data"><i class="fa fa-plus"></i> Add User</a>
                                                 @endif --}}
                                             </div>
@@ -48,7 +48,7 @@
                                                         <th id="phone" data-orderable="false" data-searchable="false">Phone</th>
                                                         {{-- <th id="whatsapp" data-orderable="false" data-searchable="false">Whatsapp</th> --}}
                                                         <th id="created_at" data-orderable="false" data-searchable="false">DateTime</th>
-                                                        @if($data['user_list_status'] || $data['user_list_edit'] || $data['user_list_view'] )
+                                                        @if($data['user_status'] || $data['user_edit'] || $data['user_view'] ||$data['user_add_address'])
                                                             <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                         @endif
                                                     </tr>
