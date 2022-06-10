@@ -78,25 +78,25 @@
                                                                         <div class="col-12 form-group">
                                                                             <label for="vendor_system_email">System E-mail</label>
                                                                             <div class="controls">
-                                                                                <input type="email" id="vendor_system_email" name="vendor_system_email" class="form-control" placeholder="E-mail" value="{{$data['vendor_system_email']}}" required>
+                                                                                <input type="email" id="vendor_system_email" name="vendor_system_email" class="form-control" placeholder="E-mail" value="{{$data['vendor_system_email'] ?? ''}}" required>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 form-group">
                                                                             <label for="vendor_meta_title">Meta Title</label>
                                                                             <div class="controls">
-                                                                                <input type="text" id="vendor_meta_title" name="vendor_meta_title"  class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_meta_title']}}">
+                                                                                <input type="text" id="vendor_meta_title" name="vendor_meta_title"  class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_meta_title'] ?? ''}}">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 form-group">
                                                                             <label for="vendor_meta_keywords">Meta Keywords</label>
                                                                             <div class="controls">
-                                                                                <input type="text" id="vendor_meta_keywords" name="vendor_meta_keywords" class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_meta_keywords']}}">
+                                                                                <input type="text" id="vendor_meta_keywords" name="vendor_meta_keywords" class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_meta_keywords'] ?? ''}}">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 form-group">
                                                                             <label for="vendor_meta_description">Meta Description</label>
                                                                             <div class="controls">
-                                                                                <input type="text" id="vendor_meta_description" name="vendor_meta_description" class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_meta_description']}}">
+                                                                                <input type="text" id="vendor_meta_description" name="vendor_meta_description" class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_meta_description'] ?? ''}}">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
@@ -115,7 +115,7 @@
                                                                     <div class="row">
                                                                         <div class="col-12 form-group">
                                                                             <label>About Us</label>
-                                                                            <textarea class="ckeditor form-control" id="vendor_about_us_editor" name="vendor_about_us"> {{$data['vendor_about_us']}}</textarea>
+                                                                            <textarea class="ckeditor form-control" id="vendor_about_us_editor" name="vendor_about_us"> {{$data['vendor_about_us'] ?? ''}}</textarea>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
                                                                             <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitEditor('vendorAboutusForm')">Save Changes</button>
@@ -131,7 +131,7 @@
                                                                     <div class="row">
                                                                         <div class="col-12 form-group">
                                                                             <label>Terms and Condition</label>
-                                                                            <textarea class="ckeditor form-control" id="vendor_terms_condition_editor" name="vendor_terms_condition">{{$data['vendor_terms_condition']}}</textarea>
+                                                                            <textarea class="ckeditor form-control" id="vendor_terms_condition_editor" name="vendor_terms_condition">{{$data['vendor_terms_condition'] ?? ''}}</textarea>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
                                                                             <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitEditor('vendorTncForm')">Save Changes</button>
@@ -147,7 +147,7 @@
                                                                     <div class="row">
                                                                         <div class="col-12 form-group">
                                                                             <label>Privacy Policy</label>
-                                                                            <textarea class="ckeditor form-control" id="vendor_privacy_policy_editor" name="vendor_privacy_policy">{{$data['vendor_privacy_policy']}}</textarea>
+                                                                            <textarea class="ckeditor form-control" id="vendor_privacy_policy_editor" name="vendor_privacy_policy">{{$data['vendor_privacy_policy'] ?? ''}}</textarea>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
                                                                             <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitEditor('vendorPrivacyForm')">Save Changes</button>
@@ -163,15 +163,15 @@
                                                                 <div class="row">
                                                                     <h6 class="col-12 text-bold-400 pl-0">Notification</h6>
                                                                     <div class="col-12 mb-2">
-                                                                            <input id="vendor_switchery1" type="checkbox" data-url="publishVendorEmailNotification"  data-id="trigger_vendor_email_notification" class="js-switch switchery" <?php echo ($data['trigger_vendor_email_notification'] == 1) ? 'checked' : ''; ?> >
+                                                                            <input id="vendor_switchery1" type="checkbox" data-url="publishVendorEmailNotification"  data-id="trigger_vendor_email_notification" class="js-switch switchery" <?php echo ( isset($data['trigger_vendor_email_notification']) && $data['trigger_vendor_email_notification'] == 1) ? 'checked' : ''; ?> >
                                                                             <label for="vendor_switchery1">Trigger Email Notification</label>
                                                                     </div>
                                                                     <div class="col-12 mb-2">
-                                                                            <input id="vendor_switchery2" type="checkbox" data-url="publishVendorWhatsappNotification"  data-id="trigger_vendor_whatsapp_notification" class="js-switch switchery" <?php echo ($data['trigger_vendor_whatsapp_notification'] == 1) ? 'checked' : ''; ?>>
+                                                                            <input id="vendor_switchery2" type="checkbox" data-url="publishVendorWhatsappNotification"  data-id="trigger_vendor_whatsapp_notification" class="js-switch switchery" <?php echo (isset($data['trigger_vendor_whatsapp_notification']) && $data['trigger_vendor_whatsapp_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="vendor_switchery2">Trigger Whatsapp Notification</label>
                                                                     </div>
                                                                     <div class="col-12 mb-2">
-                                                                            <input id="vendor_switchery3" type="checkbox" data-url="publishVendorSMSNotification"  data-id="trigger_vendor_sms_notification" class="js-switch switchery" <?php echo ($data['trigger_vendor_sms_notification'] == 1) ? 'checked' : ''; ?>>
+                                                                            <input id="vendor_switchery3" type="checkbox" data-url="publishVendorSMSNotification"  data-id="trigger_vendor_sms_notification" class="js-switch switchery" <?php echo (isset($data['trigger_vendor_sms_notification']) && $data['trigger_vendor_sms_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="vendor_switchery3">Trigger SMS Notification</label>
                                                                     </div>
                                                                 </div>
@@ -184,13 +184,13 @@
                                                                         <div class="col-12 form-group">
                                                                             <label for="vendor_android_url">Android</label> 
                                                                             <div class="controls">
-                                                                                <input type="text" id="vendor_android_url" name="vendor_android_url" class="form-control" placeholder="" value="{{$data['vendor_android_url']}}" required>
+                                                                                <input type="text" id="vendor_android_url" name="vendor_android_url" class="form-control" placeholder="" value="{{$data['vendor_android_url'] ?? ''}}" required>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 form-group">
                                                                             <label for="vendor_ios_url">IOS</label>
                                                                             <div class="controls">
-                                                                                <input type="text" id="vendor_ios_url" name="vendor_ios_url"  class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_ios_url']}}">
+                                                                                <input type="text" id="vendor_ios_url" name="vendor_ios_url"  class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_ios_url'] ?? ''}}">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
@@ -209,13 +209,13 @@
                                                                         <div class="col-12 form-group">
                                                                             <label for="vendor_android_version">Android (Format-> ["va1","val2","val3"])</label>
                                                                             <div class="controls">
-                                                                                <input type="text" id="vendor_android_version" name="vendor_android_version" class="form-control" placeholder="" value="{{$data['vendor_android_version']}}" required>
+                                                                                <input type="text" id="vendor_android_version" name="vendor_android_version" class="form-control" placeholder="" value="{{$data['vendor_android_version'] ?? ''}}" required>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 form-group">
                                                                             <label for="vendor_ios_version">IOS (Format-> ["va1","val2","val3"])</label>
                                                                             <div class="controls">
-                                                                                <input type="text" id="vendor_ios_version" name="vendor_ios_version"  class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_ios_version']}}">
+                                                                                <input type="text" id="vendor_ios_version" name="vendor_ios_version"  class="form-control" placeholder="" aria-invalid="false" value="{{$data['vendor_ios_version'] ?? ''}}">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">

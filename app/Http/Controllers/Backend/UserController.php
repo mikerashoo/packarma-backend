@@ -49,7 +49,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = User::with('phone_country','whatsapp_country','currency')->Where('approval_status', '=', 'accepted');
+                $query = User::with('phone_country','whatsapp_country','currency')->Where('approval_status', '=', 'accepted')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
@@ -324,7 +324,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = User::with('phone_country','whatsapp_country','currency')->where('approval_status', '!=', 'accepted');
+                $query = User::with('phone_country','whatsapp_country','currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at','desc'); 
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {

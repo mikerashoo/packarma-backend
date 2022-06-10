@@ -75,7 +75,7 @@ class ForgotPasswordApiController extends Controller
     private function validateForgotPassword(Request $request)
     {
         return \Validator::make($request->all(), [
-            'phone' => 'required|numeric',
+            'phone' => 'required|numeric|digits:10',
             'workflow' => 'required',
             'otp_code' => 'required',
             'new_password' => 'required|string|min:8',
