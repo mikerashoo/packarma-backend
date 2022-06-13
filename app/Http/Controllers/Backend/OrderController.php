@@ -25,6 +25,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use PDF;
+use Elibyy\TCPDF\Facades\TCPDF;
 use NumberToWords\NumberToWords;
 
 class OrderController extends Controller
@@ -355,150 +356,154 @@ class OrderController extends Controller
      */
     public function orderPdf($id)
     {
+        try {
+            \Log::info("Order Invoice Generation Starts " . Carbon::now()->format('H:i:s:u'));
+            $main_table = 'orders';
 
-        $main_table = 'orders';
-
-        $data = DB::table('orders')->select(
-            'orders.id',
-            'orders.product_weight',
-            'orders.vendor_amount',
-            'orders.vendor_pending_payment',
-            'orders.vendor_payment_status',
-            'orders.order_delivery_status',
-            'orders.product_quantity',
-            'orders.mrp',
-            'orders.gst_type',
-            'orders.gst_percentage',
-            'orders.freight_amount',
-            'orders.gst_amount',
-            'orders.grand_total',
-            'orders.shipping_details',
-            'orders.billing_details',
-            'orders.shelf_life',
-            'orders.delivery_datetime',
-            'orders.created_at',
-            'vendors.vendor_name',
-            'vendors.vendor_company_name',
-            'vendors.vendor_email',
-            'vendors.gstin',
-            'vendors.vendor_address',
-            'vendors.phone',
-            'categories.category_name',
-            'sub_categories.sub_category_name',
-            'products.product_name',
-            'products.product_description',
-            'measurement_units.unit_name',
-            'measurement_units.unit_symbol',
-            'countries.country_name',
-            'countries.phone_code',
-            'currencies.currency_name',
-            'currencies.currency_symbol',
-            'storage_conditions.storage_condition_title',
-            'packaging_machines.packaging_machine_name',
-            'product_forms.product_form_name',
-            'packing_types.packing_name',
-            'packaging_treatments.packaging_treatment_name',
-            'recommendation_engines.engine_name',
-            'recommendation_engines.structure_type',
-            'recommendation_engines.min_shelf_life',
-            'recommendation_engines.max_shelf_life',
-            'packaging_materials.packaging_material_name',
-            'packaging_materials.material_description',
-            'customer_enquiries.address',
-            'states.state_name',
-            'cities.city_name',
-        )
-            ->leftjoin('categories', 'orders.category_id', '=', 'categories.id')
-            ->leftjoin('vendors', 'orders.vendor_id', '=', 'vendors.id')
-            ->leftjoin('sub_categories', 'orders.sub_category_id', '=', 'sub_categories.id')
-            ->leftjoin('products', 'orders.product_id', '=', 'products.id')
-            ->leftjoin('measurement_units', 'orders.measurement_unit_id', '=', 'measurement_units.id')
-            ->leftjoin('countries', 'orders.country_id', '=', 'countries.id')
-            ->leftjoin('currencies', 'orders.currency_id', '=', 'currencies.id')
-            ->leftjoin('storage_conditions', 'orders.storage_condition_id', '=', 'storage_conditions.id')
-            ->leftjoin('packaging_machines', 'orders.packaging_machine_id', '=', 'packaging_machines.id')
-            ->leftjoin('product_forms', 'orders.product_form_id', '=', 'product_forms.id')
-            ->leftjoin('packing_types', 'orders.packing_type_id', '=', 'packing_types.id')
-            ->leftjoin('packaging_treatments', 'orders.packaging_treatment_id', '=', 'packaging_treatments.id')
-            ->leftjoin('recommendation_engines', 'orders.recommendation_engine_id', '=', 'recommendation_engines.id')
-            ->leftjoin('packaging_materials', 'orders.packaging_material_id', '=', 'packaging_materials.id')
-            ->leftjoin('customer_enquiries', 'orders.customer_enquiry_id', '=', 'customer_enquiries.id')
-            ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
-            ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
-            ->where([[$main_table . '' . '.id', $id], [$main_table . '' . '.deleted_at', NULL]])->first();
+            $data = DB::table('orders')->select(
+                'orders.id',
+                'orders.product_weight',
+                'orders.vendor_amount',
+                'orders.vendor_pending_payment',
+                'orders.vendor_payment_status',
+                'orders.order_delivery_status',
+                'orders.product_quantity',
+                'orders.mrp',
+                'orders.gst_type',
+                'orders.gst_percentage',
+                'orders.freight_amount',
+                'orders.gst_amount',
+                'orders.grand_total',
+                'orders.shipping_details',
+                'orders.billing_details',
+                'orders.shelf_life',
+                'orders.delivery_datetime',
+                'orders.created_at',
+                'vendors.vendor_name',
+                'vendors.vendor_company_name',
+                'vendors.vendor_email',
+                'vendors.gstin',
+                'vendors.vendor_address',
+                'vendors.phone',
+                'categories.category_name',
+                'sub_categories.sub_category_name',
+                'products.product_name',
+                'products.product_description',
+                'measurement_units.unit_name',
+                'measurement_units.unit_symbol',
+                'countries.country_name',
+                'countries.phone_code',
+                'currencies.currency_name',
+                'currencies.currency_symbol',
+                'storage_conditions.storage_condition_title',
+                'packaging_machines.packaging_machine_name',
+                'product_forms.product_form_name',
+                'packing_types.packing_name',
+                'packaging_treatments.packaging_treatment_name',
+                'recommendation_engines.engine_name',
+                'recommendation_engines.structure_type',
+                'recommendation_engines.min_shelf_life',
+                'recommendation_engines.max_shelf_life',
+                'packaging_materials.packaging_material_name',
+                'packaging_materials.material_description',
+                'customer_enquiries.address',
+                'states.state_name',
+                'cities.city_name',
+            )
+                ->leftjoin('categories', 'orders.category_id', '=', 'categories.id')
+                ->leftjoin('vendors', 'orders.vendor_id', '=', 'vendors.id')
+                ->leftjoin('sub_categories', 'orders.sub_category_id', '=', 'sub_categories.id')
+                ->leftjoin('products', 'orders.product_id', '=', 'products.id')
+                ->leftjoin('measurement_units', 'orders.measurement_unit_id', '=', 'measurement_units.id')
+                ->leftjoin('countries', 'orders.country_id', '=', 'countries.id')
+                ->leftjoin('currencies', 'orders.currency_id', '=', 'currencies.id')
+                ->leftjoin('storage_conditions', 'orders.storage_condition_id', '=', 'storage_conditions.id')
+                ->leftjoin('packaging_machines', 'orders.packaging_machine_id', '=', 'packaging_machines.id')
+                ->leftjoin('product_forms', 'orders.product_form_id', '=', 'product_forms.id')
+                ->leftjoin('packing_types', 'orders.packing_type_id', '=', 'packing_types.id')
+                ->leftjoin('packaging_treatments', 'orders.packaging_treatment_id', '=', 'packaging_treatments.id')
+                ->leftjoin('recommendation_engines', 'orders.recommendation_engine_id', '=', 'recommendation_engines.id')
+                ->leftjoin('packaging_materials', 'orders.packaging_material_id', '=', 'packaging_materials.id')
+                ->leftjoin('customer_enquiries', 'orders.customer_enquiry_id', '=', 'customer_enquiries.id')
+                ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
+                ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
+                ->where([[$main_table . '' . '.id', $id], [$main_table . '' . '.deleted_at', NULL]])->first();
 
 
-        $invoice_date = Carbon::now()->format('d/m/Y');
-        !empty($data->created_at) ? $order_date = Carbon::parse($data->created_at)->format('d/m/Y') : $order_date = 'Order Date Not Found';
-        !empty($data->delivery_datetime) ?  $delivery_date = Carbon::parse($data->delivery_datetime)->format('d/m/Y') : $delivery_date = 'Delivery Date Not Found';
+            $invoice_date = Carbon::now()->format('d/m/Y');
+            !empty($data->created_at) ? $order_date = Carbon::parse($data->created_at)->format('d/m/Y') : $order_date = 'Order Date Not Found';
+            !empty($data->delivery_datetime) ?  $delivery_date = Carbon::parse($data->delivery_datetime)->format('d/m/Y') : $delivery_date = 'Delivery Date Not Found';
 
-        $shipping_data = json_decode($data->shipping_details);
-        $billing_data = json_decode($data->billing_details);
+            $shipping_data = json_decode($data->shipping_details);
+            $billing_data = json_decode($data->billing_details);
 
-        if (!empty($data->gst_type) &&  $data->gst_type == 'Igst') {
-            $cgst = $cgst_amount =  $sgst = $sgst_amount = $dc_cgst = $dc_cgst_amount = $dc_sgst = $dc_sgst_amount =  0;
-            $igst = $dc_igst = $data->gst_percentage ?? 0;
-            $igst_amount = $data->gst_amount ?? 0;
+            if (!empty($data->gst_type) &&  $data->gst_type == 'Igst') {
+                $cgst = $cgst_amount =  $sgst = $sgst_amount = $dc_cgst = $dc_cgst_amount = $dc_sgst = $dc_sgst_amount =  0;
+                $igst = $dc_igst = $data->gst_percentage ?? 0;
+                $igst_amount = $data->gst_amount ?? 0;
 
-            //reverse calculation
-            $dc_amount = $data->freight_amount ?? 0;
-            $dc_tax_val = round($dc_amount / (1 + ($dc_igst / 100)), 2);
-            $dc_igst_amount = $dc_amount - $dc_tax_val;
-        } else {
+                //reverse calculation
+                $dc_amount = $data->freight_amount ?? 0;
+                $dc_tax_val = round($dc_amount / (1 + ($dc_igst / 100)), 2);
+                $dc_igst_amount = $dc_amount - $dc_tax_val;
+            } else {
 
-            $cgst = $sgst = $dc_cgst = $dc_sgst = $data->gst_percentage ? ($data->gst_percentage / 2) : 0;
-            $cgst_amount = $sgst_amount = $data->gst_amount ? ($data->gst_amount / 2) : 0;
+                $cgst = $sgst = $dc_cgst = $dc_sgst = $data->gst_percentage ? ($data->gst_percentage / 2) : 0;
+                $cgst_amount = $sgst_amount = $data->gst_amount ? ($data->gst_amount / 2) : 0;
 
-            $dc_amount = $data->freight_amount ?? 0;
-            $dc_tax_val = round($dc_amount / (1 + ((2 * $dc_cgst) / 100)), 2);
-            $dc_tax_amount = $dc_amount - $dc_tax_val;
-            $dc_cgst_amount = $dc_sgst_amount  = $dc_tax_amount / 2;
+                $dc_amount = $data->freight_amount ?? 0;
+                $dc_tax_val = round($dc_amount / (1 + ((2 * $dc_cgst) / 100)), 2);
+                $dc_tax_amount = $dc_amount - $dc_tax_val;
+                $dc_cgst_amount = $dc_sgst_amount  = $dc_tax_amount / 2;
 
-            $igst =  $igst_amount = $dc_igst = $dc_igst_amount = 0;
+                $igst =  $igst_amount = $dc_igst = $dc_igst_amount = 0;
+            }
+
+            $numberToWords = new NumberToWords();
+            $grand_total = ($data->grand_total ?? 0) + ($dc_amount ?? 0);
+            $numberTransformer = $numberToWords->getNumberTransformer('en');
+            $in_words = $numberTransformer->toWords($grand_total);
+
+
+            $result = [
+                'data' => $data,
+                'invoice_date' => $invoice_date,
+                'order_date' => $order_date,
+                'delivery_date' => $delivery_date,
+                'shipping_data' => $shipping_data,
+                'billing_data' => $billing_data,
+                'cgst' => $cgst,
+                'dc_cgst' => $dc_cgst,
+                'cgst_amount' => $cgst_amount,
+                'dc_cgst_amount' => $dc_cgst_amount,
+                'sgst' => $sgst,
+                'dc_sgst' => $dc_sgst,
+                'sgst_amount' => $sgst_amount,
+                'dc_sgst_amount' => $dc_sgst_amount,
+                'igst' => $igst,
+                'dc_igst' => $dc_igst,
+                'igst_amount' => $igst_amount,
+                'dc_amount' => $dc_amount,
+                'dc_tax_val' => $dc_tax_val,
+                'dc_igst_amount' => $dc_igst_amount,
+                'in_words' => $in_words,
+                'no_image' => getFile('mypcot.jpg', 'default'),
+            ];
+            // $result['data'] = $data;
+            // echo '<pre>';
+            // print_r($billing_data);
+            // echo '</pre>';
+            // die;
+            $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $html =  view('backend/order/order_list/order_pdf', $result);
+
+            $pdf->SetTitle('Order Invoice');
+            $pdf->AddPage();
+            $pdf->writeHTML($html, true, false, true, false, '');
+            $pdf->Output('Order Invoice.pdf', 'I');
+        } catch (\Exception $e) {
+            \Log::error("Order Invoice Generation Failed " . $e->getMessage());
+            return redirect()->back()->withErrors(array("msg" => "Something went wrong"));
         }
-
-        $numberToWords = new NumberToWords();
-        $grand_total = ($data->grand_total ?? 0) + ($dc_amount ?? 0);
-        $numberTransformer = $numberToWords->getNumberTransformer('en');
-        $in_words = $numberTransformer->toWords($grand_total);
-
-
-        $result = [
-            'data' => $data,
-            'invoice_date' => $invoice_date,
-            'order_date' => $order_date,
-            'delivery_date' => $delivery_date,
-            'shipping_data' => $shipping_data,
-            'billing_data' => $billing_data,
-            'cgst' => $cgst,
-            'dc_cgst' => $dc_cgst,
-            'cgst_amount' => $cgst_amount,
-            'dc_cgst_amount' => $dc_cgst_amount,
-            'sgst' => $sgst,
-            'dc_sgst' => $dc_sgst,
-            'sgst_amount' => $sgst_amount,
-            'dc_sgst_amount' => $dc_sgst_amount,
-            'igst' => $igst,
-            'dc_igst' => $dc_igst,
-            'igst_amount' => $igst_amount,
-            'dc_amount' => $dc_amount,
-            'dc_tax_val' => $dc_tax_val,
-            'dc_igst_amount' => $dc_igst_amount,
-            'in_words' => $in_words,
-            'no_image' => getFile('mypcot.jpg', 'default'),
-        ];
-        // $result['data'] = $data;
-        // echo '<pre>';
-        // print_r($billing_data);
-        // echo '</pre>';
-        // die;
-        $html =  view('backend/order/order_list/order_pdf', $result);
-
-
-        PDF::SetTitle('Order Invoice');
-        PDF::AddPage();
-        PDF::writeHTML($html, true, false, true, false, '');
-
-        PDF::Output('Order Invoice.pdf', 'I');
     }
 }
