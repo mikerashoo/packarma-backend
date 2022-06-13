@@ -325,6 +325,7 @@ Route::group(['middleware' => ['customAuth']], function () {
 	Route::get('/order_payment_update/{id}', 'OrderController@updateOrderPayment');
 	Route::post('/saveOrderPaymentStatus', 'OrderController@updatePaymentStatusData');
 	Route::get('/order_view/{id}', 'OrderController@viewOrder');
+	Route::get('/order_pdf/{id}', 'OrderController@orderPdf');
 
 	//order payment
 	Route::get('/order_payment_list', 'OrderPaymentController@index');
