@@ -204,9 +204,9 @@ class SubscriptionApiController extends Controller
                     ->where([['users.id', $user_id],['user_subscription_payments.payment_status','paid']]);
 
                 $data = $data->get()->toArray();
-                if(empty($data)) {
-                    errorMessage(__('subscription.subscription_not_found'), $msg_data);
-                }
+                // if(empty($data)) {
+                //     errorMessage(__('subscription.subscription_not_found'), $msg_data);
+                // }
                 
                 //subscription listing 
                 $subscription_list = Subscription::select('id','subscription_type','amount');

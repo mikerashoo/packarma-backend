@@ -22,8 +22,8 @@
                    
                                     <div class="col-12 users-module">
                                         <div class="table-responsive">
-                                            <table class="table mb-0 mt-3">
-                                                <thead>
+                                            <table class="table mb-0 mt-3 " style="height:100px;">
+                                                <thead style="position: sticky; position: -webkit-sticky; top: 0;  background-color: #d6d6d6; color: #000000;">
                                                     <tr>
                                                         <th>Permissions</th>
                                                         @foreach($data['permission_types'] as $type)
@@ -66,6 +66,7 @@
     </div>
 </section>
 <script>
+    
     var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
     elems.forEach(function(html) {
         var switchery = new Switchery(html, { color: '#11c15b', jackColor: '#fff', size: 'small', secondaryColor: '#ff5251'});
