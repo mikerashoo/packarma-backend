@@ -118,11 +118,10 @@ class PaymentApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
 
                 $i = 0;
-                // foreach ($data as $row) {
-                //     $data[$i]['product_image'] = getFile($row['product_image'], 'product');
-                //     $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
-                //     $i++;
-                // }
+                foreach ($data as $row) {
+                    $data[$i]->odr_id = getFormatid($row->id, $main_table);
+                    $i++;
+                }
 
 
                 $responseData['result'] = $data;

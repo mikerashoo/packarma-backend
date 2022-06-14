@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use PDF;
 use Elibyy\TCPDF\Facades\TCPDF;
-use NumberToWords\NumberToWords;
 
 class OrderController extends Controller
 {
@@ -459,10 +458,8 @@ class OrderController extends Controller
                 $igst =  $igst_amount = $dc_igst = $dc_igst_amount = 0;
             }
 
-            $numberToWords = new NumberToWords();
             $grand_total = ($data->grand_total ?? 0) + ($dc_amount ?? 0);
-            $numberTransformer = $numberToWords->getNumberTransformer('en');
-            $in_words = $numberTransformer->toWords($grand_total);
+            $in_words = convertNumberToWord($grand_total);
 
 
             $result = [

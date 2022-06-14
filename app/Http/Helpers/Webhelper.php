@@ -587,6 +587,13 @@ if (!function_exists('gstType')) {
     }
 }
 
+/**
+ *   created by : Maaz Ansari
+ *   Created On : 14-June-2022
+ *   Uses :  to get pin code details   
+ */
+
+
 if (!function_exists('getPincodeDetails')) {
     function getPincodeDetails($pincode)
     {
@@ -602,26 +609,76 @@ if (!function_exists('getPincodeDetails')) {
         $msg_data['pin_code'] = $data[0]['PostOffice'][0]['Pincode'];
         return $msg_data;
     }
+}
 
-    if (!function_exists('getFormatid')) {
-        function getFormatid($id, $from_table = '')
-        {
-            switch ($from_table) {
-                case 'orders':
-                    $prefix = '#PAC';
-                    break;
+if (!function_exists('getFormatid')) {
+    function getFormatid($id, $from_table = '')
+    {
+        switch ($from_table) {
+            case 'orders':
+                $prefix = '#PAC';
+                break;
 
-                case 'vendor_quotations':
-                    $prefix = '#PEQ';
-                    break;
+            case 'vendor_quotations':
+                $prefix = '#PEQ';
+                break;
 
-                default:
-                    $prefix = '#MYP';
-                    break;
-            }
-            $formatId = str_pad($id, 6, 0, STR_PAD_LEFT);
-            $formatId = $prefix . $formatId;
-            return $formatId;
+            default:
+                $prefix = '#MYP';
+                break;
         }
+        $formatId = str_pad($id, 6, 0, STR_PAD_LEFT);
+        $formatId = $prefix . $formatId;
+        return $formatId;
+    }
+}
+
+
+if (!function_exists('convertNumberToWord')) {
+    function convertNumberToWord($num = false)
+    {
+        $num = str_replace(array(',', ' '), '', trim($num));
+        if (!$num) {
+            return false;
+        }
+        $num = (int) $num;
+        $words = array();
+        $list1 = array(
+            '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven',
+            'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
+        );
+        $list2 = array('', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'hundred');
+        $list3 = array(
+            '', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion',
+            'octillion', 'nonillion', 'decillion', 'undecillion', 'duodecillion', 'tredecillion', 'quattuordecillion',
+            'quindecillion', 'sexdecillion', 'septendecillion', 'octodecillion', 'novemdecillion', 'vigintillion'
+        );
+        $num_length = strlen($num);
+        $levels = (int) (($num_length + 2) / 3);
+        $max_length = $levels * 3;
+        $num = substr('00' . $num, -$max_length);
+        $num_levels = str_split($num, 3);
+        for ($i = 0; $i < count($num_levels); $i++) {
+            $levels--;
+            $hundreds = (int) ($num_levels[$i] / 100);
+            $hundreds = ($hundreds ? ' ' . $list1[$hundreds] . ' hundred' . ' ' : '');
+            $tens = (int) ($num_levels[$i] % 100);
+            $singles = '';
+            if ($tens < 20) {
+                $tens = ($tens ? ' ' . $list1[$tens] . ' ' : '');
+            } else {
+                $tens = (int)($tens / 10);
+                $tens = ' ' . $list2[$tens] . ' ';
+                $singles = (int) ($num_levels[$i] % 10);
+                $singles = ' ' . $list1[$singles] . ' ';
+            }
+            $words[] = $hundreds . $tens . $singles . (($levels && (int) ($num_levels[$i])) ? ' ' . $list3[$levels] . ' ' : '');
+        } //end for loop
+        $commas = count($words);
+        if ($commas > 1) {
+            $commas = $commas - 1;
+        }
+
+        return ucwords(implode(' ', $words));
     }
 }

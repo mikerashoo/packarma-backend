@@ -21,9 +21,9 @@
 
                    
                                     <div class="col-12 users-module">
-                                        <div class="table-responsive">
-                                            <table class="table mb-0 mt-3 " style="height:100px;">
-                                                <thead style="position: sticky; position: -webkit-sticky; top: 0;  background-color: #d6d6d6; color: #000000;">
+                                        <div class="table-responsive" style="height:250px;">
+                                            <table class="table mb-0 mt-3">
+                                                <thead style="position: sticky; position: -webkit-sticky; top: 0;  background-color: #d6d6d6; color: #000000;  z-index: 1;">
                                                     <tr>
                                                         <th>Permissions</th>
                                                         @foreach($data['permission_types'] as $type)
