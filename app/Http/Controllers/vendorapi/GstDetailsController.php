@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class GstDetailsController extends Controller
 {
@@ -56,7 +57,16 @@ class GstDetailsController extends Controller
                     $gst_certificate->storeAs('uploads/vendor_gst_certificate', $certificate_imgname, 'public');
                     $vendor_gst_details['gst_certificate'] = $certificate_imgname;
                 }
+                if (!empty($vendorGstDetails->gst_certificate)) {
+
+                    $file_to_unlink =  getFile($vendorGstDetails->gst_certificate, 'vendor_gst_certificate', FALSE, 'unlink');
+                    if ($file_to_unlink != 'file_not_found') {
+                        unlink($file_to_unlink);
+                    }
+                }
+
                 // Store Gst Details
+
                 $vendorGstDetails->update($vendor_gst_details);
                 \Log::info("Gst Details Stored Successfully");
                 $vendorGstDetailsData = $vendorGstDetails;
@@ -161,7 +171,7 @@ class GstDetailsController extends Controller
     {
         return \Validator::make($request->all(), [
             'gstin' => 'required|string|unique:vendors,gstin,' . $id . ',id,deleted_at,NULL',
-            'gst_certificate' => 'max:' . config('global.MAX_IMAGE_SIZE'),
+            'gst_certificate' => 'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
 
         ])->errors();
     }
