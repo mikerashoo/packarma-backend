@@ -57,23 +57,15 @@
                                         </div>                                       
                                     </div>                                    
                                 </div>                                
-                                @csrf                            
+                                @csrf    
+                                <hr>                        
                                 <div class="row">                                                                    
-                                    <div class="table-responsive">
-                                        <table class="table table-stripped" id="vendorMapTbl">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width: 20%;">Vendor Name<span style="color:#ff0000">*</span></th>
-                                                    {{-- <th style="width: 18%;">Warehouse<span style="color:#ff0000">*</span></th> --}}
-                                                    <th style="width: 18%;">Vendor Price<span style="color:#ff0000">*</span></th>
-                                                    <th style="width: 18%;">Commission Rate Per Kg<span style="color:#ff0000">*</span></th>
-                                                    <th style="width: 15%;">Validity (Hrs)<span style="color:#ff0000">*</span></th>
-                                                    <th style="width: 15%;">Lead Time (Days)<span style="color:#ff0000">*</span></th>
-                                                    <th><button type="button" class="btn btn-primary btn-sm" id="addStock"><i class="fa fa-plus"></i></button></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                        </table>
+                                    <div class="table-responsive" id="vendorMapTbl">
+                                                    <button type="button" class="btn btn-primary btn-sm pull-right" id="addStock"><i class="fa fa-plus"></i></button>
+<div id="map_section">
+
+</div>
+                                        
                                     </div>                                  
                                 </div>
                                 <hr>
@@ -95,17 +87,17 @@
 </section>
 <script>
 $(document).on('click', '#addStock', function(event){
-    var trlen = $('#vendorMapTbl tbody tr').length;
+    var trlen = $('.vendorMapTblTr').length;
     if(trlen == 0)
     {
         var i = trlen;
     }
     else
     {
-        var i = parseInt($('#vendorMapTbl tbody tr:last-child').attr('data-key'))+1;
+     var i =   parseInt($('#vendorMapTbl div.vendorMapTblTr:last').attr('data-key'))+1;
     }
     <?php
-    $vendor_drop = '<option value="" style="width=20%;">Select</option>';
+    $vendor_drop = '<option value="" style="width=100%;">Select</option>';
     if(is_array($vendor[0])){
         for($i=0; $i<count($vendor); $i++){
             $vendor_drop = $vendor_drop.'<option value="'.$vendor[$i]['id'].'">'.$vendor[$i]['vendor_name'].'</option>';
@@ -113,30 +105,40 @@ $(document).on('click', '#addStock', function(event){
     }
     ?>
     var vendor_dropdown = '<?php echo $vendor_drop ?>';
-    $('#vendorMapTbl').append('<tr id="vendorMapTblTr'+i+'" data-key="'+i+'">'+
+    $('#vendorMapTbl').append('<div class="vendorMapTblTr col-md-12 row" id="vendorMapTblTr'+i+'" data-key="'+i+'">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->id; ?>" id="customer_enquiry_id'+i+'" name="customer_enquiry_id[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->product_id; ?>" id="product'+i+'" name="product[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->product_quantity; ?>" id="product_quantity'+i+'" name="product_quantity[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->user_id; ?>" id="user'+i+'" name="user[]">'+
-        '<td>'+
-            '<select class="select2" id="vendor'+i+'" value="" name="vendor[]" onchange="getVendorWarehouse(this.value,'+i+')">'+
+        '<div class="col-sm-4"><dl class="row"><label class="col-sm-12 text-left">Vendor Name<span style="color:#ff0000">*</span></label><dd class="col-sm-12">'+
+            '<select class="select2" id="vendor'+i+'" value="" name="vendor[]" style="width:100%;" onchange="getVendorWarehouse(this.value,'+i+')">'+
                 vendor_dropdown+
             '</select>'+
-        '</td'+'<br>'+
-        // '<td>'+
+        '</dd></dl></div>'+
+        //    '<div class="col-sm-4"><dl class="row"><label class="col-sm-12 text-left">Vendor Name<span style="color:#ff0000">*</span></label><dd class="col-sm-12">'+
         //     '<select class="select2" id="warehouse'+i+'" value="" name="warehouse[]" style="width:100%;">'+
         //        '<option value="">Select</option>'+
         //     '</select>'+
-        // '</td>'+
-        '<td><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="vendor_price'+i+'" name="vendor_price[]"></td>'+
-        '<td><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="commission_rate'+i+'" name="commission_rate[]"></td>'+
-        '<td><input class="form-control" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="quotation_validity'+i+'" name="quotation_validity[]"></td>'+
-        '<td><input class="form-control" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="lead_time'+i+'" name="lead_time[]"></td>'+
-        '<td><button type="button" class="btn btn-danger btn-sm" id="removeVendorMap'+i+'" onclick="remove_vendor_map_tbl_row('+i+')"><i class="fa fa-minus"></i></button></td>'+
-    '</tr>');
+        // '</dd></dl></div>'+
+        '<div class="col-sm-4"><dl class="row"><label class="col-sm-12 text-left">Vendor Price<span style="color:#ff0000">*</span></label><dd class="col-sm-12"><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="vendor_price'+i+'" name="vendor_price[]"></dd></dl></div>'+
+        '<div class="col-sm-4"><dl class="row"><label class="col-sm-12 text-left">Commission Rate Per Kg<span style="color:#ff0000">*</span></label><dd class="col-sm-12"><input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="commission_rate'+i+'" name="commission_rate[]"></dd></dl></div>'+
+        '<div class="col-sm-4"><dl class="row"><label class="col-sm-12 text-left">Validity (Hrs)<span style="color:#ff0000">*</span></label><dd class="col-sm-12"><input class="form-control" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="quotation_validity'+i+'" name="quotation_validity[]"></dd></dl></div>'+
+        '<div class="col-sm-4"><dl class="row"><label class="col-sm-12 text-left">Lead Time (Days)<span style="color:#ff0000">*</span></label><dd class="col-sm-12"><input class="form-control" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="lead_time'+i+'" name="lead_time[]"></dd></dl></div>'+
+      '<div class="col-sm-4"><dl class="row"><label class="col-sm-12 text-left">Gst Type<span style="color:#ff0000">*</span></label><dd class="col-sm-12">'+
+            '<select class="select2" id="gst_type'+i+'" value="" name="gst_type[]" style="width:100%;" onchange="taxValueToggle(this.value,'+i+')">'+
+               '<option value="">Select</option>'+
+               '<option value="not_applicable">Not Applicable</option>'+
+               '<option value="cgst+sgst">CGST+SGST</option>'+
+               '<option value="igst">IGST</option>'+
+            '</select>'+
+        '</dd></dl></div>'+
+        '<div class="col-sm-4"><dl class="row"><label class="col-sm-12 text-left">Gst Percentage<span style="color:#ff0000">*</span></label><dd class="col-sm-12"><input class="form-control" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="" id="gst_percentage'+i+'" name="gst_percentage[]"></dd></dl></div>'+
+        '<div class="col-sm-8"><dl class="row"><dd class="col-sm-12"><button type="button" class="btn btn-danger btn-sm pull-right" id="removeVendorMap'+i+'" onclick="remove_vendor_map_tbl_row('+i+')"><i class="fa fa-minus"></i></button></dd></dl></div>'+
+        '</div>');
 
     $('#vendor'+i).select2();
     $('#warehouse'+i).select2();
+    $('#gst_type'+i).select2();
 });
 function remove_vendor_map_tbl_row(i)
 {
@@ -144,7 +146,8 @@ function remove_vendor_map_tbl_row(i)
 }
 
 //getVendorWarehouse function with Ajax to get warehouse drop down of selected vendor in customer enquiry map to vendor
-function getVendorWarehouse(vendor,i){
+function getVendorWarehouse(vendor,i)
+{
         var product_id ='<?php echo $data->product_id; ?>';
         $("#vendor_price"+i).val('');
         $("#commission_rate"+i).val('');
@@ -179,5 +182,17 @@ function getVendorWarehouse(vendor,i){
                 }
             },
         });  
+    }
+
+
+    function taxValueToggle(gst_type,i){
+        if(gst_type == 'not_applicable'){
+        $('#gst_percentage'+i).hide('slow');
+        }else{
+            $('#gst_percentage'+i).show('slow');
+
+        }
+       
+        
     }
 </script>

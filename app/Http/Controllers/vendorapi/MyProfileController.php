@@ -26,7 +26,7 @@ class MyProfileController extends Controller
                 $vendor_id = $vendor_token['sub'];
 
 
-                $data = Vendor::select('vendor_name', 'vendor_email', 'phone', 'whatsapp_no', 'phone_country_id', 'whatsapp_country_id')
+                $data = Vendor::select('vendor_name', 'vendor_company_name', 'vendor_email', 'phone', 'whatsapp_no', 'phone_country_id', 'whatsapp_country_id')
                     ->with(['phone_country' => function ($query) {
                         $query->select('id', 'country_name', 'phone_code');
                     }])
