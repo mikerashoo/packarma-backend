@@ -27,5 +27,7 @@ return [
     'not_active' => 'Please contact admin team your account is locked',
     'rejected' => 'Your account has been rejected by admin team please contact them',
     'approval_pending' => 'Your account approval is pending please contact admin',
+    'email_cant_update' => 'You can not change your email address',
+    'phone_cant_update' => 'You can not change your phone no',
 
 ];

@@ -47,10 +47,14 @@ class Vendor extends Model implements JWTSubject
     ];
 
     /**
-     * The attributes that should be cast.
+     * The attributes that should be hidden for serialization.
      *
-     * @var array<string, string>
+     * @var array<int, string>
      */
+    protected $hidden = [
+        'vendor_password',
+        'fpwd_flag',
+    ];
 
 
 
