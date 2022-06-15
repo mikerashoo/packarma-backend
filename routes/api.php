@@ -43,6 +43,7 @@ Route::middleware(['basicAuth'])->group(function () {
         //Packaging Treatment
         Route::post('/packaging_treatment/listing', 'PackagingTreatmentApiController@index');
         Route::post('/packaging_treatment/featured_listing', 'PackagingTreatmentApiController@featured_index');
+        Route::post('/packaging_treatment/treatment_applicable_products', 'PackagingTreatmentApiController@applicable_products');
 
         //Subscription
         Route::post('/subscription/listing', 'SubscriptionApiController@index');

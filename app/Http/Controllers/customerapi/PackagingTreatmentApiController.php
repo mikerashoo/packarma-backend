@@ -5,6 +5,7 @@ namespace App\Http\Controllers\customerapi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PackagingTreatment;
+use App\Models\Product;
 use Response;
 
 class PackagingTreatmentApiController extends Controller
@@ -157,6 +158,69 @@ class PackagingTreatmentApiController extends Controller
         catch(\Exception $e)
         {
             \Log::error("Packaging Treatment Featured fetching failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 15-06-2022
+     * Uses : Display a packaging treatment applicable product.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function applicable_products(Request $request)
+    {
+        $msg_data = array();
+        try
+        {
+            $token = readHeaderToken();
+            if($token)
+            {
+                $data = Product::select('id','product_name','product_description','product_image','product_thumb_image','meta_title','meta_description','meta_keyword')
+                                    ->where([['status', '1'],['packaging_treatment_id',$request->packaging_treatment_id]]);
+
+                $product_data = Product::whereRaw("1 = 1");
+
+                if($request->product_id)
+                {
+                    $product_data = $product_data->where('id',$request->product_id);
+                    $data = $data->where('id',$request->product_id);
+                }
+                if($request->product_name)
+                {
+                    $product_data = $product_data->where('product_name',$request->product_name);
+                    $data = $data->where('product_name',$request->product_name);
+                }
+                if(empty($product_data->first()))
+                {
+                    errorMessage(__('packaging_treatment.treatment_applicable_product_not_found'), $msg_data);
+                }
+                $total_records = $data->get()->count();
+                $data = $data->get()->toArray();
+                $i=0;
+                foreach($data as $row)
+                {
+                    $data[$i]['product_image'] = getFile($row['product_image'], 'product');
+                    $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product',false,'thumb');
+                    $i++;
+                }
+                if(empty($data)) {
+                    errorMessage(__('packaging_treatment.treatment_applicable_product_not_found'), $msg_data);
+                }
+                $responseData['result'] = $data;
+                $responseData['total_records'] = $total_records;
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
+            }
+            else
+            {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        }
+        catch(\Exception $e)
+        {
+            \Log::error("Packaging Treatment Applicable Product fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

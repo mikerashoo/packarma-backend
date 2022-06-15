@@ -33,7 +33,7 @@ class MeasurementUnitController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = MeasurementUnit::select('*');
+                $query = MeasurementUnit::select('*')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_unit_name']) && !is_null($request['search']['search_unit_name'])) {

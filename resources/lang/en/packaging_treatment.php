@@ -14,4 +14,5 @@ return [
     */
 
     'packaging_treatment_not_found' => 'Packaging Treatment Not Found',
+    'treatment_applicable_product_not_found' => 'Packaging Treatment Applicable Product Not Found'
 ];

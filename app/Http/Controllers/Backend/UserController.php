@@ -168,10 +168,6 @@ class UserController extends Controller
         $isUpdateFlow = false;
         if (isset($_GET['id'])) {
             $isUpdateFlow = true;
-            $response = User::where([['name', strtolower($request->name)], ['id', '<>', $_GET['id']]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Name Already Exist', $msg_data);
-            }
             $response = User::where([['email', strtolower($request->email)], ['id', '<>', $_GET['id']]])->get()->toArray();
             if (isset($response[0])) {
                 errorMessage('Email  Already Exist', $msg_data);
@@ -180,10 +176,13 @@ class UserController extends Controller
             if (isset($response[0])) {
                 errorMessage('Phone Number Already Exist', $msg_data);
             }
-            $response = User::where([['whatsapp_no', $request->whatsapp_no], ['id', '<>', $_GET['id']]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Whatsapp Number Already Exist', $msg_data);
-            }
+            if(isset($request->whatsapp_no)){
+                $response = User::where([['whatsapp_no', $request->whatsapp_no], ['id', '!=', $_GET['id']]])->get()->toArray();
+                if (isset($response[0])) {
+                    // print_r($response[0]);exit;
+                    errorMessage('Whatsapp Number Already Exist', $msg_data);
+                }
+            }   
             $tableObject = User::find($_GET['id']);
             $msg = "Data Updated Successfully";
         } else {
@@ -200,9 +199,11 @@ class UserController extends Controller
             if (isset($response[0])) {
                 errorMessage('Phone Number Already Exist', $msg_data);
             }
-            $response = User::where([['whatsapp_no', $request->whatsapp_no]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Whatsapp Number Already Exist', $msg_data);
+            if(isset($request->whatsapp_no)){
+                $response = User::where([['whatsapp_no', $request->whatsapp_no]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('Whatsapp Number Already Exist', $msg_data);
+                }
             }
             $msg = "Data Saved Successfully";
         }
@@ -222,7 +223,6 @@ class UserController extends Controller
             }
         }
         $tableObject->name = $request->name;
-        $tableObject->email = $request->email;
         $tableObject->phone_country_id = $request->phone_country_code;
         $tableObject->phone = $request->phone;
         if($request->whatsapp_country_code != '' && $request->whatsapp_no != ''){
@@ -291,7 +291,7 @@ class UserController extends Controller
     {
         return \Validator::make($request->all(), [
             'name' => 'required|string',
-            'email' => 'required|email',
+            // 'email' => 'required|email',
             'phone_country_code' => 'required|integer',
             'phone' => 'required|integer',
             // 'currency' => 'required|integer',

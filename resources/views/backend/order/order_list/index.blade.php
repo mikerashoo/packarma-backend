@@ -64,7 +64,7 @@
                                                     <th id="grand_total" data-orderable="false" data-searchable="false">Order Amount</th>
                                                     <th id="product_quantity" data-orderable="false" data-searchable="false">Product Quantity</th>
                                                     <th id="order_delivery_status" data-orderable="false" data-searchable="false">Delivery Status</th>
-                                                    <th id="payment_status" data-orderable="false" data-searchable="false">Payment Status</th>
+                                                    {{-- <th id="payment_status" data-orderable="false" data-searchable="false">Payment Status</th> --}}
                                                     <th id="packaging_material" data-orderable="false" data-searchable="false">Packaging Material Name</th>
                                                     @if($data['order_view'] || $data['order_delivery_update'] || $data['order_payment_update'] || $data['vendor_payment_update'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>

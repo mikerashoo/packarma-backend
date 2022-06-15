@@ -56,7 +56,6 @@
 				                            <thead>
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
-                                                    <th id="description" data-orderable="false" data-searchable="false">Description</th>
                                                     <th id="product_name" data-orderable="false" data-searchable="false">Product Name</th>
                                                     <th id="user_name" data-orderable="false" data-searchable="false">User Name</th>
                                                     <th id="enquiry_status" data-orderable="false" data-searchable="false">Enquiry Status</th>

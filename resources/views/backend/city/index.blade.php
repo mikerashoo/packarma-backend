@@ -25,10 +25,6 @@
                                 <!-- <hr class="mb-0"> -->
                             	<div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
-                                        <div class="col-md-4">
-                                            <label>City</label>
-                                            <input class="form-control mb-3" type="text" id="search_city_name" name="search_city_name">
-                                        </div>
                                         <div class="col-sm-4">
                                             <label>State Name</label>
                                             <select class="form-control mb-3 select2" id="search_state" name="search_state" style="width: 100% !important;">
@@ -37,6 +33,10 @@
                                                     <option value="{{$state->id}}">{{$state->state_name}}</option>
                                                 @endforeach
                                             </select><br/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>City</label>
+                                            <input class="form-control mb-3" type="text" id="search_city_name" name="search_city_name">
                                         </div>
                                         <div class="col-md-4">
                                             <label>&nbsp;</label><br/>

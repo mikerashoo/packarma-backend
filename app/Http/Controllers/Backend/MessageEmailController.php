@@ -33,7 +33,7 @@ class MessageEmailController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = MessageEmail::select('*');              
+	            $query = MessageEmail::select('*')->orderBy('updated_at','desc');              
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_title']) && ! is_null($request['search']['search_title'])) {

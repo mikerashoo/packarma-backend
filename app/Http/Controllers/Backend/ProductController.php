@@ -41,7 +41,7 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Product::with('category','sub_category');
+                $query = Product::with('category','sub_category')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_product_name']) && !is_null($request['search']['search_product_name'])) {

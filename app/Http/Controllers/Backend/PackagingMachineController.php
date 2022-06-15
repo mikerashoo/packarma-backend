@@ -35,7 +35,7 @@ class PackagingMachineController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = PackagingMachine::select('*');
+                $query = PackagingMachine::select('*')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_packaging_machine']) && !is_null($request['search']['search_packaging_machine'])) {

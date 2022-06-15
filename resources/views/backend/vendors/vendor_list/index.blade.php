@@ -39,6 +39,7 @@
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>
+                                                    <th id="vendor_company_name" data-orderable="false" data-searchable="false">Vendor Company Name</th>
                                                     <th id="mark_featured" data-orderable="false" data-searchable="false">Mark Featured</th>
                                                     @if($data['vendor_status'])
                                                         <th id="vendor_status" data-orderable="false" data-searchable="false">Status</th>

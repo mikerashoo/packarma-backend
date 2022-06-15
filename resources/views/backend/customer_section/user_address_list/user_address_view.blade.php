@@ -65,16 +65,23 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>City</strong></td>
-                                                <td>{{ $data->city->city_name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Address</strong></td>
-                                                <td>{{ $data->address }}</td>
-
+                                                <td>{{ $data->city_name }}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Pincode</strong></td>
                                                 <td>{{ $data->pincode }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Area</strong></td>
+                                                <td>{{ $data->area }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Flat</strong></td>
+                                                <td>{{ $data->flat }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Landmark</strong></td>
+                                                <td>{{ $data->land_mark }}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Date Time</strong></td>

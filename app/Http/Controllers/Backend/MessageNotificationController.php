@@ -33,7 +33,7 @@ class MessageNotificationController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = MessageNotification::select('*');              
+	            $query = MessageNotification::select('*')->orderBy('updated_at','desc');             
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                                             

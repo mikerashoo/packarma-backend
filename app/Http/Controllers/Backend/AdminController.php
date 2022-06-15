@@ -113,7 +113,7 @@ class AdminController extends Controller
         $data['role_permissions'] = $permissions;
         $permissionArr = Permission::where([['to_be_considered', 'Yes']])->get()->toArray();
         $formatedPermissions = array();
-        $permisstion_type = array('List', 'Add', 'Edit', 'View', 'Status', 'Delete','Map To Vendor','Material Map','Delivery Status Update','Customer Payment Update','Vendor Payment Update');
+        $permisstion_type = array('List', 'Add', 'Edit', 'View', 'Status','Map To Vendor','Material Map','Delivery Status Update','Customer Payment Update','Vendor Payment Update');
         foreach ($permissionArr as $key => $value) {
             if ($value['parent_status'] == 'parent') {
                 if (!isset($formatedPermissions[$value['id']])) {
@@ -186,21 +186,42 @@ class AdminController extends Controller
      */
     public function updateProfile(Request $request)
     {
-        $this->validate($request, [
-            'admin_name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-        ]);
+        // $this->validate($request, [
+        //     'admin_name' => 'required|string',
+        //     'email' => 'required|email',
+        //     'phone' => 'required|numeric|digits:10',
+        // ]);
+        $msg_data=array();
+        $validationErrors = $this->validateUpdateProfile($request);
+		if (count($validationErrors)) {
+            \Log::error("User Approval List Validation Exception: " . implode(", ", $validationErrors->all()));
+        	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
+        }
 
         $msg_data = array();
         $id = session('data')['id'];
         $admins = Admin::find($id);
         $admins->admin_name = $request->admin_name;
-        $admins->email = $request->email;
+        // $admins->email = $request->email;
         $admins->phone = $request->phone;
         $admins->save();
         successMessage('Profile updated successfully', $msg_data);
         //return back()->with('success','Profile updated successfully!');
+    }
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 10-06-2022
+     *   Uses :  To update Admin Profile details
+     *   @param Request $request
+     *   @return Response
+     */
+    private function validateUpdateProfile(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'admin_name' => 'required|string',
+            // 'email' => 'required|email',
+            'phone' => 'required|numeric|digits:10',
+        ])->errors();
     }
 
     /**
@@ -242,6 +263,11 @@ class AdminController extends Controller
             //return redirect()->back()->withErrors(array("msgMatchPass"=>"Password not matched!"));
         }
         $admins = Admin::find($id);
+        
+        if ($admins->password == md5($admins->email . $request->new_password)) {
+            errorMessage(__('change_password.new_password_cannot_same_current_password'), $msg_data);
+        }
+        
         $admins->password = md5($email . $request->new_password);
         $admins->save();
         successMessage('Password updated successfully!', $msg_data);

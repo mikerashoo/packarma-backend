@@ -38,9 +38,9 @@
             <div class="navbar-header d-flex pull-left">
                 <div class="navbar-toggle menu-toggle d-xl-none d-block float-left align-items-center justify-content-center" data-toggle="collapse"><i class="ft-menu font-medium-3"></i></div>
                 <li class="nav-item mr-2 d-none d-lg-block">
-                    <a class="nav-link apptogglefullscreen" id="navbar-fullscreen" href="javascript:;">
+                    {{-- <a class="nav-link apptogglefullscreen" id="navbar-fullscreen" href="javascript:;">
                         <i class="ft-maximize font-medium-3" style="color:black !important"></i>
-                    </a>
+                    </a> --}}
                 </li>
                    
                 <h5 class="translateLable padding-top-sm padding-left-sm pt-1"  data-translate="welcome_to_admin_panel">Welcome {{session('data')['name']}}</h5>
