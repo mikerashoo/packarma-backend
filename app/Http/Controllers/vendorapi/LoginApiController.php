@@ -24,6 +24,7 @@ class LoginApiController extends Controller
     public function index(Request $request)
     {
         $msg_data = array();
+        $default_home_page = 'home';
         \Log::info("Logging in vendor, starting at: " . Carbon::now()->format('H:i:s:u'));
         try {
             // Request Validation
@@ -63,7 +64,7 @@ class LoginApiController extends Controller
                 $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
             }])->with(['phone_country' => function ($query) {
                 $query->select('id', 'phone_code', 'country_name');
-            }])->where([['vendor_email', $request->vendor_email], ['vendor_password', md5($request->vendor_email . $request->vendor_password)], ['status', '1'], ['is_verified', 'Y']])->first();
+            }])->where([['vendor_email', $request->vendor_email], ['vendor_password', md5($request->vendor_email . $request->vendor_password)], ['is_verified', 'Y']])->first();
 
             // print_r($vendorData);
             // die();
@@ -71,24 +72,36 @@ class LoginApiController extends Controller
             if (empty($vendorData)) {
                 errorMessage(__('vendor.login_failed'), $msg_data);
             }
+
+            if ($vendorData->approval_status == 'rejected') {
+                errorMessage(__('vendor.rejected'), $msg_data);
+            }
+
+            if ($vendorData->approval_status != 'accepted') {
+                if (empty($vendorData->gstin)) {
+                    $default_home_page = 'gst';
+                }
+            }
+
+            if ($vendorData->status == 0 && $vendorData->approval_status == 'accepted') {
+                errorMessage(__('vendor.not_active'), $msg_data);
+            }
+
+
+
+
             $imei_no = $request->header('imei-no');
             $vendor_token = JWTAuth::fromUser($vendorData);
             $vendors = Vendor::find($vendorData->id);
             $vendorData->last_login = $vendors->last_login = Carbon::now();
             $vendorData->remember_token  = $vendor_token;
+            $vendorData->load_page = $default_home_page;
             $vendors->save();
 
             VendorDevice::updateOrCreate(
                 ['vendor_id' => $vendorData->id, 'imei_no' => $imei_no],
                 ['remember_token' => $vendor_token]
             );
-
-            if (empty($vendorData->gstin)) {
-                $vendorData->load_page = 'gst';
-            } else {
-                $vendorData->load_page = 'home';
-            }
-
 
             successMessage(__('vendor.logged_in_successfully'), $vendorData->toArray());
         } catch (\Exception $e) {
