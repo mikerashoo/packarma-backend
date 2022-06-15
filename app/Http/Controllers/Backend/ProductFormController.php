@@ -35,7 +35,7 @@ class ProductFormController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = ProductForm::select('*');
+                $query = ProductForm::select('*')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_product_form']) && !is_null($request['search']['search_product_form'])) {

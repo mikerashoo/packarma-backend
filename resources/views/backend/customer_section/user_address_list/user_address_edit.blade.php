@@ -32,10 +32,6 @@
                                                     @endforeach
                                                 </select><br/><br>
                                             </div>
-                                            {{-- <div class="col-sm-6">
-                                                <label>GST Identification Number</label>
-                                                <input class="form-control" type="text" id="gstin" name="gstin" value="{{ $data->gstin }}"><br />
-                                            </div> --}}
                                             <div class="col-sm-6">
                                                 <label>Address Name</label>
                                                 <input class="form-control" type="text" id="address_name" name="address_name" value="{{ $data->address_name }}"><br />
@@ -84,25 +80,24 @@
                                                 </select><br><br>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>City<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="city" name="city" style="width: 100% !important;">
-                                                    <option value="">Select</option>
-                                                    @foreach ($city as $cities)
-                                                        @if ($cities->id == $data->city_id)
-                                                            <option value="{{ $cities->id }}" selected>{{ $cities->city_name }}</option>
-                                                        @else
-                                                            <option value="{{ $cities->id }}">{{ $cities->city_name }}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select><br/><br>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Address<span style="color:#ff0000">*</span></label>
-                                                <textarea class="form-control required" id="address" name="address">{{ $data->address }}</textarea><br/>
+                                                <label>City Name<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="city_name" name="city_name" value="{{ $data->city_name }}"><br />
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Pincode<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="pincode" name="pincode" value="{{ $data->pincode }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Flat<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="flat" name="flat" value="{{ $data->flat }}"><br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Area<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="area" name="area" value="{{ $data->area }}"><br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Landmark<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="landmark" name="landmark" value="{{ $data->land_mark }}"><br />
                                             </div>
                                         </div>
                                     </div>

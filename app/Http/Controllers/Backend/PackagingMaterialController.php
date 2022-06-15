@@ -35,7 +35,7 @@ class PackagingMaterialController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = PackagingMaterial::select('*');
+                $query = PackagingMaterial::select('*')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_packaging_material']) && !is_null($request['search']['search_packaging_material'])) {

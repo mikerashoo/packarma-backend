@@ -17,16 +17,16 @@
                             		<form method="post" id="profileForm" action="updateProfile">
                                         @csrf
                                         <div class="row">
+                                            <dl class="col-sm-4">
+                                                <label>Email</label>
+                                                <dd class="form-control" readonly>{{ $data->email }}</dd>
+                                            </dl>
                                             <div class="col-md-4">
-                                                <label>Name</label>
+                                                <label>Name<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="text" name="admin_name" value="{{$data->admin_name}}"><br/>
                                             </div>
                                             <div class="col-md-4">
-                                                <label>Email Id</label>
-                                                <input class="form-control" type="text" name="email" value="{{$data->email}}"><br/>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label>Contact Number</label>
+                                                <label>Contact Number<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="text" name="phone" value="{{$data->phone}}"><br/>
                                             </div>
                                         </div>

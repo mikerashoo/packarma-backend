@@ -26,7 +26,7 @@ class CountryController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = Country::with('currency');                
+	            $query = Country::with('currency')->orderBy('updated_at','desc');               
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         

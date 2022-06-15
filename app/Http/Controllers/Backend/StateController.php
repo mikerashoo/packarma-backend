@@ -34,7 +34,7 @@ class StateController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = State::with('country');              
+	            $query = State::with('country')->orderBy('updated_at','desc');              
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                                             

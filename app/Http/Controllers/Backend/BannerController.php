@@ -44,7 +44,7 @@ class BannerController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Banner::select('*');
+                $query = Banner::select('*')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_banner_title']) && !is_null($request['search']['search_banner_title'])) {

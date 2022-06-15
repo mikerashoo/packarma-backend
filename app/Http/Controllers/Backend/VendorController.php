@@ -81,6 +81,9 @@ class VendorController extends Controller
                     ->editColumn('vendor_name', function ($event) {
                         return $event->vendor_name;
                     })
+                    ->editColumn('vendor_company_name', function ($event) {
+                        return $event->vendor_company_name;
+                    })
                     ->editColumn('vendor_status', function ($event) {
                         $vendor_status = checkPermission('vendor_status');
                         $status = '';
@@ -173,13 +176,15 @@ class VendorController extends Controller
     {
         $msg_data = array();
         $msg = "";
-        $validationErrors = $this->validateRequest($request);
-        if (count($validationErrors)) {
-            \Log::error("Vendor Validation Exception: " . implode(", ", $validationErrors->all()));
-            errorMessage(implode("\n", $validationErrors->all()), $msg_data);
-        }
+        
         $isEditFlow = false;
         if (isset($_GET['id'])) {
+            $validationErrors = $this->validateEditVendorRequest($request);
+            if (count($validationErrors)) {
+                \Log::error("Vendor Validation Exception: " . implode(", ", $validationErrors->all()));
+                errorMessage(implode("\n", $validationErrors->all()), $msg_data);
+            }
+
             $isEditFlow = true;
             $response = Vendor::where([['vendor_name', strtolower($request->vendor_name)], ['id', '<>', $_GET['id']]])->get()->toArray();
             if (isset($response[0])) {
@@ -199,6 +204,12 @@ class VendorController extends Controller
             $tblObj = Vendor::find($_GET['id']);
             $msg = "Data Updated Successfully";
         } else {
+            $validationErrors = $this->validateAddVendorRequest($request);
+            if (count($validationErrors)) {
+                \Log::error("Vendor Validation Exception: " . implode(", ", $validationErrors->all()));
+                errorMessage(implode("\n", $validationErrors->all()), $msg_data);
+            }
+
             $tblObj = new Vendor;
             $response = Vendor::where([['vendor_name', strtolower($request->vendor_name)]])->get()->toArray();
             if (isset($response[0])) {
@@ -225,15 +236,18 @@ class VendorController extends Controller
             if (strlen($request->whatsapp_no) != $allowedPhoneLength) {
                 errorMessage("Whatsapp Number Should be $allowedPhoneLength digit long.", $msg_data);
             }
-            print_r($request->whatsapp_country_code);
-            exit;
             $tblObj->whatsapp_country_id = $request->whatsapp_country_code;
             $tblObj->whatsapp_no = $request->whatsapp_no;
         }
         $tblObj->vendor_name = $request->vendor_name;
-        $tblObj->vendor_email = $request->vendor_email;
-        $tblObj->vendor_address = $request->vendor_address;
-        $tblObj->pincode = $request->pincode;
+        if(isset($request->vendor_email)){
+            $tblObj->vendor_email = $request->vendor_email;
+            $vendor_password = md5($request->vendor_email . $request->vendor_password);
+            $tblObj->vendor_password = $vendor_password;
+        }
+        
+        $tblObj->vendor_company_name = $request->vendor_company_name;
+        $tblObj->gstin = $request->gstin;
         $tblObj->phone_country_id = $request->phone_country_code;
         $tblObj->phone = $request->phone;
         $tblObj->currency_id = $request->currency;
@@ -289,7 +303,7 @@ class VendorController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Vendor::with('phone_country', 'whatsapp_country', 'currency')->where('approval_status', '!=', 'accepted');
+                $query = Vendor::with('phone_country', 'whatsapp_country', 'currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
@@ -379,7 +393,7 @@ class VendorController extends Controller
     {
         $msg_data = array();
         $msg = "";
-        $validationErrors = $this->validateRequest($request, 'approval');
+        $validationErrors = $this->validateRequest($request);
         if (count($validationErrors)) {
             \Log::error("Vendor Approval Validation Exception: " . implode(", ", $validationErrors->all()));
             errorMessage(implode("\n", $validationErrors->all()), $msg_data);
@@ -423,26 +437,57 @@ class VendorController extends Controller
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 25-Mar-2022
-     *   Uses :  Vendor Add|Edit Form Validation part will be handle by below function
+     *   Uses :  Vendor approval Form Validation part will be handle by below function
      *   @param Request request
      *   @return Response
      */
-    private function validateRequest(Request $request, $flow = 'normal')
+    private function validateRequest(Request $request)
     {
-        if ($flow ==  'approval') {
-            return \Validator::make($request->all(), [
-                'approval_status' => 'required',
-            ])->errors();
-        } else {
-            return \Validator::make($request->all(), [
-                'vendor_name' => 'required|string',
-                'vendor_email' => 'required|string',
-                'phone_country_code' => 'required|integer',
-                'phone' => 'required|integer',
-                'currency' => 'required|integer',
-            ])->errors();
-        }
+        return \Validator::make($request->all(), [
+            'approval_status' => 'required',
+        ])->errors();
     }
+
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 15-June-2022
+     *   Uses :  Vendor Add Form Validation part will be handle by below function
+     *   @param Request request
+     *   @return Response
+     */
+    private function validateAddVendorRequest(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'vendor_name' => 'required|string',
+            'vendor_email' => 'required|string',
+            'vendor_password' => 'required|string|min:8',
+            'vendor_company_name' => 'required|string',
+            'gstin' => 'required|string|min:15|max:15|unique:vendors,gstin'. ($request->id ? ",$request->id" : ''),
+            'phone_country_code' => 'required|integer',
+            'phone' => 'required|integer',
+            'currency' => 'required|integer',
+        ])->errors();
+    }
+
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 25-Mar-2022
+     *   Uses :  Vendor Edit Form Validation part will be handle by below function
+     *   @param Request request
+     *   @return Response
+     */
+    private function validateEditVendorRequest(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'vendor_name' => 'required|string',
+            'vendor_company_name' => 'required|string',
+            'gstin' => 'required|string|min:15|max:15|unique:vendors,gstin'. ($request->id ? ",$request->id" : ''),
+            'phone_country_code' => 'required|integer',
+            'phone' => 'required|integer',
+            'currency' => 'required|integer',
+        ])->errors();
+    }
+    
 
     /**
      *   created by : Pradyumn Dwivedi

@@ -45,7 +45,7 @@
                     			@csrf
                         		<div class="row">
                         			<div class="col-sm-6">
-                        				<label>Approval</label>
+                        				<label>Approval<span class="text-danger">*</span></label>
                         				<select class="select2" id="approval_status" name="approval_status" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($approvalArray as $key => $val)

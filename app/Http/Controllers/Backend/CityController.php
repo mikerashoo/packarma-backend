@@ -42,7 +42,7 @@ class CityController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = City::with('state','country');                
+	            $query = City::with('state','country')->orderBy('updated_at','desc');           
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                                             

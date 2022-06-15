@@ -63,8 +63,8 @@
                                                     <tr>
                                                         <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                         <th id="name" data-orderable="false" data-searchable="false">User</th>
-                                                        <th id="city_name" data-orderable="false" data-searchable="false">City</th>
-                                                        <th id="address" data-orderable="false" data-searchable="false">Address</th>
+                                                        <th id="state" data-orderable="false" data-searchable="false">State</th>
+                                                        <th id="city" data-orderable="false" data-searchable="false">City</th>
                                                         <th id="pincode" data-orderable="false" data-searchable="false">Pincode</th>
                                                         @if ($user_address_view || $user_address_edit || $user_address_status)
                                                             <th id="action" data-orderable="false" data-searchable="false"width="130px">Action</th>

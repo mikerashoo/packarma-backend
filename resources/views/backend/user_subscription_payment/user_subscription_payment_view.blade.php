@@ -20,7 +20,7 @@
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered">
                                             <tr>
-                                                <td class="col-sm-3"><strong>User Name</strong></td>
+                                                <td class="col-sm-5"><strong>User Name</strong></td>
                                                 <td>{{$data->user->name}}</td>
                                             </tr>
                                             <tr>

@@ -52,7 +52,7 @@ class UserAddressController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = UserAddress::with('user', 'city')->orderBy('updated_at','desc');
+                $query = UserAddress::with('user','state')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user']) && !is_null($request['search']['search_user'])) {
@@ -66,11 +66,11 @@ class UserAddressController extends Controller
                     ->editColumn('name', function ($event) {
                         return $event->user->name;
                     })
-                    ->editColumn('city_name', function ($event) {
-                        return $event->city->city_name;
+                    ->editColumn('state', function ($event) {
+                        return $event->state->state_name;
                     })
-                    ->editColumn('address', function ($event) {
-                        return $event->address;
+                    ->editColumn('city', function ($event) {
+                        return $event->city_name;
                     })
                     ->editColumn('pincode', function ($event) {
                         return $event->pincode;
@@ -98,7 +98,7 @@ class UserAddressController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'city_name', 'address', 'pincode', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['name', 'state', 'city', 'pincode', 'action'])->setRowId('id')->make(true);
             }
             catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -177,38 +177,6 @@ class UserAddressController extends Controller
         $isUpdateFlow = false;
         if (isset($_GET['id'])) {
             $isUpdateFlow = true;
-            $tableObject = UserAddress::find($_GET['id']);
-            if(isset($request->gstin)){
-                $response = UserAddress::where([['gstin', $request->gstin], ['id', '<>', $_GET['id']]])->get()->toArray();
-                if (isset($response[0])) {
-                    errorMessage('GST Identification Number Already Exist', $msg_data);
-                } 
-            }
-            if(isset($request->address_name)){
-                $response = UserAddress::where([['address_name', strtolower($request->address_name)], ['user_id', $request->user],['id', '<>', $_GET['id']]])->get()->toArray();
-                if (isset($response[0])) {
-                    errorMessage('Address Name Already Exist of Selected User', $msg_data);
-                } 
-            }
-            if(isset($request->mobile_no)){
-                $maxPhoneCodeLength = Country::where('id', $request->country)->get()->toArray();
-                $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
-                if(strlen($request->mobile_no) != $allowedPhoneLength){
-                    errorMessage("Mobile Number Should be $allowedPhoneLength digit long.", $msg_data);
-                }
-                $response = UserAddress::where([['mobile_no', $request->mobile_no], ['id', '<>', $_GET['id']]])->get()->toArray();
-                if (isset($response[0])) {
-                    errorMessage('Mobile Number Already Exist', $msg_data);
-                } 
-            }
-            $response = UserAddress::where([['address', strtolower($request->address)],['user_id', $request->user],['id', '<>', $_GET['id']]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Address Already Exist of Selected User', $msg_data);
-            }
-            $response = UserAddress::where([['pincode', $request->pincode],['user_id', $request->user],['id', '<>', $_GET['id']]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Pincode Already Exist of Selected', $msg_data);
-            }
             $getKeys = true;
             $addressType = addressType('',$getKeys);
             if(isset($request->type)){
@@ -219,41 +187,11 @@ class UserAddressController extends Controller
                     errorMessage('Address Type Does not Exists.', $msg_data);
                 }
             }
+            $tableObject = UserAddress::find($_GET['id']);
             $msg = "Data Updated Successfully";
         }
         else {
             $tableObject = new UserAddress;
-            if(isset($request->gstin)){
-                $response = UserAddress::where([['gstin', $request->gstin]])->get()->toArray();
-                if (isset($response[0])) {
-                    errorMessage('GST Information Number Already Exist', $msg_data);
-                } 
-            }
-            if(isset($request->address_name)){
-                $response = UserAddress::where([['address_name', strtolower($request->address_name)],['user_id', $request->user]])->get()->toArray();
-                if (isset($response[0])) {
-                    errorMessage('Address Name Already Exist of Selected User', $msg_data);
-                } 
-            }
-            if(isset($request->mobile_no)){
-                $maxPhoneCodeLength = Country::where('id', $request->country)->get()->toArray();
-                $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
-                if(strlen($request->mobile_no) != $allowedPhoneLength){
-                    errorMessage("Mobile Number Should be $allowedPhoneLength digit long.", $msg_data);
-                }
-                $response = UserAddress::where([['mobile_no', $request->mobile_no]])->get()->toArray();
-                if (isset($response[0])) {
-                    errorMessage('Mobile Number Already Exist', $msg_data);
-                } 
-            }
-            $response = UserAddress::where([['address', strtolower($request->address)],['user_id', $request->user]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Address Already Exist of Selected User', $msg_data);
-            }
-            $response = UserAddress::where([['pincode', $request->pincode],['user_id', $request->user]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Pincode Already Exist of Selected User', $msg_data);
-            }
             $getKeys = true;
             $addressType = addressType('',$getKeys);
             if(isset($request->type)){
@@ -266,10 +204,7 @@ class UserAddressController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        $tableObject->user_id = $request->user;
-        if(isset($request->gstin)){
-            $tableObject->gstin = $request->gstin;
-        }
+
         if(isset($request->address_name)){
             $tableObject->address_name = $request->address_name;
         }
@@ -287,11 +222,14 @@ class UserAddressController extends Controller
         if(isset($request->mobile_no)){
             $tableObject->mobile_no = $request->mobile_no;
         }
-        $tableObject->city_id = $request->city;
-        $tableObject->state_id = $request->state;
+        $tableObject->user_id = $request->user;
         $tableObject->country_id = $request->country;
-        $tableObject->address = $request->address;
+        $tableObject->state_id = $request->state;
+        $tableObject->city_name = $request->city_name;
         $tableObject->pincode = $request->pincode;
+        $tableObject->flat = $request->flat;
+        $tableObject->area = $request->area;
+        $tableObject->land_mark = $request->landmark;
         if ($isUpdateFlow) {
             $tableObject->updated_by = session('data')['id'];
         }
@@ -347,11 +285,13 @@ class UserAddressController extends Controller
     {
         return \Validator::make($request->all(), [
             'user' => 'required|integer',
-            'city' => 'required|integer',
-            'state' => 'required|integer',
             'country' => 'required|integer',
-            'address' => 'required|string',
+            'state' => 'required|integer',
+            'city_name' => 'required|string',
             'pincode' => 'required|integer',
+            'flat' => 'required|string',
+            'area' => 'required|string',
+            'landmark' => 'required|string'
         ])->errors();
     }
 }

@@ -59,14 +59,14 @@ class VendorWarehouseController extends Controller
                     ->editColumn('vendor_name', function ($event) {
 	                    return $event->vendor->vendor_name;
 	                })
+                    ->editColumn('gstin', function ($event) {
+	                    return $event->gstin;
+	                })
                     ->editColumn('state', function ($event) {
 	                    return $event->state->state_name;
 	                })
                     ->editColumn('city', function ($event) {
-	                    return $event->city->city_name;
-	                })
-                    ->editColumn('address', function ($event) {
-	                    return $event->address;
+	                    return $event->city_name;
 	                })
 	                ->editColumn('action', function ($event) {
                         $vendor_warehouse_view = checkPermission('vendor_warehouse_view');
@@ -90,7 +90,7 @@ class VendorWarehouseController extends Controller
                         return $actions;
 	                }) 
 	                ->addIndexColumn() 
-	                ->rawColumns(['warehouse_name', 'vendor_name', 'state', 'city', 'address', 'action'])->setRowId('id')->make(true);
+	                ->rawColumns(['warehouse_name', 'vendor_name','gstin', 'state', 'city', 'action'])->setRowId('id')->make(true);
 	        }
 	        catch (\Exception $e) {
 	    		\Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -159,14 +159,8 @@ class VendorWarehouseController extends Controller
             if(isset($response[0])){
                 errorMessage($request->warehouse_name.' warehouse is Already Exist to Selected Vendor', $msg_data);
             }
-            if(isset($request->gstin)){
-                $response = VendorWarehouse::where([['gstin', $request->gstin], ['id', '<>', $_GET['id']]])->get()->toArray();
-                if (isset($response[0])) {
-                    errorMessage('GST Identification Number Already Exist', $msg_data);
-                } 
-            }
             if(isset($request->mobile_no)){
-                $maxPhoneCodeLength = Country::where('id', $request->country)->get()->toArray();
+                $maxPhoneCodeLength = Country::where('id', $request->phone_country_code)->get()->toArray();
                 $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
                 if(strlen($request->mobile_no) != $allowedPhoneLength){
                     errorMessage("Mobile Number Should be $allowedPhoneLength digit long.", $msg_data);
@@ -176,14 +170,6 @@ class VendorWarehouseController extends Controller
                     errorMessage('Mobile Number Already Exist', $msg_data);
                 } 
             }
-            $response = VendorWarehouse::where([['address', strtolower($request->address)], ['id', '<>', $_GET['id']]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Address Already Exist', $msg_data);
-            }
-            $response = VendorWarehouse::where([['pincode', $request->pincode], ['id', '<>', $_GET['id']]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Pincode Already Exist', $msg_data);
-            }
             $tblObj = VendorWarehouse::find($_GET['id']);
             $msg = "Data Updated Successfully";
         } else {
@@ -192,14 +178,8 @@ class VendorWarehouseController extends Controller
             if(isset($response[0])){
                 errorMessage($request->warehouse_name.' warehouse is Already Exist to Selected Vendor', $msg_data);
             }
-            if(isset($request->gstin)){
-                $response = VendorWarehouse::where([['gstin', $request->gstin]])->get()->toArray();
-                if (isset($response[0])) {
-                    errorMessage('GST Information Number Already Exist', $msg_data);
-                } 
-            }
             if(isset($request->mobile_no)){
-                $maxPhoneCodeLength = Country::where('id', $request->country)->get()->toArray();
+                $maxPhoneCodeLength = Country::where('id', $request->phone_country_code)->get()->toArray();
                 $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
                 if(strlen($request->mobile_no) != $allowedPhoneLength){
                     errorMessage("Mobile Number Should be $allowedPhoneLength digit long.", $msg_data);
@@ -209,29 +189,18 @@ class VendorWarehouseController extends Controller
                     errorMessage('Mobile Number Already Exist', $msg_data);
                 } 
             }
-            $response = VendorWarehouse::where([['address', strtolower($request->address)]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Address Already Exist', $msg_data);
-            }
-            $response = VendorWarehouse::where([['pincode', $request->pincode]])->get()->toArray();
-            if (isset($response[0])) {
-                errorMessage('Pincode Already Exist', $msg_data);
-            }
             $msg = "Data Saved Successfully";
         }
         $tblObj->warehouse_name = $request->warehouse_name;
         $tblObj->vendor_id = $request->vendor;
-        if(isset($request->gstin)){
-            $tblObj->gstin = $request->gstin;
-        }
-        if(isset($request->mobile_no)){
-            $tblObj->mobile_no = $request->mobile_no;
-        }
-        $tblObj->city_id = $request->city;
+        $tblObj->country_id = $request->phone_country_code;
+        $tblObj->mobile_no = $request->mobile_no;
         $tblObj->state_id = $request->state;
-        $tblObj->country_id = $request->country;
-        $tblObj->address = $request->address;
+        $tblObj->city_name = $request->city;
         $tblObj->pincode = $request->pincode;
+        $tblObj->area = $request->area;
+        $tblObj->flat = $request->flat;
+        $tblObj->land_mark = $request->landmark;
         if($isEdit){
             $tblObj->updated_by = session('data')['id'];
         }else{
@@ -285,12 +254,15 @@ class VendorWarehouseController extends Controller
     {
         return \Validator::make($request->all(), [
             'warehouse_name' => 'required|string',
-	        'vendor' => 'required|integer',
-            'city' => 'required|integer',
-            'state' => 'required|integer',
-            'country' => 'required|integer',
-            'address' => 'required|string',
-            'pincode' => 'required|integer'
+	        'vendor' => 'required|numeric',
+            'phone_country_code' => 'required|numeric',
+            'mobile_no' => 'required|numeric',
+            'state' => 'required|numeric',
+            'city' => 'required|string',
+            'pincode' => 'required|numeric',
+            'area' => 'required|string',
+            'flat' => 'required|string',
+            'landmark' => 'required|string'
         ])->errors();
     }
 }

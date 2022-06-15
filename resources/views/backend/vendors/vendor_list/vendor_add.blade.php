@@ -24,8 +24,29 @@
                         				<input class="form-control required" type="text" id="vendor_name" name="vendor_name"><br/>
                         			</div>
                                     <div class="col-sm-6">
+                        				<label>Vendor Company Name<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" id="vendor_company_name" name="vendor_company_name"><br/>
+                        			</div>
+                                    <div class="col-sm-6">
                         				<label>Vendor Email<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="email" id="vendor_email" name="vendor_email"><br/>
+                        				<input class="form-control required" type="text" id="vendor_email" name="vendor_email"><br/>
+                        			</div>
+                                    <div class="col-sm-6">
+                        				<label>Vendor Password<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="password" id="vendor_password" name="vendor_password"><br/>
+                        			</div>
+                                    <div class="col-sm-6">
+                        				<label>GST Number<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" id="gstin" name="gstin"><br/>
+                        			</div>
+                                    <div class="col-sm-6">
+                        				<label>Currency<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="currency" name="currency" style="width: 100% !important;">
+                                            <option value="">Select</option>
+                                            @foreach($currency as $val)
+                                                <option value="{{$val->id}}">{{$val->currency_name}}</option>
+                                            @endforeach
+                                        </select><br/>
                         			</div>
                                     <div class="col-sm-6">
                         				<label>Phone Country Code<span style="color:#ff0000">*</span></label>
@@ -42,35 +63,18 @@
                                     </div>
                                     <div class="col-sm-6">
                         				<label>Whatsapp Country Code</label>
-                        				<select class="select2" id="whatsapp_country_code" name="whatsapp_country_code" style="width: 100% !important;">
+                        				<select class="select2 required" id="whatsapp_country_code" name="whatsapp_country_code" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($whatsapp_country as $val)
                                                 <option value="{{$val->id}}">+{{$val->phone_code}}</option>
-                                            @endforeach
+                                             @endforeach
                                         </select><br/>
                         			</div>
                                     <div class="col-sm-6">
                                         <label>Whatsapp Number</label>
                                         <input class="form-control" type="text" id="whatsapp_no" name="whatsapp_no" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>Vendor Address<span style="color:#ff0000">*</span></label>
-                                        <textarea class="form-control required" id="vendor_address" name="vendor_address"></textarea><br/>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>Pincode<span style="color:#ff0000">*</span></label>
-                                        <input class="form-control required" type="text"  id="pincode" name="pincode" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                    </div>
-                                    <div class="col-sm-6">
-                        				<label>Currency<span style="color:#ff0000">*</span></label>
-                        				<select class="select2 required" id="currency" name="currency" style="width: 100% !important;">
-                                            <option value="">Select</option>
-                                            @foreach($currency as $val)
-                                                <option value="{{$val->id}}">{{$val->currency_code}}</option>
-                                            @endforeach
-                                        </select><br/>
-                        			</div>
-                        		</div>
+                                    </div><br>
+                                </div>
                         		<hr>
                         		<div class="row">
                         			<div class="col-sm-12">

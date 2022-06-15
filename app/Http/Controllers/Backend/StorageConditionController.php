@@ -33,7 +33,7 @@ class StorageConditionController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = StorageCondition::select('*');
+                $query = StorageCondition::select('*')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_storage_condition']) && !is_null($request['search']['search_storage_condition'])) {
