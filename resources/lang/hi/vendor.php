@@ -26,5 +26,6 @@ return [
     'gst_details_fetched' => 'Gst Details Fetched Successfully',
     'not_active' => 'Please contact admin team your account is locked',
     'rejected' => 'Your account has been rejected by admin team please contact them',
+    'approval_pending' => 'Your account approval is pending please contact admin',
 
 ];

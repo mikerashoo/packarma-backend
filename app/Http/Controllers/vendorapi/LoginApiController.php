@@ -77,9 +77,11 @@ class LoginApiController extends Controller
                 errorMessage(__('vendor.rejected'), $msg_data);
             }
 
-            if ($vendorData->approval_status != 'accepted') {
+            if ($vendorData->approval_status == 'pending') {
                 if (empty($vendorData->gstin)) {
                     $default_home_page = 'gst';
+                } else {
+                    errorMessage(__('vendor.approval_pending'), $msg_data);
                 }
             }
 
