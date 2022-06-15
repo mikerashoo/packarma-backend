@@ -85,6 +85,16 @@ class MyProfileController extends Controller
                     errorMessage(__('auth.validation_failed'), $vendorValidationErrors->all());
                 }
                 \Log::info("Vendor Update Start!");
+
+                if (isset($request->vendor_email) && !empty($request->vendor_email)) {
+                    errorMessage(__('vendor.email_cant_update'), $msg_data);
+                }
+
+                if (isset($request->phone) && !empty($request->phone)) {
+                    errorMessage(__('vendor.phone_cant_update'), $msg_data);
+                }
+
+
                 $checkVendor = Vendor::where([['phone', $request->phone], ['id', '!=', $vendor_id]])->first();
                 if (!empty($checkVendor)) {
                     errorMessage(__('vendor.same_phone_exist'), $msg_data);
@@ -141,8 +151,8 @@ class MyProfileController extends Controller
             'vendor_name' => 'required|string',
             'vendor_company_name' => 'required|string',
             'phone_country_id' => 'required|numeric',
-            'phone' => 'required|numeric',
-            'vendor_email' => 'required|email',
+            // 'phone' => 'required|numeric',
+            // 'vendor_email' => 'required|email',
 
         ])->errors();
     }

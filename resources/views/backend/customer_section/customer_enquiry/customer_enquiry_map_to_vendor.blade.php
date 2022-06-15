@@ -87,6 +87,7 @@
 </section>
 <script>
 $(document).on('click', '#addStock', function(event){
+    
     var trlen = $('.vendorMapTblTr').length;
     if(trlen == 0)
     {
@@ -105,7 +106,7 @@ $(document).on('click', '#addStock', function(event){
     }
     ?>
     var vendor_dropdown = '<?php echo $vendor_drop ?>';
-    $('#vendorMapTbl').append('<div class="vendorMapTblTr col-md-12 row" id="vendorMapTblTr'+i+'" data-key="'+i+'">'+
+    $('#vendorMapTbl').append('<div style="border-top: 1px solid #393d92;"; class="vendorMapTblTr col-md-12 row pt-4 mt-4" id="vendorMapTblTr'+i+'" data-key="'+i+'">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->id; ?>" id="customer_enquiry_id'+i+'" name="customer_enquiry_id[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->product_id; ?>" id="product'+i+'" name="product[]">'+
         '<input class="form-control" type="hidden"  value="<?php echo $data->product_quantity; ?>" id="product_quantity'+i+'" name="product_quantity[]">'+
@@ -139,6 +140,10 @@ $(document).on('click', '#addStock', function(event){
     $('#vendor'+i).select2();
     $('#warehouse'+i).select2();
     $('#gst_type'+i).select2();
+        $('html, body').animate({
+        scrollTop: $('#vendorMapTblTr'+i).offset().top
+    }, 1000);
+
 });
 function remove_vendor_map_tbl_row(i)
 {
