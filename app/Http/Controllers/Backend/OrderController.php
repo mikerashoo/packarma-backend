@@ -6,22 +6,23 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Order;
+use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Product;
 use App\Models\Vendor;
-use App\Models\Category;
-use App\Models\SubCategory;
-use App\Models\StorageCondition;
-use App\Models\PackagingMachine;
-use App\Models\ProductForm;
-use App\Models\PackingType;
-use App\Models\MeasurementUnit;
-use App\Models\PackagingTreatment;
-use App\Models\PackagingMaterial;
+use App\Models\Product;
 use App\Models\Country;
 use App\Models\Currency;
+use App\Models\Category;
+use App\Models\SubCategory;
+use App\Models\ProductForm;
+use App\Models\PackingType;
 use App\Models\OrderPayment;
-use Carbon\Carbon;
+use App\Models\MeasurementUnit;
+use App\Models\StorageCondition;
+use App\Models\PackagingMachine;
+use App\Models\RecommendationEngine;
+use App\Models\PackagingTreatment;
+use App\Models\PackagingMaterial;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use PDF;
@@ -87,9 +88,9 @@ class OrderController extends Controller
                     ->editColumn('order_delivery_status', function ($event) {
                         return deliveryStatus($event->order_delivery_status);
                     })
-                    ->editColumn('payment_status', function ($event) {
-                        return paymentStatus($event->customer_payment_status);
-                    })
+                    // ->editColumn('payment_status', function ($event) {
+                    //     return paymentStatus($event->customer_payment_status);
+                    // })
                     ->editColumn('packaging_material', function ($event) {
                         return $event->packaging_material->packaging_material_name;
                     })
@@ -127,7 +128,7 @@ class OrderController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['user_name', '	vendor_name', 'grand_total', 'order_delivery_status', 'payment_status', 'updated_at', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['user_name', 'vendor_name', 'grand_total','product_quantity', 'order_delivery_status','packaging_material', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -312,7 +313,29 @@ class OrderController extends Controller
     // 'storage_condition', table pending
     public function viewOrder($id)
     {
-        $data['data'] = Order::with('user', 'vendor', 'category', 'sub_category', 'product', 'packaging_machine', 'product_form', 'packing_type', 'packaging_treatment', 'country', 'currency', 'measurement_unit')->find($id);
+        $data['data'] = Order::where('id',$id)->get();
+        $data['user'] = User::all();
+        $data['vendor'] = Vendor::all();
+        $data['product'] = Product::all();
+        $data['country'] = Country::all();
+        $data['currency'] = Currency::all();
+        $data['category'] = Category::all();
+        $data['sub_category'] = SubCategory::all();
+        $data['product_form'] = ProductForm::all();
+        $data['packing_type'] = PackingType::all();
+        $data['measurement_unit'] = MeasurementUnit::all();
+        $data['packaging_machine'] = PackagingMachine::all();
+        $data['packaging_material'] = PackagingMaterial::all();
+        $data['packaging_treatment'] = PackagingTreatment::all();
+        $data['recommendation_engine'] = RecommendationEngine::all();
+        
+        $i = 0;
+        foreach ($data['data'] as $row) {
+            $data['data'][$i]->order_id = getFormatid($row->id, 'orders');
+            $data['data'][$i]->billing_details = json_decode($row->billing_details, TRUE);
+            $data['data'][$i]->shipping_details = json_decode($row->shipping_details, TRUE);
+            $i++;
+        }
         return view('backend/order/order_list/order_view', $data);
     }
 
