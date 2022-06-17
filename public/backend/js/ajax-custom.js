@@ -119,6 +119,7 @@ $(document).ready(function () {
         var dataSize = $(this).attr('data-size');
         var dataTitle = $(this).attr('data-title');
         loadViewPageInModal(page, dataSize, dataTitle);
+
     });
 });
 
@@ -133,6 +134,11 @@ function loadViewPageInModal(page_url, dataSize, dataTitle) {
                 size: dataSize,
                 buttons: false
             });
+
+            if (page_url.includes('map_vendor_form')) {
+                $('#vendor').select2();
+
+            }
         }
     });
 }
@@ -201,6 +207,59 @@ function submitForm(form_id, form_method, errorOverlay = '') {
             } else {
                 if (errorOverlay) {
                     $(form).find('.form-error').html('<span class="text-success">' + response['message'] + '</span>');
+                } else {
+                    $.activeitNoty({
+                        type: 'success',
+                        icon: 'fa fa-check',
+                        message: response['message'],
+                        container: 'floating',
+                        timer: 3000
+                    });
+                }
+                setTimeout(function () {
+                    location.reload();
+                }, 2000);
+            }
+        }
+    });
+}
+
+
+
+function submitModalForm(form_id, form_method, errorOverlay = '') {
+    var form = $('#' + form_id);
+    var formdata = false;
+    if (window.FormData) {
+        formdata = new FormData(form[0]);
+    }
+    $.ajax({
+        url: form.attr('action'),
+        type: form_method,
+        dataType: 'html',
+        data: formdata ? formdata : form.serialize(),
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            var response = JSON.parse(data);
+            if (response['success'] == 0) {
+                if (errorOverlay) {
+                    $(form).find('.form-error').html('<span class="text-danger">*' + response['message'] + '</span>').css('z-index', '-1');
+                    setTimeout(function () {
+                        $(form).find('.form-error').empty();
+                    }, 3000);
+                } else {
+                    $.activeitNoty({
+                        type: 'danger',
+                        icon: 'fa fa-minus',
+                        message: response['message'],
+                        container: 'floating',
+                        timer: 3000
+                    });
+                }
+            } else {
+                if (errorOverlay) {
+                    $(form).find('.form-error').html('<span class="text-success">' + response['message'] + '</span>').css('z-index', '-1');
                 } else {
                     $.activeitNoty({
                         type: 'success',
@@ -329,6 +388,62 @@ $(document).on('click', '.delimg', function (event) {
         }
     });
 });
+
+
+$(document).on('click', '.delete_map_vendor', function (event) {
+    var ib = $(this).attr('data-id');
+    var url = $(this).attr('data-url');
+    var main_id = $(this).attr('id');
+    bootbox.confirm({
+        message: "Are you sure you want to delete this Mapped Vendor?",
+        buttons: {
+            confirm: {
+                label: 'Yes, I confirm',
+                className: 'btn-primary'
+            },
+            cancel: {
+                label: 'Cancel',
+                className: 'btn-danger'
+            }
+        },
+        callback: function (result) {
+            if (result) {
+                $.ajax({
+                    type: 'post',
+                    url: url,
+                    data: {
+                        'ib': ib,
+                        '_token': $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    success: function (data) {
+                        var response = JSON.parse(data);
+                        if (response['success'] == 0) {
+                            $.activeitNoty({
+                                type: 'danger',
+                                icon: 'fa fa-minus',
+                                message: response['message'],
+                                container: 'floating',
+                                timer: 3000
+                            });
+                        } else {
+                            $.activeitNoty({
+                                type: 'success',
+                                icon: 'fa fa-check',
+                                message: response['message'],
+                                container: 'floating',
+                                timer: 3000
+                            });
+                            $('#' + main_id).closest('.map_vendor_section').remove();
+                        }
+                    }
+                });
+            }
+        }
+    });
+});
+
+
+
 
 /**
  * -- CKEditor Textarea box

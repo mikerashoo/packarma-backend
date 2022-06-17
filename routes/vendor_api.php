@@ -21,6 +21,7 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
     Route::post('/verify_otp', 'OtpApiController@verifyOtp');
     Route::post('/login_api', 'LoginApiController@index');
     Route::post('/forgot_password_api', 'ForgotPasswordApiController@index');
+    Route::post('/general_info_all', 'GeneralInfoController@generalInforAll');
     Route::middleware(['vendorTokenAuth'])->group(function () {
         Route::post('/country/listing', 'CountryController@index');
         Route::post('/state/listing', 'StateController@index');
