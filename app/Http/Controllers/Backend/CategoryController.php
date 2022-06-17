@@ -39,7 +39,7 @@ class CategoryController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Category::select('*');
+                $query = Category::select('*')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_category_name']) && !is_null($request['search']['search_category_name'])) {

@@ -32,7 +32,7 @@ class OtpApiController extends Controller
             $validationErrors = $this->validateRequestOtp($request);
             if (count($validationErrors)) {
                 \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                errorMessage($validationErrors->all(), $validationErrors->all());
             }
             $otp_data = array();
             $otp_data['otp_code'] = $otp = generateRandomOTP();
@@ -100,7 +100,7 @@ class OtpApiController extends Controller
             $validationErrors = $this->validateVerifyOtp($request);
             if (count($validationErrors)) {
                 \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                errorMessage($validationErrors->all(), $validationErrors->all());
             }
 
             $checkOtpUser = User::where('phone',$request->phone)->first();

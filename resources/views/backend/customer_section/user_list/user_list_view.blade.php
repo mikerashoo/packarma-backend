@@ -63,26 +63,28 @@
                                         <table class="table table-striped table-bordered mb-0">
                                             <thead>
                                                 <tr>
-                                                    <th>Address</th>
-                                                    <th>Pincode</th>
-                                                    <th>City</th>
                                                     <th>State</th>
-                                                    <th>Country</th>
+                                                    <th>City</th>
+                                                    <th>Pincode</th>
+                                                    <th>Area</th>
+                                                    <th>Flat</th>
+                                                    <th>Landmark</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($userAddress as $value)
                                                     <tr>
-                                                        <td>{{ $value->address }}</td>
-                                                        <td>{{ $value->pincode }}</td>
-                                                        <td>{{ $value->city->city_name }}</td>
                                                         <td>{{ $value->state->state_name }}</td>
-                                                        <td>{{ $value->country->country_name }}</td>
+                                                        <td>{{ $value->city_name }}</td>
+                                                        <td>{{ $value->pincode }}</td>
+                                                        <td>{{ $value->area }}</td>
+                                                        <td>{{ $value->flat }}</td>
+                                                        <td>{{ $value->land_mark }}</td>
                                                     </tr>
                                                 @endforeach
                                                 @if (empty($userAddress->toArray()))
                                                     <tr>
-                                                        <td colspan="5" class="text-center">No address found</td>
+                                                        <td colspan="6" class="text-center">No address found</td>
                                                     </tr>
                                                 @endif
                                             </tbody>

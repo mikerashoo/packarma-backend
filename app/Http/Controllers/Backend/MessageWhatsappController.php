@@ -33,7 +33,7 @@ class MessageWhatsappController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = MessageWhatsapp::select('*');              
+	            $query = MessageWhatsapp::select('*')->orderBy('updated_at','desc');              
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                                             

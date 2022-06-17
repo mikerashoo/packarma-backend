@@ -23,10 +23,14 @@
                                         <label>Name<span style="color:#ff0000">*</span></label>
                                         <input class="form-control required" type="text" id="name" name="name" value="{{ $data->name }}"><br />
                                     </div>
-                                    <div class="col-sm-6">
+                                    {{-- <div class="col-sm-6">
                                         <label>Email<span style="color:#ff0000">*</span></label>
-                                        <input class="form-control required" type="text" id="email" name="email" value="{{ $data->email }}"><br />
-                                    </div>
+                                        <input disabled class="form-control required" type="text" id="email" name="email" value="{{ $data->email }}"><br />
+                                    </div> --}}
+                                    <dl class="col-sm-6">
+                                        <label>Email</label>
+                                        <dd class="form-control" readonly>{{ $data->email; }}</dd>
+                                    </dl>
                                     <div class="col-sm-6">
                                         <label>Phone Country Code<span style="color:#ff0000">*</span></label>
                                         <select class="select2 required" id="phone_country_code" name="phone_country_code" style="width: 100% !important;">

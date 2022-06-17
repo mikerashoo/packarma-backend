@@ -30,7 +30,7 @@ class CustomerQuoteApiController extends Controller
                 $validationErrors = $this->validateRequest($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
 
                 $user_id = $token['sub'];
@@ -142,7 +142,7 @@ class CustomerQuoteApiController extends Controller
                 $validationErrors = $this->validateAcceptQuotaion($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $user_id = $token['sub'];
                 if($request->enquiry_status == "accept"){
@@ -210,7 +210,7 @@ class CustomerQuoteApiController extends Controller
                 $validationErrors = $this->validateRejectQuotaion($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $statusData = VendorQuotation::where('id',$request->vendor_quotation_id)->first();
                     if($statusData->enquiry_status == "reject"){

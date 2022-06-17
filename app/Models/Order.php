@@ -204,4 +204,34 @@ class Order extends Model
     {
         return $this->belongsTo('App\Models\MeasurementUnit');
     }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 14-june-2022
+     * uses : to get data of packaging solution in order table
+     */
+    public function recommendation_engine()
+    {
+        return $this->belongsTo('App\Models\RecommendationEngine');
+    }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 14-june-2022
+     * uses : to get data of user address in order table
+     */
+    public function user_address()
+    {
+        return $this->belongsTo('App\Models\UserAddress');
+    }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 14-june-2022
+     * uses : to get data of state in order table
+     */
+    public function state()
+    {
+        return $this->belongsTo('App\Models\State');
+    }
 }

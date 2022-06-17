@@ -10,6 +10,8 @@ use App\Models\Order;
 use App\Models\UserAddress;
 use App\Models\VendorQuotation;
 use App\Models\User;
+use App\Models\State;
+use App\Models\Country;
 use Response;
 
 class OrderApiController extends Controller
@@ -53,7 +55,6 @@ class OrderApiController extends Controller
                     'orders.product_quantity',
                     'measurement_units.unit_symbol',
                     'orders.created_at',
-                    'orders.order_details'
                 )
                     ->leftjoin('packaging_materials', 'packaging_materials.id', '=', 'orders.packaging_material_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
@@ -90,10 +91,10 @@ class OrderApiController extends Controller
                 }
                 $i=0;
                 foreach($data as $row) {
-                    if(!empty($row->order_details)) {
-                        $data[$i]->order_details = json_decode($row->order_details,true);
+                    if(!empty($row->shipping_details)) {
+                        $data[$i]->shipping_details = json_decode($row->shipping_details,true);
                     } else {
-                        $data[$i]->order_details = null;
+                        $data[$i]->shipping_details = null;
                     }
                     $i++;
                 }
@@ -222,7 +223,7 @@ class OrderApiController extends Controller
                 $validationErrors = $this->validateShowOrder($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $user_id = $token['sub'];
 
@@ -237,6 +238,7 @@ class OrderApiController extends Controller
                     'orders.created_at',
                     'categories.category_name',
                     'sub_categories.sub_category_name',
+                    'orders.product_id',
                     'products.product_name',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.shelf_life',
@@ -252,10 +254,8 @@ class OrderApiController extends Controller
                     'orders.mrp',
                     'orders.gst_amount',
                     'orders.grand_total',
-                    'states.state_name',
-                    'cities.city_name',
-                    'customer_enquiries.address',
-                    'customer_enquiries.pincode'
+                    'orders.shipping_details',
+                    'orders.billing_details'
 
                 )
                     ->leftjoin('customer_enquiries', 'customer_enquiries.id', '=', 'orders.customer_enquiry_id')
@@ -277,6 +277,18 @@ class OrderApiController extends Controller
 
                 
                 $data = $data->get()->toArray();
+                $i=0;
+                foreach($data as $row) {
+                    $data[$i]->order_id = getFormatid($row->id, 'orders');
+                    if(!empty($row->billing_details)) {
+                        $data[$i]->shipping_details = json_decode($row->shipping_details,true);
+                        $data[$i]->billing_details = json_decode($row->billing_details,true);
+                    } else {
+                        $data[$i]->shipping_details = null;
+                        $data[$i]->billing_details = null;
+                    }
+                    $i++;
+                }
                 $responseData['result'] = $data;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }
@@ -313,7 +325,7 @@ class OrderApiController extends Controller
                 $validationErrors = $this->validateCancelOrder($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $statusData = Order::where('id',$request->order_id)->first();
                 if($statusData->order_delivery_status == "delivered"){
@@ -374,7 +386,7 @@ class OrderApiController extends Controller
                 $validationErrors = $this->validateFinalQuantityRequest($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 \Log::info("Taking Product Quantity and amount calculation started");
                 //storing values in variable from request
@@ -437,11 +449,12 @@ class OrderApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
+                $user_data = User::find($user_id);
 
                 $validationErrors = $this->validateNewOrder($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 \Log::info("My order creation started!");
                 //storing customer_enquiry_id and vendor_quotation_id in variable from request
@@ -503,14 +516,23 @@ class OrderApiController extends Controller
                 if($request->same_address_checkbox == 'yes'){
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
                     $shipping_address_data = $billing_address_data;
+
+                    $billing_state_data = State::find($shipping_address_data->state_id);
+                    $billing_country_data = Country::find($shipping_address_data->country_id);
+                    $shipping_state_data = State::find($shipping_address_data->state_id);
+                    $shipping_country_data = Country::find($shipping_address_data->country_id);
                     // print_r($billing_address_data);exit;
                 }else{
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
                     $shipping_address_data = UserAddress::find($request->user_shipping_address_id);
+                    $billing_state_data = State::find($billing_address_data->state_id);
+                    $billing_country_data = Country::find($billing_address_data->country_id);
+                    $shipping_state_data = State::find($shipping_address_data->state_id);
+                    $shipping_country_data = Country::find($shipping_address_data->country_id);
                 }
                 //store order details in json array
                 $order_detail=array(
-                    'user_id' => $user_id,
+                    'user_name' => $user_data->name,
                     'product_quantity' => $product_quantity,
                     'mrp' => $mrp_rate_price,
                     'sub_total' => $sub_total_price,
@@ -543,13 +565,13 @@ class OrderApiController extends Controller
                 );
                 //store shipping details in json array
                 $shipping_detail=array(
-                    "id" => $shipping_address_data->id,
-                    "user_id"=> $user_id,
+                    "user_address_id" => $shipping_address_data->id,
+                    "user_name"=> $user_data->name,
                     "address_name"=> $shipping_address_data->address_name,
                     "type" => $shipping_address_data->type,
                     "mobile_no" => $shipping_address_data->mobile_no,
-                    "country_id" => $shipping_address_data->country_id,
-                    "state_id" => $shipping_address_data->state_id,
+                    "country_name" => $shipping_country_data->country_name,
+                    "state_name" => $shipping_state_data->state_name,
                     "city_name" => $shipping_address_data->city_name,
                     "flat" => $shipping_address_data->flat,
                     "area" => $shipping_address_data->area,
@@ -558,13 +580,13 @@ class OrderApiController extends Controller
                 );
                 //store billing details in json array
                 $billing_detail=array(
-                    "id"=> $billing_address_data->id,
-                    "user_id"=> $user_id,
+                    "user_address_id"=> $billing_address_data->id,
+                    "user_name"=> $user_data->name,
                     "address_name"=> $billing_address_data->address_name,
                     "type" => $billing_address_data->type,
                     "mobile_no" => $billing_address_data->mobile_no,
-                    "country_id" => $billing_address_data->country_id,
-                    "state_id" => $billing_address_data->state_id,
+                    "country_name" => $billing_country_data->country_name,
+                    "state_name" => $billing_state_data->state_name,
                     "city_name" => $billing_address_data->city_name,
                     "flat" => $billing_address_data->flat,
                     "area" => $billing_address_data->area,

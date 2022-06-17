@@ -30,7 +30,7 @@ class PincodeDetailApiController extends Controller
                 $pincodeValidationErrors = $this->validatePincode($request);
                 if (count($pincodeValidationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $pincodeValidationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $pincodeValidationErrors->all());
+                    errorMessage($validationErrors->all(), $pincodeValidationErrors->all());
                 }
                 $pincode = "1";
                 if ($request->pin_code) {

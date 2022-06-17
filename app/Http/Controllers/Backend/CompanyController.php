@@ -41,7 +41,7 @@ class CompanyController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = Company::select('*');
+	            $query = Company::select('*')->orderBy('updated_at','desc');
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         

@@ -37,7 +37,7 @@ class StaffController extends Controller
     public function staffData(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = Admin::with('role');
+	            $query = Admin::with('role')->orderBy('updated_at','desc');
 	            return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if ($request['search']['search_email'] && ! is_null($request['search']['search_email'])) {

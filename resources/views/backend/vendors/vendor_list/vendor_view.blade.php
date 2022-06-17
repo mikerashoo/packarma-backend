@@ -24,6 +24,10 @@
                                                 <td>{{$data->vendor_name}}</td>
                                             </tr>
                                             <tr>
+                                                <td><strong>Vendor Company Name</strong></td>
+                                                <td>{{$data->vendor_company_name}}</td>
+                                            </tr>
+                                            <tr>
                                                 <td><strong>Vendor Email</strong></td>
                                                 <td>{{$data->vendor_email}}</td>
                                             </tr>
@@ -33,26 +37,26 @@
                                             </tr>
                                             @if ($data->whatsapp_no)
                                                 <tr>
-                                                    <td><strong>Vendor Phone</strong></td>
+                                                    <td><strong>Vendor Whatsapp</strong></td>
                                                     <td>{{'+'.$data->whatsapp_country->phone_code.' '.$data->whatsapp_no}}</td>
                                                 </tr>
                                             @endif
                                             <tr>
-                                                <td><strong>GST Information Number</strong></td>
+                                                <td><strong>GST Number</strong></td>
                                                 @if (!empty($data->gstin))
                                                     <td>{{ $data->gstin }}</td>
                                                 @else
                                                     <td>-</td>
                                                 @endif
                                             </tr>
-                                            <tr>
+                                            {{-- <tr>
                                                 <td><strong>Address</strong></td>
                                                 <td>{{$data->vendor_address}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Pincode</strong></td>
                                                 <td>{{$data->pincode}}</td>
-                                            </tr>
+                                            </tr> --}}
                                             <tr>
                                                 <td><strong>Vendor Status</strong></td>
                                                 <td>{{displayStatus($data->status)}}</td>

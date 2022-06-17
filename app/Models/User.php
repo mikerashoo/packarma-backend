@@ -127,4 +127,11 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo('App\Models\Currency');
     }
+
+    // mutators start
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
+    }
+    // mutators end
 }

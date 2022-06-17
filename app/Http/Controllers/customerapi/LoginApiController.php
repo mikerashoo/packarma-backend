@@ -36,13 +36,13 @@ class LoginApiController extends Controller
             $validationErrors = $this->validateLogin($request);
             if (count($validationErrors)) {
                 \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                errorMessage($validationErrors->all(), $validationErrors->all());
             }
             $userData = User::with(['currency' => function ($query) {
                 $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
             }])->with(['phone_country' => function ($query) {
                 $query->select('id', 'phone_code', 'country_name');
-            }])->where([['email', $request->email], ['password', md5($request->email.$request->password)], ['status', '1'], ['is_verified', 'Y']])->first();
+            }])->where([['email', strtolower($request->email)], ['password', md5(strtolower($request->email).$request->password)], ['status', '1'], ['is_verified', 'Y']])->first();
             
             if (empty($userData)) {
                 errorMessage(__('user.login_failed'), $msg_data);

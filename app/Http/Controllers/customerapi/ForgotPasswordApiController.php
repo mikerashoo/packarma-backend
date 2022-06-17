@@ -26,7 +26,7 @@ class ForgotPasswordApiController extends Controller
             $validationErrors = $this->validateForgotPassword($request);
             if (count($validationErrors)) {
                 \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                errorMessage($validationErrors->all(), $validationErrors->all());
             }
             $userData = User::where('phone',$request->phone)->first();
             // verify mobile number

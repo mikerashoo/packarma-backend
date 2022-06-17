@@ -31,11 +31,11 @@ class RegisterApiController extends Controller
             $validationErrors = $this->validateSignup($request);
             if (count($validationErrors)) {
                 \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                errorMessage($validationErrors->all(), $validationErrors->all());
             }
             \Log::info("User creation started!");
             // Password Creation
-            $password = md5($request->email . $request->password);
+            $password = md5(strtolower($request->email) . $request->password);
             unset($request->password);
             $request['password'] = $password;
 

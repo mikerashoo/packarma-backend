@@ -36,7 +36,7 @@ class SubCategoryController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = SubCategory::with('category');
+                $query = SubCategory::with('category')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_sub_category_name']) && !is_null($request['search']['search_sub_category_name'])) {

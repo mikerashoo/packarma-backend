@@ -18,15 +18,15 @@
                                         @csrf
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label>Old Password</label>
-                                                <input class="form-control" type="text" name="old_password">
+                                                <label>Old Password<span class="text-danger">*</span></label>
+                                                <input class="form-control" type="password" name="old_password">
                                             </div>
                                             <div class="col-md-4">
-                                                <label>New Password</label>
+                                                <label>New Password<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="password" name="new_password">
                                             </div>
                                             <div class="col-md-4">
-                                                <label>Confirm Password</label>
+                                                <label>Confirm Password<span class="text-danger">*</span></label>
                                                 <input class="form-control" type="password" name="confirm_password">
                                             </div>
                                         </div>

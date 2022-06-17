@@ -23,10 +23,18 @@
                         				<label>Vendor Name<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" id="vendor_name" name="vendor_name" value="{{$data->vendor_name}}"><br/>
                         			</div>
+                                    <dl class="col-sm-6">
+                                        <label>Email</label>
+                                        <dd class="form-control" readonly>{{ $data->vendor_email; }}</dd>
+                                    </dl>
                                     <div class="col-sm-6">
-                                        <label>Vendor Email<span style="color:#ff0000">*</span></label>
-                                        <input class="form-control required" type="email" id="vendor_email" name="vendor_email" value="{{$data->vendor_email}}"><br/>
-                                    </div>
+                        				<label>Vendor Company Name<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" id="vendor_company_name" name="vendor_company_name" value="{{$data->vendor_company_name}}"><br/>
+                        			</div>
+                                    <div class="col-sm-6">
+                        				<label>GST Number<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control required" type="text" id="gstin" name="gstin" value="{{$data->gstin}}"><br/>
+                        			</div>
                                     <div class="col-sm-6">
                         				<label>Phone Country Code<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="phone_country_code" name="phone_country_code" style="width: 100% !important;">
@@ -60,14 +68,6 @@
                                     <div class="col-sm-6">
                                         <label>Whatsapp Number</label>
                                         <input class="form-control" type="text" id="whatsapp_no" name="whatsapp_no" value="{{$data->whatsapp_no}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>Vendor Address<span style="color:#ff0000">*</span></label>
-                                        <textarea class="form-control required" id="vendor_address" name="vendor_address">{{$data->vendor_address}}</textarea><br/>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>Pincode<span style="color:#ff0000">*</span></label>
-                                        <input class="form-control required" type="number" id="pincode" name="pincode" value="{{$data->pincode}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                     </div>
                                     <div class="col-sm-6">
                         				<label>Currency<span style="color:#ff0000">*</span></label>

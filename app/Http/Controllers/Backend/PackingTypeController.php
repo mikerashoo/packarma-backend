@@ -35,7 +35,7 @@ class PackingTypeController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = PackingType::select('*');
+                $query = PackingType::select('*')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_packing_name']) && !is_null($request['search']['search_packing_name'])) {
