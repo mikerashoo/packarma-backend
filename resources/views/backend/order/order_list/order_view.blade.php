@@ -68,7 +68,7 @@
                                                         <td>{{$data[0]['vendor_warehouse']['warehouse_name']; }}</td>
                                                     </tr> --}}
                                                     <tr>
-                                                        <td class="col-sm-5"><strong>MRP</strong></td>
+                                                        <td><strong>MRP</strong></td>
                                                         <td>{{$data[0]['mrp'];}}</td>
                                                     </tr>
                                                     <tr>
@@ -138,7 +138,7 @@
                                             <div class="table-responsive">
                                                 <table class="table table-striped table-bordered">
                                                     <tr>
-                                                        <td><strong>Category Name</strong></td>
+                                                        <td class="col-sm-5"><strong>Category Name</strong></td>
                                                         <td>{{$data[0]['category']['category_name']; }}</td>
                                                     </tr>
                                                     <tr>

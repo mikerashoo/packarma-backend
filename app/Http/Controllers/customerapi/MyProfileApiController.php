@@ -28,14 +28,14 @@ class MyProfileApiController extends Controller
             if ($token) {
                 $user_id = $token['sub'];
 
-                $data = User::select('name', 'email', 'phone_country_id', 'phone', 'whatsapp_country_id', 'whatsapp_no')
+                $data = User::select('name', 'email', 'phone_country_id', 'phone', 'whatsapp_country_id', 'whatsapp_no','visiting_card_front','visiting_card_back')
                     ->with(['phone_country' => function ($query) {
                         $query->select('id', 'country_name', 'phone_code');
                     }])
                     ->with(['whatsapp_country' => function ($query) {
                         $query->select('id', 'country_name', 'phone_code');
                     }])
-                    ->where([['id', $user_id]])->first();
+                    ->where([['id', $user_id]])->get();
                 if (empty($data)) {
                     errorMessage(__('my_profile.not_found'), $msg_data);
                 }
@@ -50,7 +50,13 @@ class MyProfileApiController extends Controller
                     "edit_user" => true,
                     "delete_user" => true,
                 );
-
+                $i=0;
+                foreach($data as $row)
+                {
+                    $data[$i]['visiting_card_front'] = getFile($row['visiting_card_front'], 'visiting_card', false, 'front');
+                    $data[$i]['visiting_card_back'] = getFile($row['visiting_card_back'], 'visiting_card',false,'back');
+                    $i++;
+                }
                 $msg_data['result'] = $data;
                 $msg_data['flags'] = $flags;
 
@@ -86,10 +92,10 @@ class MyProfileApiController extends Controller
                     errorMessage(__('auth.validation_failed'), $userValidationErrors->all());
                 }
                 \Log::info("User Update Start!");
-                $checkUser = User::where([['phone', $request->phone], ['id', '!=', $user_id]])->first();
-                if (!empty($checkUser)) {
-                    errorMessage(__('user.same_phone_exist'), $msg_data);
-                }
+                // $checkUser = User::where([['phone', $request->phone], ['id', '!=', $user_id]])->first();
+                // if (!empty($checkUser)) {
+                //     errorMessage(__('user.same_phone_exist'), $msg_data);
+                // }
 
                 $checkUser = User::where('id', $user_id)->first();
                 $checkUser->update($request->all());
@@ -98,6 +104,29 @@ class MyProfileApiController extends Controller
 
                 $userData->created_at->toDateTimeString();
                 $userData->updated_at->toDateTimeString();
+
+                $input = array();
+                // Storing visiting card Front and Back
+                if ($request->hasFile('visiting_card_front')) {
+                    \Log::info("Storing visiting card front image.");
+                    $visiting_card_front = $request->file('visiting_card_front');
+                    $extension = $visiting_card_front->extension();
+                    $imgname_front = $user['id'] . '_front_' . Carbon::now()->format('dmYHis') . '.' . $extension;
+                    $visiting_card_front->storeAs('uploads/visiting_card/front', $imgname_front, 'public');
+                    $user['visiting_card_front'] = $input['visiting_card_front'] = $imgname_front;
+                }
+                if ($request->hasFile('visiting_card_back')) {
+                    \Log::info("Storing visiting card back image.");
+                    $visiting_card_back = $request->file('visiting_card_back');
+                    $extension = $visiting_card_back->extension();
+                    $imgname_back = $user['id'] . '_back_' . Carbon::now()->format('dmYHis') . '.' . $extension;
+                    $visiting_card_back->storeAs('uploads/visiting_card/back', $imgname_back, 'public');
+                    $user['visiting_card_back'] = $input['visiting_card_back'] = $imgname_back;
+                }
+                if (!empty($input)) {
+                    User::find($user_id)->update($input);
+                }
+
                 \Log::info("Existing customer updated with email id: " . $request->email . " and phone number: " . $request->phone);
                 successMessage(__('user.update_successfully'), $user);
             } else {
@@ -152,9 +181,6 @@ class MyProfileApiController extends Controller
     {
         return \Validator::make($request->all(), [
             'name' => 'required|string',
-            'phone_country_id' => 'required|numeric',
-            'phone' => 'required|numeric',
-            'email' => 'required|email',
         ])->errors();
     }
 }

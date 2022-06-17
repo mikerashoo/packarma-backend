@@ -21,7 +21,7 @@
 
                    
                                     <div class="col-12 users-module">
-                                        <div class="table-responsive" style="height:500px;">
+                                        <div class="table-responsive" style="height:450px;">
                                             <table class="table mb-0 mt-3">
                                                 <thead style="position: sticky; position: -webkit-sticky; top: 0;  background-color: #d6d6d6; color: #000000;  z-index: 1;">
                                                     <tr>
