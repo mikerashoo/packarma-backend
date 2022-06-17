@@ -223,7 +223,7 @@ class OrderApiController extends Controller
                 $validationErrors = $this->validateShowOrder($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $user_id = $token['sub'];
 
@@ -238,6 +238,7 @@ class OrderApiController extends Controller
                     'orders.created_at',
                     'categories.category_name',
                     'sub_categories.sub_category_name',
+                    'orders.product_id',
                     'products.product_name',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.shelf_life',
@@ -324,7 +325,7 @@ class OrderApiController extends Controller
                 $validationErrors = $this->validateCancelOrder($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $statusData = Order::where('id',$request->order_id)->first();
                 if($statusData->order_delivery_status == "delivered"){
@@ -385,7 +386,7 @@ class OrderApiController extends Controller
                 $validationErrors = $this->validateFinalQuantityRequest($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 \Log::info("Taking Product Quantity and amount calculation started");
                 //storing values in variable from request
@@ -453,7 +454,7 @@ class OrderApiController extends Controller
                 $validationErrors = $this->validateNewOrder($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 \Log::info("My order creation started!");
                 //storing customer_enquiry_id and vendor_quotation_id in variable from request

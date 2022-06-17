@@ -89,7 +89,7 @@ class MyProfileApiController extends Controller
                 $userValidationErrors = $this->validateUpdate($request);
                 if (count($userValidationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $userValidationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $userValidationErrors->all());
+                    errorMessage($validationErrors->all(), $userValidationErrors->all());
                 }
                 \Log::info("User Update Start!");
                 // $checkUser = User::where([['phone', $request->phone], ['id', '!=', $user_id]])->first();

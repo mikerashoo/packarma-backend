@@ -33,7 +33,7 @@ class ChangePasswordApiController extends Controller
                 $validationErrors = $this->validateForgotPassword($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $userData = User::where('id', $user_id)->first();
                 if ($userData->password != md5($userData->email . $request->current_password)) {

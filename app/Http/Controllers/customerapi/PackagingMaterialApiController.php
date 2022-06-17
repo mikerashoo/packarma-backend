@@ -30,7 +30,7 @@ class PackagingMaterialApiController extends Controller
                 $validationErrors = $this->validateMaterial($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $page_no=1;
                 $limit=10;

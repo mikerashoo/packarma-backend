@@ -29,7 +29,7 @@ class PackagingSolutionApiController extends Controller
                 $validationErrors = $this->validateRequest($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 else{
                     $page_no=1;
