@@ -244,7 +244,7 @@ function submitModalForm(form_id, form_method, errorOverlay = '') {
             var response = JSON.parse(data);
             if (response['success'] == 0) {
                 if (errorOverlay) {
-                    $(form).find('.form-error').html('<span class="text-danger">*' + response['message'] + '</span>').css('z-index', '-1');
+                    $(form).find('.form-error').html('<span class="text-danger">*' + response['message'] + '</span>');
                     setTimeout(function () {
                         $(form).find('.form-error').empty();
                     }, 3000);
@@ -259,7 +259,7 @@ function submitModalForm(form_id, form_method, errorOverlay = '') {
                 }
             } else {
                 if (errorOverlay) {
-                    $(form).find('.form-error').html('<span class="text-success">' + response['message'] + '</span>').css('z-index', '-1');
+                    $(form).find('.form-error').html('<span class="text-success">' + response['message'] + '</span>');
                 } else {
                     $.activeitNoty({
                         type: 'success',
