@@ -34,7 +34,7 @@ class FeedbackApiController extends Controller
                 $validationErrors = $this->validateFeedbackStore($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $feedbackData = Review::create($request->all());
                 \Log::info("Feedback Submitted Successfully");

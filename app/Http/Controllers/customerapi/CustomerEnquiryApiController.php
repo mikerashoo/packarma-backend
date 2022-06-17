@@ -158,7 +158,7 @@ class CustomerEnquiryApiController extends Controller
                 $validationErrors = $this->validateEnquiry($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 //getting user address details from userAddress and putting value to request to store in cumstomer enquiry table
                 $userAddress = UserAddress::find($request->user_address_id);

@@ -29,7 +29,7 @@ class UserSubscriptionPaymentApiController extends Controller
                 $validationErrors = $this->validateNewSubscriptionPayment($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 \Log::info("My order payment started!");
 
@@ -103,7 +103,7 @@ class UserSubscriptionPaymentApiController extends Controller
                 $validationErrors = $this->validatePaymentSuccess($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
-                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                    errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 \Log::info("Checking Payment success status!");
 
