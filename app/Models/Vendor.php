@@ -107,4 +107,11 @@ class Vendor extends Model implements JWTSubject
     {
         return $this->belongsTo('App\Models\PackagingMaterial');
     }
+
+    // mutators start
+    public function setVendorEmailAttribute($value)
+    {
+        $this->attributes['vendor_email'] = strtolower($value);
+    }
+    // mutators end
 }

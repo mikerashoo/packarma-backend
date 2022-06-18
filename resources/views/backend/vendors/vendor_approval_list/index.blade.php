@@ -42,6 +42,8 @@
                                                         <th id="name" data-orderable="false" data-searchable="false">Vendor Name</th>
                                                         <th id="email" data-orderable="false" data-searchable="false">Email</th>
                                                         <th id="phone" data-orderable="false" data-searchable="false">Phone</th>
+                                                        <th id="gstin" data-orderable="false" data-searchable="false">Gst No</th>
+                                                        <th id="gst_certificate" data-orderable="false" data-searchable="false">Gst Certificate</th>
                                                         <th id="approval_status" data-orderable="false" data-searchable="false">Approval Status</th>
                                                         <th id="created_at" data-orderable="false" data-searchable="false">Date Time</th>
                                                         @if ($data['vendor_approval_view'] || $data['vendor_approval_update'] )

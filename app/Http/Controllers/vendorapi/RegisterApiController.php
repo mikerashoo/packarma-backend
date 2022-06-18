@@ -29,7 +29,7 @@ class RegisterApiController extends Controller
             }
             \Log::info("Vendor creation started!");
             // Password Creation
-            $vendor_password = md5($request->vendor_email . $request->vendor_password);
+            $vendor_password = md5(strtolower($request->vendor_email) . $request->vendor_password);
             unset($request->vendor_password);
             $request['vendor_password'] = $vendor_password;
 

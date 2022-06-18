@@ -84,7 +84,7 @@
                                     <div class="card-content">
                                         <div class="card-body pb-0">
                                             <h6>{{ $vendors->vendor_name ??''; }}</h6>
-                                            <p class="text-secondary small">Rate, {{ $vendors->mrp ??''; }}/{{ $vendors->unit_symbol ??''; }}</p>
+                                            <p class="text-secondary small">Rate, {{ $vendors->vendor_price ??''; }}/{{ $vendors->unit_symbol ??''; }}</p>
                                             <p class="text-secondary small">Delivery in {{ $vendors->lead_time ??''; }} Days</p>
                                             <p class="text-secondary small">Commission Rate, {{ $vendors->commission_amt ??''; }}/{{ $vendors->unit_symbol ??''; }}</p>
                                         </div>

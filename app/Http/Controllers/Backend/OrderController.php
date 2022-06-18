@@ -128,7 +128,7 @@ class OrderController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['user_name', 'vendor_name', 'grand_total','product_quantity', 'order_delivery_status','packaging_material', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['user_name', 'vendor_name', 'grand_total', 'product_quantity', 'order_delivery_status', 'packaging_material', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -313,7 +313,7 @@ class OrderController extends Controller
     // 'storage_condition', table pending
     public function viewOrder($id)
     {
-        $data['data'] = Order::where('id',$id)->get();
+        $data['data'] = Order::where('id', $id)->get();
         $data['user'] = User::all();
         $data['vendor'] = Vendor::all();
         $data['product'] = Product::all();
@@ -328,7 +328,7 @@ class OrderController extends Controller
         $data['packaging_material'] = PackagingMaterial::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['recommendation_engine'] = RecommendationEngine::all();
-        
+
         $i = 0;
         foreach ($data['data'] as $row) {
             $data['data'][$i]->order_id = getFormatid($row->id, 'orders');
@@ -507,7 +507,7 @@ class OrderController extends Controller
                 'dc_tax_val' => $dc_tax_val,
                 'dc_igst_amount' => $dc_igst_amount,
                 'in_words' => $in_words,
-                'no_image' => getFile('mypcot.jpg', 'default'),
+                'no_image' => getFile('mypcot.jpg', 'mypcot'),
             ];
             // $result['data'] = $data;
             // echo '<pre>';

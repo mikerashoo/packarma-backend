@@ -73,7 +73,13 @@
                                     <div class="col-sm-6">
                                         <label>Whatsapp Number</label>
                                         <input class="form-control" type="text" id="whatsapp_no" name="whatsapp_no" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                    </div><br>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Gst Certificate<span style="color:#ff0000">*</span></label>
+                                        <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.GSTCERTIFICATE'); ?></p>
+                                        <input type="file" id="gst_certificate" name="gst_certificate" class="form-control required" accept="gst_certificate/png, gst_certificate/jpg, gst_certificate/jpeg, gst_certificate/pdf" onchange="checkFiles(this.files)"><br/>
+                                    </div>
+                                    <br>
                                 </div>
                         		<hr>
                         		<div class="row">
