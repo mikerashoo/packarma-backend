@@ -84,6 +84,21 @@ class VendorController extends Controller
                     ->editColumn('vendor_company_name', function ($event) {
                         return $event->vendor_company_name;
                     })
+                    ->editColumn('gstin', function ($event) {
+                        return $event->gstin ?? 'not found';
+                    })
+                    ->editColumn('gst_certificate', function ($event) {
+                        if (str_contains($event->gst_certificate, '.pdf')) {
+                            $file  = '<span><i class="fa fa-file"></i>' . $event->gst_certificate . '</span>';
+                        } else {
+                            // $image_path = getFile($event->gst_certificate, 'vendor_gst_certificate', false);
+                            // $file  = '<img src="' . $image_path . '" alt="File Not Found" width="150" height="150">';
+                            $imageUrl = ListingImageUrl('vendor_gst_certificate', $event->gst_certificate, 'image', false);
+                            $file  = ' <img src="' . $imageUrl . '" width="150" height="150"/>';
+                        }
+
+                        return $file;
+                    })
                     ->editColumn('vendor_status', function ($event) {
                         $vendor_status = checkPermission('vendor_status');
                         $status = '';
@@ -122,7 +137,7 @@ class VendorController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['vendor_name', 'vendor_approval_status', 'vendor_status', 'mark_featured', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['vendor_name', 'gstin', 'gst_certificate', 'vendor_approval_status', 'vendor_status', 'mark_featured', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -162,6 +177,9 @@ class VendorController extends Controller
         $data['phone_country'] = Country::all();
         $data['whatsapp_country'] = Country::all();
         $data['currency'] = Currency::all();
+        if ($data['data']) {
+            $data['data']->image_path = getFile($data['data']->gst_certificate, 'vendor_gst_certificate', false);
+        }
         return view('backend/vendors/vendor_list/vendor_edit', $data);
     }
 
@@ -176,7 +194,7 @@ class VendorController extends Controller
     {
         $msg_data = array();
         $msg = "";
-        
+
         $isEditFlow = false;
         if (isset($_GET['id'])) {
             $validationErrors = $this->validateEditVendorRequest($request);
@@ -194,11 +212,11 @@ class VendorController extends Controller
             if (isset($CheckPhoneresponse[0])) {
                 errorMessage('Phone Number Already Exist', $msg_data);
             }
-            $CheckPhoneresponse = Vendor::where([['whatsapp_country_id', $request->whatsapp_phone_code], ['whatsapp_no', $request->whatsapp_no], ['id', '<>', $_GET['id']]])->get()->toArray();
+            $CheckPhoneresponse = Vendor::where([['whatsapp_country_id', $request->whatsapp_country_code], ['whatsapp_no', $request->whatsapp_no], ['id', '<>', $_GET['id']]])->get()->toArray();
             if (isset($CheckPhoneresponse[0])) {
                 errorMessage('Whatsapp Number Already Exist', $msg_data);
             }
-            if (!empty($request->whatsapp_no) && empty($request->whatsapp_phone_code)) {
+            if (!empty($request->whatsapp_no) && empty($request->whatsapp_country_code)) {
                 errorMessage('Please Select Whatsapp Country Code.', $msg_data);
             }
             $tblObj = Vendor::find($_GET['id']);
@@ -219,7 +237,7 @@ class VendorController extends Controller
             if (isset($CheckPhoneresponse[0])) {
                 errorMessage('Phone Number Already Exist', $msg_data);
             }
-            $CheckPhoneresponse = Vendor::where([['whatsapp_country_id', ($request->whatsapp_phone_code)], ['whatsapp_no', $request->whatsapp_no]])->get()->toArray();
+            $CheckPhoneresponse = Vendor::where([['whatsapp_country_id', ($request->whatsapp_country_code)], ['whatsapp_no', $request->whatsapp_no]])->get()->toArray();
             if (isset($CheckPhoneresponse[0])) {
                 errorMessage('Whatsapp Number Already Exist', $msg_data);
             }
@@ -240,12 +258,14 @@ class VendorController extends Controller
             $tblObj->whatsapp_no = $request->whatsapp_no;
         }
         $tblObj->vendor_name = $request->vendor_name;
-        if(isset($request->vendor_email)){
-            $tblObj->vendor_email = $request->vendor_email;
-            $vendor_password = md5($request->vendor_email . $request->vendor_password);
-            $tblObj->vendor_password = $vendor_password;
-        }
-        
+        // if (isset($request->vendor_email)) {
+        $tblObj->vendor_email = strtolower($request->vendor_email);
+        $vendor_password = md5(strtolower($request->vendor_email) . $request->vendor_password);
+        $tblObj->vendor_password = $vendor_password;
+        // }
+        print_r($tblObj->vendor_email);
+        die;
+
         $tblObj->vendor_company_name = $request->vendor_company_name;
         $tblObj->gstin = $request->gstin;
         $tblObj->phone_country_id = $request->phone_country_code;
@@ -261,6 +281,16 @@ class VendorController extends Controller
         }
         $tblObj->save();
         $last_inserted_id = $tblObj->id;
+
+        if ($request->hasFile('gst_certificate')) {
+            $image = $request->file('gst_certificate');
+            $actualImage = saveSingleImage($image, 'vendor_gst_certificate', $last_inserted_id);
+            $tblObj = Vendor::find($last_inserted_id);
+            $tblObj->gst_certificate = $actualImage;
+            $tblObj->save();
+        }
+
+
         successMessage($msg, $msg_data);
     }
 
@@ -303,7 +333,7 @@ class VendorController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Vendor::with('phone_country', 'whatsapp_country', 'currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at','desc');
+                $query = Vendor::with('phone_country', 'whatsapp_country', 'currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
@@ -322,6 +352,21 @@ class VendorController extends Controller
                     })
                     ->editColumn('phone', function ($event) {
                         return '+' . $event->phone_country->phone_code . ' ' . $event->phone;
+                    })
+                    ->editColumn('gstin', function ($event) {
+                        return $event->gstin ?? 'not found';
+                    })
+                    ->editColumn('gst_certificate', function ($event) {
+                        if (str_contains($event->gst_certificate, '.pdf')) {
+                            $file  = '<span><i class="fa fa-edit"></i>' . $event->gst_certificate . '</span>';
+                        } else {
+                            $imageUrl = ListingImageUrl('vendor_gst_certificate', $event->gst_certificate, 'image', false);
+                            $file  = ' <img src="' . $imageUrl . '" width="150" height="150"/>';
+                            // $image_path = getFile($event->gst_certificate, 'vendor_gst_certificate', false);
+                            // $file  = '<img src="' . $image_path . '" alt="File Not Found" width="150" height="150">';
+                        }
+
+                        return $file;
                     })
                     ->editColumn('approval_status', function ($event) {
                         $db_approval_status = $event->approval_status;
@@ -354,7 +399,7 @@ class VendorController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'email', 'phone', 'approval_status', 'created_at', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['name', 'email', 'phone', 'gstin', 'gst_certificate', 'approval_status', 'created_at', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -409,6 +454,7 @@ class VendorController extends Controller
             }
         }
         $tableObject->approval_status = $request->approval_status;
+        $tableObject->status = 1;
         $tableObject->approved_on = date('Y-m-d H:i:s');
         $tableObject->approved_by =  session('data')['id'];
         $tableObject->admin_remark = '';
@@ -462,10 +508,12 @@ class VendorController extends Controller
             'vendor_email' => 'required|string',
             'vendor_password' => 'required|string|min:8',
             'vendor_company_name' => 'required|string',
-            'gstin' => 'required|string|min:15|max:15|unique:vendors,gstin'. ($request->id ? ",$request->id" : ''),
+            'gstin' => 'required|string|min:15|max:15|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
             'phone_country_code' => 'required|integer',
             'phone' => 'required|integer',
             'currency' => 'required|integer',
+            'gst_certificate' => 'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
+
         ])->errors();
     }
 
@@ -481,13 +529,15 @@ class VendorController extends Controller
         return \Validator::make($request->all(), [
             'vendor_name' => 'required|string',
             'vendor_company_name' => 'required|string',
-            'gstin' => 'required|string|min:15|max:15|unique:vendors,gstin'. ($request->id ? ",$request->id" : ''),
+            'gstin' => 'required|string|min:15|max:15|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
             'phone_country_code' => 'required|integer',
             'phone' => 'required|integer',
             'currency' => 'required|integer',
+            'gst_certificate' => 'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
+
         ])->errors();
     }
-    
+
 
     /**
      *   created by : Pradyumn Dwivedi

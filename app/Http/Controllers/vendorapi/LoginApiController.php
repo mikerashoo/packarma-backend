@@ -64,7 +64,7 @@ class LoginApiController extends Controller
                 $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
             }])->with(['phone_country' => function ($query) {
                 $query->select('id', 'phone_code', 'country_name');
-            }])->where([['vendor_email', $request->vendor_email], ['vendor_password', md5($request->vendor_email . $request->vendor_password)], ['is_verified', 'Y']])->first();
+            }])->where([['vendor_email', strtolower($request->vendor_email)], ['vendor_password', md5(strtolower($request->vendor_email) . $request->vendor_password)], ['is_verified', 'Y']])->first();
 
             // print_r($vendorData);
             // die();

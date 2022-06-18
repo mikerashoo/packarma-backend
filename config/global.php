@@ -19,6 +19,7 @@ return [
         "ORDER_PAYMENT" => "1200X800 pixels (3:2), Max Size 500Kb and .jpg format image",
         "WHATSAPP_FILE" => "500X500 pixels (1:1), Max Size 500Kb and .jpg format image",
         "NOTIFICATION" => "1200X800 pixels (3:2), Max Size 500Kb and .jpg format image",
+        'GSTCERTIFICATE' => '2MB .pdf, .jpeg, .jpg, .png format file'
     ],
     'SIZE' =>  [
         "BANNER" => "500000",
