@@ -258,13 +258,11 @@ class VendorController extends Controller
             $tblObj->whatsapp_no = $request->whatsapp_no;
         }
         $tblObj->vendor_name = $request->vendor_name;
-        // if (isset($request->vendor_email)) {
-        $tblObj->vendor_email = strtolower($request->vendor_email);
-        $vendor_password = md5(strtolower($request->vendor_email) . $request->vendor_password);
-        $tblObj->vendor_password = $vendor_password;
-        // }
-        print_r($tblObj->vendor_email);
-        die;
+        if (isset($request->vendor_email)) {
+            $tblObj->vendor_email = strtolower($request->vendor_email);
+            $vendor_password = md5(strtolower($request->vendor_email) . $request->vendor_password);
+            $tblObj->vendor_password = $vendor_password;
+        }
 
         $tblObj->vendor_company_name = $request->vendor_company_name;
         $tblObj->gstin = $request->gstin;
