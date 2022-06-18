@@ -18,7 +18,22 @@ class VendorQuotation extends Model
         'enquiry_status',
         'product_quantity',
         'sub_total',
-        'total_amount'
+        'total_amount',
+        'user_id',
+        'customer_enquiry_id',
+        'product_id',
+        'vendor_id',
+        'vendor_price',
+        'commission_amt',
+        'gst_type',
+        'gst_percentage',
+        'mrp',
+        'gst_amount',
+        'freight_amount',
+        'total_amount',
+        'quotation_expiry_datetime',
+        'lead_time',
+        'created_by',
     ];
 
     /**

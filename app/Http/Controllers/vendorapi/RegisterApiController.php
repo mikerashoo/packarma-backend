@@ -74,7 +74,7 @@ class RegisterApiController extends Controller
             'vendor_name' => 'required|string',
             'vendor_company_name' => 'required|string',
             'phone_country_id' => 'required|numeric',
-            'phone' => 'required|numeric',
+            'phone' => 'required|numeric|digits:10',
             'vendor_email' => 'required|email',
             'vendor_password' => 'required|string|min:8'
 

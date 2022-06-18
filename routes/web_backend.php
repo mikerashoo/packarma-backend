@@ -185,6 +185,8 @@ Route::group(['middleware' => ['customAuth']], function () {
 	Route::post('saveEnquiryMapToVendor', 'CustomerEnquiryController@saveFormDataVendor');
 	Route::get('/customer_enquiry_view/{id}', 'CustomerEnquiryController@view');
 	Route::post('/getVendorWarehouseDropdown', 'CustomerEnquiryController@getVendorWarehouse');
+	Route::get('/map_vendor_form/{id}/{customer_enquiry_id}', 'CustomerEnquiryController@mapVendorForm');
+	Route::post('/delete_map_vendor', 'CustomerEnquiryController@deleteMappedVendor');
 
 	//user subscription payment
 	Route::get('/user_subscription_payment', 'UserSubscriptionPaymentController@index');

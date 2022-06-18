@@ -150,7 +150,7 @@ class MyProfileController extends Controller
         return \Validator::make($request->all(), [
             'vendor_name' => 'required|string',
             'vendor_company_name' => 'required|string',
-            'phone_country_id' => 'required|numeric',
+            // 'phone_country_id' => 'required|numeric',
             // 'phone' => 'required|numeric',
             // 'vendor_email' => 'required|email',
 
