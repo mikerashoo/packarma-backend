@@ -422,6 +422,9 @@ class VendorController extends Controller
     {
         $data['data'] = Vendor::find($id);
         $data['approvalArray'] = approvalStatusArray();
+        if ($data['data']) {
+            $data['data']->image_path = getFile($data['data']->gst_certificate, 'vendor_gst_certificate', false);
+        }
         return view('backend/vendors/vendor_approval_list/vendor_approval_update', $data);
     }
 
@@ -436,7 +439,7 @@ class VendorController extends Controller
     {
         $msg_data = array();
         $msg = "";
-        $validationErrors = $this->validateRequest($request);
+        $validationErrors = $this->validateRequest($request, $_GET['id']);
         if (count($validationErrors)) {
             \Log::error("Vendor Approval Validation Exception: " . implode(", ", $validationErrors->all()));
             errorMessage(implode("\n", $validationErrors->all()), $msg_data);
@@ -452,6 +455,7 @@ class VendorController extends Controller
             }
         }
         $tableObject->approval_status = $request->approval_status;
+        $tableObject->gstin = $request->gstin ?? '';
         $tableObject->status = 1;
         $tableObject->approved_on = date('Y-m-d H:i:s');
         $tableObject->approved_by =  session('data')['id'];
@@ -460,6 +464,16 @@ class VendorController extends Controller
             $tableObject->admin_remark = $request->admin_remark;
         }
         $tableObject->save();
+
+        if ($request->hasFile('gst_certificate')) {
+            $image = $request->file('gst_certificate');
+            $actualImage = saveSingleImage($image, 'vendor_gst_certificate', $_GET['id']);
+            // $tblObj = Vendor::find($_GET['id']);
+            $tableObject->gst_certificate = $actualImage;
+            $tableObject->save();
+        }
+
+
         successMessage($msg, $msg_data);
     }
 
@@ -485,10 +499,13 @@ class VendorController extends Controller
      *   @param Request request
      *   @return Response
      */
-    private function validateRequest(Request $request)
+    private function validateRequest(Request $request, $id)
     {
         return \Validator::make($request->all(), [
             'approval_status' => 'required',
+            'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|unique:vendors,gstin' . ($id ? ",$id" : '') : '',
+            'gst_certificate' => ($request->approval_status == 'accepted') ?  'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : '',
+
         ])->errors();
     }
 
