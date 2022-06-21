@@ -26,6 +26,17 @@ $(document).ready(function () {
         else {
             $("#remark").hide();
         }
+
+        if (this.value == 'accepted') {
+            $("#gstin_div").show();
+            $("#gst_certificate_div").show();
+        }
+        else {
+            $("#gstin_div").hide();
+            $("#gst_certificate_div").hide();
+        }
+
+
     });
     setTimeout(function () {
         $('.successAlert').fadeOut('slow');
@@ -167,6 +178,8 @@ function loadViewPage(page_url) {
                 if (document.getElementById("approval_status")) {
                     var status = document.getElementById("approval_status").value;
                     (status == 'rejected') ? $("#remark").show() : $("#remark").hide();
+                    (status == 'accepted') ? $("#gstin_div").show() : $("#gstin_div").hide();
+                    (status == 'accepted') ? $("#gst_certificate_div").show() : $("#gst_certificate_div").hide();
                 }
             }
         }

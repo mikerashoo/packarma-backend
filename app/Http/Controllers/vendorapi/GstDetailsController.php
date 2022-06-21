@@ -112,6 +112,7 @@ class GstDetailsController extends Controller
                 $i = 0;
                 foreach ($vendorGstData as $row) {
 
+                    $vendorGstData[$i]['file_type'] = explode('.', $row['gst_certificate'])['1'];
                     $vendorGstData[$i]['gst_certificate'] = getFile($row['gst_certificate'], 'vendor_gst_certificate');
                     $i++;
                 }
