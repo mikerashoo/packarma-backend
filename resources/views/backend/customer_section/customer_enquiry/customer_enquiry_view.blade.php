@@ -49,10 +49,10 @@
                                                         <td><strong>Order ID</strong></td>
                                                         <td>{{$data->order_id;}}</td>
                                                     </tr> --}}
-                                                    <tr>
+                                                    {{-- <tr>
                                                         <td><strong>Description</strong></td>
                                                         <td>{{$data->description;}}</td>
-                                                    </tr>
+                                                    </tr> --}}
                                                     <tr>
                                                         <td><strong>Enquiry Status</strong></td>
                                                         <td>{{customerEnquiryQuoteType($data->quote_type); }}</td>
@@ -67,11 +67,19 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>City</strong></td>
-                                                        <td>{{ $data['city']->city_name;}}</td>
+                                                        <td>{{ $data->city_name;}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><strong>User Address</strong></td>
-                                                        <td>{{ $data['user_address']->address;}}</td>
+                                                        <td><strong>Area</strong></td>
+                                                        <td>{{ $data->area;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Flat</strong></td>
+                                                        <td>{{ $data->flat;}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Landmark</strong></td>
+                                                        <td>{{ $data->land_mark;}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Pincode</strong></td>

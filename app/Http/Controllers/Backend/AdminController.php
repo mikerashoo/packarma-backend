@@ -112,6 +112,7 @@ class AdminController extends Controller
         $permissions = json_decode($roleData['permission'], TRUE);
         $data['role_permissions'] = $permissions;
         $permissionArr = Permission::where([['to_be_considered', 'Yes']])->get()->toArray();
+        // print_r($permissionArr);exit;
         $formatedPermissions = array();
         $permisstion_type = array('List', 'Add', 'Edit', 'View', 'Status','Map To Vendor','Material Map','Delivery Status Update','Customer Payment Update','Vendor Payment Update');
         foreach ($permissionArr as $key => $value) {
@@ -166,7 +167,7 @@ class AdminController extends Controller
             if (($key = array_search($permission_id, $permissions)) !== false) {
                 unset($permissions[$key]);
             }
-            $permissions = explode(',', implode(',', $permissions));
+            // $permissions = explode(',', implode(',', $permissions));
         }
 
         $msg_data = array();
