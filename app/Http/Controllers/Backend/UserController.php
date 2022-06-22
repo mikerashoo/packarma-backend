@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use App\Models\Currency;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
+use App\Models\CustomerDevice;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
 
@@ -263,6 +264,7 @@ class UserController extends Controller
             successMessage('Published', $msg_data);
         }
         else {
+            CustomerDevice::where([['user_id', $request->id]])->update(['remember_token' => NULL]);
             successMessage('Unpublished', $msg_data);
         }
     }
@@ -450,6 +452,10 @@ class UserController extends Controller
         if($request->approval_status ==  'accepted') {
             $tableObject->status = 1;
         }
+        $tableObject->status = 0;
+        if ($request->approval_status !=  'accepted') {
+            CustomerDevice::where([['user_id', $_GET['id']]])->update(['remember_token' => NULL]);
+        }
         $tableObject->save();
 
         if ($request->hasFile('gst_certificate')) {
@@ -488,9 +494,7 @@ class UserController extends Controller
     {
         return \Validator::make($request->all(), [
             'approval_status' => 'required|string',
-            // 'gstin'=> 'string|min:15|max:15|unique:users,gstin' . ($request->id ? ",$request->id" : ''),
-            // 'gst_certificate' => 'mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_GST_CERTIFICATE_SIZE'),
-            'gstin' => ($request->approval_status == 'accepted') ? 'nullable|string|min:15|max:15|unique:users,gstin' . ($id ? ",$id" : '') : '',
+            'gstin' => ($request->approval_status == 'accepted') ? 'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : '') : '',
             'gst_certificate' => ($request->approval_status == 'accepted') ?  'nullable|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
         ])->errors();
     }

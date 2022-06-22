@@ -264,15 +264,15 @@ class UserAddressApiController extends Controller
         return \Validator::make($request->all(), [
             'country_id' => 'required|numeric',
             'address_name' => 'required|string',
-            'mobile_no' => 'required|digits:10|unique:user_addresses,mobile_no',
-            'pincode' => 'required|digits:6',
+            'mobile_no' => 'required|numeric|digits:10|unique:user_addresses,mobile_no',
+            'pincode' => 'required|numeric|digits:6',
             'flat' => 'required|string',
             'area' => 'required|string',
             'land_mark' => 'required|string',
             'city_name' => 'required|string',
             'state_id' => 'required|numeric',
             'type' => 'required|in:shipping,billing',
-            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|unique:user_addresses,gstin',
+            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:user_addresses,gstin',
         ])->errors();
     }
 
@@ -293,7 +293,7 @@ class UserAddressApiController extends Controller
             'id' => 'required|numeric',
             'country_id' => 'required|numeric',
             'address_name' => 'required|string',
-            'mobile_no' => 'required|digits:10|unique:user_addresses,mobile_no' . ($request->id ? ",$request->id" : ''),
+            'mobile_no' => 'required|numeric|digits:10|unique:user_addresses,mobile_no' . ($request->id ? ",$request->id" : ''),
             'pincode' => 'required|digits:6',
             'flat' => 'required|string',
             'area' => 'required|string',
@@ -301,7 +301,7 @@ class UserAddressApiController extends Controller
             'city_name' => 'required|string',
             'state_id' => 'required|numeric',
             'type' => 'required|in:shipping,billing',
-            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|unique:user_addresses,gstin' . ($request->id ? ",$request->id" : ''),
+            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:user_addresses,gstin' . ($request->id ? ",$request->id" : ''),
         ])->errors();
     }
 }
