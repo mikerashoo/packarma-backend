@@ -18,6 +18,7 @@ use App\Models\PackagingMaterial;
 use Yajra\DataTables\DataTables;
 use App\Models\Country;
 use App\Models\Currency;
+use App\Models\VendorDevice;
 use Illuminate\Support\Facades\Crypt;
 
 
@@ -456,12 +457,16 @@ class VendorController extends Controller
         }
         $tableObject->approval_status = $request->approval_status;
         $tableObject->gstin = $request->gstin ?? '';
-        $tableObject->status = 1;
+        $request->approval_status ==  'accepted' ? $tableObject->status = 1 : $tableObject->status = 0;
         $tableObject->approved_on = date('Y-m-d H:i:s');
         $tableObject->approved_by =  session('data')['id'];
         $tableObject->admin_remark = '';
         if ($request->approval_status ==  'rejected' && !empty($request->admin_remark)) {
             $tableObject->admin_remark = $request->admin_remark;
+        }
+
+        if ($request->approval_status !=  'accepted') {
+            VendorDevice::where([['vendor_id', $_GET['id']]])->update(['remember_token' => NULL]);
         }
         $tableObject->save();
 
@@ -503,7 +508,7 @@ class VendorController extends Controller
     {
         return \Validator::make($request->all(), [
             'approval_status' => 'required',
-            'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|unique:vendors,gstin' . ($id ? ",$id" : '') : '',
+            'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin' . ($id ? ",$id" : '') : '',
             'gst_certificate' => ($request->approval_status == 'accepted') ?  'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : '',
 
         ])->errors();
@@ -523,7 +528,7 @@ class VendorController extends Controller
             'vendor_email' => 'required|string',
             'vendor_password' => 'required|string|min:8',
             'vendor_company_name' => 'required|string',
-            'gstin' => 'required|string|min:15|max:15|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
+            'gstin' => 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
             'phone_country_code' => 'required|integer',
             'phone' => 'required|integer',
             'currency' => 'required|integer',
@@ -544,7 +549,7 @@ class VendorController extends Controller
         return \Validator::make($request->all(), [
             'vendor_name' => 'required|string',
             'vendor_company_name' => 'required|string',
-            'gstin' => 'required|string|min:15|max:15|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
+            'gstin' => 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
             'phone_country_code' => 'required|integer',
             'phone' => 'required|integer',
             'currency' => 'required|integer',
@@ -590,6 +595,7 @@ class VendorController extends Controller
         if ($request->status == 1) {
             successMessage('Published', $msg_data);
         } else {
+            VendorDevice::where([['vendor_id', $request->id]])->update(['remember_token' => NULL]);
             successMessage('Unpublished', $msg_data);
         }
     }

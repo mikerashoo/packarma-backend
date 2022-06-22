@@ -274,7 +274,7 @@ class MyAddressController extends Controller
         return \Validator::make($request->all(), [
             'warehouse_name' => 'required|string',
             'city_name' => 'required|string',
-            'gstin' => 'required|string',
+            'gstin' => 'sometimes|required|regex:' . config('global.GST_NO_VALIDATION'),
             'mobile_no' => 'required|digits:10',
             'state_id' => 'required|numeric',
             'country_id' => 'required|numeric',
