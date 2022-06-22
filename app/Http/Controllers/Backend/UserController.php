@@ -452,7 +452,6 @@ class UserController extends Controller
         if($request->approval_status ==  'accepted') {
             $tableObject->status = 1;
         }
-        $tableObject->status = 0;
         if ($request->approval_status !=  'accepted') {
             CustomerDevice::where([['user_id', $_GET['id']]])->update(['remember_token' => NULL]);
         }
