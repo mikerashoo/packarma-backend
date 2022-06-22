@@ -36,5 +36,5 @@ return [
         "NOTIFICATION" => "500000"
     ],
     'PLATFORM' => ['ios', 'android', 'web'],
-    'MAX_IMAGE_SIZE' => '2048'
+    'MAX_IMAGE_SIZE' => '2048',
 ];

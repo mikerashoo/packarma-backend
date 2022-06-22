@@ -37,8 +37,10 @@ class CustomerEnquiry extends Model
         'user_address_id',
         'country_id',
         'state_id',
-        'city_id',
-        'address',
+        'city_name',
+        'flat',
+        'area',
+        'land_mark',
         'pincode',
         'created_by'
     ];

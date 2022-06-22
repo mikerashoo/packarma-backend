@@ -12,6 +12,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\User;
+use Carbon\Carbon;
 use App\Models\Currency;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
@@ -403,6 +404,9 @@ class UserController extends Controller
     {
         $data['data'] = User::find($id);
         $data['approvalArray'] = approvalStatusArray();
+        if ($data['data']) {
+            $data['data']->image_path = getFile($data['data']->gst_certificate, 'gst_certificate', false);
+        }
         return view('backend/customer_section/user_approval_list/user_approval_list_update', $data);
     }
 
@@ -417,7 +421,7 @@ class UserController extends Controller
     {
     	$msg_data=array();
         $msg = "";
-        $validationErrors = $this->validateRequestApprovalList($request);
+        $validationErrors = $this->validateRequestApprovalList($request, $_GET['id']);
 		if (count($validationErrors)) {
             \Log::error("User Approval List Validation Exception: " . implode(", ", $validationErrors->all()));
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
@@ -435,13 +439,25 @@ class UserController extends Controller
             } 
         } 
         $tableObject->approval_status = $request->approval_status;
+        $tableObject->gstin = $request->gstin ?? '';
+        $tableObject->approval_status = $request->approval_status;
         $tableObject->approved_on = date('Y-m-d H:i:s');
         $tableObject->approved_by =  session('data')['id'];
         $tableObject->admin_remark = '';
         if($request->approval_status ==  'rejected' && !empty($request->admin_remark)) {
             $tableObject->admin_remark = $request->admin_remark;
         }
+        if($request->approval_status ==  'accepted') {
+            $tableObject->status = 1;
+        }
         $tableObject->save();
+
+        if ($request->hasFile('gst_certificate')) {
+            $image = $request->file('gst_certificate');
+            $actualImage = saveSingleImage($image, 'gst_certificate', $_GET['id']);
+            $tableObject->gst_certificate = $actualImage;
+            $tableObject->save();
+        }
         successMessage($msg , $msg_data);
     }
 
@@ -468,10 +484,14 @@ class UserController extends Controller
        *   @param Request request
        *   @return Response
     */
-    private function validateRequestApprovalList(Request $request)
+    private function validateRequestApprovalList(Request $request, $id)
     {
         return \Validator::make($request->all(), [
             'approval_status' => 'required|string',
+            // 'gstin'=> 'string|min:15|max:15|unique:users,gstin' . ($request->id ? ",$request->id" : ''),
+            // 'gst_certificate' => 'mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_GST_CERTIFICATE_SIZE'),
+            'gstin' => ($request->approval_status == 'accepted') ? 'nullable|string|min:15|max:15|unique:users,gstin' . ($id ? ",$id" : '') : '',
+            'gst_certificate' => ($request->approval_status == 'accepted') ?  'nullable|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
         ])->errors();
     }
 }

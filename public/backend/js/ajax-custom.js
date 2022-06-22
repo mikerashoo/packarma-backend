@@ -19,7 +19,6 @@ $(document).ready(function () {
 
     $(document).on('change', '#approval_status', function () {
         var status = document.getElementById("approval_status").value;
-        console.log(status);
         if (this.value == 'rejected') {
             $("#remark").show();
         }

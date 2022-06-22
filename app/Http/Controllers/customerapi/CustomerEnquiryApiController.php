@@ -164,8 +164,11 @@ class CustomerEnquiryApiController extends Controller
                 $userAddress = UserAddress::find($request->user_address_id);
                 $request['country_id'] = $userAddress->country_id;
                 $request['state_id'] = $userAddress->state_id;
-                $request['city_id'] = $userAddress->city_id;
-                $request['address'] = $userAddress->address;
+                $request['city_name'] = $userAddress->city_name;
+                // $request['address'] = $userAddress->address;
+                $request['flat'] = $userAddress->flat;
+                $request['area'] = $userAddress->area;
+                $request['land_mark'] = $userAddress->land_mark;
                 $request['pincode'] = $userAddress->pincode;
                 $request['user_id'] = $user_id;
                 // Store a new enquiry

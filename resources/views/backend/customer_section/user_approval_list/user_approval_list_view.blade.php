@@ -32,6 +32,14 @@
                                                 <td>{{ approvalStatusArray($data->approval_status) }}</td>
                                             </tr>
                                             <tr>
+                                                <td><strong>GST Information Number</strong></td>
+                                                @if (!empty($data->gstin))
+                                                    <td>{{ $data->gstin }}</td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                            </tr>
+                                            <tr>
                                                 <td><strong>Date Time</strong></td>
                                                 <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
                                             </tr>
