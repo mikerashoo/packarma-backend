@@ -171,7 +171,7 @@ class GstDetailsController extends Controller
     private function validateGstDetailsRegister(Request $request, $id)
     {
         return \Validator::make($request->all(), [
-            'gstin' => 'required|string|unique:vendors,gstin,' . $id . ',id,deleted_at,NULL',
+            'gstin' => 'required|string|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin,' . $id . ',id,deleted_at,NULL',
             'gst_certificate' => 'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
 
         ])->errors();
