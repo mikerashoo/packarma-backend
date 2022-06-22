@@ -64,8 +64,22 @@
                                         </select><br />
                                     </div>
                                     <div class="col-sm-6" id="remark">
-                                        <label>Remark<span style="color:#ff0000">*</span></label>
+                                        <label>Remark</label>
                                         <textarea class="form-control" id="admin_remark" name="admin_remark">{{ $data->admin_remark }}</textarea><br />
+                                    </div>
+                                    <div class="col-sm-6" id="gstin_div">
+                                        <label>GST Number</label>
+                                        <input class="form-control" type="text" id="gstin" name="gstin" value="{{$data->gstin}}"><br/>
+                                    </div>   
+                                    <div class="col-sm-6" id="gst_certificate_div">
+                                        <label>Gst Certificate</label>
+                                        <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.GSTCERTIFICATE'); ?></p>
+                                        <input class="form-control" type="file" id="gst_certificate" name="gst_certificate" accept="gst_certificate/png, gst_certificate/jpg, gst_certificate/jpeg, gst_certificate/pdf" onchange="checkFiles(this.files)"><br/>
+                                        @if(str_contains($data->gst_certificate, '.pdf'))
+                                            <span><i class="fa fa-edit"></i>{{$data->gst_certificate}}</span>
+                                        @else
+                                            <img src="{{ $data->image_path}}" width="200px" height="auto">
+                                        @endif
                                     </div>
                                 </div>
                                 <hr>

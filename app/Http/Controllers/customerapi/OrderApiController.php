@@ -231,6 +231,7 @@ class OrderApiController extends Controller
                     'orders.id',
                     // 'customer_enquiries.description',
                     'orders.grand_total',
+                    'orders.recommendation_engine_id',
                     'recommendation_engines.engine_name',
                     'recommendation_engines.structure_type',
                     'orders.customer_payment_status',
@@ -569,6 +570,7 @@ class OrderApiController extends Controller
                     "user_name"=> $user_data->name,
                     "address_name"=> $shipping_address_data->address_name,
                     "type" => $shipping_address_data->type,
+                    "phone_code" => $shipping_country_data->phone_code,
                     "mobile_no" => $shipping_address_data->mobile_no,
                     "country_name" => $shipping_country_data->country_name,
                     "state_name" => $shipping_state_data->state_name,
@@ -584,6 +586,7 @@ class OrderApiController extends Controller
                     "user_name"=> $user_data->name,
                     "address_name"=> $billing_address_data->address_name,
                     "type" => $billing_address_data->type,
+                    "phone_code" => $billing_country_data->phone_code,
                     "mobile_no" => $billing_address_data->mobile_no,
                     "country_name" => $billing_country_data->country_name,
                     "state_name" => $billing_state_data->state_name,
@@ -594,7 +597,7 @@ class OrderApiController extends Controller
                     "pincode" => $billing_address_data->pincode,
                     "gstin" => $billing_address_data->gstin
                 );
-                //jason array in jason columns
+                //json array in json columns
                 $order_request_data['order_details'] = json_encode($order_detail);
                 $order_request_data['product_details'] = json_encode($product_detail);
                 $order_request_data['shipping_details'] = json_encode($shipping_detail);

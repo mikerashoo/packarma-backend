@@ -126,7 +126,7 @@ class UserAddressApiController extends Controller
                 $addressValidationErrors = $this->validateAddressRegister($request);
                 if (count($addressValidationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $addressValidationErrors->all()));
-                    errorMessage($validationErrors->all(), $addressValidationErrors->all());
+                    errorMessage($addressValidationErrors->all(), $addressValidationErrors->all());
                 }
                 \Log::info("User address creation started!");
                 $user_address_data = array();
@@ -173,7 +173,7 @@ class UserAddressApiController extends Controller
                 $addressValidationErrors = $this->validateAddressUpdate($request);
                 if (count($addressValidationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $addressValidationErrors->all()));
-                    errorMessage($validationErrors->all(), $addressValidationErrors->all());
+                    errorMessage($addressValidationErrors->all(), $addressValidationErrors->all());
                 }
                 \Log::info("User Address Update started!");
                 $user_address_data = array();

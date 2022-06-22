@@ -16,93 +16,91 @@
                             </div>
                         </div>
                         <div class="card-body">
-                                <div class="card-text">
-                                    <div class="col-md-12 row">
-                                        <div class="col-md-6">
-                                            <dl class="row">
-                                                <dt class="col-sm-4 text-left">Product Name :</dt>
-                                                <dd class="col-sm-8">{{ $data['product']->product_name }}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-4 text-left">User Name :</dt>
-                                                <dd class="col-sm-8">{{ $data['user']->name }}</dd>
-                                            </dl>
-                                            {{-- <dl class="row">
-                                                <dt class="col-sm-4 text-left">Enquiry Type :</dt>
-                                                <dd class="col-sm-8">{{ customerEnquiryType($data->enquiry_type); }}</dd>
-                                            </dl> --}}
-                                            <dl class="row">                                                                        
-                                                <dt class="col-sm-4 text-left">User Address :</dt>
-                                                <dd class="col-sm-8">{{$data->address}}, {{$data['city']->city_name}}, {{$data['state']->state_name}}, {{$data->pincode}}</dd>
-                                            </dl>
-                                        </div>
-                                        <div class="col-md-6">
-                                            {{-- <dl class="row">
-                                                <dt class="col-sm-5 text-left">Vendor Name :</dt>
-                                                <dd class="col-sm-7">{{ $vendor_material_map['vendor']['vendor_name'] }}</dd>
-                                            </dl> --}}
-                                            <dl class="row">
-                                                <dt class="col-sm-5 text-left">Packaging Material :</dt>
-                                                <dd class="col-sm-7">{{$packaging_material['packaging_material_name']}}</dd>
-                                            </dl>
-                                            <dl class="row">
-                                                <dt class="col-sm-5 text-left">Recommendation Engine :</dt>
-                                                <dd class="col-sm-7">{{$recommendation_engine['engine_name']}}</dd>
-                                            </dl>
-                                            <dl class="row">                                                                        
-                                                <dt class="col-sm-5 text-left">Description :</dt>
-                                                <dd class="col-sm-7 ">{{ $data->description }} </dd>
-                                            </dl>
-                                        </div>                                       
-                                    </div>   
-                                    
-                                    <div class="col-md-12 row">
-                                        <div class="col-md-12">
-                                            <dl class="row">                                                                        
-                                                <dt class="col-sm-5 text-left">Map Vendors :</dt>
-                                            </dl>
-                                        </div>                                       
+                            <div class="card-text">
+                                <div class="col-md-12 row">
+                                    <div class="col-md-6">
+                                        <dl class="row">
+                                            <dt class="col-sm-4 text-left">Product Name:</dt>
+                                            <dd class="col-sm-8">{{ $data['product']->product_name }}</dd>
+                                        </dl>
+                                        <dl class="row">
+                                            <dt class="col-sm-4 text-left">User Name:</dt>
+                                            <dd class="col-sm-8">{{ $data['user']->name }}</dd>
+                                        </dl>
+                                        {{-- <dl class="row">
+                                            <dt class="col-sm-4 text-left">Enquiry Type :</dt>
+                                            <dd class="col-sm-8">{{ customerEnquiryType($data->enquiry_type); }}</dd>
+                                        </dl> --}}
+                                        <dl class="row">                                                                        
+                                            <dt class="col-sm-4 text-left">User Address:</dt>
+                                            <dd class="col-sm-8">{{$data->flat}}, {{$data->land_mark}}, {{$data->area}}, {{$data->city_name}}, {{$data->state->state_name}}</dd>
+                                        </dl>
                                     </div>
-                                    <div class="col-md-12 row">
-                                          <!-- Outline variants section start -->
-                           <div class="col-md-3 col-12">
-                                <div class="card card-outline-secondary box-shadow-0 text-center" style="height: 90%;">
-                                    <div class="card-content">
-                                        <div class="card-body modal_src_data" data-size="medium" data-title="Map Vendor To Enquiry" href="map_vendor_form/-1/{{ $data->id }}">
-                                            <h1><i class="fa fa-user fa-2x text-secondary" style="color: grey;"></i></h1>
-                                            <h4 class="card-title text-secondary">Map Vendors</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @php
-                                $i=1;
-                            @endphp
-                            @foreach ($mapped_vendor as $vendors)
-                            <div class="col-md-3 col-12 map_vendor_section">
-                                <div class="card card-outline-secondary box-shadow-0 h6" style="height: 90%;">
-                                    <div class="card-content">
-                                        <div class="card-body pb-0">
-                                            <h6>{{ $vendors->vendor_name ??''; }}</h6>
-                                            <p class="text-secondary small">Rate, {{ $vendors->vendor_price ??''; }}/{{ $vendors->unit_symbol ??''; }}</p>
-                                            <p class="text-secondary small">Delivery in {{ $vendors->lead_time ??''; }} Days</p>
-                                            <p class="text-secondary small">Commission Rate, {{ $vendors->commission_amt ??''; }}/{{ $vendors->unit_symbol ??''; }}</p>
-                                        </div>
-                                        <div class="card-footer">
-                                        <a href="map_vendor_form/{{$vendors->id}}/{{ $data->id }}" class="modal_src_data" data-size="medium" data-title="Edit Mapped Vendor" style="color: #975AFF;">Edit</a> | <a style="color: red;" class="delete_map_vendor" data-id="{{$vendors->id}}" data-url="delete_map_vendor" id="delete{{$i}}" >Remove</a>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @php
-                                $i++;
-                            @endphp
-                            @endforeach
-                    <!-- Outline variants section end -->
-                                    </div>
-
-                                </div>                                
+                                    <div class="col-md-6">
+                                        {{-- <dl class="row">
+                                            <dt class="col-sm-5 text-left">Vendor Name :</dt>
+                                            <dd class="col-sm-7">{{ $vendor_material_map['vendor']['vendor_name'] }}</dd>
+                                        </dl> --}}
+                                        <dl class="row">
+                                            <dt class="col-sm-5 text-left">Packaging Material:</dt>
+                                            <dd class="col-sm-7">{{$packaging_material['packaging_material_name']}}</dd>
+                                        </dl>
+                                        <dl class="row">
+                                            <dt class="col-sm-5 text-left">Recommendation Engine:</dt>
+                                            <dd class="col-sm-7">{{$recommendation_engine['engine_name']}}</dd>
+                                        </dl>
+                                        {{-- <dl class="row">                                                                        
+                                            <dt class="col-sm-5 text-left">Description :</dt>
+                                            <dd class="col-sm-7 ">{{ $data->description }} </dd>
+                                        </dl> --}}
+                                    </div>                                       
+                                </div>   
                                 
+                                <div class="col-md-12 row">
+                                    <div class="col-md-12">
+                                        <dl class="row">                                                                        
+                                            <dt class="col-sm-5 text-left">Map Vendors:</dt>
+                                        </dl>
+                                    </div>                                       
+                                </div>
+                                <div class="col-md-12 row">
+                                <!-- Outline variants section start -->
+                                    <div class="col-md-3 col-12">
+                                        <div class="card card-outline-secondary box-shadow-0 text-center" style="height: 90%;">
+                                            <div class="card-content">
+                                                <div class="card-body modal_src_data" data-size="medium" data-title="Map Vendor To Enquiry" href="map_vendor_form/-1/{{ $data->id }}">
+                                                    <h1><i class="fa fa-user fa-2x text-secondary" style="color: grey;"></i></h1>
+                                                    <h4 class="card-title text-secondary">Map Vendors</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @php
+                                        $i=1;
+                                    @endphp
+                                    @foreach ($mapped_vendor as $vendors)
+                                    <div class="col-md-3 col-12 map_vendor_section">
+                                        <div class="card card-outline-secondary box-shadow-0 h6" style="height: 90%;">
+                                            <div class="card-content">
+                                                <div class="card-body pb-0">
+                                                    <h6>{{ $vendors->vendor_name ??''; }}</h6>
+                                                    <p class="text-secondary small">Rate, {{ $vendors->vendor_price ??''; }}/{{ $vendors->unit_symbol ??''; }}</p>
+                                                    <p class="text-secondary small">Delivery in {{ $vendors->lead_time ??''; }} Days</p>
+                                                    <p class="text-secondary small">Commission Rate, {{ $vendors->commission_amt ??''; }}/{{ $vendors->unit_symbol ??''; }}</p>
+                                                </div>
+                                                <div class="card-footer">
+                                                <a href="map_vendor_form/{{$vendors->id}}/{{ $data->id }}" class="modal_src_data" data-size="medium" data-title="Edit Mapped Vendor" style="color: #975AFF;">Edit</a> | <a style="color: red;" class="delete_map_vendor" data-id="{{$vendors->id}}" data-url="delete_map_vendor" id="delete{{$i}}" >Remove</a>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @php
+                                        $i++;
+                                    @endphp
+                                    @endforeach
+                                    <!-- Outline variants section end -->
+                                </div>
+                            </div>                                
                         </div>
                     </div>
                 </div>

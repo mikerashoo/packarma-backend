@@ -39,7 +39,7 @@
                                                 </tr>
                                             @endif
                                             <tr>
-                                                <td><strong>GST Information Number</strong></td>
+                                                <td><strong>GST Number</strong></td>
                                                 @if (!empty($data->gstin))
                                                     <td>{{ $data->gstin }}</td>
                                                 @else
