@@ -457,7 +457,7 @@ class VendorController extends Controller
         }
         $tableObject->approval_status = $request->approval_status;
         $tableObject->gstin = $request->gstin ?? '';
-        $request->approval_status ==  'accepted' ? $tableObject->status = 1 : $tableObject->status = 0;
+        $request->approval_status ==  'accepted' ? $tableObject->status = '1' : $tableObject->status = '0';
         $tableObject->approved_on = date('Y-m-d H:i:s');
         $tableObject->approved_by =  session('data')['id'];
         $tableObject->admin_remark = '';
