@@ -21,6 +21,11 @@ return [
     'update_successfully' => 'User Updated Successfully',
     'same_phone_exist' => 'Phone number Already Exist',
     'delete_successfully' => 'User Deleted Successfully',
+    'approval_pending' => 'Registration is under process',
+    'rejected' => 'Registration is Rejected',
+    'user_does_not_exist' => 'User does not exist'
+
+
     
 
 ];
