@@ -28,18 +28,18 @@ class MyProfileApiController extends Controller
             if ($token) {
                 $user_id = $token['sub'];
 
-                $data = User::select('name', 'email', 'phone_country_id', 'phone', 'whatsapp_country_id', 'whatsapp_no','visiting_card_front','visiting_card_back')
+                $data = User::select('name', 'email', 'phone_country_id','approval_status', 'phone', 'whatsapp_country_id', 'whatsapp_no','visiting_card_front','visiting_card_back')
                     ->with(['phone_country' => function ($query) {
                         $query->select('id', 'country_name', 'phone_code');
                     }])
                     ->with(['whatsapp_country' => function ($query) {
                         $query->select('id', 'country_name', 'phone_code');
                     }])
-                    ->where([['id', $user_id]])->get();
+                    ->where('id', $user_id)->first();
                 if (empty($data)) {
                     errorMessage(__('my_profile.not_found'), $msg_data);
                 }
-
+                // print_r($data->approval_status);exit;
                 // $flags = array(
                 //     "my_address" => true,
                 //     "change_password" => true,
@@ -75,13 +75,14 @@ class MyProfileApiController extends Controller
                         "logout" => true,
                     );
                 }
-                $i=0;
-                foreach($data as $row)
-                {
-                    $data[$i]['visiting_card_front'] = getFile($row['visiting_card_front'], 'visiting_card', false, 'front');
-                    $data[$i]['visiting_card_back'] = getFile($row['visiting_card_back'], 'visiting_card',false,'back');
-                    $i++;
-                }
+                // $i=0;
+                // // print_r($data);exit;
+                // foreach($data as $row)
+                // {
+                    $data->visiting_card_front = getFile($data->visiting_card_front, 'visiting_card', false, 'front');
+                    $data->visiting_card_back = getFile($data->visiting_card_back, 'visiting_card',false,'back');
+                    // $i++;
+                // }
                 $msg_data['result'] = $data;
                 $msg_data['flags'] = $flags;
 

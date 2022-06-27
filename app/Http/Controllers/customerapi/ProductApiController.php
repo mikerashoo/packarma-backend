@@ -36,7 +36,7 @@ class ProductApiController extends Controller
                     $limit = $request->limit;
                 }
                 $offset = ($page_no - 1) * $limit;
-                $data = Product::select('id','product_name','product_description','product_image','product_thumb_image','meta_title','meta_description','meta_keyword')->where('status', '1');
+                $data = Product::select('id','category_id','sub_category_id','product_name','product_description','product_image','product_thumb_image','meta_title','meta_description','meta_keyword')->where('status', '1');
                 $productData = Product::whereRaw("1 = 1");
                 if ($request->product_id) {
                     $productData = $productData->where('id', $request->product_id);
