@@ -31,6 +31,7 @@ class VendorWarehouse extends Model
         'area',
         'land_mark',
         'city_name',
+        'status',
     ];
 
 

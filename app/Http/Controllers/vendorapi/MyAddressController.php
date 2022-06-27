@@ -111,6 +111,7 @@ class MyAddressController extends Controller
                 $vendor_address_data = array();
                 $vendor_address_data = $request->all();
                 $vendor_address_data['vendor_id'] = $vendor_id;
+                $vendor_address_data['status'] = 1;
 
                 // Store a new vendor address
                 $vendorAdressData = VendorWarehouse::create($vendor_address_data);
