@@ -25,8 +25,8 @@ return [
     'gst_details_stored' => 'Your Gst Details Stored Successfully',
     'gst_details_fetched' => 'Gst Details Fetched Successfully',
     'not_active' => 'Please contact admin team your account is locked',
-    'rejected' => 'Your account has been rejected by admin team please contact them',
-    'approval_pending' => 'Your account approval is pending please contact admin',
+    'rejected' => 'Your registration request has been rejected. Please contact support team for further clarification',
+    'approval_pending' => 'Your request is pending for verification, account will be activated post successfull verification',
     'email_cant_update' => 'You can not change your email address',
     'phone_cant_update' => 'You can not change your phone no',
 
