@@ -42,10 +42,26 @@ class LoginApiController extends Controller
                 $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
             }])->with(['phone_country' => function ($query) {
                 $query->select('id', 'phone_code', 'country_name');
-            }])->where([['email', strtolower($request->email)], ['password', md5(strtolower($request->email).$request->password)], ['status', '1'], ['is_verified', 'Y']])->first();
+            }])->where([['email', strtolower($request->email)], ['password', md5(strtolower($request->email).$request->password)]])->first(); //, ['status', '1'], ['is_verified', 'Y'], ['deleted_at', NULL]
             
             if (empty($userData)) {
                 errorMessage(__('user.login_failed'), $msg_data);
+            }
+
+            if ($userData->approval_status == 'pending') {
+                errorMessage(__('user.approval_pending'), $msg_data);
+            }
+
+            if ($userData->approval_status == 'rejected') {
+                errorMessage(__('user.rejected'), $msg_data);
+            }
+
+            if ($userData->deleted_at != NULL) {
+                errorMessage(__('user.user_does_not_exist'), $msg_data);
+            }            
+
+            if ($userData->status == 0 && $userData->approval_status == 'accepted') {
+                errorMessage(__('user.not_active'), $msg_data);
             }
             $imei_no = $request->header('device-id');
             $token = JWTAuth::fromUser($userData);
