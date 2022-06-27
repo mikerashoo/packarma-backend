@@ -131,5 +131,9 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/user/my_profile', 'MyProfileApiController@show');
         Route::post('/user/update_my_profile', 'MyProfileApiController@update');
         Route::post('/user/delete_my_account', 'MyProfileApiController@destroy');
+
+        //GST Details
+        Route::post('/user/show_gst_details', 'GstDetailsApiController@show');
+        Route::post('/user/store_gst_details', 'GstDetailsApiController@store');
     });
 });

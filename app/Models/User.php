@@ -48,6 +48,8 @@ class User extends Authenticatable implements JWTSubject
         'subscription_start',
         'subscription_end',
         'type',
+        'gstin',
+        'gst_certificate'
     ];
 
     /**

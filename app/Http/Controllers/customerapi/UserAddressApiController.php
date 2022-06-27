@@ -132,6 +132,7 @@ class UserAddressApiController extends Controller
                 $user_address_data = array();
                 $user_address_data = $request->all();
                 $user_address_data['user_id'] = $user_id;
+                $user_address_data['status'] = 1;
 
                 // Store a new vendor address
                 $userAddressData = UserAddress::create($user_address_data);
@@ -264,7 +265,7 @@ class UserAddressApiController extends Controller
         return \Validator::make($request->all(), [
             'country_id' => 'required|numeric',
             'address_name' => 'required|string',
-            'mobile_no' => 'required|numeric|digits:10|unique:user_addresses,mobile_no',
+            'mobile_no' => 'required|numeric|digits:10',
             'pincode' => 'required|numeric|digits:6',
             'flat' => 'required|string',
             'area' => 'required|string',
@@ -293,7 +294,7 @@ class UserAddressApiController extends Controller
             'id' => 'required|numeric',
             'country_id' => 'required|numeric',
             'address_name' => 'required|string',
-            'mobile_no' => 'required|numeric|digits:10|unique:user_addresses,mobile_no' . ($request->id ? ",$request->id" : ''),
+            'mobile_no' => 'required|numeric|digits:10',
             'pincode' => 'required|digits:6',
             'flat' => 'required|string',
             'area' => 'required|string',

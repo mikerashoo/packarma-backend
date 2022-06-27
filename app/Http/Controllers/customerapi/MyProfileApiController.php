@@ -40,16 +40,41 @@ class MyProfileApiController extends Controller
                     errorMessage(__('my_profile.not_found'), $msg_data);
                 }
 
-                $flags = array(
-                    "my_address" => true,
-                    "change_password" => true,
-                    "about_us" => true,
-                    "help_and_support" => true,
-                    "terms_and_condition" => true,
-                    "privacy_policy" => true,
-                    "edit_user" => true,
-                    "delete_user" => true,
-                );
+                // $flags = array(
+                //     "my_address" => true,
+                //     "change_password" => true,
+                //     "about_us" => true,
+                //     "help_and_support" => true,
+                //     "terms_and_condition" => true,
+                //     "privacy_policy" => true,
+                //     "edit_user" => true,
+                //     "delete_user" => true,
+                // );
+                if ($data->approval_status != 'accepted') {
+                    $flags = array(
+                        "my_address" => false,
+                        "change_password" => false,
+                        "about_us" => false,
+                        "help_and_support" => false,
+                        "terms_and_condition" => false,
+                        "privacy_policy" => false,
+                        "edit_user" => false,
+                        "delete_user" => false,
+                        "logout" => true,
+                    );
+                } else {
+                    $flags = array(
+                        "my_address" => true,
+                        "change_password" => true,
+                        "about_us" => true,
+                        "help_and_support" => true,
+                        "terms_and_condition" => true,
+                        "privacy_policy" => true,
+                        "edit_user" => true,
+                        "delete_user" => true,
+                        "logout" => true,
+                    );
+                }
                 $i=0;
                 foreach($data as $row)
                 {
@@ -92,10 +117,29 @@ class MyProfileApiController extends Controller
                     errorMessage($userValidationErrors->all(), $userValidationErrors->all());
                 }
                 \Log::info("User Update Start!");
-                // $checkUser = User::where([['phone', $request->phone], ['id', '!=', $user_id]])->first();
-                // if (!empty($checkUser)) {
-                //     errorMessage(__('user.same_phone_exist'), $msg_data);
+                
+                $checkUser = User::select('approval_status', 'email', 'phone', 'status')->where([['id', $user_id]])->first();
+
+                // if (isset($request->email) && (strtolower($request->email) != strtolower($checkUser->email))) {
+                //     errorMessage(__('user.email_cant_update'), $msg_data);
                 // }
+
+                // if (isset($request->phone) && ($request->phone != $checkUser->phone)) {
+                //     errorMessage(__('vendor.phone_cant_update'), $msg_data);
+                // }
+
+
+                if ($checkUser->approval_status == 'rejected') {
+                    errorMessage(__('user.rejected'), $msg_data);
+                }
+
+                if ($checkUser->approval_status == 'pending') {
+                    errorMessage(__('user.approval_pending'), $msg_data);
+                }
+
+                if ($checkUser->status == 0 && $checkUser->approval_status == 'accepted') {
+                    errorMessage(__('user.not_active'), $msg_data);
+                }
 
                 $checkUser = User::where('id', $user_id)->first();
                 $checkUser->update($request->all());
