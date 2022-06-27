@@ -135,6 +135,7 @@ class UserAddressApiController extends Controller
                 $user_address_data['status'] = 1;
 
                 // Store a new vendor address
+                // print_r($user_address_data);exit;
                 $userAddressData = UserAddress::create($user_address_data);
                 \Log::info("My address created successfully!");
 

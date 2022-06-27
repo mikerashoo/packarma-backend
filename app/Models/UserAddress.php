@@ -31,6 +31,7 @@ class UserAddress extends Model
         'land_mark',
         'city_name',
         'state_id',
+        'status'
     ];
 
     /**

@@ -41,7 +41,7 @@ class SubCategoryApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
 
-                $data = SubCategory::select('id','sub_category_name','sub_category_image','sub_category_thumb_image','seo_url','meta_title','meta_description','meta_keyword')
+                $data = SubCategory::select('id','category_id', 'sub_category_name','sub_category_image','sub_category_thumb_image','seo_url','meta_title','meta_description','meta_keyword')
                                         ->where([['status','1'],['category_id',$request->category_id]]);
 
                 $subCategoryData = SubCategory::whereRaw("1 = 1");
