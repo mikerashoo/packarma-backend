@@ -18,5 +18,8 @@ return [
     'phone_already_exist' => 'User has already been registered with this phone number.',
     'login_failed' => 'Invalid login credentials',
     'logged_in_successfully' => 'Logged in successfully!',
+    'gst_certificate_not_found' => 'Gst Certificate Not Found Please Upload',
+    'gst_details_stored' => 'Your Gst Details Stored Successfully',
+    'gst_details_fetched' => 'Gst Details Fetched Successfully',
 
 ];
