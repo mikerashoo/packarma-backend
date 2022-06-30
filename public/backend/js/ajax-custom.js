@@ -101,6 +101,18 @@ $(document).ready(function () {
                     var switchery = new Switchery(html, { color: '#11c15b', jackColor: '#fff', size: 'small', secondaryColor: '#ff5251' });
                 });
             },
+            createdRow: function (row, data, dataIndex, cells) {
+                if (data.stylesheet) {
+                    $.each(data.stylesheet, function (k, rowStyle) {
+                        $.each(rowStyle.col, function (rows) {
+                            $(cells[rows]).css(rowStyle.style);
+
+                        });
+
+                        $(cells[rowStyle.col]).css(rowStyle.style);
+                    });
+                }
+            },
         });
 
         $('#listing-filter-data .form-control').keyup(function () {

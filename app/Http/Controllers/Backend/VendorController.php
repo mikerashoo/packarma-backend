@@ -150,6 +150,21 @@ class VendorController extends Controller
                         $actions .= '</span>';
                         return $actions;
                     })
+                    ->addColumn('stylesheet', function ($event) {
+                        $isDeleted = isRecordDeleted($event->deleted_at);
+                        if ($isDeleted) {
+
+                            return [
+                                [
+                                    'col' => [0],
+                                    'style' => [
+                                        'background' => '#F55252',
+                                        'color' => '#ffffff',
+                                    ],
+                                ],
+                            ];
+                        }
+                    })
                     ->addIndexColumn()
                     ->rawColumns(['vendor_name', 'gstin', 'gst_certificate', 'vendor_approval_status', 'vendor_status', 'mark_featured', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
