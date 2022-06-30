@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\SubCategory;
@@ -41,8 +42,19 @@ class SubCategoryApiController extends Controller
                 }
                 $offset=($page_no-1)*$limit;
 
-                $data = SubCategory::select('id','sub_category_name','sub_category_image','sub_category_thumb_image','seo_url','meta_title','meta_description','meta_keyword')
-                                        ->where([['status','1'],['category_id',$request->category_id]]);
+                $data = DB::table('sub_categories')->select(
+                    'sub_categories.id',
+                    'sub_categories.sub_category_name',
+                    'sub_categories.sub_category_image',
+                    'sub_categories.sub_category_thumb_image',
+                    'sub_categories.category_id',
+                    'categories.category_name'
+                )
+                    ->leftjoin('categories', 'categories.id', '=', 'sub_categories.category_id')
+                    ->where([['sub_categories.category_id','=', $request->category_id],['sub_categories.status','=', 1]]);
+                    // print_r($data);exit;
+                // $data = SubCategory::select('id','category_id', 'sub_category_name','sub_category_image','sub_category_thumb_image','seo_url','meta_title','meta_description','meta_keyword')
+                //                         ->where([['status','1'],['category_id',$request->category_id]]);
 
                 $subCategoryData = SubCategory::whereRaw("1 = 1");
                 if($request->category_id)
@@ -72,8 +84,8 @@ class SubCategoryApiController extends Controller
                 $i=0;
                 foreach($data as $row)
                 {
-                    $data[$i]['sub_category_image'] = getFile($row['sub_category_image'], 'sub_category');
-                    $data[$i]['sub_category_thumb_image'] = getFile($row['sub_category_thumb_image'], 'sub_category',false,'thumb');
+                    $data[$i]->sub_category_image = getFile($row->sub_category_image, 'sub_category');
+                    $data[$i]->sub_category_thumb_image = getFile($row->sub_category_thumb_image, 'sub_category',false,'thumb');
                     $i++;
                 }
                 if(empty($data)) {

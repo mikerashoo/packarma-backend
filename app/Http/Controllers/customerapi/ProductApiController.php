@@ -9,8 +9,13 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use App\Models\ProductForm;
+use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\PackagingTreatment;
 use Response;
 
 class ProductApiController extends Controller
@@ -36,7 +41,29 @@ class ProductApiController extends Controller
                     $limit = $request->limit;
                 }
                 $offset = ($page_no - 1) * $limit;
-                $data = Product::select('id','product_name','product_description','product_image','product_thumb_image','meta_title','meta_description','meta_keyword')->where('status', '1');
+
+                $data = DB::table('products')->select(
+                    'products.id',
+                    'products.product_name',
+                    'products.product_description',
+                    'products.product_image',
+                    'products.product_thumb_image',
+                    'products.category_id',
+                    'categories.category_name',
+                    'products.sub_category_id',
+                    'sub_categories.sub_category_name',
+                    'products.product_form_id',
+                    'product_forms.product_form_name',
+                    'products.packaging_treatment_id',
+                    'packaging_treatments.packaging_treatment_name'
+                )
+                    ->leftjoin('categories', 'categories.id', '=', 'products.category_id')
+                    ->leftjoin('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
+                    ->leftjoin('product_forms', 'product_forms.id', '=', 'products.product_form_id')
+                    ->leftjoin('packaging_treatments', 'packaging_treatments.id', '=', 'products.packaging_treatment_id')
+                    ->where('products.status', 1);
+
+                // $data = Product::select('id','category_id','sub_category_id','product_name','product_description','product_image','product_thumb_image','meta_title','meta_description','meta_keyword')->where('status', '1');
                 $productData = Product::whereRaw("1 = 1");
                 if ($request->product_id) {
                     $productData = $productData->where('id', $request->product_id);
@@ -64,8 +91,8 @@ class ProductApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $i = 0;
                 foreach ($data as $row) {
-                    $data[$i]['product_image'] = getFile($row['product_image'], 'product');
-                    $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
+                    $data[$i]->product_image = getFile($row->product_image, 'product');
+                    $data[$i]->product_thumb_image = getFile($row->product_thumb_image, 'product', false, 'thumb');
                     $i++;
                 }
                 if(empty($data)) {
