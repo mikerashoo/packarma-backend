@@ -39,6 +39,7 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
         Route::post('/general_info', 'GeneralInfoController@index');
         Route::post('/profile', 'MyProfileController@show');
         Route::post('/update_profile', 'MyProfileController@update');
+        Route::post('/check_vendor_status', 'MyProfileController@checkVendorStatus');
         Route::post('/delete_account', 'MyProfileController@destroy');
         Route::post('/get_pincode_data', 'PincodeDetailController@index');
         Route::post('/address/listing', 'MyAddressController@index');
