@@ -65,7 +65,7 @@ class Vendor extends Model implements JWTSubject
      */
     public function phone_country()
     {
-        return $this->belongsTo('App\Models\Country', 'phone_country_id', 'id');
+        return $this->belongsTo('App\Models\Country', 'phone_country_id', 'id')->withTrashed();
     }
 
     /**
@@ -75,7 +75,7 @@ class Vendor extends Model implements JWTSubject
      */
     public function whatsapp_country()
     {
-        return $this->belongsTo('App\Models\Country', 'whatsapp_country_id', 'id');
+        return $this->belongsTo('App\Models\Country', 'whatsapp_country_id', 'id')->withTrashed();
     }
 
     /**
@@ -105,7 +105,7 @@ class Vendor extends Model implements JWTSubject
      */
     public function packaging_material()
     {
-        return $this->belongsTo('App\Models\PackagingMaterial');
+        return $this->belongsTo('App\Models\PackagingMaterial')->withTrashed();
     }
 
     // mutators start

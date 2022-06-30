@@ -51,7 +51,7 @@ class VendorController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Vendor::select('*')->Where('approval_status', '=', 'accepted')->orderBy('updated_at', 'desc');
+                $query = Vendor::select('*')->Where('approval_status', '=', 'accepted')->orderBy('updated_at', 'desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if ($request['search']['search_vendor_name'] && !is_null($request['search']['search_vendor_name'])) {
@@ -60,22 +60,29 @@ class VendorController extends Controller
                         $query->get();
                     })
                     ->editColumn('mark_featured', function ($event) {
+
+                        $isDeleted = isRecordDeleted($event->deleted_at);
                         $vendor_edit = checkPermission('vendor_edit');
                         $featured = '';
-                        if ($vendor_edit) {
-                            if ($event->is_featured == '1') {
-                                $featured .= ' <input type="checkbox" data-url="featuredVendor" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                        if (!$isDeleted) {
+
+                            if ($vendor_edit) {
+                                if ($event->is_featured == '1') {
+                                    $featured .= ' <input type="checkbox" data-url="featuredVendor" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                                } else {
+                                    $featured .= ' <input type="checkbox" data-url="featuredVendor" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                                }
                             } else {
-                                $featured .= ' <input type="checkbox" data-url="featuredVendor" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                                $db_featured = $event->is_featured;
+                                $bg_class = 'bg-light-danger';
+                                if ($db_featured == '1') {
+                                    $bg_class = 'bg-light-success';
+                                }
+                                $displayFeaturedStatus = displayFeatured($db_featured);
+                                $featured = '<span class=" badge badge-pill ' . $bg_class . ' mb-2 mr-2">' . $displayFeaturedStatus . '</span>';
                             }
                         } else {
-                            $db_featured = $event->is_featured;
-                            $bg_class = 'bg-light-danger';
-                            if ($db_featured == '1') {
-                                $bg_class = 'bg-light-success';
-                            }
-                            $displayFeaturedStatus = displayFeatured($db_featured);
-                            $featured = '<span class=" badge badge-pill ' . $bg_class . ' mb-2 mr-2">' . $displayFeaturedStatus . '</span>';
+                            $featured = '<span class=" badge badge-pill bg-danger mb-2 mr-2">Vendor Is Deleted</span>';
                         }
                         return $featured;
                     })
@@ -101,26 +108,32 @@ class VendorController extends Controller
                         return $file;
                     })
                     ->editColumn('vendor_status', function ($event) {
+                        $isDeleted = isRecordDeleted($event->deleted_at);
                         $vendor_status = checkPermission('vendor_status');
                         $status = '';
-                        if ($vendor_status) {
-                            if ($event->status == '1') {
-                                $status .= ' <input type="checkbox" data-url="publishVendor" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                        if (!$isDeleted) {
+                            if ($vendor_status) {
+                                if ($event->status == '1') {
+                                    $status .= ' <input type="checkbox" data-url="publishVendor" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                                } else {
+                                    $status .= ' <input type="checkbox" data-url="publishVendor" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                                }
                             } else {
-                                $status .= ' <input type="checkbox" data-url="publishVendor" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
+                                $db_status = $event->status;
+                                $bg_class = 'bg-danger';
+                                if ($db_status == '1') {
+                                    $bg_class = 'bg-success';
+                                }
+                                $displayStatus = displayStatus($db_status);
+                                $status = '<span class="' . $bg_class . ' text-center rounded p-1 text-white">' . $displayStatus . '</span>';
                             }
                         } else {
-                            $db_status = $event->status;
-                            $bg_class = 'bg-danger';
-                            if ($db_status == '1') {
-                                $bg_class = 'bg-success';
-                            }
-                            $displayStatus = displayStatus($db_status);
-                            $status = '<span class="' . $bg_class . ' text-center rounded p-1 text-white">' . $displayStatus . '</span>';
+                            $status = '<span class=" badge badge-pill bg-danger mb-2 mr-2">Vendor Is Deleted</span>';
                         }
                         return $status;
                     })
                     ->editColumn('action', function ($event) {
+                        $isDeleted = isRecordDeleted($event->deleted_at);
                         $vendor_view = checkPermission('vendor_view');
                         $vendor_edit = checkPermission('vendor_edit');
                         $vendor_material_map = checkPermission('vendor_material_map');
@@ -128,10 +141,10 @@ class VendorController extends Controller
                         if ($vendor_view) {
                             $actions .= '<a href="vendor_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if ($vendor_edit) {
+                        if ($vendor_edit && !$isDeleted) {
                             $actions .= ' <a href="vendor_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
-                        if ($vendor_material_map) {
+                        if ($vendor_material_map && !$isDeleted) {
                             $actions .= ' <a href="vendor_material_map?id=' . Crypt::encrypt($event->id) . '" class="btn btn-secondary btn-sm" title="Map Material"><i class="fa ft-zap"></i></a>';
                         }
                         $actions .= '</span>';
@@ -302,7 +315,7 @@ class VendorController extends Controller
      */
     public function view($id)
     {
-        $data['data'] = Vendor::with('phone_country', 'whatsapp_country', 'packaging_material')->find($id);
+        $data['data'] = Vendor::withTrashed()->with('phone_country', 'whatsapp_country', 'packaging_material')->find($id);
         $data['vendor_material_mapping'] = VendorMaterialMapping::with('packaging_material', 'recommendation_engine', 'product')->where('vendor_id', '=', $id)->get();
         return view('backend/vendors/vendor_list/vendor_view', $data);
     }

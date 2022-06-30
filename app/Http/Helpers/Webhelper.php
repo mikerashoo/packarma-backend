@@ -194,6 +194,28 @@ if (!function_exists('displayFeatured')) {
     }
 }
 
+
+/**
+ *   created by : Maaz
+ *   Created On : 29-Jun-2022
+ *   Uses : To display globally records deleted or no
+ *   @param $key
+ *   @return Response
+ */
+if (!function_exists('isRecordDeleted')) {
+    function isRecordDeleted($value = NULL)
+    {
+
+        if ($value == NULL) {
+            $isDeleted = false;
+        } else {
+            $isDeleted = true;
+        }
+
+        return $isDeleted;
+    }
+}
+
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 01-Mar-2022

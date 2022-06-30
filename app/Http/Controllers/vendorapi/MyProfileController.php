@@ -7,6 +7,7 @@ use App\Models\Vendor;
 use App\Models\VendorDevice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Session;
 
 class MyProfileController extends Controller
 {
@@ -171,6 +172,70 @@ class MyProfileController extends Controller
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
+
+
+    /**
+     * Use to Check Vendor Status.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function checkVendorStatus(Request $request)
+    {
+
+        $msg_data = array();
+        $default_home_page = 'home';
+        \Log::info("Check Vendor Status, starting at: " . Carbon::now()->format('H:i:s:u'));
+        try {
+            $vendor_token = readVendorHeaderToken();
+            if ($vendor_token) {
+                $vendor_id = $vendor_token['sub'];
+
+
+                $vendorData = Vendor::with(['currency' => function ($query) {
+                    $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
+                }])->with(['phone_country' => function ($query) {
+                    $query->select('id', 'phone_code', 'country_name');
+                }])->where([['id', $vendor_id], ['is_verified', 'Y']])->first();
+
+                if (empty($vendorData)) {
+                    errorMessage(__('vendor.not_found'), $msg_data);
+                }
+
+
+                if ($vendorData->approval_status == 'rejected') {
+                    errorMessage(__('vendor.rejected'), $msg_data);
+                }
+
+                if ($vendorData->approval_status == 'pending') {
+                    if (empty($vendorData->gstin)) {
+                        $default_home_page = 'gst';
+                    } else {
+                        errorMessage(__('vendor.approval_pending'), $msg_data);
+                    }
+                }
+
+                if ($vendorData->status == 0 && $vendorData->approval_status == 'accepted') {
+                    errorMessage(__('vendor.not_active'), $msg_data);
+                }
+
+                $vendorData->load_page = $default_home_page;
+                successMessage(__('vendor.status_fetched'), $vendorData->toArray());
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Check Vendor status failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+
+
+
+
+
+
 
 
     private function validateSignup(Request $request)

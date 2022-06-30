@@ -29,5 +29,7 @@ return [
     'approval_pending' => 'Your request is pending for verification, account will be activated post successfull verification',
     'email_cant_update' => 'You can not change your email address',
     'phone_cant_update' => 'You can not change your phone no',
+    'not_found' => 'No details Found',
+    'status_fetched' => 'Your Status Fetched Successfully',
 
 ];
