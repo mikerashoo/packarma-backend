@@ -29,5 +29,6 @@ return [
     'gst_details_stored' => 'Your GST Details Stored Successfully',
     'gst_details_fetched' => 'GST Details Fetched Successfully',
     'email_cant_update' => 'You can not change your email address',
-    'phone_cant_update' => 'You can not change your phone no'
+    'phone_cant_update' => 'You can not change your phone no',
+    'phone_already_registered' => 'Phone number ia already registered please use another number'
 ];

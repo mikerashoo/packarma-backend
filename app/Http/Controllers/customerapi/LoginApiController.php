@@ -30,6 +30,7 @@ class LoginApiController extends Controller
     public function index(Request $request)
     {
         $msg_data = array();
+        $default_home_page = 'home';
         \Log::info("Logging in user, starting at: " . Carbon::now()->format('H:i:s:u'));
         try {
             // Request Validation
@@ -42,34 +43,32 @@ class LoginApiController extends Controller
                 $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
             }])->with(['phone_country' => function ($query) {
                 $query->select('id', 'phone_code', 'country_name');
-            }])->where([['email', strtolower($request->email)], ['password', md5(strtolower($request->email).$request->password)]])->first(); //, ['status', '1'], ['is_verified', 'Y'], ['deleted_at', NULL]
+            }])->where([['email', strtolower($request->email)], ['password', md5(strtolower($request->email).$request->password)],['is_verified', 'Y']])->first(); //, ['status', '1'], ['deleted_at', NULL]
             
             if (empty($userData)) {
                 errorMessage(__('user.login_failed'), $msg_data);
             }
-
-            if ($userData->approval_status == 'pending') {
-                errorMessage(__('user.approval_pending'), $msg_data);
-            }
-
             if ($userData->approval_status == 'rejected') {
                 errorMessage(__('user.rejected'), $msg_data);
             }
-
-            if ($userData->deleted_at != NULL) {
-                errorMessage(__('user.user_does_not_exist'), $msg_data);
-            }            
-
+            if ($userData->approval_status == 'pending') {
+                if (empty($userData->gstin)) {
+                    $default_home_page = 'gst';
+                } else {
+                    errorMessage(__('user.approval_pending'), $msg_data);
+                }
+            }
             if ($userData->status == 0 && $userData->approval_status == 'accepted') {
                 errorMessage(__('user.not_active'), $msg_data);
             }
+            
             $imei_no = $request->header('device-id');
             $token = JWTAuth::fromUser($userData);
             $users = User::find($userData->id);
             $userData->last_login = $users->last_login = Carbon::now();
             $userData->remember_token = $token;
+            $userData->load_page = $default_home_page;
             $users->save();
-            // print_r($userData);exit;
             CustomerDevice::updateOrCreate(
                 ['user_id' => $userData->id, 'imei_no' => $imei_no],
                 ['remember_token' => $token]
