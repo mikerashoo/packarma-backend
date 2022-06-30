@@ -14,7 +14,6 @@ class MyProfileApiController extends Controller
      * Created By Pradyumn Dwivedi
      * Created at : 03/06/2022
      * Uses : To show customer(user) my profile
-     * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -27,7 +26,6 @@ class MyProfileApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
-
                 $data = User::select('name', 'email', 'phone_country_id','approval_status', 'phone', 'whatsapp_country_id', 'whatsapp_no','visiting_card_front','visiting_card_back')
                     ->with(['phone_country' => function ($query) {
                         $query->select('id', 'country_name', 'phone_code');
@@ -39,17 +37,6 @@ class MyProfileApiController extends Controller
                 if (empty($data)) {
                     errorMessage(__('my_profile.not_found'), $msg_data);
                 }
-                // print_r($data->approval_status);exit;
-                // $flags = array(
-                //     "my_address" => true,
-                //     "change_password" => true,
-                //     "about_us" => true,
-                //     "help_and_support" => true,
-                //     "terms_and_condition" => true,
-                //     "privacy_policy" => true,
-                //     "edit_user" => true,
-                //     "delete_user" => true,
-                // );
                 if ($data->approval_status != 'accepted') {
                     $flags = array(
                         "my_address" => false,
@@ -60,6 +47,8 @@ class MyProfileApiController extends Controller
                         "privacy_policy" => false,
                         "edit_user" => false,
                         "delete_user" => false,
+                        "my_subscription" => false,
+                        "my_order" => false,
                         "logout" => true,
                     );
                 } else {
@@ -72,6 +61,8 @@ class MyProfileApiController extends Controller
                         "privacy_policy" => true,
                         "edit_user" => true,
                         "delete_user" => true,
+                        "my_subscription" => true,
+                        "my_order" => true,
                         "logout" => true,
                     );
                 }
@@ -85,7 +76,6 @@ class MyProfileApiController extends Controller
                 // }
                 $msg_data['result'] = $data;
                 $msg_data['flags'] = $flags;
-
                 successMessage(__('my_profile.info_fetch'), $msg_data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
@@ -118,38 +108,28 @@ class MyProfileApiController extends Controller
                     errorMessage($userValidationErrors->all(), $userValidationErrors->all());
                 }
                 \Log::info("User Update Start!");
-                
                 $checkUser = User::select('approval_status', 'email', 'phone', 'status')->where([['id', $user_id]])->first();
-
                 // if (isset($request->email) && (strtolower($request->email) != strtolower($checkUser->email))) {
                 //     errorMessage(__('user.email_cant_update'), $msg_data);
                 // }
-
-                // if (isset($request->phone) && ($request->phone != $checkUser->phone)) {
-                //     errorMessage(__('vendor.phone_cant_update'), $msg_data);
+                // if (isset($request->phone) && ($request->phone == $checkUser->phone)) {
+                //     errorMessage(__('user.phone_already_registered'), $msg_data);
                 // }
-
-
                 if ($checkUser->approval_status == 'rejected') {
                     errorMessage(__('user.rejected'), $msg_data);
                 }
-
                 if ($checkUser->approval_status == 'pending') {
                     errorMessage(__('user.approval_pending'), $msg_data);
                 }
-
                 if ($checkUser->status == 0 && $checkUser->approval_status == 'accepted') {
                     errorMessage(__('user.not_active'), $msg_data);
                 }
-
                 $checkUser = User::where('id', $user_id)->first();
                 $checkUser->update($request->all());
                 $userData = $checkUser;
                 $user = $userData->toArray();
-
                 $userData->created_at->toDateTimeString();
                 $userData->updated_at->toDateTimeString();
-
                 $input = array();
                 // Storing visiting card Front and Back
                 if ($request->hasFile('visiting_card_front')) {
@@ -171,7 +151,6 @@ class MyProfileApiController extends Controller
                 if (!empty($input)) {
                     User::find($user_id)->update($input);
                 }
-
                 \Log::info("Existing customer updated with email id: " . $request->email . " and phone number: " . $request->phone);
                 successMessage(__('user.update_successfully'), $user);
             } else {
@@ -197,9 +176,7 @@ class MyProfileApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
-
                 \Log::info("Delete Customer Start!");
-
                 User::destroy($user_id);
                 CustomerDevice::where('user_id', $user_id)->delete();
                 \Log::info("Customer deleted successfully! ");
@@ -212,7 +189,6 @@ class MyProfileApiController extends Controller
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
-
 
     /**
      * Created By Pradyumn Dwivedi

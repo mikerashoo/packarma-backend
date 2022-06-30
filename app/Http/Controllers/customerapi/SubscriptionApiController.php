@@ -126,6 +126,16 @@ class SubscriptionApiController extends Controller
                     $newDateTime = Carbon::now()->addMonths(12)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
+                if($user->subscription_end != null && $user->subscription_end > $subscription_start_date){
+                    $diff_days = strtotime($user->subscription_end) - strtotime($subscription_start_date);
+                    // 1 day = 24 hours
+                    // 24 * 60 * 60 = 86400 seconds
+                    $interval = abs(round($diff_days / 86400));
+                    $subscription_end_date = Carbon::createFromFormat('Y-m-d H:i:s', $subscription_end_date);
+                    $subscription_end_date = $subscription_end_date->addDays($interval);
+                    // print_r($subscription_end_date);exit;
+                }
+                // print_r($subscription_end_date);exit;
                 //data to enter in user table of selected user id
                 $subscription_request_data = array();
                 $subscription_request_data['subscription_id'] = $subscription->id;
