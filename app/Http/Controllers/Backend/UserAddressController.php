@@ -52,7 +52,7 @@ class UserAddressController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = UserAddress::with('user','state')->orderBy('updated_at','desc');
+                $query = UserAddress::with('user','state')->orderBy('updated_at','desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user']) && !is_null($request['search']['search_user'])) {
@@ -76,17 +76,18 @@ class UserAddressController extends Controller
                         return $event->pincode;
                     })
                     ->editColumn('action', function ($event) {
+                        $isDeleted = isRecordDeleted($event->deleted_at);
                         $user_address_view = checkPermission('user_address_view');
                         $user_address_edit = checkPermission('user_address_edit');
                         $user_address_status = checkPermission('user_address_status');
                         $actions = '<span style="white-space:nowrap;">';
-                        if ($user_address_view) {
+                        if ($user_address_view && !$isDeleted) {
                             $actions .= '<a href="user_address_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if ($user_address_edit) {
+                        if ($user_address_edit && !$isDeleted) {
                             $actions .= ' <a href="user_address_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
-                        if ($user_address_status) {
+                        if ($user_address_status && !$isDeleted) {
                             if ($event->status == '1') {
                                 $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
                             }

@@ -32,7 +32,8 @@ class SubscriptionController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = Subscription::select('*')->orderBy('updated_at','desc');                
+	            $query = Subscription::select('*')->orderBy('updated_at','desc');
+
 	            return DataTables::of($query) 
                     ->filter(function ($query) use ($request) {                        
                         if (isset($request['search']['search_type']) && ! is_null($request['search']['search_type'])) {
@@ -41,7 +42,8 @@ class SubscriptionController extends Controller
                         $query->get();
                     })
                 ->editColumn('type', function ($event) {
-	                    return subscriptionType($event->type);                        
+                    // print_r($event);exit;   
+	                    return subscriptionType($event->subscription_type);                        
 	                }) 
                 ->editColumn('amount', function ($event) {
 	                    return $event->amount;                        
