@@ -47,7 +47,7 @@ class VendorMaterialController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = VendorMaterialMapping::with('packaging_material', 'vendor')->orderBy('updated_at', 'desc');
+                $query = VendorMaterialMapping::with('packaging_material', 'vendor')->orderBy('updated_at', 'desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if ($request['search']['search_vendor'] && !is_null($request['search']['search_vendor'])) {
@@ -71,10 +71,12 @@ class VendorMaterialController extends Controller
                         return $event->vendor_price;
                     })
                     ->editColumn('vendor_material_map_status', function ($event) {
+                        $isDeleted = isRecordDeleted($event->deleted_at);
                         $isVendorDeleted = isRecordDeleted($event->vendor->deleted_at);
+
                         $vendor_material_map_status = checkPermission('vendor_material_map_status');
                         $status = '';
-                        if (!$isVendorDeleted) {
+                        if (!$isDeleted && !$isVendorDeleted) {
                             if ($vendor_material_map_status) {
                                 if ($event->status == '1') {
                                     $status .= ' <input type="checkbox" data-url="publishVendorMaterialMap" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
@@ -109,17 +111,11 @@ class VendorMaterialController extends Controller
                         $actions .= '</span>';
                         return $actions;
                     })
-                    ->addColumn('stylesheet', function ($event) {
-                        $isVendorDeleted = isRecordDeleted($event->vendor->deleted_at);
-                        return [
-                            [
-                                'col' => [0],
-                                'style' => [
-                                    'background' => '#F55252',
-                                    'color' => '#ffffff',
-                                ],
-                            ],
-                        ];
+                    ->setRowClass(function ($event) {
+                        $isDeleted = isRecordDeleted($event->deleted_at);
+                        if ($isDeleted) {
+                            return 'alert-danger';
+                        }
                     })
                     ->addIndexColumn()
                     ->rawColumns(['vendor_name', 'material_name', 'min_amt_profit', 'min_stock_qty', 'vendor_material_map_status', 'action'])->setRowId('id')->make(true);
