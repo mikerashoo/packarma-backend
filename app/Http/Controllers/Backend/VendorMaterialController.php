@@ -22,7 +22,7 @@ class VendorMaterialController extends Controller
     public function index()
     {
         try {
-            $data['vendor'] = Vendor::all();
+            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->get();
             $data['packaging_material'] = PackagingMaterial::all();
             $data['vendor_material_map_add'] = checkPermission('vendor_material_map_add');
             $data['vendor_material_map_edit'] = checkPermission('vendor_material_map_edit');
@@ -59,7 +59,12 @@ class VendorMaterialController extends Controller
                         $query->get();
                     })
                     ->editColumn('vendor_name', function ($event) {
-                        return $event->vendor->vendor_name;
+                        $isVendorDeleted = isRecordDeleted($event->vendor->deleted_at);
+                        if (!$isVendorDeleted) {
+                            return $event->vendor->vendor_name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->vendor->vendor_name . '</span>';
+                        }
                     })
                     ->editColumn('material_name', function ($event) {
                         return $event->packaging_material->packaging_material_name;
@@ -71,12 +76,11 @@ class VendorMaterialController extends Controller
                         return $event->vendor_price;
                     })
                     ->editColumn('vendor_material_map_status', function ($event) {
-                        $isDeleted = isRecordDeleted($event->deleted_at);
                         $isVendorDeleted = isRecordDeleted($event->vendor->deleted_at);
 
                         $vendor_material_map_status = checkPermission('vendor_material_map_status');
                         $status = '';
-                        if (!$isDeleted && !$isVendorDeleted) {
+                        if (!$isVendorDeleted) {
                             if ($vendor_material_map_status) {
                                 if ($event->status == '1') {
                                     $status .= ' <input type="checkbox" data-url="publishVendorMaterialMap" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
@@ -92,10 +96,8 @@ class VendorMaterialController extends Controller
                                 $displayStatus = displayStatus($db_status);
                                 $status = '<span class="' . $bg_class . ' text-center rounded p-1 text-white">' . $displayStatus . '</span>';
                             }
-                        } else {
-                            $status = '<span class=" badge badge-pill bg-danger mb-2 mr-2">Vendor Is Deleted</span>';
+                            return $status;
                         }
-                        return $status;
                     })
                     ->editColumn('action', function ($event) {
                         $isVendorDeleted = isRecordDeleted($event->vendor->deleted_at);
@@ -105,17 +107,16 @@ class VendorMaterialController extends Controller
                         if ($vendor_material_map_view) {
                             $actions .= '<a href="vendor_material_map_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if ($vendor_material_map_edit && !$isVendorDeleted) {
-                            $actions .= ' <a href="vendor_material_map_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                        if (!$isVendorDeleted) {
+
+                            if ($vendor_material_map_edit) {
+                                $actions .= ' <a href="vendor_material_map_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                            }
+                        } else {
+                            $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;"> Deleted</span>';
                         }
                         $actions .= '</span>';
                         return $actions;
-                    })
-                    ->setRowClass(function ($event) {
-                        $isDeleted = isRecordDeleted($event->deleted_at);
-                        if ($isDeleted) {
-                            return 'alert-danger';
-                        }
                     })
                     ->addIndexColumn()
                     ->rawColumns(['vendor_name', 'material_name', 'min_amt_profit', 'min_stock_qty', 'vendor_material_map_status', 'action'])->setRowId('id')->make(true);
@@ -143,7 +144,7 @@ class VendorMaterialController extends Controller
             $data['vendor'][] = Vendor::find($_GET['id']);
             $data['id'] = $_GET['id'];
         } else {
-            $data['vendor'] = Vendor::all();
+            $data['vendor'] = Vendor::Where('approval_status', '=', 'accepted')->get();
         }
         $data['product'] = Product::all();
         $data['packaging_material'] = PackagingMaterial::all();

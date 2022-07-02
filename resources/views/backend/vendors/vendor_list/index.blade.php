@@ -33,9 +33,9 @@
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
                                     </div>
-                            		<div class="table-responsive">
+                            		<div class="table-responsive" style="height:450px;">
                                         <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="vendor_data">
-				                            <thead>
+				                            <thead style="position: sticky; background-color:#dedede; top: 0;  z-index: 1;">
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>

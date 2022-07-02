@@ -81,13 +81,16 @@ class VendorController extends Controller
                                 $displayFeaturedStatus = displayFeatured($db_featured);
                                 $featured = '<span class=" badge badge-pill ' . $bg_class . ' mb-2 mr-2">' . $displayFeaturedStatus . '</span>';
                             }
-                        } else {
-                            $featured = '<span class=" badge badge-pill bg-danger mb-2 mr-2">Vendor Is Deleted</span>';
+                            return $featured;
                         }
-                        return $featured;
                     })
                     ->editColumn('vendor_name', function ($event) {
-                        return $event->vendor_name;
+                        $isDeleted = isRecordDeleted($event->deleted_at);
+                        if (!$isDeleted) {
+                            return $event->vendor_name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->vendor_name . '</span>';
+                        }
                     })
                     ->editColumn('vendor_company_name', function ($event) {
                         return $event->vendor_company_name;
@@ -127,10 +130,8 @@ class VendorController extends Controller
                                 $displayStatus = displayStatus($db_status);
                                 $status = '<span class="' . $bg_class . ' text-center rounded p-1 text-white">' . $displayStatus . '</span>';
                             }
-                        } else {
-                            $status = '<span class=" badge badge-pill bg-danger mb-2 mr-2">Vendor Is Deleted</span>';
+                            return $status;
                         }
-                        return $status;
                     })
                     ->editColumn('action', function ($event) {
                         $isDeleted = isRecordDeleted($event->deleted_at);
@@ -141,11 +142,15 @@ class VendorController extends Controller
                         if ($vendor_view) {
                             $actions .= '<a href="vendor_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if ($vendor_edit && !$isDeleted) {
-                            $actions .= ' <a href="vendor_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
-                        }
-                        if ($vendor_material_map && !$isDeleted) {
-                            $actions .= ' <a href="vendor_material_map?id=' . Crypt::encrypt($event->id) . '" class="btn btn-secondary btn-sm" title="Map Material"><i class="fa ft-zap"></i></a>';
+                        if (!$isDeleted) {
+                            if ($vendor_edit) {
+                                $actions .= ' <a href="vendor_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                            }
+                            if ($vendor_material_map) {
+                                $actions .= ' <a href="vendor_material_map?id=' . Crypt::encrypt($event->id) . '" class="btn btn-secondary btn-sm" title="Map Material"><i class="fa ft-zap"></i></a>';
+                            }
+                        } else {
+                            $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;">Deleted</span>';
                         }
                         $actions .= '</span>';
                         return $actions;
@@ -153,12 +158,6 @@ class VendorController extends Controller
                     ->addIndexColumn()
                     ->rawColumns(['vendor_name', 'gstin', 'gst_certificate', 'vendor_approval_status', 'vendor_status', 'mark_featured', 'action'])
                     ->setRowId('id')
-                    ->setRowClass(function ($event) {
-                        $isDeleted = isRecordDeleted($event->deleted_at);
-                        if ($isDeleted) {
-                            return 'alert-danger';
-                        }
-                    })
                     ->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());

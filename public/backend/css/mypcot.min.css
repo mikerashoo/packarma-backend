@@ -1360,11 +1360,11 @@ a.list-group-item-dark:focus {
 	min-height: 300px !important;
 }
 
-.table-responsive {
+/* .table-responsive {
 	transform: rotateX(180deg);
 }
 
 #dataTable_wrapper,
 #roleTable {
 	transform: rotateX(180deg);
-}
+} */

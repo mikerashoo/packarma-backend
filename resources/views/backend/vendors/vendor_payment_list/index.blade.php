@@ -44,12 +44,16 @@
                                                     <option value="">Select</option>
                                                 @endif
                                                 @foreach ($vendor as $vendors)
+                                                 @php
+                                                    $isVendorDeleted = isRecordDeleted($vendors->deleted_at);
+                                                    $isVendorDeleted ? $deleted_status = ' - (Deleted)' : $deleted_status = '';
+                                                @endphp
                                                     @if (isset($id))
                                                         @if ($vendors->id == $order->vendor_id )
-                                                            <option value="{{ $vendors->id }}" selected>{{ $vendors->vendor_name }}</option>
+                                                            <option value="{{ $vendors->id }}" selected>{{ $vendors->vendor_name }}{{$deleted_status}}</option>
                                                         @endif
                                                     @else
-                                                        <option value="{{ $vendors->id }}">{{ $vendors->vendor_name }}</option>
+                                                        <option value="{{ $vendors->id }}">{{ $vendors->vendor_name }}{{$deleted_status}}</option>
                                                     @endif
                                                 @endforeach
                                             </select><br/>

@@ -30,7 +30,11 @@
                                             <select class="form-control mb-3 select2" id="search_user_name" name="search_user_name" style="width: 100% !important;">
                                                 <option value="">Select</option>
                                                 @foreach($data['user'] as $users)
-                                                    <option value="{{$users->id}}">{{$users->name}}</option>                                                
+                                                  @php
+                                                    $isUserDeleted = isRecordDeleted($users->deleted_at);
+                                                    $isUserDeleted ? $user_deleted_status = ' - (Deleted)' : $user_deleted_status = '';
+                                                @endphp
+                                                    <option value="{{$users->id}}">{{$users->name}}{{$user_deleted_status}}</option>                                                
                                                 @endforeach
                                             </select><br/>
                                         </div>
@@ -39,7 +43,11 @@
                                             <select class="form-control mb-3 select2" id="search_vendor_name" name="search_vendor_name" style="width: 100% !important;">
                                                 <option value="">Select</option>
                                                 @foreach($data['vendor'] as $vendors)
-                                                    <option value="{{$vendors->id}}">{{$vendors->vendor_name}}</option>                                                
+                                                   @php
+                                                    $isVendorDeleted = isRecordDeleted($vendors->deleted_at);
+                                                    $isVendorDeleted ? $vendor_deleted_status = ' - (Deleted)' : $vendor_deleted_status = '';
+                                                @endphp
+                                                    <option value="{{$vendors->id}}">{{$vendors->vendor_name}}{{$vendor_deleted_status}}</option>                                                
                                                 @endforeach
                                             </select><br>
                                         </div>

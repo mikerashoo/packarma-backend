@@ -21,8 +21,8 @@ class VendorQuotationController extends Controller
      */
     public function index()
     {
-        $data['user'] = User::all();
-        $data['vendor'] = Vendor::all();
+        $data['user'] = User::withTrashed()->Where('approval_status', '=', 'accepted')->get();
+        $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->get();
         $data['vendor_quotation_view'] = checkPermission('vendor_quotation_view');
         return view('backend/vendors/vendor_quotation/index', ['data' => $data]);
     }
@@ -53,13 +53,23 @@ class VendorQuotationController extends Controller
                         $query->get();
                     })
                     ->editColumn('user_name', function ($event) {
-                        return $event->user->name;
+                        $isUserDeleted = isRecordDeleted($event->user->deleted_at);
+                        if (!$isUserDeleted) {
+                            return $event->user->name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->user->name . '</span>';
+                        }
                     })
                     ->editColumn('customer_enquiry_id', function ($event) {
                         return $event->customer_enquiry_id;
                     })
                     ->editColumn('vendor_name', function ($event) {
-                        return $event->vendor->vendor_name;
+                        $isVendorDeleted = isRecordDeleted($event->vendor->deleted_at);
+                        if (!$isVendorDeleted) {
+                            return $event->vendor->vendor_name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->vendor->vendor_name . '</span>';
+                        }
                     })
                     ->editColumn('product_name', function ($event) {
                         return $event->product->product_name;

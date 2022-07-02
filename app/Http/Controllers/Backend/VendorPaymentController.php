@@ -20,7 +20,7 @@ class VendorPaymentController extends Controller
     public function index()
     {
         try {
-            $data['vendor'] = Vendor::all();
+            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->get();
             $data['paymentMode'] = paymentMode();
             $data['paymentStatusType'] = paymentStatusType();
             $data['vendor_payment_add'] = checkPermission('vendor_payment_add');
@@ -61,7 +61,12 @@ class VendorPaymentController extends Controller
                         $query->get();
                     })
                     ->editColumn('vendor_name', function ($event) {
-                        return $event->vendor->vendor_name;
+                        $isVendorDeleted = isRecordDeleted($event->vendor->deleted_at);
+                        if (!$isVendorDeleted) {
+                            return $event->vendor->vendor_name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->vendor->vendor_name . '</span>';
+                        }
                     })
                     ->editColumn('order_id', function ($event) {
                         return $event->order_id;
@@ -87,12 +92,6 @@ class VendorPaymentController extends Controller
                         $actions .= '</span>';
                         return $actions;
                     })
-                    ->setRowClass(function ($event) {
-                        $isDeleted = isRecordDeleted($event->deleted_at);
-                        if ($isDeleted) {
-                            return 'alert-danger';
-                        }
-                    })
                     ->addIndexColumn()
                     ->rawColumns(['vendor_name', 'order_id', 'payment_mode', 'payment_status', 'transaction_date', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
@@ -115,7 +114,7 @@ class VendorPaymentController extends Controller
      */
     public function add()
     {
-        $data['vendor'] = Vendor::all();
+        $data['vendor'] = Vendor::Where('approval_status', '=', 'accepted')->get();
         $data['payment_details'] = [];
         if (isset($_GET['id'])) {
             $data['order'][] = Order::find($_GET['id']);
