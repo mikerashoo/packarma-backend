@@ -37,7 +37,7 @@ class SubscriptionController extends Controller
 	            return DataTables::of($query) 
                     ->filter(function ($query) use ($request) {                        
                         if (isset($request['search']['search_type']) && ! is_null($request['search']['search_type'])) {
-                            $query->where('type', 'like', "%" . $request['search']['search_type'] . "%");
+                            $query->where('subscription_type', 'like', "%" . $request['search']['search_type'] . "%");
                         }
                         $query->get();
                     })
