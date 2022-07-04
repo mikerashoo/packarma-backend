@@ -33,24 +33,23 @@
                                                         <option value="">Select</option>
                                                     @endif
                                                     @foreach ($user as $users)
+                                                        @php
+                                                            $isUserDeleted = isRecordDeleted($users->deleted_at);
+                                                            $isUserDeleted ? $deleted_status = ' - (Deleted)' : $deleted_status = '';
+                                                        @endphp
                                                         @if (isset($id))
                                                             @if ($users->id == $id)
-                                                                <option selected value="{{ $users->id }}">{{ $users->name }}</option>
+                                                                <option selected value="{{ $users->id }}">{{ $users->name }} {{$deleted_status}}</option>
                                                             @endif
                                                         @else
-                                                            <option value="{{ $users->id }}">{{ $users->name }}</option>
+                                                            <option value="{{ $users->id }}">{{ $users->name }} {{$deleted_status}}</option>
                                                         @endif
                                                     @endforeach
                                                 </select><br><br>
                                             </div>
                                             <div class="col-sm-4">
                                                 <label>City</label>
-                                                <select class="form-control mb-3 select2" id="search_city" name="search_city" style="width: 100% !important;">
-                                                    <option value="">Select</option>
-                                                    @foreach ($city as $cities)
-                                                        <option value="{{ $cities->id }}">{{ $cities->city_name }}</option>
-                                                    @endforeach
-                                                </select><br />
+                                                <input class="form-control mb-3" type="text" id="search_city" name="search_city">
                                             </div>
                                             <div class="col-md-4">
                                                 <label>&nbsp;</label><br />

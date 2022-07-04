@@ -38,7 +38,7 @@ class CustomerEnquiryController extends Controller
      */
     public function index()
     {
-        $data['user'] = User::all();
+        $data['user'] = User::withTrashed()->where('approval_status','accepted')->get();
         $data['enquiryType'] = customerEnquiryType();
         $data['quoteType'] = customerEnquiryQuoteType();
         $data['customer_enquiry_add'] = checkPermission('customer_enquiry_add');
@@ -56,12 +56,9 @@ class CustomerEnquiryController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = CustomerEnquiry::with('product', 'state', 'city', 'user', 'country', 'vendor_quotation')->orderBy('updated_at', 'desc');
+                $query = CustomerEnquiry::with('product', 'state', 'city', 'user', 'country', 'vendor_quotation')->orderBy('updated_at', 'desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
-                        if (isset($request['search']['search_description']) && !is_null($request['search']['search_description'])) {
-                            $query->where('description', 'like', "%" . $request['search']['search_description'] . "%");
-                        }
                         if (isset($request['search']['search_user_name']) && !is_null($request['search']['search_user_name'])) {
                             $query->where('user_id', $request['search']['search_user_name']);
                         }
@@ -77,7 +74,12 @@ class CustomerEnquiryController extends Controller
                         return $event->product->product_name;
                     })
                     ->editColumn('user_name', function ($event) {
-                        return $event->user->name;
+                        $isUserDeleted = isRecordDeleted($event->user->deleted_at);
+                        if (!$isUserDeleted) {
+                            return $event->user->name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->user->name . '</span>';
+                        }
                     })
                     ->editColumn('enquiry_status', function ($event) {
                         return customerEnquiryQuoteType($event->quote_type);
@@ -86,6 +88,7 @@ class CustomerEnquiryController extends Controller
                         return date('d-m-Y H:i A', strtotime($event->updated_at));
                     })
                     ->editColumn('action', function ($event) {
+                        $isUserDeleted = isRecordDeleted($event->user->deleted_at);
                         $customer_enquiry_edit = checkPermission('customer_enquiry_edit');
                         $customer_enquiry_view = checkPermission('customer_enquiry_view');
                         $customer_enquiry_map_to_vendor = checkPermission('customer_enquiry_map_to_vendor');
@@ -93,13 +96,17 @@ class CustomerEnquiryController extends Controller
                         if ($customer_enquiry_view) {
                             $actions .= '<a href="customer_enquiry_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        //finding vendor enquiry count
-                        $vendor_quotation_count = VendorQuotation::where('customer_enquiry_id', '=', $event->id)->get()->count();
-                        // if ($vendor_quotation_count == 0) {
-                        if ($customer_enquiry_map_to_vendor) {
-                            $actions .= ' <a href="customer_enquiry_map_to_vendor/' . $event->id . '" class="btn btn-info btn-sm src_data" title="Map Vendor"><i class="fa ft-zap"></i></a>';
+                        if (!$isUserDeleted) {
+                            //finding vendor enquiry count
+                            $vendor_quotation_count = VendorQuotation::where('customer_enquiry_id', '=', $event->id)->get()->count();
+                            // if ($vendor_quotation_count == 0) {
+                            if ($customer_enquiry_map_to_vendor) {
+                                $actions .= ' <a href="customer_enquiry_map_to_vendor/' . $event->id . '" class="btn btn-info btn-sm src_data" title="Map Vendor"><i class="fa ft-zap"></i></a>';
+                            }
+                            // }
+                        } else {
+                            $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;">Deleted</span>';
                         }
-                        // }
                         $actions .= '</span>';
                         return $actions;
                     })
@@ -126,7 +133,7 @@ class CustomerEnquiryController extends Controller
     public function addCustomerEnquiry()
     {
         $data['city'] = City::all();
-        $data['user'] = User::all();
+        $data['user'] = User::where([['approval_status','accepted'],['status', 1],['deleted_at',NULL]])->get();
         $data['state'] = State::all();
         $data['vendor'] = Vendor::all();
         $data['country'] = Country::all();

@@ -31,7 +31,7 @@ class UserController extends Controller
 
     public function indexUserList($id = "")
     {
-        $data['data'] = User::all();
+        $data['data'] = User::withTrashed();
         $data['user_add'] = checkPermission('user_add');
         $data['user_view'] = checkPermission('user_view');
         $data['user_edit'] = checkPermission('user_edit');
@@ -51,7 +51,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = User::with('phone_country','whatsapp_country','currency')->Where('approval_status', '=', 'accepted')->orderBy('updated_at','desc');
+                $query = User::with('phone_country','whatsapp_country','currency')->Where('approval_status', '=', 'accepted')->orderBy('updated_at','desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
@@ -63,7 +63,12 @@ class UserController extends Controller
                         $query->get();
                     })
                     ->editColumn('name', function ($event) {
-                        return $event->name;
+                        $isDeleted = isRecordDeleted($event->deleted_at);
+                        if (!$isDeleted) {
+                            return $event->name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->name . '</span>';
+                        }
                     })
                     ->editColumn('created_at', function ($event) {
                         return date('d-m-Y H:i A', strtotime($event->created_at));
@@ -78,6 +83,7 @@ class UserController extends Controller
                         return $event->gstin ?? '-';
                     })
                     ->editColumn('action', function ($event) {
+                    $isDeleted = isRecordDeleted($event->deleted_at);
                     $user_view = checkPermission('user_list_view');
                     $user_edit = checkPermission('user_list_edit');
                     $user_status = checkPermission('user_list_status');
@@ -86,19 +92,23 @@ class UserController extends Controller
                     if ($user_view) {
                         $actions .= '<a href="user_list_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                     }
-                    if ($user_edit) {
-                        $actions .= ' <a href="user_list_edit/' . $event->id.  '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
-                    }
-                    if ($user_status) {
-                        if ($event->status == '1') {
-                            $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked data-url="publishUserList">';
+                    if (!$isDeleted) {
+                        if ($user_edit) {
+                            $actions .= ' <a href="user_list_edit/' . $event->id.  '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
-                        else {
-                            $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" data-url="publishUserList">';
+                        if ($user_status) {
+                            if ($event->status == '1') {
+                                $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked data-url="publishUserList">';
+                            }
+                            else {
+                                $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" data-url="publishUserList">';
+                            }
                         }
-                    }
-                    if ($user_add_address) {
-                        $actions .= ' <a href="user_address_list?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="User Address"><i class="fa ft-plus-square"></i></a>';
+                        if ($user_add_address) {
+                            $actions .= ' <a href="user_address_list?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="User Address"><i class="fa ft-plus-square"></i></a>';
+                        }
+                    }else {
+                        $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;">Deleted</span>';
                     }
                     $actions .= '</span>';
                     return $actions;

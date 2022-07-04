@@ -37,8 +37,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $data['user'] = User::all();
-        $data['vendor'] = Vendor::all();
+        $data['user'] = User::withTrashed()->where('approval_status','accepted')->get();
+        $data['vendor'] = Vendor::withTrashed()->where('approval_status','accepted')->get();
         $data['paymentStatus'] = paymentStatus();
         $data['deliveryStatus'] = deliveryStatus();
         $data['order_view'] = checkPermission('order_view');
