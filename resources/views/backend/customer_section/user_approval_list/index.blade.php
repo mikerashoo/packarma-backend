@@ -42,6 +42,8 @@
                                                         <th id="name" data-orderable="false" data-searchable="false">Name</th>
                                                         <th id="email" data-orderable="false" data-searchable="false">Email</th>
                                                         <th id="phone" data-orderable="false" class="col-md-2" data-searchable="false">Phone</th>
+                                                        <th id="gstin" data-orderable="false" class="col-md-2" data-searchable="false">GST Number</th>
+                                                        {{-- <th id="gst_certificate" data-orderable="false" class="col-md-2" data-searchable="false">GST Certificate</th> --}}
                                                         <th id="approval_status" data-orderable="false" data-searchable="false">Approval Status</th>
                                                         <th id="created_at" data-orderable="false" data-searchable="false">Datetime</th>
                                                         @if ($data['user_approval_view'] || $data['user_approval_update'] )

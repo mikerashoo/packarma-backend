@@ -74,9 +74,9 @@ class UserController extends Controller
                     ->editColumn('phone', function ($event) {
                         return '+' . $event->phone_country->phone_code . ' ' . $event->phone;
                     })
-                    // ->editColumn('whatsapp', function ($event) {
-                    //     return '+' . $event->whatsapp_country->phone_code . ' ' . $event->whatsapp_no;
-                    // })
+                    ->editColumn('gstin', function ($event) {
+                        return $event->gstin ?? '-';
+                    })
                     ->editColumn('action', function ($event) {
                     $user_view = checkPermission('user_list_view');
                     $user_edit = checkPermission('user_list_edit');
@@ -104,7 +104,7 @@ class UserController extends Controller
                     return $actions;
                 })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'email', 'phone','action'])->setRowId('id')->make(true);
+                    ->rawColumns(['name', 'email', 'phone','gstin', 'action'])->setRowId('id')->make(true);
             }
             catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -347,6 +347,21 @@ class UserController extends Controller
                     ->editColumn('phone', function ($event) {
                         return '+' . $event->phone_country->phone_code . ' ' . $event->phone;
                     })
+                    ->editColumn('gstin', function ($event) {
+                        return $event->gstin ?? 'Not found';
+                    })
+                    // ->editColumn('gst_certificate', function ($event) {
+                    //     if (str_contains($event->gst_certificate, '.pdf')) {
+                    //         $file  = '<span><i class="fa fa-file"></i>' . $event->gst_certificate . '</span>';
+                    //     } else {
+                    //         // $image_path = getFile($event->gst_certificate, 'gst_certificate', false);
+                    //         // $file  = '<img src="' . $image_path . '" alt="File Not Found" width="150" height="150">';
+                    //         $imageUrl = ListingImageUrl('gst_certificate', $event->gst_certificate, 'image', false);
+                    //         $file  = ' <img src="' . $imageUrl . '" width="150" height="150"/>';
+                    //     }
+
+                    //     return $file;
+                    // })
                     ->editColumn('approval_status', function ($event) {
                         $db_approval_status = $event->approval_status;
                         $bg_class = 'bg-danger';
@@ -380,7 +395,7 @@ class UserController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'email', 'phone', 'approval_status','created_at','action'])->setRowId('id')->make(true);
+                    ->rawColumns(['name', 'email', 'phone', 'approval_status','gstin','created_at','action'])->setRowId('id')->make(true);
             }
             catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());

@@ -25,7 +25,7 @@ class UserAddressController extends Controller
         try {
             $data['city'] = City::all();
             $data['user'] = UserAddress::all();
-            $data['user'] = User::all();
+            $data['user'] = User::where('approval_status','=', 'accepted')->get();
             $data['user_address_add'] = checkPermission('user_address_add');
             $data['user_address_view'] = checkPermission('user_address_view');
             $data['user_address_edit'] = checkPermission('user_address_edit');
