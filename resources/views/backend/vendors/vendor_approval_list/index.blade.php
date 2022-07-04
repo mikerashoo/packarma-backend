@@ -34,16 +34,16 @@
                                                 <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                             </div>
                                         </div>
-                                        <div class="table-responsive">
+                                        <div class="table-responsive" style="height:450px;">
                                             <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="vendor_approval_list_data">
-                                                <thead>
+                                                <thead class="sticky_header">
                                                     <tr>
                                                         <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                         <th id="name" data-orderable="false" data-searchable="false">Vendor Name</th>
                                                         <th id="email" data-orderable="false" data-searchable="false">Email</th>
                                                         <th id="phone" data-orderable="false" data-searchable="false">Phone</th>
                                                         <th id="gstin" data-orderable="false" data-searchable="false">Gst No</th>
-                                                        <th id="gst_certificate" data-orderable="false" data-searchable="false">Gst Certificate</th>
+                                                        {{-- <th id="gst_certificate" data-orderable="false" data-searchable="false">Gst Certificate</th> --}}
                                                         <th id="approval_status" data-orderable="false" data-searchable="false">Approval Status</th>
                                                         <th id="created_at" data-orderable="false" data-searchable="false">Date Time</th>
                                                         @if ($data['vendor_approval_view'] || $data['vendor_approval_update'] )

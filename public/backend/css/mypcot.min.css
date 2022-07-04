@@ -1368,3 +1368,10 @@ a.list-group-item-dark:focus {
 #roleTable {
 	transform: rotateX(180deg);
 } */
+
+.sticky_header {
+	position: sticky;
+	background-color: #dedede;
+	top: 0;
+	z-index: 1;
+}

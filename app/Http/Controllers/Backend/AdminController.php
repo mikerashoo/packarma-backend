@@ -114,7 +114,7 @@ class AdminController extends Controller
         $permissionArr = Permission::where([['to_be_considered', 'Yes']])->get()->toArray();
         // print_r($permissionArr);exit;
         $formatedPermissions = array();
-        $permisstion_type = array('List', 'Add', 'Edit', 'View', 'Status','Map To Vendor','Material Map','Delivery Status Update','Customer Payment Update','Vendor Payment Update');
+        $permisstion_type = array('List', 'Add', 'Edit', 'View', 'Status', 'Map To Vendor', 'Material Map', 'Delivery Status Update', 'Customer Payment Update', 'Vendor Payment Update');
         foreach ($permissionArr as $key => $value) {
             if ($value['parent_status'] == 'parent') {
                 if (!isset($formatedPermissions[$value['id']])) {
@@ -176,7 +176,7 @@ class AdminController extends Controller
         $roles->save();
         successMessage('Permission Updated Successfully', $msg_data);
     }
-    
+
 
     /**
      *   created by : Sagar Thokal
@@ -192,11 +192,11 @@ class AdminController extends Controller
         //     'email' => 'required|email',
         //     'phone' => 'required|numeric|digits:10',
         // ]);
-        $msg_data=array();
+        $msg_data = array();
         $validationErrors = $this->validateUpdateProfile($request);
-		if (count($validationErrors)) {
+        if (count($validationErrors)) {
             \Log::error("User Approval List Validation Exception: " . implode(", ", $validationErrors->all()));
-        	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
+            errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
 
         $msg_data = array();
@@ -264,11 +264,11 @@ class AdminController extends Controller
             //return redirect()->back()->withErrors(array("msgMatchPass"=>"Password not matched!"));
         }
         $admins = Admin::find($id);
-        
+
         if ($admins->password == md5($admins->email . $request->new_password)) {
             errorMessage(__('change_password.new_password_cannot_same_current_password'), $msg_data);
         }
-        
+
         $admins->password = md5($email . $request->new_password);
         $admins->save();
         successMessage('Password updated successfully!', $msg_data);

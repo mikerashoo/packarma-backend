@@ -98,18 +98,18 @@ class VendorController extends Controller
                     ->editColumn('gstin', function ($event) {
                         return $event->gstin ?? 'not found';
                     })
-                    ->editColumn('gst_certificate', function ($event) {
-                        if (str_contains($event->gst_certificate, '.pdf')) {
-                            $file  = '<span><i class="fa fa-file"></i>' . $event->gst_certificate . '</span>';
-                        } else {
-                            // $image_path = getFile($event->gst_certificate, 'vendor_gst_certificate', false);
-                            // $file  = '<img src="' . $image_path . '" alt="File Not Found" width="150" height="150">';
-                            $imageUrl = ListingImageUrl('vendor_gst_certificate', $event->gst_certificate, 'image', false);
-                            $file  = ' <img src="' . $imageUrl . '" width="150" height="150"/>';
-                        }
+                    // ->editColumn('gst_certificate', function ($event) {
+                    //     if (str_contains($event->gst_certificate, '.pdf')) {
+                    //         $file  = '<span><i class="fa fa-file"></i>' . $event->gst_certificate . '</span>';
+                    //     } else {
+                    //         // $image_path = getFile($event->gst_certificate, 'vendor_gst_certificate', false);
+                    //         // $file  = '<img src="' . $image_path . '" alt="File Not Found" width="150" height="150">';
+                    //         $imageUrl = ListingImageUrl('vendor_gst_certificate', $event->gst_certificate, 'image', false);
+                    //         $file  = ' <img src="' . $imageUrl . '" width="150" height="150"/>';
+                    //     }
 
-                        return $file;
-                    })
+                    //     return $file;
+                    // })
                     ->editColumn('vendor_status', function ($event) {
                         $isDeleted = isRecordDeleted($event->deleted_at);
                         $vendor_status = checkPermission('vendor_status');
@@ -375,18 +375,18 @@ class VendorController extends Controller
                     ->editColumn('gstin', function ($event) {
                         return $event->gstin ?? 'not found';
                     })
-                    ->editColumn('gst_certificate', function ($event) {
-                        if (str_contains($event->gst_certificate, '.pdf')) {
-                            $file  = '<span><i class="fa fa-edit"></i>' . $event->gst_certificate . '</span>';
-                        } else {
-                            $imageUrl = ListingImageUrl('vendor_gst_certificate', $event->gst_certificate, 'image', false);
-                            $file  = ' <img src="' . $imageUrl . '" width="150" height="150"/>';
-                            // $image_path = getFile($event->gst_certificate, 'vendor_gst_certificate', false);
-                            // $file  = '<img src="' . $image_path . '" alt="File Not Found" width="150" height="150">';
-                        }
+                    // ->editColumn('gst_certificate', function ($event) {
+                    //     if (str_contains($event->gst_certificate, '.pdf')) {
+                    //         $file  = '<span><i class="fa fa-edit"></i>' . $event->gst_certificate . '</span>';
+                    //     } else {
+                    //         $imageUrl = ListingImageUrl('vendor_gst_certificate', $event->gst_certificate, 'image', false);
+                    //         $file  = ' <img src="' . $imageUrl . '" width="150" height="150"/>';
+                    //         // $image_path = getFile($event->gst_certificate, 'vendor_gst_certificate', false);
+                    //         // $file  = '<img src="' . $image_path . '" alt="File Not Found" width="150" height="150">';
+                    //     }
 
-                        return $file;
-                    })
+                    //     return $file;
+                    // })
                     ->editColumn('approval_status', function ($event) {
                         $db_approval_status = $event->approval_status;
                         $bg_class = 'bg-danger';

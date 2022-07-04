@@ -33,15 +33,15 @@
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
                                     </div>
-                            		<div class="table-responsive" style="height:450px;">
+                            		<div class="table-responsive">
                                         <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="vendor_data">
-				                            <thead style="position: sticky; background-color:#dedede; top: 0;  z-index: 1;">
+				                            <thead >
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>
                                                     <th id="vendor_company_name" data-orderable="false" data-searchable="false">Vendor Company Name</th>
                                                     <th id="gstin" data-orderable="false" data-searchable="false">Gst No</th>
-                                                    <th id="gst_certificate" data-orderable="false" data-searchable="false">Gst Certificate</th>
+                                                    {{-- <th id="gst_certificate" data-orderable="false" data-searchable="false">Gst Certificate</th> --}}
                                                     <th id="mark_featured" data-orderable="false" data-searchable="false">Mark Featured</th>
                                                     @if($data['vendor_status'])
                                                         <th id="vendor_status" data-orderable="false" data-searchable="false">Status</th>

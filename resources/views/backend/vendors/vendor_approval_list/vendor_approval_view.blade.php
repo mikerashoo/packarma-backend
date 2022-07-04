@@ -21,6 +21,25 @@
                                             <td><span>+{{ $data['phone_country']->phone_code }}</span><span> {{ $data->phone }}</span></td>
                                         </tr>
                                         <tr>
+                                            <td><strong>GST Number : </strong></td>
+                                            <td>{{ $data->gstin ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>GST Certificate : </strong></td>
+                                            <td>
+                                                @if (!empty($data->gst_certificate))
+                                                    @if (str_contains($data->gst_certificate, '.pdf'))
+                                                        <a href="{{ListingImageUrl('vendor_gst_certificate',$data->gst_certificate)}}" target="_blank"><i class="fa fa-file"></i>  {{ $data->gst_certificate}}</a>
+                                                    @else
+                                                        <a href="{{ListingImageUrl('vendor_gst_certificate',$data->gst_certificate)}}" target="_blank"><img src="{{ListingImageUrl('vendor_gst_certificate',$data->gst_certificate)}}" width="150px" height="auto"/></a>
+                                                    @endif
+                                                @else
+                                                {{'-'}}
+                                                @endif
+
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>Approval Status : </strong></td>
                                             <td>{{ approvalStatusArray($data->approval_status) }}</td>
                                         </tr>
