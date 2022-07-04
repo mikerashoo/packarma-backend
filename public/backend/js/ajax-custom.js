@@ -99,7 +99,7 @@ $(document).ready(function () {
                 elems.forEach(function (html) {
                     var switchery = new Switchery(html, { color: '#11c15b', jackColor: '#fff', size: 'small', secondaryColor: '#ff5251' });
                 });
-            },
+            }
         });
 
         $('#listing-filter-data .form-control').keyup(function () {
