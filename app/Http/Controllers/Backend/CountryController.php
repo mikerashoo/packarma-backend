@@ -16,11 +16,12 @@ class CountryController extends Controller
        *   Uses :  To show country listing page
     */
     public function index(){
-        $data['country_add'] = checkPermission('country_add');
-        $data['country_view'] = checkPermission('country_view');
-        $data['country_edit'] = checkPermission('country_edit');
-        $data['country_status'] = checkPermission('country_status'); 
-        return view('backend/country/index',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data['country_add'] = checkPermission('country_add');
+        // $data['country_view'] = checkPermission('country_view');
+        // $data['country_edit'] = checkPermission('country_edit');
+        // $data['country_status'] = checkPermission('country_status'); 
+        // return view('backend/country/index',["data"=>$data]);
     }
 
     public function fetch(Request $request){
@@ -159,9 +160,10 @@ class CountryController extends Controller
      */
     public function view($id)
     {
-        $data['data'] = Country::find($id);
-        $data['currency'] = Currency::all();
-        return view('backend/country/country_view', $data);
+        return redirect('/webadmin/dashboard');
+        // $data['data'] = Country::find($id);
+        // $data['currency'] = Currency::all();
+        // return view('backend/country/country_view', $data);
     }
 
     /**
@@ -170,8 +172,9 @@ class CountryController extends Controller
        *   Uses : To load Add country page
     */
     public function addCountry() {
-        $data = Currency::all();
-        return view('backend/country/country_add',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data = Currency::all();
+        // return view('backend/country/country_add',["data"=>$data]);
     }
 
     /**
@@ -183,9 +186,10 @@ class CountryController extends Controller
     */
 
     public function editCountry($id) {
-        $data['data'] = Country::find($id);
-        $data['currency'] = Currency::all();        
-        return view('backend/country/country_edit',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data['data'] = Country::find($id);
+        // $data['currency'] = Currency::all();        
+        // return view('backend/country/country_edit',["data"=>$data]);
     }
 
     /**

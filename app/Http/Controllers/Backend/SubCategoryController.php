@@ -235,6 +235,7 @@ class SubCategoryController extends Controller
         return \Validator::make($request->all(), [
             'sub_category_name' => 'required|string',
             'category' => 'required|integer',
+            'sub_category_image' => 'mimes:jpeg,png,jpg',
         ])->errors();
     }
 
@@ -250,7 +251,7 @@ class SubCategoryController extends Controller
         return \Validator::make($request->all(), [
             'sub_category_name' => 'required|string',
             'category' => 'required|integer',
-            'sub_category_image' => 'required',
+            'sub_category_image' => 'required|mimes:jpeg,png,jpg',
         ])->errors();
     }
 }

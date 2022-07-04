@@ -243,6 +243,7 @@ class BannerController extends Controller
     {
         return \Validator::make($request->all(), [
             'title' => 'required|string',
+            'banner_image' => 'mimes:jpeg,png,jpg',
         ])->errors();
     }
 
@@ -257,7 +258,7 @@ class BannerController extends Controller
     {
         return \Validator::make($request->all(), [
             'title' => 'required|string',
-            'banner_image' => 'required',
+            'banner_image' => 'required|mimes:jpeg,png,jpg',
         ])->errors();
     }
 }

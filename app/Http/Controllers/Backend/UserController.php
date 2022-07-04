@@ -1,7 +1,7 @@
 <?php
 /*
- *	Developed by : Pradyumn Dwivedi - Mypcot Infotech 
- *	Project Name : Packult 
+ *	Developed by : Pradyumn Dwivedi - Mypcot Infotech
+ *	Project Name : Packult
  *	File Name : UserController.php
  *	File Path : app\Http\Controllers\Backend\UserController.php
  *	Created On : 22-Mar-2022
@@ -184,7 +184,7 @@ class UserController extends Controller
                     // print_r($response[0]);exit;
                     errorMessage('Whatsapp Number Already Exist', $msg_data);
                 }
-            }   
+            }
             $tableObject = User::find($_GET['id']);
             $msg = "Data Updated Successfully";
         } else {
@@ -268,11 +268,11 @@ class UserController extends Controller
             successMessage('Unpublished', $msg_data);
         }
     }
-    
+
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 23-mar-2022
-       *   Uses :  To view user list details  
+       *   Uses :  To view user list details
        *   @param int $id
        *   @return Response
     */
@@ -300,12 +300,12 @@ class UserController extends Controller
             // 'currency' => 'required|integer',
         ])->errors();
     }
-    
+
     //--------------------user approval list section--------------------------
 
     /**
      *   created by : Pradyumn Dwivedi
-     *   Created On : 23-Mar-2022 
+     *   Created On : 23-Mar-2022
      *   Uses :  To show Pending user listing for approval
      */
     public function indexApprovalList()
@@ -319,7 +319,7 @@ class UserController extends Controller
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 23-March-2022
-     *   Uses :  display dynamic data in datatable for Pending user in user approval list  
+     *   Uses :  display dynamic data in datatable for Pending user in user approval list
      *   @param Request request
      *   @return Response
      */
@@ -327,7 +327,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = User::with('phone_country','whatsapp_country','currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at','desc'); 
+                $query = User::with('phone_country','whatsapp_country','currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
@@ -448,13 +448,13 @@ class UserController extends Controller
             $approvalStatusArray = approvalStatusArray('',$getKeys);
             if (in_array( $request->approval_status, $approvalStatusArray))
              {
-                $tableObject = User::find($_GET['id']);            
+                $tableObject = User::find($_GET['id']);
                 $msg = "Approval Status Updated Successfully";
             }
             else{
                 errorMessage('Approval Status Does not Exists.', $msg_data);
-            } 
-        } 
+            }
+        }
         $tableObject->approval_status = $request->approval_status;
         $tableObject->gstin = $request->gstin ?? '';
         $tableObject->approval_status = $request->approval_status;
@@ -484,7 +484,7 @@ class UserController extends Controller
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 23-mar-2022
-       *   Uses :  To view user approval list details  
+       *   Uses :  To view user approval list details
        *   @param int $id
        *   @return Response
     */
@@ -508,8 +508,8 @@ class UserController extends Controller
     {
         return \Validator::make($request->all(), [
             'approval_status' => 'required|string',
-            'gstin' => ($request->approval_status == 'accepted') ? 'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : '') : '',
-            'gst_certificate' => ($request->approval_status == 'accepted') ?  'nullable|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
+            'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : '') : '',
+            'gst_certificate' => ($request->approval_status == 'accepted') ?  'required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
         ])->errors();
     }
 }

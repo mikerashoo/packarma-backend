@@ -74,9 +74,9 @@
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.GSTCERTIFICATE'); ?></p>
                                         <input class="form-control" type="file" id="gst_certificate" name="gst_certificate" accept="gst_certificate/png, gst_certificate/jpg, gst_certificate/jpeg, gst_certificate/pdf" onchange="checkFiles(this.files)"><br/>
                                         @if(str_contains($data->gst_certificate, '.pdf'))
-                                            <span><i class="fa fa-edit"></i>{{$data->gst_certificate}}</span>
+                                            <span><a href="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" target="_blank"><i class="fa fa-file"></i>  {{ $data->gst_certificate}}</a></span>
                                         @else
-                                            <img src="{{ $data->image_path}}" width="200px" height="auto">
+                                            <a href="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" target="_blank"><img src="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" width="250px" height="auto"/></a>
                                         @endif
                                     </div>
                                     <div class="col-sm-6" id="remark">
