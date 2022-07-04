@@ -43,12 +43,31 @@
                                             @endif
                                             <tr>
                                                 <td><strong>GST Number</strong></td>
+                                                <td>
                                                 @if (!empty($data->gstin))
-                                                    <td>{{ $data->gstin }}</td>
+                                                    {{ $data->gstin }}
                                                 @else
-                                                    <td>-</td>
+                                                    {{'-'}}
                                                 @endif
+                                                </td>
+                                               
                                             </tr>
+
+                                            <tr>
+                                            <td><strong>GST Certificate : </strong></td>
+                                            <td>
+                                                @if (!empty($data->gst_certificate))
+                                                    @if (str_contains($data->gst_certificate, '.pdf'))
+                                                        <a href="{{ListingImageUrl('vendor_gst_certificate',$data->gst_certificate)}}" target="_blank"><i class="fa fa-file"></i>  {{ $data->gst_certificate}}</a>
+                                                    @else
+                                                        <a href="{{ListingImageUrl('vendor_gst_certificate',$data->gst_certificate)}}" target="_blank"><img src="{{ListingImageUrl('vendor_gst_certificate',$data->gst_certificate)}}" width="150px" height="auto"/></a>
+                                                    @endif
+                                                @else
+                                                {{'-'}}
+                                                @endif
+
+                                            </td>
+                                        </tr>
                                             {{-- <tr>
                                                 <td><strong>Address</strong></td>
                                                 <td>{{$data->vendor_address}}</td>

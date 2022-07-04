@@ -32,7 +32,7 @@ class VendorMaterialMapping extends Model
 
     public function vendor()
     {
-        return $this->belongsTo('App\Models\Vendor');
+        return $this->belongsTo('App\Models\Vendor')->withTrashed();
     }
 
     /**
@@ -42,7 +42,7 @@ class VendorMaterialMapping extends Model
      */
     public function packaging_material()
     {
-        return $this->belongsTo('App\Models\PackagingMaterial');
+        return $this->belongsTo('App\Models\PackagingMaterial')->withTrashed();
     }
 
     /**

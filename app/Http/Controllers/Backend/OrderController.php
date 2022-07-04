@@ -74,10 +74,20 @@ class OrderController extends Controller
                         $query->get();
                     })
                     ->editColumn('user_name', function ($event) {
-                        return $event->user->name;
+                        $isUserDeleted = isRecordDeleted($event->user->deleted_at);
+                        if (!$isUserDeleted) {
+                            return $event->user->name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->user->name . '</span>';
+                        }
                     })
                     ->editColumn('vendor_name', function ($event) {
-                        return $event->vendor->vendor_name;
+                        $isVendorDeleted = isRecordDeleted($event->vendor->deleted_at);
+                        if (!$isVendorDeleted) {
+                            return $event->vendor->vendor_name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->vendor->vendor_name . '</span>';
+                        }
                     })
                     ->editColumn('grand_total', function ($event) {
                         return $event->currency->currency_symbol . $event->grand_total;
@@ -483,7 +493,7 @@ class OrderController extends Controller
 
             $grand_total = ($data->grand_total ?? 0) + ($dc_amount ?? 0);
             $in_words = convertNumberToWord($grand_total);
-
+            $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
 
             $result = [
                 'data' => $data,
@@ -507,6 +517,7 @@ class OrderController extends Controller
                 'dc_tax_val' => $dc_tax_val,
                 'dc_igst_amount' => $dc_igst_amount,
                 'in_words' => $in_words,
+                'financialYear' => $financialYear,
                 'no_image' => getFile('mypcot.jpg', 'mypcot'),
             ];
             // $result['data'] = $data;

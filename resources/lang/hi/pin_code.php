@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'not_found' => 'Pin Code details not found',
+    'not_found' => 'Pincode details not found',
     'details_found' => 'Pincode details found!',
     'api_error' => 'There is problem with api please chceck',
 ];

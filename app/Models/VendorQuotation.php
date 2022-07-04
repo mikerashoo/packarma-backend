@@ -43,7 +43,7 @@ class VendorQuotation extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\User')->withTrashed();
     }
 
     /**
@@ -53,7 +53,7 @@ class VendorQuotation extends Model
      */
     public function vendor()
     {
-        return $this->belongsTo('App\Models\Vendor');
+        return $this->belongsTo('App\Models\Vendor')->withTrashed();
     }
 
     /**

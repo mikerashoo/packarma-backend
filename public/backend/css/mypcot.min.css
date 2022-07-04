@@ -1359,3 +1359,19 @@ a.list-group-item-dark:focus {
 .ck-editor__editable {
 	min-height: 300px !important;
 }
+
+/* .table-responsive {
+	transform: rotateX(180deg);
+}
+
+#dataTable_wrapper,
+#roleTable {
+	transform: rotateX(180deg);
+} */
+
+.sticky_header {
+	position: sticky;
+	background-color: #dedede;
+	top: 0;
+	z-index: 1;
+}

@@ -141,6 +141,13 @@ class PackagingMaterialApiController extends Controller
                     errorMessage(__('packagingmaterial.id_require'), $msg_data);
                 }
 
+                $priceValidationErrors = $this->validateUpdatePrice($request);
+                if (count($priceValidationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $priceValidationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $priceValidationErrors->all());
+                }
+
+
                 if (!$request->vendor_price) {
                     errorMessage(__('packagingmaterial.vendor_price_require'), $msg_data);
                 }
@@ -173,5 +180,18 @@ class PackagingMaterialApiController extends Controller
             \Log::error("Material Price Updation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
+    }
+
+    private function validateUpdatePrice(Request $request)
+    {
+        return \Validator::make(
+            $request->all(),
+            [
+                'vendor_price' => 'required|numeric|digits_between:1,5',
+            ],
+            [
+                'vendor_price.digits_between' => 'The vendor price must not be greater than 99999',
+            ]
+        )->errors();
     }
 }
