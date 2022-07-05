@@ -60,24 +60,24 @@ class SubCategoryApiController extends Controller
                 if($request->category_id)
                 {
                     $subCategoryData = $subCategoryData->where('category_id',$request->category_id);
-                    $data = $data->where('category_id',$request->category_id);
+                    $data = $data->where('sub_categories.category_id',$request->category_id);
                 }
                 if($request->sub_category_id)
                 {
                     $subCategoryData = $subCategoryData->where('id',$request->sub_category_id);
-                    $data = $data->where('id',$request->sub_category_id);
+                    $data = $data->where('sub_categories.id',$request->sub_category_id);
                 }
                 if($request->sub_category_name)
                 {
                     $subCategoryData = $subCategoryData->where('sub_category_name',$request->sub_category_name);
-                    $data = $data->where('sub_category_name',$request->sub_category_name);
+                    $data = $data->where('sub_categories.sub_category_name',$request->sub_category_name);
                 }
                 if(empty($subCategoryData->first()))
                 {
                     errorMessage(__('sub_category.sub_category_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'sub_category_name');
+                    $data = fullSearchQuery($data, $request->search,'sub_categories.sub_category_name');
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();

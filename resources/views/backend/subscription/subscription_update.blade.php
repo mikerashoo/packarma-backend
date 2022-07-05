@@ -21,13 +21,15 @@
                                             <div class="col-md-12 row">
                                                 <div class="col-md-6">
                                                     <dl class="row">
-                                                        <dt class="col-sm-4 text-left">Subscription Type :</dt>
-                                                        <dd class="col-sm-8">{{ subscriptionType($data->type); }}</dd>
+                                                        <dt class="col-sm-8 text-left">Subscription Type :</dt>
+                                                        <dd class="col-sm-4">{{ subscriptionType($data->subscription_type); }}</dd>
                                                     </dl>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <dl class="row">                                                                        
-                                                        <dt class="col-sm-4 text-left">Subscription Amount :</dt>
-                                                        <dd class="col-sm-8">{{  $data->amount }} </dd>
-                                                    </dl>                                                     
+                                                        <dt class="col-sm-8 text-left">Subscription Amount :</dt>
+                                                        <dd class="col-sm-4">{{ $data->amount }} </dd>
+                                                    </dl>  
                                                 </div>
                                             </div>                                    
                                         </div>

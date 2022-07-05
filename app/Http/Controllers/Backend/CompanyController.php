@@ -24,11 +24,12 @@ class CompanyController extends Controller
        *   Uses :  To show company listing page
     */
     public function index(){
-        $data['company_add'] = checkPermission('company_add');
-        $data['company_view'] = checkPermission('company_view');
-        $data['company_edit'] = checkPermission('company_edit');
-        $data['company_status'] = checkPermission('company_status');
-        return view('backend/company/index',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data['company_add'] = checkPermission('company_add');
+        // $data['company_view'] = checkPermission('company_view');
+        // $data['company_edit'] = checkPermission('company_edit');
+        // $data['company_status'] = checkPermission('company_status');
+        // return view('backend/company/index',["data"=>$data]);
     }
 
     /**
@@ -100,7 +101,8 @@ class CompanyController extends Controller
        *   Uses : To load Add company page
     */
     public function add() {
-        return view('backend/company/company_add');
+        return redirect('/webadmin/dashboard');
+        // return view('backend/company/company_add');
     }
 
     /**
@@ -111,8 +113,9 @@ class CompanyController extends Controller
        *   @return Response
     */
     public function edit($id) {
-        $data['data'] = Company::find($id);
-        return view('backend/company/company_edit',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data['data'] = Company::find($id);
+        // return view('backend/company/company_edit',["data"=>$data]);
     }
 
     /**
@@ -124,11 +127,12 @@ class CompanyController extends Controller
      */
     public function view($id)
     {
-        $data= Company::find($id);
-        if($data){
-            $data->image_path = getFile($data->comapny_image,'company',true);
-        }
-        return view('backend/company/company_view', ["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data= Company::find($id);
+        // if($data){
+        //     $data->image_path = getFile($data->comapny_image,'company',true);
+        // }
+        // return view('backend/company/company_view', ["data"=>$data]);
     }
     /**
        *   created by : Sagar Thokal

@@ -63,7 +63,9 @@ class BannerApiController extends Controller
                     $i++;
                 }
                 if(empty($data)) {
-                    errorMessage(__('banner.banner_not_found'), $msg_data);
+                    $data['banner_image'] = getFile('banner_image', 'banner');
+                    $data['banner_thumb_image'] = getFile('banner_thumb_image', 'banner',false,'thumb');
+                    // errorMessage(__('banner.banner_not_found'), $msg_data);
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;

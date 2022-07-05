@@ -18,7 +18,7 @@ class UserSubscriptionPaymentController extends Controller
     */
     public function index() 
     {   
-        $data['user'] = User::all();
+        $data['user'] = User::withTrashed();
         $data['subscriptionType'] = subscriptionType();
         $data['user_subscription_payment_view'] = checkPermission('user_subscription_payment_view');
         return view('backend/user_subscription_payment/index',['data' =>$data] ); 
@@ -34,7 +34,7 @@ class UserSubscriptionPaymentController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = UserSubscriptionPayment::with('user')->orderBy('updated_at','desc');                
+	            $query = UserSubscriptionPayment::with('user')->orderBy('updated_at','desc')->withTrashed();            
 	            return DataTables::of($query) 
                     ->filter(function ($query) use ($request) {                        
                         if ($request['search']['search_user_name'] && ! is_null($request['search']['search_user_name'])) {
@@ -46,7 +46,13 @@ class UserSubscriptionPaymentController extends Controller
                         $query->get();
                     })
                     ->editColumn('name', function ($event) {
-	                    return $event->user->name;                        
+                        $isDeleted = isRecordDeleted($event->user->deleted_at);
+                        if (!$isDeleted) {
+                            return $event->user->name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->user->name . '</span>';
+                        }
+	                    // return $event->user->name;                        
 	                }) 
                     ->editColumn('subscription_type', function ($event) {
 	                    return subscriptionType($event->subscription_type);                        

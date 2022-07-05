@@ -37,8 +37,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $data['user'] = User::all();
-        $data['vendor'] = Vendor::all();
+        $data['user'] = User::withTrashed()->where('approval_status','accepted')->get();
+        $data['vendor'] = Vendor::withTrashed()->where('approval_status','accepted')->get();
         $data['paymentStatus'] = paymentStatus();
         $data['deliveryStatus'] = deliveryStatus();
         $data['order_view'] = checkPermission('order_view');
@@ -376,6 +376,8 @@ class OrderController extends Controller
             'payment_status' => 'required|string',
             'payment_mode' => 'required|string',
             'amount' => 'required|numeric',
+            'transaction_date' => 'required|date',
+            'order_image' => 'mimes:jpeg,png,jpg'
         ])->errors();
     }
 

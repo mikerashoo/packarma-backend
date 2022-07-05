@@ -25,7 +25,7 @@ class UserAddressController extends Controller
         try {
             $data['city'] = City::all();
             $data['user'] = UserAddress::all();
-            $data['user'] = User::all();
+            $data['user'] = User::withTrashed()->where('approval_status','=', 'accepted')->get();
             $data['user_address_add'] = checkPermission('user_address_add');
             $data['user_address_view'] = checkPermission('user_address_view');
             $data['user_address_edit'] = checkPermission('user_address_edit');
@@ -52,19 +52,25 @@ class UserAddressController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = UserAddress::with('user','state')->orderBy('updated_at','desc');
+                $query = UserAddress::with('user','state')->orderBy('updated_at','desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user']) && !is_null($request['search']['search_user'])) {
                             $query->where('user_id', $request['search']['search_user']);
                         }
-                        if (isset($request['search']['search_city']) && ! is_null($request['search']['search_city'])) {
-                            $query->where('city_id', $request['search']['search_city']);                           
+                        if (isset($request['search']['search_city']) && !is_null($request['search']['search_city'])) {
+                            $query->where('city_name', 'like', "%" . $request['search']['search_city'] . "%");
                         }
                         $query->get();
                     })
                     ->editColumn('name', function ($event) {
-                        return $event->user->name;
+                        $isUserDeleted = isRecordDeleted($event->user->deleted_at);
+                        if (!$isUserDeleted) {
+                            return $event->user->name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->user->name . '</span>';
+                        }
+                        // return $event->user->name;
                     })
                     ->editColumn('state', function ($event) {
                         return $event->state->state_name;
@@ -76,6 +82,7 @@ class UserAddressController extends Controller
                         return $event->pincode;
                     })
                     ->editColumn('action', function ($event) {
+                        $isUserDeleted = isRecordDeleted($event->user->deleted_at);
                         $user_address_view = checkPermission('user_address_view');
                         $user_address_edit = checkPermission('user_address_edit');
                         $user_address_status = checkPermission('user_address_status');
@@ -83,16 +90,20 @@ class UserAddressController extends Controller
                         if ($user_address_view) {
                             $actions .= '<a href="user_address_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if ($user_address_edit) {
-                            $actions .= ' <a href="user_address_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
-                        }
-                        if ($user_address_status) {
-                            if ($event->status == '1') {
-                                $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
+                        if (!$isUserDeleted) {
+                            if ($user_address_edit) {
+                                $actions .= ' <a href="user_address_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                             }
-                            else {
-                                $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
+                            if ($user_address_status) {
+                                if ($event->status == '1') {
+                                    $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
+                                }
+                                else {
+                                    $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
+                                }
                             }
+                        }else {
+                            $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;"> Deleted</span>';
                         }
                         $actions .= '</span>';
                         return $actions;

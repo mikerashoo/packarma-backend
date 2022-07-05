@@ -34,7 +34,7 @@
                                                 @endif
                                                 @foreach ($vendor as $vendors)
 
-                                                 @php
+                                                @php
                                                     $isVendorDeleted = isRecordDeleted($vendors->deleted_at);
                                                     $isVendorDeleted ? $deleted_status = ' - (Deleted)' : $deleted_status = '';
                                                 @endphp

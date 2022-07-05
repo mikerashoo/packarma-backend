@@ -102,28 +102,28 @@ class SubscriptionApiController extends Controller
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
 
-                    $newDateTime = Carbon::now()->addMonths(1)->toArray();
+                    $newDateTime = Carbon::now()->addDays(30)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
                 if($subscription->subscription_type == 'quarterly'){
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
 
-                    $newDateTime = Carbon::now()->addMonths(3)->toArray();
+                    $newDateTime = Carbon::now()->addDays(90)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
                 if($subscription->subscription_type == 'semi_yearly'){
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
 
-                    $newDateTime = Carbon::now()->addMonths(6)->toArray();
+                    $newDateTime = Carbon::now()->addDays(180)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
                 if($subscription->subscription_type == 'yearly'){
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
 
-                    $newDateTime = Carbon::now()->addMonths(12)->toArray();
+                    $newDateTime = Carbon::now()->addDays(360)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
                 if($user->subscription_end != null && $user->subscription_end > $subscription_start_date){
@@ -133,9 +133,7 @@ class SubscriptionApiController extends Controller
                     $interval = abs(round($diff_days / 86400));
                     $subscription_end_date = Carbon::createFromFormat('Y-m-d H:i:s', $subscription_end_date);
                     $subscription_end_date = $subscription_end_date->addDays($interval);
-                    // print_r($subscription_end_date);exit;
                 }
-                // print_r($subscription_end_date);exit;
                 //data to enter in user table of selected user id
                 $subscription_request_data = array();
                 $subscription_request_data['subscription_id'] = $subscription->id;

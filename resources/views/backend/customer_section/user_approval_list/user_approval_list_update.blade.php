@@ -25,15 +25,15 @@
                                             <dd class="col-sm-8">{{ $data->name }}</dd>
                                         </dl>
                                         <dl class="row">
-                                            <dt class="col-sm-4 text-left">Email : </dt>
-                                            <dd class="col-sm-8">{{ $data->email }} </dd>
-                                        </dl>
-                                        <dl class="row">
                                             <dt class="col-sm-4 text-left">Approval Status:</dt>
                                             <dd class="col-sm-8">{{ approvalStatusArray($data->approval_status) }} </dd>
                                         </dl>
                                     </div>
                                     <div class="col-md-6">
+                                        <dl class="row">
+                                            <dt class="col-sm-4 text-left">Email : </dt>
+                                            <dd class="col-sm-8">{{ $data->email }} </dd>
+                                        </dl>
                                         <dl class="row">
                                             <dt class="col-sm-4 text-left">Phone Number : </dt>
                                             <dd class="col-sm-8"><span>+{{ $data['phone_country']->phone_code }}</span><span> {{ $data->phone }}</span></dd>
@@ -63,23 +63,25 @@
                                             @endforeach
                                         </select><br />
                                     </div>
-                                    <div class="col-sm-6" id="remark">
-                                        <label>Remark</label>
-                                        <textarea class="form-control" id="admin_remark" name="admin_remark">{{ $data->admin_remark }}</textarea><br />
-                                    </div>
-                                    <div class="col-sm-6" id="gstin_div">
+                                    <div class="col-sm-6">
+                                        {{-- id="gstin_div" --}}
                                         <label>GST Number</label>
                                         <input class="form-control" type="text" id="gstin" name="gstin" value="{{$data->gstin}}"><br/>
                                     </div>   
-                                    <div class="col-sm-6" id="gst_certificate_div">
+                                    <div class="col-sm-6">
+                                        {{-- id="gst_certificate_div" --}}
                                         <label>Gst Certificate</label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.GSTCERTIFICATE'); ?></p>
                                         <input class="form-control" type="file" id="gst_certificate" name="gst_certificate" accept="gst_certificate/png, gst_certificate/jpg, gst_certificate/jpeg, gst_certificate/pdf" onchange="checkFiles(this.files)"><br/>
                                         @if(str_contains($data->gst_certificate, '.pdf'))
-                                            <span><i class="fa fa-edit"></i>{{$data->gst_certificate}}</span>
+                                            <span><a href="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" target="_blank"><i class="fa fa-file"></i>  {{ $data->gst_certificate}}</a></span>
                                         @else
-                                            <img src="{{ $data->image_path}}" width="200px" height="auto">
+                                            <a href="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" target="_blank"><img src="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" width="250px" height="auto"/></a>
                                         @endif
+                                    </div>
+                                    <div class="col-sm-6" id="remark">
+                                        <label>Remark</label>
+                                        <textarea class="form-control" row="3" id="admin_remark" name="admin_remark">{{ $data->admin_remark }}</textarea><br />
                                     </div>
                                 </div>
                                 <hr>
