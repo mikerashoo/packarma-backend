@@ -27,6 +27,8 @@ class QuotationApiController extends Controller
                 $vendor_id = $vendor_token['sub'];
                 $page_no = 1;
                 $limit = 10;
+                $orderByArray = ['vendor_quotations.updated_at' => 'DESC',];
+                $defaultSortByName = false;
 
                 if (isset($request->page_no) && !empty($request->page_no)) {
                     $page_no = $request->page_no;
@@ -162,7 +164,11 @@ class QuotationApiController extends Controller
                 if (isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search, 'vendor_price|product_name');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['products.product_name' => 'ASC'];
+                }
 
+                $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
 
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
@@ -170,6 +176,7 @@ class QuotationApiController extends Controller
                 $i = 0;
                 foreach ($data as $row) {
                     $data[$i]->quote_id = getFormatid($row->id, $main_table);
+                    $data[$i]->unit_symbol = 'kg';
                     $i++;
                 }
 

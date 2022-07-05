@@ -32,6 +32,8 @@ class PackagingMaterialApiController extends Controller
                 $vendor_id = $vendor_token['sub'];
                 $page_no = 1;
                 $limit = 10;
+                $orderByArray = ['vendor_material_mappings.updated_at' => 'DESC',];
+                $defaultSortByName = false;
 
                 if (isset($request->page_no) && !empty($request->page_no)) {
                     $page_no = $request->page_no;
@@ -94,16 +96,21 @@ class PackagingMaterialApiController extends Controller
                     $data = fullSearchQuery($data, $request->search, 'vendor_price|packaging_material_name');
                 }
 
+                if ($defaultSortByName) {
+                    $orderByArray = ['packaging_materials.packaging_material_name' => 'ASC'];
+                }
+
+                $data = allOrderBy($data, $orderByArray);
+
                 $total_records = $data->get()->count();
 
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
 
                 $i = 0;
-                // foreach ($data as $row) {
-                //     $data[$i]['product_image'] = getFile($row['product_image'], 'product');
-                //     $data[$i]['product_thumb_image'] = getFile($row['product_thumb_image'], 'product', false, 'thumb');
-                //     $i++;
-                // }
+                foreach ($data as $row) {
+                    $data[$i]->unit_symbol = 'kg';
+                    $i++;
+                }
 
 
 
