@@ -95,6 +95,11 @@ class HomeApiController extends Controller
                     ->where([['vendor_quotations.vendor_id', $vendor_id], ['enquiry_status', 'mapped']])
                     ->orderBy('vendor_quotations.created_at', 'desc')->take(3)->get()->toArray();
 
+                $i = 0;
+                foreach ($last_three_enquiries as $row) {
+                    $last_three_enquiries[$i]->unit_symbol = 'kg';
+                    $i++;
+                }
 
                 $responseData['pending_payments'] = $pending_payments;
                 $responseData['received_today'] = $received_today;

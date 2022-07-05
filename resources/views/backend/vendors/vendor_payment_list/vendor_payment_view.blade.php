@@ -37,8 +37,8 @@
                                             <td>{{$data->remark}}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Date Time</strong></td>
-                                            <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
+                                            <td><strong>Creation Date Time</strong></td>
+                                            <td>{{date('d-m-Y H:i A', strtotime($data->created_at)) }}</td>
                                         </tr>
                                     </table>
                                 </div>

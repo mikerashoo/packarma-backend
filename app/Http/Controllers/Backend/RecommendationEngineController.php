@@ -45,7 +45,7 @@ class RecommendationEngineController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = RecommendationEngine::with('product')->orderBy('updated_at','desc');
+                $query = RecommendationEngine::with('product')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_recommendation_engine']) && !is_null($request['search']['search_recommendation_engine'])) {
@@ -115,16 +115,17 @@ class RecommendationEngineController extends Controller
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['packaging_material'] = PackagingMaterial::all();
         $data['vendor'] = Vendor::all();
-        return view('backend/recommendation_engine/recommendation_engine_add',$data);
+        return view('backend/recommendation_engine/recommendation_engine_add', $data);
     }
 
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 27-04-2022
      *   Uses : get product details from product table in recrommendation engine selected product from dropdown  
-   */
-    public function getProductDetails(Request $request){
-        $productData = Product::with('category','product_form','packaging_treatment')->find($request->product_id);
+     */
+    public function getProductDetails(Request $request)
+    {
+        $productData = Product::with('category', 'product_form', 'packaging_treatment')->find($request->product_id);
         $data['category'] = $productData->category;
         $data['product_form'] = $productData->product_form;
         $data['packaging_treatment'] = $productData->packaging_treatment;
@@ -203,9 +204,9 @@ class RecommendationEngineController extends Controller
         $tableObject->packaging_material_id = $request->packaging_material;
         $tableObject->storage_condition_id = $request->storage_condition;
         $tableObject->display_shelf_life = $request->display_shelf_life;
-        if($isEditFlow){
+        if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
@@ -248,11 +249,10 @@ class RecommendationEngineController extends Controller
         $recordData = RecommendationEngine::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Published', $msg_data);
+        } else {
+            successMessage('Unpublished', $msg_data);
         }
     }
 
@@ -266,8 +266,8 @@ class RecommendationEngineController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'packaging_solution' => 'required|string',
-            'structure_type' => 'required|string', 
+            'packaging_solution' => 'required|string|unique:recommendation_engines,engine_name,' . $request->id . ',id',
+            'structure_type' => 'required|string',
             'product' => 'required|integer',
             'min_shelf_life' => 'required|integer',
             'max_shelf_life' => 'required|integer',
