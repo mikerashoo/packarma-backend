@@ -26,6 +26,8 @@ class OrderApiController extends Controller
                 $vendor_id = $vendor_token['sub'];
                 $page_no = 1;
                 $limit = 10;
+                $orderByArray = ['orders.updated_at' => 'DESC',];
+                $defaultSortById = false;
 
                 if (isset($request->page_no) && !empty($request->page_no)) {
                     $page_no = $request->page_no;
@@ -169,6 +171,12 @@ class OrderApiController extends Controller
                     $data = fullSearchQuery($data, $request->search, 'product_name|category_name');
                 }
 
+                if ($defaultSortById) {
+                    $orderByArray = ['orders.id' => 'DESC'];
+                }
+
+                $data = allOrderBy($data, $orderByArray);
+
                 $total_records = $data->get()->count();
 
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
@@ -179,6 +187,7 @@ class OrderApiController extends Controller
                     $data[$i]->odr_id = getFormatid($row->id, $main_table);
                     $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);
                     $data[$i]->billing_details = json_decode($row->billing_details, TRUE);
+                    $data[$i]->unit_symbol = 'kg';
                     $i++;
                 }
 

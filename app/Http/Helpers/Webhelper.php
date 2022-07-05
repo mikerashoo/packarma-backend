@@ -564,6 +564,25 @@ if (!function_exists('fullSearchQuery')) {
     }
 }
 
+
+/**
+ *   Created by : Maaz
+ *   Created On : 05-july-2022
+ *   Uses: This function will be used to order data in api.
+ */
+if (!function_exists('allOrderBy')) {
+    function allOrderBy($query, $params)
+    {
+        foreach ($params as $key => $value) {
+            $query->orderBy($key, $value);
+        }
+        return $query;
+    }
+}
+
+
+
+
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 11-May-2022

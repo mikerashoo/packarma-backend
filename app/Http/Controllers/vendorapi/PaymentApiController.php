@@ -28,6 +28,8 @@ class PaymentApiController extends Controller
                 $vendor_id = $vendor_token['sub'];
                 $page_no = 1;
                 $limit = 10;
+                $orderByArray = ['orders.updated_at' => 'DESC',];
+                $defaultSortById = false;
 
                 if (isset($request->page_no) && !empty($request->page_no)) {
                     $page_no = $request->page_no;
@@ -112,6 +114,12 @@ class PaymentApiController extends Controller
                 if (isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search, 'vendor_pending_payment|vendor_amount');
                 }
+
+                if ($defaultSortById) {
+                    $orderByArray = ['orders.id' => 'DESC'];
+                }
+
+                $data = allOrderBy($data, $orderByArray);
 
                 $total_records = $data->get()->count();
 
