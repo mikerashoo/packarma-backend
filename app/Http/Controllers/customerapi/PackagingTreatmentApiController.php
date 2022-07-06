@@ -28,7 +28,8 @@ class PackagingTreatmentApiController extends Controller
             {
                 $page_no=1;
                 $limit=10;
-
+                $orderByArray = ['packaging_treatments.packaging_treatment_name' => 'ASC'];
+                $defaultSortByName = false;
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -57,6 +58,10 @@ class PackagingTreatmentApiController extends Controller
                 if(isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search,'packaging_treatment_name|packaging_treatment_description');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['packaging_treatments.packaging_treatment_name' => 'ASC'];
+                }
+                $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $i=0;

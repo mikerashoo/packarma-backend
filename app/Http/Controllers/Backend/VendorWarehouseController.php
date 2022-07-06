@@ -20,7 +20,7 @@ class VendorWarehouseController extends Controller
     */
     public function index(){
         return redirect('/webadmin/dashboard');
-        // $data['vendor'] = Vendor::all();
+        // $data['vendor'] = Vendor::where('approval_status','accepted')->orderBy('vendor_name','asc')->get();
         // $data['city'] = City::all();
         // $data['vendor_warehouse_add'] = checkPermission('vendor_warehouse_add');
         // $data['vendor_warehouse_view'] = checkPermission('vendor_warehouse_view');
@@ -113,10 +113,10 @@ class VendorWarehouseController extends Controller
     */
     public function add() {
         return redirect('/webadmin/dashboard');
-        // $data['vendor'] = Vendor::all();
+        // $data['vendor'] = Vendor::where('approval_status','accepted')->orderBy('vendor_name')->get();
         // $data['city'] = City::all();
-        // $data['state'] = State::all();
-        // $data['country'] = Country::all();
+        // $data['state'] = State::orderBy('state_name','asc')->get();
+        // $data['country'] = Country::orderBy('country_name','asc')->get();
         // return view('backend/vendors/vendor_warehouse/vendor_warehouse_add',$data);
     }
 

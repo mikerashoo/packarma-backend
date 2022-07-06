@@ -23,9 +23,8 @@ class UserAddressController extends Controller
     public function index()
     {
         try {
-            $data['city'] = City::all();
             $data['user'] = UserAddress::all();
-            $data['user'] = User::withTrashed()->where('approval_status','=', 'accepted')->get();
+            $data['user'] = User::withTrashed()->where('approval_status','=', 'accepted')->orderBy('name','asc')->get();
             $data['user_address_add'] = checkPermission('user_address_add');
             $data['user_address_view'] = checkPermission('user_address_view');
             $data['user_address_edit'] = checkPermission('user_address_edit');
@@ -131,17 +130,17 @@ class UserAddressController extends Controller
      */
     public function add()
     {
-        $data['city'] = City::all();
+        // $data['city'] = City::all();
         if (isset($_GET['id'])) {
             $data['user'][] = User::find($_GET['id']);
             $data['id'] = $_GET['id'];
         }
         else {
-            $data['user'] = User::all();
+            $data['user'] = User::where('approval_status','accepted')->orderBy('name','asc')->get();
         }
         $data['addressType'] = addressType();
-        $data['state'] = State::all();
-        $data['country'] = Country::all();
+        $data['state'] = State::where('status', 1)->orderBy('state_name','asc')->get();
+        $data['country'] = Country::where('status', 1)->orderBy('country_name','asc')->get();
         return view('backend/customer_section/user_address_list/user_address_add', $data);
     }
 
@@ -160,7 +159,7 @@ class UserAddressController extends Controller
             \Log::error("Edit address: Address id not found");
             errorMessage('Address id not found', $msg_data);
         }
-        $data['city'] = City::all();
+        // $data['city'] = City::all();
         $data['user'] = User::all();
         $data['state'] = State::all();
         $data['country'] = Country::all();

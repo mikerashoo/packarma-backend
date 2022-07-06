@@ -18,7 +18,7 @@ class UserSubscriptionPaymentController extends Controller
     */
     public function index() 
     {   
-        $data['user'] = User::withTrashed();
+        $data['user'] = User::withTrashed()->orderBy('name','asc')->get();
         $data['subscriptionType'] = subscriptionType();
         $data['user_subscription_payment_view'] = checkPermission('user_subscription_payment_view');
         return view('backend/user_subscription_payment/index',['data' =>$data] ); 

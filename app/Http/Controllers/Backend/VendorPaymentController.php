@@ -20,7 +20,7 @@ class VendorPaymentController extends Controller
     public function index()
     {
         try {
-            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->get();
+            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name','asc')->get();
             $data['paymentMode'] = paymentMode();
             $data['paymentStatusType'] = paymentStatusType();
             $data['vendor_payment_add'] = checkPermission('vendor_payment_add');
@@ -114,7 +114,7 @@ class VendorPaymentController extends Controller
      */
     public function add()
     {
-        $data['vendor'] = Vendor::Where('approval_status', '=', 'accepted')->get();
+        $data['vendor'] = Vendor::Where('approval_status', '=', 'accepted')->orderBy('vendor_name','asc')->get();
         $data['payment_details'] = [];
         if (isset($_GET['id'])) {
             $data['order'][] = Order::find($_GET['id']);

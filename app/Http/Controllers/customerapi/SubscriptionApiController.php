@@ -31,6 +31,8 @@ class SubscriptionApiController extends Controller
             {
                 $page_no=1;
                 $limit=10;
+                $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
+                $defaultSortByName = false;
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -57,6 +59,10 @@ class SubscriptionApiController extends Controller
                 if(isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search,'subscription_type');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
+                }
+                $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 if(empty($data)) {
@@ -97,7 +103,6 @@ class SubscriptionApiController extends Controller
                 $user_id = $token['sub'];
                 $user = User::find($user_id);
                 $subscription = Subscription::find($request->subscription_id);
-
                 if($subscription->subscription_type == 'monthly'){
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
@@ -198,9 +203,9 @@ class SubscriptionApiController extends Controller
             if($token)
             {
                 $user_id = $token['sub'];
-
+                $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
+                $defaultSortByName = false;
                 $data = DB::table('users')->select(
-                    
                     'users.subscription_id',
                     'users.type',
                     'subscriptions.subscription_type',
@@ -215,7 +220,6 @@ class SubscriptionApiController extends Controller
                 // if(empty($data)) {
                 //     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 // }
-                
                 //subscription listing 
                 $subscription_list = Subscription::select('id','subscription_type','amount');
                 $subscriptionData = Subscription::whereRaw("1 = 1");
@@ -236,6 +240,10 @@ class SubscriptionApiController extends Controller
                 if(isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search,'subscription_type');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
+                }
+                $subscription_list = allOrderBy($subscription_list, $orderByArray);
                 $subscription_total_records = $subscription_list->get()->count();
                 $subscription_list = $subscription_list->get()->toArray();
                 if(empty($subscription_list)) {
@@ -244,7 +252,6 @@ class SubscriptionApiController extends Controller
                 $responseData['subscription_listing'] = $subscription_list;
                 $responseData['total_records'] = $subscription_total_records;
                 // successMessage(__('success_msg.data_fetched_successfully'), $responseData);
-
                 $responseData['my_subscription'] = $data;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }

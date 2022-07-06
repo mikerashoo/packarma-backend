@@ -35,7 +35,8 @@ class CityApiController extends Controller
                 }
                 $page_no=1;
                 $limit=10;
-                
+                $orderByArray = ['cities.city_name' => 'ASC'];
+                $defaultSortByName = false;
                 if(isset($request->search_country_id)){
                     $country_id = $request->search_country_id;
                 }
@@ -78,6 +79,10 @@ class CityApiController extends Controller
                 if(isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search,'city_name');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['cities.city_name' => 'ASC'];
+                }
+                $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 if(empty($data)) {

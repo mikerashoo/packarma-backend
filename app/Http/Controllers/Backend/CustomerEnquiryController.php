@@ -38,7 +38,7 @@ class CustomerEnquiryController extends Controller
      */
     public function index()
     {
-        $data['user'] = User::withTrashed()->where('approval_status','accepted')->get();
+        $data['user'] = User::withTrashed()->where('approval_status','accepted')->orderBy('name','asc')->get();
         $data['enquiryType'] = customerEnquiryType();
         $data['quoteType'] = customerEnquiryQuoteType();
         $data['customer_enquiry_add'] = checkPermission('customer_enquiry_add');
