@@ -29,6 +29,8 @@ class CountryApiController extends Controller
             // {
                 $page_no=1;
                 $limit=10;
+                $orderByArray = ['countries.country_name' => 'ASC'];
+                $defaultSortByName = false;
                 if(isset($request->search_country_id)){
                     $country_id = $request->search_country_id;
                 }
@@ -82,6 +84,10 @@ class CountryApiController extends Controller
                 if(isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search,'country_name');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['countries.country_name' => 'ASC'];
+                }
+                $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 if(empty($data)) {

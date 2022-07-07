@@ -106,18 +106,9 @@ class SubscriptionController extends Controller
         	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
         if(isset($_GET['id'])) {            
-            $getKeys = true;
-            $subscriptionType = subscriptionType('',$getKeys);
-            if (in_array( $request->type, $subscriptionType))
-            {
-                $tableObject = Subscription::find($_GET['id']);            
-                $msg = "Subscription Amount Updated Successfully";
-            }
-            else{
-                errorMessage('Subscription Does not Exists.', $msg_data);
-            }
+            $tableObject = Subscription::find($_GET['id']);            
+            $msg = "Subscription Amount Updated Successfully";
         } 
-        $tableObject->type = $request->type;
         $tableObject->amount = $request->amount;
         $tableObject->updated_at = date('Y-m-d H:i:s');
         $tableObject->updated_by =  session('data')['id'];
@@ -135,8 +126,7 @@ class SubscriptionController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'type' => 'required|string',
-            'amount' => 'required|regex:/^\d+(\.\d{1,3})?$/|required',
+            'amount' => 'required|numeric',
         ])->errors();
     }
 }
