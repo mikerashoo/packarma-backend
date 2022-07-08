@@ -24,7 +24,7 @@
                         				<input class="form-control required" type="text" id="packaging_material_name" name="packaging_material_name" value="{{ $data->packaging_material_name }}"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Material Description<span style="color:#ff0000">*</span></label>
+                        				<label>Material Description</label>
                         				<input class="form-control required" type="text" id="material_description" name="material_description" value="{{ $data->material_description }}"><br/>
                         			</div>
                                     <div class="col-sm-6">

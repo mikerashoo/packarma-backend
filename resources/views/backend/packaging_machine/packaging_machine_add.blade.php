@@ -24,7 +24,7 @@
                         				<input class="form-control required" type="text" id="packaging_machine_name" name="packaging_machine_name"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Packaging Machine Description<span style="color:#ff0000">*</span></label>
+                        				<label>Packaging Machine Description</label>
                         				<input class="form-control required" type="text" id="packaging_machine_description" name="packaging_machine_description"><br/>
                         			</div>
                                     <div class="col-sm-6">

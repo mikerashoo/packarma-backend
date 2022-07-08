@@ -44,10 +44,12 @@ class OrderApiController extends Controller
                     'orders.product_weight',
                     'orders.vendor_amount',
                     'orders.vendor_pending_payment',
+                    'orders.customer_payment_status',
                     'orders.vendor_payment_status',
                     'orders.order_delivery_status',
                     'orders.product_quantity',
                     'orders.mrp',
+                    'orders.gst_type',
                     'orders.gst_amount',
                     'orders.grand_total',
                     'orders.shipping_details',
@@ -184,10 +186,14 @@ class OrderApiController extends Controller
 
                 $i = 0;
                 foreach ($data as $row) {
+                    $data[$i]->cgst_amount = "0.00";
+                    $data[$i]->sgst_amount = "0.00";
+                    $data[$i]->igst_amount = "0.00";
+
                     $data[$i]->odr_id = getFormatid($row->id, $main_table);
                     $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);
                     $data[$i]->billing_details = json_decode($row->billing_details, TRUE);
-                    $data[$i]->unit_symbol = 'kg';
+                    $data[$i]->material_unit_symbol = 'kg';
                     $data[$i]->order_status = $row->order_delivery_status;
                     $data[$i]->show_update_button = true;
                     if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing') {
@@ -201,6 +207,22 @@ class OrderApiController extends Controller
                     if ($row->order_delivery_status == 'delivered') {
                         $data[$i]->show_update_button = false;
                     }
+
+                    if ($row->customer_payment_status == 'fully_paid') {
+                        $data[$i]->customer_payment_status = 'paid';
+                    } else {
+                        $data[$i]->customer_payment_status = 'pending';
+                    }
+                    if ($row->gst_type == 'cgst+sgst') {
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+                    }
+
+                    if ($row->gst_type == 'igst') {
+                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                    }
+
+
+
                     $i++;
                 }
 

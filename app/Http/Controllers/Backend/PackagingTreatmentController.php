@@ -35,7 +35,7 @@ class PackagingTreatmentController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = PackagingTreatment::select('*')->orderBy('updated_at','desc');
+                $query = PackagingTreatment::select('*')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_packaging_treatment']) && !is_null($request['search']['search_packaging_treatment'])) {
@@ -52,23 +52,23 @@ class PackagingTreatmentController extends Controller
                     ->editColumn('mark_featured', function ($event) {
                         $packaging_treatment_edit = checkPermission('packaging_treatment_edit');
                         $featured = '';
-                        if($packaging_treatment_edit) {
-                            if($event->is_featured == '1') {
-                                $featured .= ' <input type="checkbox" data-url="featuredPackagingTreatment" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
+                        if ($packaging_treatment_edit) {
+                            if ($event->is_featured == '1') {
+                                $featured .= ' <input type="checkbox" data-url="featuredPackagingTreatment" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
                             } else {
-                                $featured .= ' <input type="checkbox" data-url="featuredPackagingTreatment" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
+                                $featured .= ' <input type="checkbox" data-url="featuredPackagingTreatment" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
                             }
-                        }else{
+                        } else {
                             $db_featured = $event->is_featured;
                             $bg_class = 'bg-light-danger';
-                            if($db_featured == '1'){
+                            if ($db_featured == '1') {
                                 $bg_class = 'bg-light-success';
                             }
                             $displayFeaturedStatus = displayFeatured($db_featured);
-                            $featured = '<span class=" badge badge-pill '.$bg_class.' mb-2 mr-2">'. $displayFeaturedStatus.'</span>'; 
+                            $featured = '<span class=" badge badge-pill ' . $bg_class . ' mb-2 mr-2">' . $displayFeaturedStatus . '</span>';
                         }
-	                    return $featured;
-	                })
+                        return $featured;
+                    })
                     ->editColumn('action', function ($event) {
                         $packaging_treatment_view = checkPermission('packaging_treatment_view');
                         $packaging_treatment_edit = checkPermission('packaging_treatment_edit');
@@ -91,7 +91,7 @@ class PackagingTreatmentController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['packaging_treatment_name', 'packaging_treatment_description','mark_featured','action'])->setRowId('id')->make(true);
+                    ->rawColumns(['packaging_treatment_name', 'packaging_treatment_description', 'mark_featured', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -125,8 +125,8 @@ class PackagingTreatmentController extends Controller
     public function edit($id)
     {
         $data['data'] = PackagingTreatment::find($id);
-        if($data['data']){
-            $data['data']->image_path = getFile($data['data']->packaging_treatment_image,'packaging_treatment',true);
+        if ($data['data']) {
+            $data['data']->image_path = getFile($data['data']->packaging_treatment_image, 'packaging_treatment', true);
         }
         return view('backend/packaging_treatment/packaging_treatment_edit', $data);
     }
@@ -164,27 +164,27 @@ class PackagingTreatmentController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if($request->hasFile('packaging_treatment_image')) {
+        if ($request->hasFile('packaging_treatment_image')) {
             $fixedSize = config('global.SIZE.PACKAGING_TREATMENT');
-            $size = $fixedSize/1000;
+            $size = $fixedSize / 1000;
             $fileSize = $request->file('packaging_treatment_image')->getSize();
-            if($fileSize >= $fixedSize){
-                errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
+            if ($fileSize >= $fixedSize) {
+                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
             };
         }
         $tableObject->packaging_treatment_name = $request->packaging_treatment_name;
         $tableObject->packaging_treatment_description = $request->packaging_treatment_description;
-        if($isEditFlow){
+        if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
         $last_inserted_id = $tableObject->id;
-        if($request->hasFile('packaging_treatment_image')) {
+        if ($request->hasFile('packaging_treatment_image')) {
             $image = $request->file('packaging_treatment_image');
-            $actualImage = saveSingleImage($image,'packaging_treatment',$last_inserted_id);
-            $thumbImage = createThumbnail($image,'packaging_treatment',$last_inserted_id,'packaging_treatment');
+            $actualImage = saveSingleImage($image, 'packaging_treatment', $last_inserted_id);
+            $thumbImage = createThumbnail($image, 'packaging_treatment', $last_inserted_id, 'packaging_treatment');
             $bannerObj = PackagingTreatment::find($last_inserted_id);
             $bannerObj->packaging_treatment_image = $actualImage;
             $bannerObj->packaging_treatment_thumb_image = $thumbImage;
@@ -202,11 +202,11 @@ class PackagingTreatmentController extends Controller
      */
     public function view($id)
     {
-        $data= PackagingTreatment::find($id);
-        if($data){
-            $data->image_path = getFile($data->packaging_treatment_image,'packaging_treatment',true);
+        $data = PackagingTreatment::find($id);
+        if ($data) {
+            $data->image_path = getFile($data->packaging_treatment_image, 'packaging_treatment', true);
         }
-        return view('backend/packaging_treatment/packaging_treatment_view', ["data"=>$data]);
+        return view('backend/packaging_treatment/packaging_treatment_view', ["data" => $data]);
     }
 
     /**
@@ -222,32 +222,30 @@ class PackagingTreatmentController extends Controller
         $recordData = PackagingTreatment::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Published', $msg_data);
+        } else {
+            successMessage('Unpublished', $msg_data);
         }
     }
 
     /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 18-May-2022
-       *   Uses :  To Mark Featured Packaging Treatment
-       *   @param Request request
-       *   @return Response
-    */
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 18-May-2022
+     *   Uses :  To Mark Featured Packaging Treatment
+     *   @param Request request
+     *   @return Response
+     */
     public function markFeatured(Request $request)
     {
         $msg_data = array();
         $recordData = PackagingTreatment::find($request->id);
         $recordData->is_featured = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Packaging Treatment mark as Featured', $msg_data);
-        }
-        else {
-        	successMessage('Packaging Treatment unmark as Featured', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Packaging Treatment mark as Featured', $msg_data);
+        } else {
+            successMessage('Packaging Treatment unmark as Featured', $msg_data);
         }
     }
 
@@ -262,7 +260,7 @@ class PackagingTreatmentController extends Controller
     {
         return \Validator::make($request->all(), [
             'packaging_treatment_name' => 'required|string',
-            'packaging_treatment_description' => 'required|string',
+            // 'packaging_treatment_description' => 'required|string',
         ])->errors();
     }
 }

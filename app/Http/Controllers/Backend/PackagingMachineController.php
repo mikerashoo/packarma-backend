@@ -35,7 +35,7 @@ class PackagingMachineController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = PackagingMachine::select('*')->orderBy('updated_at','desc');
+                $query = PackagingMachine::select('*')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_packaging_machine']) && !is_null($request['search']['search_packaging_machine'])) {
@@ -105,8 +105,8 @@ class PackagingMachineController extends Controller
     public function edit($id)
     {
         $data['data'] = PackagingMachine::find($id);
-        if($data['data']){
-            $data['data']->image_path = getFile($data['data']->packaging_machine_image,'packaging_machine',true);
+        if ($data['data']) {
+            $data['data']->image_path = getFile($data['data']->packaging_machine_image, 'packaging_machine', true);
         }
         return view('backend/packaging_machine/packaging_machine_edit', $data);
     }
@@ -144,27 +144,27 @@ class PackagingMachineController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if($request->hasFile('packaging_machine_image')) {
+        if ($request->hasFile('packaging_machine_image')) {
             $fixedSize = config('global.SIZE.PACKAGING_MACHINE');
-            $size = $fixedSize/1000;
+            $size = $fixedSize / 1000;
             $fileSize = $request->file('packaging_machine_image')->getSize();
-            if($fileSize >= $fixedSize){
-                errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
+            if ($fileSize >= $fixedSize) {
+                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
             };
         }
         $tableObject->packaging_machine_name = $request->packaging_machine_name;
         $tableObject->packaging_machine_description = $request->packaging_machine_description;
-        if($isEditFlow){
+        if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
         $last_inserted_id = $tableObject->id;
-        if($request->hasFile('packaging_machine_image')) {
+        if ($request->hasFile('packaging_machine_image')) {
             $image = $request->file('packaging_machine_image');
-            $actualImage = saveSingleImage($image,'packaging_machine',$last_inserted_id);
-            $thumbImage = createThumbnail($image,'packaging_machine',$last_inserted_id,'packaging_machine');
+            $actualImage = saveSingleImage($image, 'packaging_machine', $last_inserted_id);
+            $thumbImage = createThumbnail($image, 'packaging_machine', $last_inserted_id, 'packaging_machine');
             $bannerObj = PackagingMachine::find($last_inserted_id);
             $bannerObj->packaging_machine_image = $actualImage;
             $bannerObj->packaging_machine_thumb_image = $thumbImage;
@@ -182,11 +182,11 @@ class PackagingMachineController extends Controller
      */
     public function view($id)
     {
-        $data= PackagingMachine::find($id);
-        if($data){
-            $data->image_path = getFile($data->packaging_machine_image,'packaging_machine',true);
+        $data = PackagingMachine::find($id);
+        if ($data) {
+            $data->image_path = getFile($data->packaging_machine_image, 'packaging_machine', true);
         }
-        return view('backend/packaging_machine/packaging_machine_view', ["data"=>$data]);
+        return view('backend/packaging_machine/packaging_machine_view', ["data" => $data]);
     }
 
     /**
@@ -202,11 +202,10 @@ class PackagingMachineController extends Controller
         $recordData = PackagingMachine::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Published', $msg_data);
+        } else {
+            successMessage('Unpublished', $msg_data);
         }
     }
 
@@ -221,7 +220,7 @@ class PackagingMachineController extends Controller
     {
         return \Validator::make($request->all(), [
             'packaging_machine_name' => 'required|string',
-            'packaging_machine_description' => 'required|string',
+            // 'packaging_machine_description' => 'required|string',
         ])->errors();
     }
 }

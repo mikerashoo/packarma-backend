@@ -35,7 +35,7 @@ class ProductFormController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = ProductForm::select('*')->orderBy('updated_at','desc');
+                $query = ProductForm::select('*')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_product_form']) && !is_null($request['search']['search_product_form'])) {
@@ -105,8 +105,8 @@ class ProductFormController extends Controller
     public function edit($id)
     {
         $data['data'] = ProductForm::find($id);
-        if($data['data']){
-            $data['data']->image_path = getFile($data['data']->product_form_image,'product_form',true);
+        if ($data['data']) {
+            $data['data']->image_path = getFile($data['data']->product_form_image, 'product_form', true);
         }
         return view('backend/product_form/product_form_edit', $data);
     }
@@ -144,27 +144,27 @@ class ProductFormController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if($request->hasFile('product_form_image')) {
+        if ($request->hasFile('product_form_image')) {
             $fixedSize = config('global.SIZE.PRODUCT_FORM');
-            $size = $fixedSize/1000;
+            $size = $fixedSize / 1000;
             $fileSize = $request->file('product_form_image')->getSize();
-            if($fileSize >= $fixedSize){
-                errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
+            if ($fileSize >= $fixedSize) {
+                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
             };
         }
         $tableObject->product_form_name = $request->product_form_name;
         $tableObject->short_description = $request->short_description;
-        if($isEditFlow){
+        if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
         $last_inserted_id = $tableObject->id;
-        if($request->hasFile('product_form_image')) {
+        if ($request->hasFile('product_form_image')) {
             $image = $request->file('product_form_image');
-            $actualImage = saveSingleImage($image,'product_form',$last_inserted_id);
-            $thumbImage = createThumbnail($image,'product_form',$last_inserted_id,'product_form');
+            $actualImage = saveSingleImage($image, 'product_form', $last_inserted_id);
+            $thumbImage = createThumbnail($image, 'product_form', $last_inserted_id, 'product_form');
             $bannerObj = ProductForm::find($last_inserted_id);
             $bannerObj->product_form_image = $actualImage;
             $bannerObj->product_form_thumb_image = $thumbImage;
@@ -182,11 +182,11 @@ class ProductFormController extends Controller
      */
     public function view($id)
     {
-        $data= ProductForm::find($id);
-        if($data){
-            $data->image_path = getFile($data->product_form_image,'product_form',true);
+        $data = ProductForm::find($id);
+        if ($data) {
+            $data->image_path = getFile($data->product_form_image, 'product_form', true);
         }
-        return view('backend/product_form/product_form_view', ["data"=>$data]);
+        return view('backend/product_form/product_form_view', ["data" => $data]);
     }
 
     /**
@@ -202,11 +202,10 @@ class ProductFormController extends Controller
         $recordData = ProductForm::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Published', $msg_data);
+        } else {
+            successMessage('Unpublished', $msg_data);
         }
     }
 
@@ -221,7 +220,7 @@ class ProductFormController extends Controller
     {
         return \Validator::make($request->all(), [
             'product_form_name' => 'required|string',
-            'short_description' => 'required|string',
+            // 'short_description' => 'required|string',
         ])->errors();
     }
 }
