@@ -70,8 +70,8 @@ class MyProfileApiController extends Controller
                 // // print_r($data);exit;
                 // foreach($data as $row)
                 // {
-                    $data->visiting_card_front = getFile($data->visiting_card_front, 'visiting_card', false, 'front');
-                    $data->visiting_card_back = getFile($data->visiting_card_back, 'visiting_card',false,'back');
+                    $data->visiting_card_front = getFile($data->visiting_card_front,'visiting_card/front',false,'front');
+                    $data->visiting_card_back = getFile($data->visiting_card_back, 'visiting_card/front',false,'back');
                     // $i++;
                 // }
                 $msg_data['result'] = $data;
@@ -131,7 +131,7 @@ class MyProfileApiController extends Controller
                 $userData->created_at->toDateTimeString();
                 $userData->updated_at->toDateTimeString();
                 $input = array();
-                // Storing visiting card Front and Back
+                //Storing visiting card Front and Back
                 if ($request->hasFile('visiting_card_front')) {
                     \Log::info("Storing visiting card front image.");
                     $visiting_card_front = $request->file('visiting_card_front');
@@ -190,6 +190,56 @@ class MyProfileApiController extends Controller
         }
     }
 
+   /**
+     * Created By Pradyumn Dwivedi
+     * Created at : 07/07/2022
+     * Uses : To check customer status
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function checkCustomerStatus(Request $request)
+    {
+
+        $msg_data = array();
+        $default_home_page = 'home';
+        \Log::info("Check Customer Status, starting at: " . Carbon::now()->format('H:i:s:u'));
+        try {
+            $token = readHeaderToken();
+            if ($token) {
+                $user_id = $token['sub'];
+                $userData = User::with(['currency' => function ($query) {
+                    $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
+                }])->with(['phone_country' => function ($query) {
+                    $query->select('id', 'phone_code', 'country_name');
+                }])->where([['id', $user_id], ['is_verified', 'Y']])->first();
+                if (empty($userData)) {
+                    errorMessage(__('user.not_found'), $msg_data);
+                }
+                if ($userData->approval_status == 'rejected') {
+                    errorMessage(__('user.rejected'), $msg_data);
+                }
+                if ($userData->approval_status == 'pending') {
+                    if (empty($userData->gstin)) {
+                        $default_home_page = 'gst';
+                    } else {
+                        errorMessage(__('user.approval_pending'), $msg_data);
+                    }
+                }
+                if ($userData->status == 0 && $userData->approval_status == 'accepted') {
+                    errorMessage(__('user.not_active'), $msg_data);
+                }
+                $userData->load_page = $default_home_page;
+                successMessage(__('user.status_fetched'), $userData->toArray());
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Check User status failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
     /**
      * Created By Pradyumn Dwivedi
      * Created at : 03/06/2022
@@ -202,6 +252,8 @@ class MyProfileApiController extends Controller
     {
         return \Validator::make($request->all(), [
             'name' => 'required|string',
+            'visiting_card_front' => 'mimes:jpeg,png,jpg'. config('global.VISITING_CARD_IMAGE_SIZE'),
+            'visiting_card_back' => 'mimes:jpeg,png,jpg'. config('global.VISITING_CARD_IMAGE_SIZE')
         ])->errors();
     }
 }
