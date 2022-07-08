@@ -32,9 +32,21 @@
                                                 <td>{{ approvalStatusArray($data->approval_status) }}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>GST Information Number</strong></td>
+                                                <td><strong>GST Number</strong></td>
                                                 @if (!empty($data->gstin))
                                                     <td>{{ $data->gstin }}</td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                            </tr>
+                                            <tr>
+                                                <td><strong>GST Certificate</strong></td>
+                                                @if (!empty($data->gst_certificate))
+                                                    @if (str_contains($data->gst_certificate, '.pdf'))
+                                                        <td><a href="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" target="_blank"><i class="fa fa-file"></i>  {{ $data->gst_certificate}}</a></td>
+                                                    @else
+                                                        <td><a href="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" target="_blank"><img src="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" width="150px" height="auto"/></a></td>
+                                                    @endif
                                                 @else
                                                     <td>-</td>
                                                 @endif

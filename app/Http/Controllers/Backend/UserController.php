@@ -1,7 +1,7 @@
 <?php
 /*
- *	Developed by : Pradyumn Dwivedi - Mypcot Infotech 
- *	Project Name : Packult 
+ *	Developed by : Pradyumn Dwivedi - Mypcot Infotech
+ *	Project Name : Packult
  *	File Name : UserController.php
  *	File Path : app\Http\Controllers\Backend\UserController.php
  *	Created On : 22-Mar-2022
@@ -31,7 +31,7 @@ class UserController extends Controller
 
     public function indexUserList($id = "")
     {
-        $data['data'] = User::all();
+        $data['data'] = User::withTrashed();
         $data['user_add'] = checkPermission('user_add');
         $data['user_view'] = checkPermission('user_view');
         $data['user_edit'] = checkPermission('user_edit');
@@ -51,7 +51,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = User::with('phone_country','whatsapp_country','currency')->Where('approval_status', '=', 'accepted')->orderBy('updated_at','desc');
+                $query = User::with('phone_country','whatsapp_country','currency')->Where('approval_status', '=', 'accepted')->orderBy('updated_at','desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
@@ -63,7 +63,12 @@ class UserController extends Controller
                         $query->get();
                     })
                     ->editColumn('name', function ($event) {
-                        return $event->name;
+                        $isDeleted = isRecordDeleted($event->deleted_at);
+                        if (!$isDeleted) {
+                            return $event->name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->name . '</span>';
+                        }
                     })
                     ->editColumn('created_at', function ($event) {
                         return date('d-m-Y H:i A', strtotime($event->created_at));
@@ -74,10 +79,11 @@ class UserController extends Controller
                     ->editColumn('phone', function ($event) {
                         return '+' . $event->phone_country->phone_code . ' ' . $event->phone;
                     })
-                    // ->editColumn('whatsapp', function ($event) {
-                    //     return '+' . $event->whatsapp_country->phone_code . ' ' . $event->whatsapp_no;
-                    // })
+                    ->editColumn('gstin', function ($event) {
+                        return $event->gstin ?? '-';
+                    })
                     ->editColumn('action', function ($event) {
+                    $isDeleted = isRecordDeleted($event->deleted_at);
                     $user_view = checkPermission('user_list_view');
                     $user_edit = checkPermission('user_list_edit');
                     $user_status = checkPermission('user_list_status');
@@ -86,25 +92,29 @@ class UserController extends Controller
                     if ($user_view) {
                         $actions .= '<a href="user_list_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                     }
-                    if ($user_edit) {
-                        $actions .= ' <a href="user_list_edit/' . $event->id.  '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
-                    }
-                    if ($user_status) {
-                        if ($event->status == '1') {
-                            $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked data-url="publishUserList">';
+                    if (!$isDeleted) {
+                        if ($user_edit) {
+                            $actions .= ' <a href="user_list_edit/' . $event->id.  '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
-                        else {
-                            $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" data-url="publishUserList">';
+                        if ($user_status) {
+                            if ($event->status == '1') {
+                                $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked data-url="publishUserList">';
+                            }
+                            else {
+                                $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" data-url="publishUserList">';
+                            }
                         }
-                    }
-                    if ($user_add_address) {
-                        $actions .= ' <a href="user_address_list?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="User Address"><i class="fa ft-plus-square"></i></a>';
+                        if ($user_add_address) {
+                            $actions .= ' <a href="user_address_list?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="User Address"><i class="fa ft-plus-square"></i></a>';
+                        }
+                    }else {
+                        $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;">Deleted</span>';
                     }
                     $actions .= '</span>';
                     return $actions;
                 })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'email', 'phone','action'])->setRowId('id')->make(true);
+                    ->rawColumns(['name', 'email', 'phone','gstin', 'action'])->setRowId('id')->make(true);
             }
             catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -184,7 +194,7 @@ class UserController extends Controller
                     // print_r($response[0]);exit;
                     errorMessage('Whatsapp Number Already Exist', $msg_data);
                 }
-            }   
+            }
             $tableObject = User::find($_GET['id']);
             $msg = "Data Updated Successfully";
         } else {
@@ -268,11 +278,11 @@ class UserController extends Controller
             successMessage('Unpublished', $msg_data);
         }
     }
-    
+
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 23-mar-2022
-       *   Uses :  To view user list details  
+       *   Uses :  To view user list details
        *   @param int $id
        *   @return Response
     */
@@ -300,12 +310,12 @@ class UserController extends Controller
             // 'currency' => 'required|integer',
         ])->errors();
     }
-    
+
     //--------------------user approval list section--------------------------
 
     /**
      *   created by : Pradyumn Dwivedi
-     *   Created On : 23-Mar-2022 
+     *   Created On : 23-Mar-2022
      *   Uses :  To show Pending user listing for approval
      */
     public function indexApprovalList()
@@ -319,7 +329,7 @@ class UserController extends Controller
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 23-March-2022
-     *   Uses :  display dynamic data in datatable for Pending user in user approval list  
+     *   Uses :  display dynamic data in datatable for Pending user in user approval list
      *   @param Request request
      *   @return Response
      */
@@ -327,7 +337,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = User::with('phone_country','whatsapp_country','currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at','desc'); 
+                $query = User::with('phone_country','whatsapp_country','currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at','desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
@@ -347,6 +357,21 @@ class UserController extends Controller
                     ->editColumn('phone', function ($event) {
                         return '+' . $event->phone_country->phone_code . ' ' . $event->phone;
                     })
+                    ->editColumn('gstin', function ($event) {
+                        return $event->gstin ?? 'Not found';
+                    })
+                    // ->editColumn('gst_certificate', function ($event) {
+                    //     if (str_contains($event->gst_certificate, '.pdf')) {
+                    //         $file  = '<span><i class="fa fa-file"></i>' . $event->gst_certificate . '</span>';
+                    //     } else {
+                    //         // $image_path = getFile($event->gst_certificate, 'gst_certificate', false);
+                    //         // $file  = '<img src="' . $image_path . '" alt="File Not Found" width="150" height="150">';
+                    //         $imageUrl = ListingImageUrl('gst_certificate', $event->gst_certificate, 'image', false);
+                    //         $file  = ' <img src="' . $imageUrl . '" width="150" height="150"/>';
+                    //     }
+
+                    //     return $file;
+                    // })
                     ->editColumn('approval_status', function ($event) {
                         $db_approval_status = $event->approval_status;
                         $bg_class = 'bg-danger';
@@ -380,7 +405,7 @@ class UserController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'email', 'phone', 'approval_status','created_at','action'])->setRowId('id')->make(true);
+                    ->rawColumns(['name', 'email', 'phone', 'approval_status','gstin','created_at','action'])->setRowId('id')->make(true);
             }
             catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
@@ -433,13 +458,13 @@ class UserController extends Controller
             $approvalStatusArray = approvalStatusArray('',$getKeys);
             if (in_array( $request->approval_status, $approvalStatusArray))
              {
-                $tableObject = User::find($_GET['id']);            
+                $tableObject = User::find($_GET['id']);
                 $msg = "Approval Status Updated Successfully";
             }
             else{
                 errorMessage('Approval Status Does not Exists.', $msg_data);
-            } 
-        } 
+            }
+        }
         $tableObject->approval_status = $request->approval_status;
         $tableObject->gstin = $request->gstin ?? '';
         $tableObject->approval_status = $request->approval_status;
@@ -469,7 +494,7 @@ class UserController extends Controller
     /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 23-mar-2022
-       *   Uses :  To view user approval list details  
+       *   Uses :  To view user approval list details
        *   @param int $id
        *   @return Response
     */
@@ -493,8 +518,8 @@ class UserController extends Controller
     {
         return \Validator::make($request->all(), [
             'approval_status' => 'required|string',
-            'gstin' => ($request->approval_status == 'accepted') ? 'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : '') : '',
-            'gst_certificate' => ($request->approval_status == 'accepted') ?  'nullable|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
+            'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : '') : '',
+            'gst_certificate' => ($request->approval_status == 'accepted') ?  'sometimes|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
         ])->errors();
     }
 }

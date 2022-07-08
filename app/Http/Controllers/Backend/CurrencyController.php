@@ -15,11 +15,12 @@ class CurrencyController extends Controller
        *   Uses :  To show currency listing page
     */
     public function index(){
-        $data['currency_add'] = checkPermission('currency_add');
-        $data['currency_edit'] = checkPermission('currency_edit');
-        $data['currency_view'] = checkPermission('currency_view');
-        $data['currency_status'] = checkPermission('currency_status');
-        return view('backend/currency/index',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data['currency_add'] = checkPermission('currency_add');
+        // $data['currency_edit'] = checkPermission('currency_edit');
+        // $data['currency_view'] = checkPermission('currency_view');
+        // $data['currency_status'] = checkPermission('currency_status');
+        // return view('backend/currency/index',["data"=>$data]);
     }
 
     /**
@@ -159,8 +160,9 @@ class CurrencyController extends Controller
        *   Uses : To load Add currency page
     */
     public function addCurrency() { 
-        $data = Currency::all();       
-        return view('backend/currency/currency_add',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data = Currency::all();       
+        // return view('backend/currency/currency_add',["data"=>$data]);
     }
 
     /**
@@ -172,8 +174,9 @@ class CurrencyController extends Controller
     */
 
     public function editCurrency($id) {
-        $data['data'] = Currency::find($id);
-        return view('backend/currency/currency_edit',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+    //     $data['data'] = Currency::find($id);
+    //     return view('backend/currency/currency_edit',["data"=>$data]);
     }
 
     /**
@@ -185,8 +188,9 @@ class CurrencyController extends Controller
      */
     public function view($id)
     {
-        $data['data'] = Currency::find($id);
-        return view('backend/currency/currency_view', $data);
+        return redirect('/webadmin/dashboard');
+        // $data['data'] = Currency::find($id);
+        // return view('backend/currency/currency_view', $data);
     }
 
     /**

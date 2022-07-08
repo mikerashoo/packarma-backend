@@ -24,12 +24,13 @@ class CityController extends Controller
        *   Uses :  To show city listing page
     */
     public function index(){
-        $data['states'] = State::all();
-        $data['city_add'] = checkPermission('city_add');
-        $data['city_view'] = checkPermission('city_view');
-        $data['city_edit'] = checkPermission('city_edit');
-        $data['city_status'] = checkPermission('city_status');        
-        return view('backend/city/index',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data['states'] = State::all();
+        // $data['city_add'] = checkPermission('city_add');
+        // $data['city_view'] = checkPermission('city_view');
+        // $data['city_edit'] = checkPermission('city_edit');
+        // $data['city_status'] = checkPermission('city_status');        
+        // return view('backend/city/index',["data"=>$data]);
     }
 
     /**
@@ -112,9 +113,10 @@ class CityController extends Controller
        *   Uses : To load Add city page
     */
     public function add() {
-        $data['state'] = State::all();
-        $data['country'] = Country::all();
-        return view('backend/city/city_add',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data['state'] = State::all();
+        // $data['country'] = Country::all();
+        // return view('backend/city/city_add',["data"=>$data]);
     }
 
     /**
@@ -125,10 +127,11 @@ class CityController extends Controller
        *   @return Response
     */
     public function edit($id) {
-        $data['data'] = City::find($id);
-        $data['state'] = State::all();
-        $data['country'] = Country::all();
-        return view('backend/city/city_edit',["data"=>$data]);
+        return redirect('/webadmin/dashboard');
+        // $data['data'] = City::find($id);
+        // $data['state'] = State::all();
+        // $data['country'] = Country::all();
+        // return view('backend/city/city_edit',["data"=>$data]);
     }
     
     /**
@@ -185,10 +188,11 @@ class CityController extends Controller
      */
     public function view($id)
     {
-        $data['data'] = City::find($id);
-        $data['state'] = State::all();
-        $data['country'] = Country::all();
-        return view('backend/city/city_view', $data);
+        return redirect('/webadmin/dashboard');
+        // $data['data'] = City::find($id);
+        // $data['state'] = State::all();
+        // $data['country'] = Country::all();
+        // return view('backend/city/city_view', $data);
     }
 
     /**

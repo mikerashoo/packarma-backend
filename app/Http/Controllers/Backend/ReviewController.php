@@ -18,6 +18,7 @@ class ReviewController extends Controller
     */
     public function index() 
     {
+        $data['user'] = User::withTrashed()->where('approval_status','accepted')->get();
         $data['review_edit'] = checkPermission('review_edit');
         $data['review_view'] = checkPermission('review_view');
         $data['review_status'] = checkPermission('review_status');      
@@ -31,16 +32,21 @@ class ReviewController extends Controller
     public function fetch(Request $request){
         if ($request->ajax()) {
         	try {
-	            $query = Review::with('user','product')->orderBy('updated_at','desc');                
+	            $query = Review::with('user','product')->orderBy('updated_at','desc')->withTrashed();                
 	            return DataTables::of($query) 
                 ->filter(function ($query) use ($request) {                        
-                    if (isset($request['search']['search_title']) && ! is_null($request['search']['search_title'])) {
-                        $query->where('title', 'like', "%" . $request['search']['search_title'] . "%");
+                    if (isset($request['search']['search_user']) && !is_null($request['search']['search_user'])) {
+                        $query->where('user_id', $request['search']['search_user']);
                     }
                     $query->get();
                 })
                 ->editColumn('user_id', function ($event) {
-	                    return $event->user->name;                        
+                    $isDeleted = isRecordDeleted($event->deleted_at);
+                        if (!$isDeleted) {
+                            return $event->user->name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->name . '</span>';
+                        }                      
 	                }) 
                 ->editColumn('product_name', function ($event) {
 	                    return $event->product->product_name;                        

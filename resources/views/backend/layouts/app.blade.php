@@ -134,11 +134,11 @@
                                             <a href="company" class="menu-item"><i class="fa fa-circle fs_i"></i>Company</a>
                                         </li>
                                     @endif --}}
-                                    @if(in_array('city', $permission_array) || session('data')['role_id'] == 1)
+                                    <!-- @if(in_array('city', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'city' ? 'active' : ''  }}">
                                             <a href="city" class="menu-item"><i class="fa fa-circle fs_i"></i>City</a>
                                         </li>
-                                    @endif
+                                    @endif -->
                                     @if(in_array('state', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="{{ $lastParam ==  'state' ? 'active' : ''  }}">
                                             <a href="state" class="menu-item"><i class="fa fa-circle fs_i"></i>State</a>

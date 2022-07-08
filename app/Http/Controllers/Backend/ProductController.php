@@ -21,8 +21,8 @@ class ProductController extends Controller
 
     public function index()
     {
-        $data['sub_category'] = SubCategory::all();
-        $data['category'] = Category::all();
+        $data['sub_category'] = SubCategory::orderBy('sub_category_name','asc')->get();
+        $data['category'] = Category::orderBy('category_name','asc')->get();
         $data['product_add'] = checkPermission('product_add');
         $data['product_edit'] = checkPermission('product_edit');
         $data['product_view'] = checkPermission('product_view');
@@ -267,6 +267,7 @@ class ProductController extends Controller
             'category' => 'required|integer',
             'product_form' => 'required|integer',
             'packaging_treatment' => 'required|integer',
+            'product_image' => 'mimes:jpeg,png,jpg',
         ])->errors();
     }
 
@@ -286,7 +287,7 @@ class ProductController extends Controller
             'category' => 'required|integer',
             'product_form' => 'required|integer',
             'packaging_treatment' => 'required|integer',
-            'product_image' => 'required',
+            'product_image' => 'required|mimes:jpeg,png,jpg',
         ])->errors();
     }
 }

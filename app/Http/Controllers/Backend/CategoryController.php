@@ -229,6 +229,7 @@ class CategoryController extends Controller
     {
         return \Validator::make($request->all(), [
             'category_name' => 'required|string',
+            'category_image' => 'mimes:jpeg,png,jpg',
         ])->errors();
     }
 
@@ -243,7 +244,7 @@ class CategoryController extends Controller
     {
         return \Validator::make($request->all(), [
             'category_name' => 'required|string',
-            'category_image' => 'required',
+            'category_image' => 'required|mimes:jpeg,png,jpg',
         ])->errors();
     }
     

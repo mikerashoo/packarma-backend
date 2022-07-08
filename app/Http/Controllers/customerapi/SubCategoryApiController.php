@@ -34,6 +34,8 @@ class SubCategoryApiController extends Controller
                 }
                 $page_no=1;
                 $limit=10;
+                $orderByArray = ['sub_categories.sub_category_name' => 'ASC'];
+                $defaultSortByName = false;
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -60,25 +62,29 @@ class SubCategoryApiController extends Controller
                 if($request->category_id)
                 {
                     $subCategoryData = $subCategoryData->where('category_id',$request->category_id);
-                    $data = $data->where('category_id',$request->category_id);
+                    $data = $data->where('sub_categories.category_id',$request->category_id);
                 }
                 if($request->sub_category_id)
                 {
                     $subCategoryData = $subCategoryData->where('id',$request->sub_category_id);
-                    $data = $data->where('id',$request->sub_category_id);
+                    $data = $data->where('sub_categories.id',$request->sub_category_id);
                 }
                 if($request->sub_category_name)
                 {
                     $subCategoryData = $subCategoryData->where('sub_category_name',$request->sub_category_name);
-                    $data = $data->where('sub_category_name',$request->sub_category_name);
+                    $data = $data->where('sub_categories.sub_category_name',$request->sub_category_name);
                 }
                 if(empty($subCategoryData->first()))
                 {
                     errorMessage(__('sub_category.sub_category_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'sub_category_name');
+                    $data = fullSearchQuery($data, $request->search,'sub_categories.sub_category_name');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['sub_categories.sub_category_name' => 'ASC'];
+                }
+                $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $i=0;

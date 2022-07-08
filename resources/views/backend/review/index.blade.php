@@ -21,10 +21,27 @@
                                 </div>
                             	<div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
-                                        <div class="col-md-4">
-                                            <label>Title</label>
-                                            <input class="form-control mb-3" type="email" id="search_title" name="search_title">
-                                        </div>                                                                    
+                                        <div class="col-sm-4">
+                                            <label>User</label>
+                                            <select class="form-control select2" id="search_user" name="search_user" style="width: 100% !important;">
+                                                @if (!isset($id))
+                                                    <option value="">Select</option>
+                                                @endif
+                                                @foreach ($data['user'] as $users)
+                                                    @php
+                                                        $isUserDeleted = isRecordDeleted($users->deleted_at);
+                                                        $isUserDeleted ? $deleted_status = ' - (Deleted)' : $deleted_status = '';
+                                                    @endphp
+                                                    @if (isset($id))
+                                                        @if ($users->id == $id)
+                                                            <option selected value="{{ $users->id }}">{{ $users->name }} {{$deleted_status}}</option>
+                                                        @endif
+                                                    @else
+                                                        <option value="{{ $users->id }}">{{ $users->name }} {{$deleted_status}}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select><br><br>
+                                        </div>                                                                   
                                         <div class="col-md-4">
                                             <label>&nbsp;</label><br/>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
@@ -36,6 +53,7 @@
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="user_id" data-orderable="false" data-searchable="false">User Name</th>
+                                                    {{-- <th id="title" data-orderable="false" data-searchable="false">Title</th> --}}
                                                     <th id="product_name" data-orderable="false" data-searchable="false">Product Name</th>
                                                     <th id="rating" data-orderable="false" data-searchable="false">Rating</th>
                                                     <th id="status" data-orderable="false" data-searchable="false">Status</th>

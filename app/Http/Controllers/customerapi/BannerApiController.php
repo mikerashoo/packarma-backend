@@ -25,8 +25,11 @@ class BannerApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                $data =array();
                 $page_no=1;
                 $limit=10;
+                $orderByArray = ['banners.updated_at' => 'DESC',];
+                $defaultSortByName = false;
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -53,6 +56,10 @@ class BannerApiController extends Controller
                 if(isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search,'title');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['products.product_name' => 'ASC'];
+                }
+                $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $i=0;
@@ -63,7 +70,9 @@ class BannerApiController extends Controller
                     $i++;
                 }
                 if(empty($data)) {
-                    errorMessage(__('banner.banner_not_found'), $msg_data);
+                    $data[0]['banner_image'] = getFile('banner_image', 'banner');
+                    $data[0]['banner_thumb_image'] = getFile('banner_thumb_image', 'banner',false,'thumb');
+                    // errorMessage(__('banner.banner_not_found'), $msg_data);
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;

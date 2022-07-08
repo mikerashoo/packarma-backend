@@ -22,8 +22,8 @@ class VendorMaterialController extends Controller
     public function index()
     {
         try {
-            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->get();
-            $data['packaging_material'] = PackagingMaterial::all();
+            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name','asc')->get();
+            $data['packaging_material'] = PackagingMaterial::orderBy('packaging_material_name','asc')->get();
             $data['vendor_material_map_add'] = checkPermission('vendor_material_map_add');
             $data['vendor_material_map_edit'] = checkPermission('vendor_material_map_edit');
             $data['vendor_material_map_view'] = checkPermission('vendor_material_map_view');
@@ -144,10 +144,10 @@ class VendorMaterialController extends Controller
             $data['vendor'][] = Vendor::find($_GET['id']);
             $data['id'] = $_GET['id'];
         } else {
-            $data['vendor'] = Vendor::Where('approval_status', '=', 'accepted')->get();
+            $data['vendor'] = Vendor::Where('approval_status', '=', 'accepted')->orderBy('vendor_name')->get();
         }
-        $data['product'] = Product::all();
-        $data['packaging_material'] = PackagingMaterial::all();
+        // $data['product'] = Product::orderBy('product_name','asc')->get();
+        $data['packaging_material'] = PackagingMaterial::orderBy('packaging_material_name')->get();
         $data['recommendation_engine'] = RecommendationEngine::all();
         return view('backend/vendors/vendor_material_mapping/vendor_material_map_add', $data);
     }

@@ -35,7 +35,8 @@ class OrderApiController extends Controller
                 $user_id = $token['sub'];
                 $page_no=1;
                 $limit=10;
-                
+                $orderByArray = ['orders.id' => 'DESC',];
+                $defaultSortByName = false;
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -84,6 +85,10 @@ class OrderApiController extends Controller
                 if(isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search,'order_payment_status|vendor_payment_status|order_delivery_status');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['products.product_name' => 'ASC'];
+                }
+                $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 if(empty($data)) {
@@ -133,7 +138,8 @@ class OrderApiController extends Controller
                 $user_id = $token['sub'];
                 $page_no=1;
                 $limit=10;
-                
+                $orderByArray = ['orders.updated_at' => 'DESC'];
+                $defaultSortByName = false;
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
                 }
@@ -182,6 +188,10 @@ class OrderApiController extends Controller
                 if(isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search,'order_payment_status|vendor_payment_status|order_delivery_status');
                 }
+                if ($defaultSortByName) {
+                    $orderByArray = ['products.product_name' => 'ASC'];
+                }
+                $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 if(empty($data)) {
