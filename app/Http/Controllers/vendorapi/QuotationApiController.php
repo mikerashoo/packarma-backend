@@ -67,7 +67,8 @@ class QuotationApiController extends Controller
                     'products.product_description',
                     'categories.category_name',
                     'states.state_name',
-                    'cities.city_name',
+                    // 'cities.city_name',
+                    'customer_enquiries.city_name',
                     'currencies.currency_symbol',
                     'currencies.currency_code',
                 )
@@ -176,7 +177,7 @@ class QuotationApiController extends Controller
                 $i = 0;
                 foreach ($data as $row) {
                     $data[$i]->quote_id = getFormatid($row->id, $main_table);
-                    $data[$i]->unit_symbol = 'kg';
+                    $data[$i]->material_unit_symbol = 'kg';
                     $i++;
                 }
 

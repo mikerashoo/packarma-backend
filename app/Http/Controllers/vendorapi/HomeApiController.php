@@ -139,7 +139,8 @@ class HomeApiController extends Controller
 
                 $i = 0;
                 foreach ($last_three_enquiries as $row) {
-                    $last_three_enquiries[$i]->unit_symbol = 'kg';
+                    $last_three_enquiries[$i]->enq_id = getFormatid($row->id, 'vendor_quotations');
+                    $last_three_enquiries[$i]->material_unit_symbol = 'kg';
                     $i++;
                 }
 

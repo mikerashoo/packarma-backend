@@ -24,7 +24,7 @@
                         				<input class="form-control required" type="text" id="product_form_name" name="product_form_name"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Short Description<span style="color:#ff0000">*</span></label>
+                        				<label>Short Description</label>
                         				<input class="form-control required" type="text" id="short_description" name="short_description"><br/>
                         			</div>
                                     <div class="col-sm-6">

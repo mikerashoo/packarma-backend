@@ -35,7 +35,7 @@ class PackagingMaterialController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = PackagingMaterial::select('*')->orderBy('updated_at','desc');
+                $query = PackagingMaterial::select('*')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_packaging_material']) && !is_null($request['search']['search_packaging_material'])) {
@@ -137,10 +137,10 @@ class PackagingMaterialController extends Controller
             if (isset($response[0])) {
                 errorMessage('Packaging Material Already Exist', $msg_data);
             }
-            if($request->shelf_life == 0){
+            if ($request->shelf_life == 0) {
                 errorMessage('Shelf Life Should be Greater Than 0', $msg_data);
             }
-            if($request->price == 0){
+            if ($request->price == 0) {
                 errorMessage('Price Should be Greater Than 0', $msg_data);
             }
             $tableObject = PackagingMaterial::find($_GET['id']);
@@ -151,21 +151,21 @@ class PackagingMaterialController extends Controller
             if (isset($response[0])) {
                 errorMessage('Packaging Material Already Exist', $msg_data);
             }
-            if($request->shelf_life == 0){
+            if ($request->shelf_life == 0) {
                 errorMessage('Shelf Life Should be Greater Than 0', $msg_data);
             }
-            if($request->price == 0){
+            if ($request->price == 0) {
                 errorMessage('Price Should be Greater Than 0', $msg_data);
             }
             $msg = "Data Saved Successfully";
         }
         $tableObject->packaging_material_name = $request->packaging_material_name;
         $tableObject->material_description = $request->material_description;
-        if($request->shelf_life <= 30){
+        if ($request->shelf_life <= 30) {
             $tableObject->shelf_life = 30;
-        }elseif($request->shelf_life <= 60){
+        } elseif ($request->shelf_life <= 60) {
             $tableObject->shelf_life = 60;
-        }else{
+        } else {
             $tableObject->shelf_life = 90;
         }
         $tableObject->approx_price = $request->price;
@@ -175,9 +175,9 @@ class PackagingMaterialController extends Controller
         $tableObject->sit = $request->sit;
         $tableObject->gsm = $request->gsm;
         $tableObject->special_feature = $request->special_feature;
-        if($isEditFlow){
+        if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
@@ -210,11 +210,10 @@ class PackagingMaterialController extends Controller
         $recordData = PackagingMaterial::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Published', $msg_data);
+        } else {
+            successMessage('Unpublished', $msg_data);
         }
     }
 
@@ -229,7 +228,7 @@ class PackagingMaterialController extends Controller
     {
         return \Validator::make($request->all(), [
             'packaging_material_name' => 'required|string',
-            'material_description' => 'required|string',
+            // 'material_description' => 'required|string',
             'shelf_life' => 'required|integer',
             'price' => 'required|numeric',
             'wvtr' => 'required|string',

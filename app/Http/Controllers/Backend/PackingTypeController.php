@@ -35,7 +35,7 @@ class PackingTypeController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = PackingType::select('*')->orderBy('updated_at','desc');
+                $query = PackingType::select('*')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_packing_name']) && !is_null($request['search']['search_packing_name'])) {
@@ -143,9 +143,9 @@ class PackingTypeController extends Controller
         }
         $tableObject->packing_name = $request->packing_name;
         $tableObject->packing_description = $request->packing_description;
-        if($isEditFlow){
+        if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
@@ -178,11 +178,10 @@ class PackingTypeController extends Controller
         $recordData = PackingType::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Published', $msg_data);
+        } else {
+            successMessage('Unpublished', $msg_data);
         }
     }
 
@@ -197,7 +196,7 @@ class PackingTypeController extends Controller
     {
         return \Validator::make($request->all(), [
             'packing_name' => 'required|string',
-            'packing_description' => 'required|string',
+            // 'packing_description' => 'required|string',
         ])->errors();
     }
 }

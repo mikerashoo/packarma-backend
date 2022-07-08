@@ -9,17 +9,18 @@ use Yajra\DataTables\DataTables;
 
 class StorageConditionController extends Controller
 {
-     /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 04-April-2022
-       *   Uses :  To show storage condition listing page
-    */
-    public function index(){
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 04-April-2022
+     *   Uses :  To show storage condition listing page
+     */
+    public function index()
+    {
         $data['storage_condition_add'] = checkPermission('storage_condition_add');
         $data['storage_condition_edit'] = checkPermission('storage_condition_edit');
         $data['storage_condition_view'] = checkPermission('storage_condition_view');
         $data['storage_condition_status'] = checkPermission('storage_condition_status');
-        return view('backend/storage_condition/index',["data"=>$data]);
+        return view('backend/storage_condition/index', ["data" => $data]);
     }
 
     /**
@@ -33,7 +34,7 @@ class StorageConditionController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = StorageCondition::select('*')->orderBy('updated_at','desc');
+                $query = StorageCondition::select('*')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_storage_condition']) && !is_null($request['search']['search_storage_condition'])) {
@@ -48,8 +49,8 @@ class StorageConditionController extends Controller
                         return $event->storage_condition_description;
                     })
                     ->editColumn('updated_at', function ($event) {
-	                    return date('d-m-Y H:i A', strtotime($event->updated_at));                        
-	                })
+                        return date('d-m-Y H:i A', strtotime($event->updated_at));
+                    })
                     ->editColumn('action', function ($event) {
                         $storage_condition_view = checkPermission('storage_condition_view');
                         $storage_condition_edit = checkPermission('storage_condition_edit');
@@ -72,7 +73,7 @@ class StorageConditionController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns([ 'storage_condition_name','storage_condition_description','updated_at', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['storage_condition_name', 'storage_condition_description', 'updated_at', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -87,11 +88,12 @@ class StorageConditionController extends Controller
     }
 
     /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 04-April-2022
-       *   Uses : To load Add storage condition page
-    */
-    public function add() {
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 04-April-2022
+     *   Uses : To load Add storage condition page
+     */
+    public function add()
+    {
         return view('backend/storage_condition/storage_condition_add');
     }
 
@@ -144,10 +146,9 @@ class StorageConditionController extends Controller
         }
         $tableObject->storage_condition_title = $request->storage_condition_title;
         $tableObject->storage_condition_description = $request->storage_condition_description;
-        if($isEditFlow){
+        if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }
-        else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
@@ -180,11 +181,10 @@ class StorageConditionController extends Controller
         $recordData = StorageCondition::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Published', $msg_data);
+        } else {
+            successMessage('Unpublished', $msg_data);
         }
     }
 
@@ -199,7 +199,7 @@ class StorageConditionController extends Controller
     {
         return \Validator::make($request->all(), [
             'storage_condition_title' => 'required|string',
-            'storage_condition_description' => 'required|string',
+            // 'storage_condition_description' => 'required|string',
         ])->errors();
     }
 }

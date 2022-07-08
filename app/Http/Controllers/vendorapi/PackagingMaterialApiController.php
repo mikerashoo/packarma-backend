@@ -108,7 +108,7 @@ class PackagingMaterialApiController extends Controller
 
                 $i = 0;
                 foreach ($data as $row) {
-                    $data[$i]->unit_symbol = 'kg';
+                    $data[$i]->material_unit_symbol = 'kg';
                     $i++;
                 }
 
