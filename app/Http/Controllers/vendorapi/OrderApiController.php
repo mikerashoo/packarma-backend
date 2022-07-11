@@ -204,7 +204,7 @@ class OrderApiController extends Controller
                         $data[$i]->order_status = 'ongoing';
                     }
 
-                    if ($row->order_delivery_status == 'delivered') {
+                    if ($row->order_delivery_status == 'delivered' || $row->order_delivery_status == 'cancelled') {
                         $data[$i]->show_update_button = false;
                     }
 
