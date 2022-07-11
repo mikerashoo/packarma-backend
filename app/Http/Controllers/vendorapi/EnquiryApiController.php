@@ -214,6 +214,7 @@ class EnquiryApiController extends Controller
                 $quotation_data = $request->all();
                 $quotation_data['vendor_id'] = $vendor_id;
                 $quotation_data['enquiry_status'] = 'quoted';
+                $quotation_data['quotation_expiry_datetime'] = Carbon::now()->addDays(30)->format('Y-m-d H:i:s');
                 unset($quotation_data['id']);
                 // print_r($quotation_data);
                 // die;

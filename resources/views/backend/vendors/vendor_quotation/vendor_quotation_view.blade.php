@@ -51,10 +51,10 @@
                                                 <td><strong>Enquiry Status</strong></td>
                                                 <td>{{vendorEnquiryStatus($data->enquiry_status)}}</td>
                                             </tr>
-                                            <tr>
+                                            {{-- <tr>
                                                 <td><strong>Quotation Expiry Date Time</strong></td>
                                                 <td>{{date('d-m-Y H:i:s', strtotime($data->quotation_expiry_datetime)) }}</td>
-                                            </tr>
+                                            </tr> --}}
                                             <tr>
                                                 <td><strong>Lead Time (Days)</strong></td>
                                                 <td>{{$data->lead_time}}</td>

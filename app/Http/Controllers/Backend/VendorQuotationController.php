@@ -21,8 +21,8 @@ class VendorQuotationController extends Controller
      */
     public function index()
     {
-        $data['user'] = User::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('name','asc')->get();
-        $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name','asc')->get();
+        $data['user'] = User::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('name', 'asc')->get();
+        $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name', 'asc')->get();
         $data['vendor_quotation_view'] = checkPermission('vendor_quotation_view');
         return view('backend/vendors/vendor_quotation/index', ['data' => $data]);
     }
@@ -80,9 +80,9 @@ class VendorQuotationController extends Controller
                     ->editColumn('enquiry_status', function ($event) {
                         return vendorEnquiryStatus($event->enquiry_status);
                     })
-                    ->editColumn('quotation_validity', function ($event) {
-                        return date('d-m-Y H:i:s', strtotime($event->quotation_expiry_datetime));
-                    })
+                    // ->editColumn('quotation_validity', function ($event) {
+                    //     return date('d-m-Y H:i:s', strtotime($event->quotation_expiry_datetime));
+                    // })
                     ->editColumn('action', function ($event) {
                         $vendor_quotation_view = checkPermission('vendor_quotation_view');
                         $actions = '<span style="white-space:nowrap;">';
