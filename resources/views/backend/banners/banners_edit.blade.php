@@ -44,7 +44,7 @@
                                             <div class="col-sm-6">
                                                 <label>Banner Image<span class="text-danger">*</span></label>
                                                 <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.BANNER'); ?></p>
-                                                <input class="form-control required" type="file" id="banner_image" name="banner_image" accept="banner_image/png, banner_image/jpg, banner_image/jpeg" onchange="checkFiles(this.files)" multiple><br/>
+                                                <input class="form-control required" type="file" id="banner_image" name="banner_image" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)" multiple><br/>
                                                 <img src="{{ $data->image_path}}" width="200px" height="auto">
                                             </div>
                                         </div>

@@ -46,7 +46,7 @@
                         		<div class="row">
                         			<div class="col-sm-6">
                         				<label>Approval<span class="text-danger">*</span></label>
-                        				<select class="select2" id="approval_status" name="approval_status" style="width: 100% !important;">
+                        				<select class="select2 required" id="approval_status" name="approval_status" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($approvalArray as $key => $val)
                                                 @if($key == $data->approval_status)

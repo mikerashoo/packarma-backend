@@ -533,7 +533,6 @@ class CustomerEnquiryController extends Controller
             ])->errors();
         } elseif ($for == 'addEnquiry') {
             return \Validator::make($request->all(), [
-                'description' => 'required|string',
                 'user' => 'required|integer',
                 'category' => 'required|integer',
                 'sub_category' => 'required|integer',

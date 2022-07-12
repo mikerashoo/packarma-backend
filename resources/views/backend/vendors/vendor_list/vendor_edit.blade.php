@@ -67,7 +67,7 @@
                                     </div>
                                     <div class="col-sm-6">
                         				<label>Whatsapp Country Code</label>
-                        				<select class="select2 required" id="whatsapp_country_code" name="whatsapp_country_code" style="width: 100% !important;">
+                        				<select class="select2" id="whatsapp_country_code" name="whatsapp_country_code" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($whatsapp_country as $val)
                                                 @if($val->id == $data->whatsapp_country_id)
@@ -83,16 +83,15 @@
                                         <input class="form-control" type="text" id="whatsapp_no" name="whatsapp_no" value="{{$data->whatsapp_no}}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Gst Certificate<span style="color:#ff0000">*</span></label>
+                                        <label>GST Certificate<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.GSTCERTIFICATE'); ?></p>
-                                        <input class="form-control required" type="file" id="gst_certificate" name="gst_certificate" accept="gst_certificate/png, gst_certificate/jpg, gst_certificate/jpeg, gst_certificate/pdf" onchange="checkFiles(this.files)"><br/>
+                                        <input class="form-control required" type="file" id="gst_certificate" name="gst_certificate" accept="image/png, image/jpg, image/jpeg, application/pdf" onchange="checkFiles(this.files)"><br/>
                                         @if(str_contains($data->gst_certificate, '.pdf'))
                                         <span><i class="fa fa-edit"></i>{{$data->gst_certificate}}</span>
                                         @else
                                         <img src="{{ $data->image_path}}" width="200px" height="auto">
                                         @endif
                                     </div>
-                                    
                         		</div>
                         		<hr>
                         		<div class="row">

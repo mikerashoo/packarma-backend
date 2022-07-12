@@ -54,7 +54,7 @@
                         				<input class="form-control required" type="text" id="gstin" name="gstin" value="{{$data->gstin}}"><br/>
                         			</div>   
                                     <div class="col-sm-6" id="gst_certificate_div">
-                                        <label>Gst Certificate<span style="color:#ff0000">*</span></label><br>
+                                        <label>GST Certificate<span style="color:#ff0000">*</span></label><br>
                                         @if (!empty($data->gst_certificate))
                                             @if(str_contains($data->gst_certificate, '.pdf'))
                                                 <span><i class="fa fa-edit"></i>{{$data->gst_certificate}}</span>
@@ -63,7 +63,7 @@
                                             @endif
                                         @else
                                             <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.GSTCERTIFICATE'); ?></p>
-                                            <input class="form-control required" type="file" id="gst_certificate" name="gst_certificate" accept="gst_certificate/png, gst_certificate/jpg, gst_certificate/jpeg, gst_certificate/pdf" onchange="checkFiles(this.files)"><br/>
+                                            <input class="form-control required" type="file" id="gst_certificate" name="gst_certificate" accept="image/png, image/jpg, image/jpeg, application/pdf" onchange="checkFiles(this.files)"><br/>
                                         @endif
                                     </div>
                                     <div class="col-sm-6" id="remark">
