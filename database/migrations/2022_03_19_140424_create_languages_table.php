@@ -17,7 +17,7 @@ class CreateLanguagesTable extends Migration
             $table->id();
             $table->string('language_title', 100);
             $table->char('language_code', 3);
-            $table->enum('status', [1, 0])->default(0);
+            $table->enum('status', [1, 0])->default(1);
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);
             $table->softDeletes();

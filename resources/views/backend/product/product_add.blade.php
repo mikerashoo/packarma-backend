@@ -66,7 +66,7 @@
                                     <div class="col-sm-6">
                                         <label>Product Image<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PRODUCT'); ?></p>
-                                        <input type="file" id="product_image" name="product_image" class="form-control required" accept="product_image/png, product_image/jpg, product_image/jpeg" onchange="checkFiles(this.files)">
+                                        <input type="file" id="product_image" name="product_image" class="form-control required" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)">
                                     </div>
                         		</div>
                         		<hr>

@@ -17,6 +17,16 @@ $(document).ready(function () {
         $('#listing-filter-data .select2').val('').trigger('change');
     });
 
+    // remove alert messages for empty input fields
+    $(document).on('keyup', '.required', function (event) {
+        $(this).removeClass('border-danger');
+    });
+
+    $(document).on('change', '.required', function (event) {
+        $(this).removeClass('border-danger');
+        $(this).siblings('.select2-container').find('.selection').find('.select2-selection').removeClass('border-danger');
+    });
+
     $(document).on('change', '#approval_status', function () {
         var status = document.getElementById("approval_status").value;
         if (this.value == 'rejected') {
@@ -190,49 +200,64 @@ function submitForm(form_id, form_method, errorOverlay = '') {
     if (window.FormData) {
         formdata = new FormData(form[0]);
     }
-    $.ajax({
-        url: form.attr('action'),
-        type: form_method,
-        dataType: 'html',
-        data: formdata ? formdata : form.serialize(),
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (data) {
-            var response = JSON.parse(data);
-            if (response['success'] == 0) {
-                if (errorOverlay) {
-                    $(form).find('.form-error').html('<span class="text-danger">*' + response['message'] + '</span>');
-                    setTimeout(function () {
-                        $(form).find('.form-error').empty();
-                    }, 3000);
-                } else {
-                    $.activeitNoty({
-                        type: 'danger',
-                        icon: 'fa fa-minus',
-                        message: response['message'],
-                        container: 'floating',
-                        timer: 3000
-                    });
-                }
-            } else {
-                if (errorOverlay) {
-                    $(form).find('.form-error').html('<span class="text-success">' + response['message'] + '</span>');
-                } else {
-                    $.activeitNoty({
-                        type: 'success',
-                        icon: 'fa fa-check',
-                        message: response['message'],
-                        container: 'floating',
-                        timer: 3000
-                    });
-                }
-                setTimeout(function () {
-                    location.reload();
-                }, 2000);
-            }
+    var can = 0;
+    $('#' + form_id).find(".required").each(function(){
+        var here = $(this);
+        if(here.val() == '') {
+            // here.css({borderColor: 'red'});
+            here.addClass('border-danger');
+            here.siblings('.select2-container').find('.selection').find('.select2-selection').addClass('border-danger');
+            can++;
         }
     });
+    if(can == 0) {
+        $.ajax({
+            url: form.attr('action'),
+            type: form_method,
+            dataType: 'html',
+            data: formdata ? formdata : form.serialize(),
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                var response = JSON.parse(data);
+                if (response['success'] == 0) {
+                    if (errorOverlay) {
+                        $(form).find('.form-error').html('<span class="text-danger">*' + response['message'] + '</span>');
+                        setTimeout(function () {
+                            $(form).find('.form-error').empty();
+                        }, 3000);
+                    } else {
+                        $.activeitNoty({
+                            type: 'danger',
+                            icon: 'fa fa-minus',
+                            message: response['message'],
+                            container: 'floating',
+                            timer: 3000
+                        });
+                    }
+                } else {
+                    if (errorOverlay) {
+                        $(form).find('.form-error').html('<span class="text-success">' + response['message'] + '</span>');
+                    } else {
+                        $.activeitNoty({
+                            type: 'success',
+                            icon: 'fa fa-check',
+                            message: response['message'],
+                            container: 'floating',
+                            timer: 3000
+                        });
+                    }
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                }
+            }
+        });
+    } else {
+        var ih = $('.border-danger').last().closest('.tab-pane').attr('id');
+        $('#'+ih+'-tab').click(); 
+    }
 }
 
 

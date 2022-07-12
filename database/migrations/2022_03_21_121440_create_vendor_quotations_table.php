@@ -25,7 +25,7 @@ class CreateVendorQuotationsTable extends Migration
             $table->string('enquiry_status', 255)->default('mapped')->comment('mapped|quoted|viewed|accept|reject|requote');
             $table->datetime('quotation_expiry_datetime')->nullable();
             $table->integer('lead_time')->default(0);
-            $table->enum('status', [1, 0])->default(0);
+            $table->enum('status', [1, 0])->default(1);
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);
             $table->timestamps();
