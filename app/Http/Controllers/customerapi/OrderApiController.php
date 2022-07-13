@@ -519,7 +519,7 @@ class OrderApiController extends Controller
                 $order_request_data['commission'] = $commission;
                 $order_request_data['vendor_amount'] = $vendor_amount;
                 $order_request_data['customer_pending_payment'] = $total_amount_price;
-                $order_request_data['vendor_pending_payment'] = 0;
+                $order_request_data['vendor_pending_payment'] = $vendor_amount;
                 $order_request_data['created_by'] = $user_id;
                 $order_request_data['currency_id'] = $vendor_quotation_data->currency_id;
 
