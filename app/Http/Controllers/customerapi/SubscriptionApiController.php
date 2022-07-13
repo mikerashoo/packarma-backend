@@ -100,6 +100,8 @@ class SubscriptionApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                $payment_status = 'paid';
+                $payment_mode = 'cash';
                 $user_id = $token['sub'];
                 $user = User::find($user_id);
                 $subscription = Subscription::find($request->subscription_id);
@@ -160,7 +162,8 @@ class SubscriptionApiController extends Controller
                 $subscription_payment_data['subscription_id'] = $subscription->id;
                 $subscription_payment_data['amount'] = $subscription->amount;
                 $subscription_payment_data['subscription_type'] = $subscription->subscription_type;
-                $subscription_payment_data['payment_status'] = 'pending';
+                $subscription_payment_data['payment_mode'] = $payment_mode;
+                $subscription_payment_data['payment_status'] = $payment_status;
                 $subscription_payment_data['created_by'] = $user_id;
 
                 //store subsciption payment details to subscription payment table
@@ -210,12 +213,15 @@ class SubscriptionApiController extends Controller
                     'users.type',
                     'subscriptions.subscription_type',
                     'users.subscription_start',
-                    'users.subscription_end',
+                    'users.subscription_end'
                 )
                     ->leftjoin('subscriptions', 'users.subscription_id', '=', 'subscriptions.id')
-                    ->leftjoin('user_subscription_payments', 'users.subscription_id', '=', 'user_subscription_payments.subscription_id')
+                    ->leftJoin('user_subscription_payments', function($join)
+                         {
+                             $join->on('users.subscription_id', '=', 'user_subscription_payments.subscription_id');
+                             $join->on('users.subscription_start', '=', 'user_subscription_payments.created_at');
+                         })
                     ->where([['users.id', $user_id],['user_subscription_payments.payment_status','paid']]);
-
                 $data = $data->get()->toArray();
                 // if(empty($data)) {
                 //     errorMessage(__('subscription.subscription_not_found'), $msg_data);
@@ -238,7 +244,7 @@ class SubscriptionApiController extends Controller
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'subscription_type');
+                    $subscription_list = fullSearchQuery($subscriptionData, $request->search,'subscription_type');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
@@ -249,6 +255,14 @@ class SubscriptionApiController extends Controller
                 if(empty($subscription_list)) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
+                $new_user = UserSubscriptionPayment::where('user_id', $user_id)->get()->count();
+                $show_renew_button = false;
+                $show_buy_button = true;
+                if($new_user > 0){
+                    $show_renew_button = true;
+                }
+                $responseData['show_buy_button'] = $show_buy_button;
+                $responseData['show_renew_button'] = $show_renew_button;
                 $responseData['subscription_listing'] = $subscription_list;
                 $responseData['total_records'] = $subscription_total_records;
                 // successMessage(__('success_msg.data_fetched_successfully'), $responseData);
