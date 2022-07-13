@@ -274,6 +274,7 @@ class CustomerQuoteApiController extends Controller
                     'vendor_quotations.id',
                     'vendor_quotations.vendor_id',
                     'vendors.vendor_name',
+                    'vendor_quotations.mrp',
                     'vendor_quotations.vendor_warehouse_id',
                     'vendor_warehouses.warehouse_name',
                 )
