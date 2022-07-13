@@ -51,7 +51,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = User::with('phone_country','whatsapp_country','currency')->Where('approval_status', '=', 'accepted')->orderBy('updated_at','desc')->withTrashed();
+                $query = User::with('phone_country', 'whatsapp_country', 'currency')->Where('approval_status', '=', 'accepted')->orderBy('updated_at', 'desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
@@ -59,6 +59,13 @@ class UserController extends Controller
                         }
                         if (isset($request['search']['search_phone']) && !is_null($request['search']['search_phone'])) {
                             $query->where('phone', 'like', "%" . $request['search']['search_phone'] . "%");
+                        }
+                        if ($request['search']['search_user_type'] && !is_null($request['search']['search_user_type'])) {
+                            if ($request['search']['search_user_type'] == 'not-deleted') {
+                                $query->where('deleted_at', NULL);
+                            } else {
+                                $query->where('deleted_at', '!=', NULL);
+                            }
                         }
                         $query->get();
                     })
@@ -83,40 +90,38 @@ class UserController extends Controller
                         return $event->gstin ?? '-';
                     })
                     ->editColumn('action', function ($event) {
-                    $isDeleted = isRecordDeleted($event->deleted_at);
-                    $user_view = checkPermission('user_list_view');
-                    $user_edit = checkPermission('user_list_edit');
-                    $user_status = checkPermission('user_list_status');
-                    $user_add_address = checkPermission('user_list_add_address');
-                    $actions = '<span style="white-space:nowrap;">';
-                    if ($user_view) {
-                        $actions .= '<a href="user_list_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
-                    }
-                    if (!$isDeleted) {
-                        if ($user_edit) {
-                            $actions .= ' <a href="user_list_edit/' . $event->id.  '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                        $isDeleted = isRecordDeleted($event->deleted_at);
+                        $user_view = checkPermission('user_list_view');
+                        $user_edit = checkPermission('user_list_edit');
+                        $user_status = checkPermission('user_list_status');
+                        $user_add_address = checkPermission('user_list_add_address');
+                        $actions = '<span style="white-space:nowrap;">';
+                        if ($user_view) {
+                            $actions .= '<a href="user_list_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if ($user_status) {
-                            if ($event->status == '1') {
-                                $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked data-url="publishUserList">';
+                        if (!$isDeleted) {
+                            if ($user_edit) {
+                                $actions .= ' <a href="user_list_edit/' . $event->id .  '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                             }
-                            else {
-                                $actions .= ' <input type="checkbox" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" data-url="publishUserList">';
+                            if ($user_status) {
+                                if ($event->status == '1') {
+                                    $actions .= ' <input type="checkbox" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked data-url="publishUserList">';
+                                } else {
+                                    $actions .= ' <input type="checkbox" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" data-url="publishUserList">';
+                                }
                             }
+                            if ($user_add_address) {
+                                $actions .= ' <a href="user_address_list?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="User Address"><i class="fa ft-plus-square"></i></a>';
+                            }
+                        } else {
+                            $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;">Deleted</span>';
                         }
-                        if ($user_add_address) {
-                            $actions .= ' <a href="user_address_list?id=' . Crypt::encrypt($event->id) . '" class="btn btn-warning btn-sm " title="User Address"><i class="fa ft-plus-square"></i></a>';
-                        }
-                    }else {
-                        $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;">Deleted</span>';
-                    }
-                    $actions .= '</span>';
-                    return $actions;
-                })
+                        $actions .= '</span>';
+                        return $actions;
+                    })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'email', 'phone','gstin', 'action'])->setRowId('id')->make(true);
-            }
-            catch (\Exception $e) {
+                    ->rawColumns(['name', 'email', 'phone', 'gstin', 'action'])->setRowId('id')->make(true);
+            } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
                     'draw' => 0,
@@ -188,7 +193,7 @@ class UserController extends Controller
             if (isset($response[0])) {
                 errorMessage('Phone Number Already Exist', $msg_data);
             }
-            if(isset($request->whatsapp_no)){
+            if (isset($request->whatsapp_no)) {
                 $response = User::where([['whatsapp_no', $request->whatsapp_no], ['id', '!=', $_GET['id']]])->get()->toArray();
                 if (isset($response[0])) {
                     // print_r($response[0]);exit;
@@ -211,7 +216,7 @@ class UserController extends Controller
             if (isset($response[0])) {
                 errorMessage('Phone Number Already Exist', $msg_data);
             }
-            if(isset($request->whatsapp_no)){
+            if (isset($request->whatsapp_no)) {
                 $response = User::where([['whatsapp_no', $request->whatsapp_no]])->get()->toArray();
                 if (isset($response[0])) {
                     errorMessage('Whatsapp Number Already Exist', $msg_data);
@@ -221,36 +226,36 @@ class UserController extends Controller
         }
         $maxPhoneCodeLength = Country::where('id', $request->phone_country_code)->get()->toArray();
         $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
-        if(strlen($request->phone) != $allowedPhoneLength){
+        if (strlen($request->phone) != $allowedPhoneLength) {
             errorMessage("Phone Number Should be $allowedPhoneLength digit long.", $msg_data);
         }
-        if($request->whatsapp_country_code == '' && $request->whatsapp_no != ''){
+        if ($request->whatsapp_country_code == '' && $request->whatsapp_no != '') {
             errorMessage("Please Select Country Code for Whatsapp Number", $msg_data);
         }
-        if($request->whatsapp_country_code != ''){
+        if ($request->whatsapp_country_code != '') {
             $maxPhoneCodeLength = Country::where('id', $request->whatsapp_country_code)->get()->toArray();
             $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
-            if(strlen($request->whatsapp_no) != $allowedPhoneLength){
+            if (strlen($request->whatsapp_no) != $allowedPhoneLength) {
                 errorMessage("Whatsapp Number Should be $allowedPhoneLength digit long.", $msg_data);
             }
         }
         $tableObject->name = $request->name;
         $tableObject->phone_country_id = $request->phone_country_code;
         $tableObject->phone = $request->phone;
-        if($request->whatsapp_country_code != '' && $request->whatsapp_no != ''){
+        if ($request->whatsapp_country_code != '' && $request->whatsapp_no != '') {
             $tableObject->whatsapp_country_id = $request->whatsapp_country_code;
             $tableObject->whatsapp_no = $request->whatsapp_no;
         }
-        if($request->currency != ''){
+        if ($request->currency != '') {
             $tableObject->currency_id = $request->currency;
         }
         $tableObject->approval_status = "accepted";
         $tableObject->approved_on = date('Y-m-d H:i:s');
         $tableObject->approved_by =  session('data')['id'];
         $tableObject->password = '';
-        if($isUpdateFlow){
+        if ($isUpdateFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
@@ -272,24 +277,23 @@ class UserController extends Controller
         $recordData->save();
         if ($request->status == 1) {
             successMessage('Published', $msg_data);
-        }
-        else {
+        } else {
             CustomerDevice::where([['user_id', $request->id]])->update(['remember_token' => NULL]);
             successMessage('Unpublished', $msg_data);
         }
     }
 
     /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 23-mar-2022
-       *   Uses :  To view user list details
-       *   @param int $id
-       *   @return Response
-    */
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 23-mar-2022
+     *   Uses :  To view user list details
+     *   @param int $id
+     *   @return Response
+     */
     public function viewUserList($id)
     {
         $data['data'] = User::find($id);
-        $data['userAddress'] = UserAddress::with('city', 'state', 'country','user')->where('user_id', '=', $id)->get();
+        $data['userAddress'] = UserAddress::with('city', 'state', 'country', 'user')->where('user_id', '=', $id)->get();
         return view('backend/customer_section/user_list/user_list_view', $data);
     }
 
@@ -323,7 +327,7 @@ class UserController extends Controller
         $data['data'] = User::all();
         $data['user_approval_view'] = checkPermission('user_approval_view');
         $data['user_approval_update'] = checkPermission('user_approval_update');
-        return view('backend/customer_section/user_approval_list/index',["data"=>$data]);
+        return view('backend/customer_section/user_approval_list/index', ["data" => $data]);
     }
 
     /**
@@ -337,7 +341,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = User::with('phone_country','whatsapp_country','currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at','desc');
+                $query = User::with('phone_country', 'whatsapp_country', 'currency')->where('approval_status', '!=', 'accepted')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_name']) && !is_null($request['search']['search_name'])) {
@@ -377,11 +381,9 @@ class UserController extends Controller
                         $bg_class = 'bg-danger';
                         if ($db_approval_status == 'accepted') {
                             $bg_class = 'bg-success';
-                        }
-                        else if ($db_approval_status == 'rejected') {
+                        } else if ($db_approval_status == 'rejected') {
                             $bg_class = 'bg-danger';
-                        }
-                        else {
+                        } else {
                             $bg_class = 'bg-warning';
                         }
                         $displayStatus = approvalStatusArray($db_approval_status);
@@ -405,9 +407,8 @@ class UserController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'email', 'phone', 'approval_status','gstin','created_at','action'])->setRowId('id')->make(true);
-            }
-            catch (\Exception $e) {
+                    ->rawColumns(['name', 'email', 'phone', 'approval_status', 'gstin', 'created_at', 'action'])->setRowId('id')->make(true);
+            } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
                     'draw' => 0,
@@ -438,30 +439,28 @@ class UserController extends Controller
     }
 
     /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 23-Mar-2022
-       *   Uses :  To store user approval list details in table
-       *   @param Request request
-       *   @return Response
-    */
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 23-Mar-2022
+     *   Uses :  To store user approval list details in table
+     *   @param Request request
+     *   @return Response
+     */
     public function saveApprovalListFormData(Request $request)
     {
-    	$msg_data=array();
+        $msg_data = array();
         $msg = "";
         $validationErrors = $this->validateRequestApprovalList($request, $_GET['id']);
-		if (count($validationErrors)) {
+        if (count($validationErrors)) {
             \Log::error("User Approval List Validation Exception: " . implode(", ", $validationErrors->all()));
-        	errorMessage(implode("\n", $validationErrors->all()), $msg_data);
+            errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
-        if(isset($_GET['id'])) {
+        if (isset($_GET['id'])) {
             $getKeys = true;
-            $approvalStatusArray = approvalStatusArray('',$getKeys);
-            if (in_array( $request->approval_status, $approvalStatusArray))
-             {
+            $approvalStatusArray = approvalStatusArray('', $getKeys);
+            if (in_array($request->approval_status, $approvalStatusArray)) {
                 $tableObject = User::find($_GET['id']);
                 $msg = "Approval Status Updated Successfully";
-            }
-            else{
+            } else {
                 errorMessage('Approval Status Does not Exists.', $msg_data);
             }
         }
@@ -471,10 +470,10 @@ class UserController extends Controller
         $tableObject->approved_on = date('Y-m-d H:i:s');
         $tableObject->approved_by =  session('data')['id'];
         $tableObject->admin_remark = '';
-        if($request->approval_status ==  'rejected' && !empty($request->admin_remark)) {
+        if ($request->approval_status ==  'rejected' && !empty($request->admin_remark)) {
             $tableObject->admin_remark = $request->admin_remark;
         }
-        if($request->approval_status ==  'accepted') {
+        if ($request->approval_status ==  'accepted') {
             $tableObject->status = 1;
         }
         if ($request->approval_status !=  'accepted') {
@@ -488,16 +487,16 @@ class UserController extends Controller
             $tableObject->gst_certificate = $actualImage;
             $tableObject->save();
         }
-        successMessage($msg , $msg_data);
+        successMessage($msg, $msg_data);
     }
 
     /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 23-mar-2022
-       *   Uses :  To view user approval list details
-       *   @param int $id
-       *   @return Response
-    */
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 23-mar-2022
+     *   Uses :  To view user approval list details
+     *   @param int $id
+     *   @return Response
+     */
     public function viewApprovalList($id)
     {
         $data['data'] = User::find($id);
@@ -508,12 +507,12 @@ class UserController extends Controller
     }
 
     /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 23-Mar-2022
-       *   Uses :  User Approval List Form Validation part will be handle by below function
-       *   @param Request request
-       *   @return Response
-    */
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 23-Mar-2022
+     *   Uses :  User Approval List Form Validation part will be handle by below function
+     *   @param Request request
+     *   @return Response
+     */
     private function validateRequestApprovalList(Request $request, $id)
     {
         return \Validator::make($request->all(), [
