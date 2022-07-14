@@ -57,6 +57,14 @@ class VendorController extends Controller
                         if ($request['search']['search_vendor_name'] && !is_null($request['search']['search_vendor_name'])) {
                             $query->where('vendor_name', 'like', "%" . $request['search']['search_vendor_name'] . "%");
                         }
+
+                        if ($request['search']['search_vendor_type'] && !is_null($request['search']['search_vendor_type'])) {
+                            if ($request['search']['search_vendor_type'] == 'not-deleted') {
+                                $query->where('deleted_at', NULL);
+                            } else {
+                                $query->where('deleted_at', '!=', NULL);
+                            }
+                        }
                         $query->get();
                     })
                     ->editColumn('mark_featured', function ($event) {

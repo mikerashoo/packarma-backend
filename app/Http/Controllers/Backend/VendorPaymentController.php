@@ -20,7 +20,7 @@ class VendorPaymentController extends Controller
     public function index()
     {
         try {
-            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name','asc')->get();
+            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name', 'asc')->get();
             $data['paymentMode'] = paymentMode();
             $data['paymentStatusType'] = paymentStatusType();
             $data['vendor_payment_add'] = checkPermission('vendor_payment_add');
@@ -114,7 +114,7 @@ class VendorPaymentController extends Controller
      */
     public function add()
     {
-        $data['vendor'] = Vendor::Where('approval_status', '=', 'accepted')->orderBy('vendor_name','asc')->get();
+        $data['vendor'] = Vendor::Where('approval_status', '=', 'accepted')->orderBy('vendor_name', 'asc')->get();
         $data['payment_details'] = [];
         if (isset($_GET['id'])) {
             $data['order'][] = Order::find($_GET['id']);
@@ -195,7 +195,7 @@ class VendorPaymentController extends Controller
         //decreasing pending_payment by amount in order table
         Order::where('id',  $request->order_id)->decrement('vendor_pending_payment', $request->amount);
         if (($request->payment_status == 'fully_paid') && ($request->amount == $orderData->pending_payment)) {
-            Order::where("id", '=',  $_GET['id'])->update(['payment_status' => 'fully_paid']);
+            Order::where("id", '=',  $_GET['id'])->update(['vendor_payment_status' => 'fully_paid']);
             successMessage($msg, $msg_data);
         }
         successMessage($msg, $msg_data);
