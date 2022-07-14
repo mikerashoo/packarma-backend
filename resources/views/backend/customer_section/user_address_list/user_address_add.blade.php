@@ -37,12 +37,12 @@
                                         </select><br><br>
                                     </div>
                                     <div class="col-sm-6">
-                                        <label>Address Name</label>
-                                        <input class="form-control" type="text" id="address_name" name="address_name"><br />
+                                        <label>Address Name<span style="color:#ff0000">*</span></label>
+                                        <input class="form-control required" type="text" id="address_name" name="address_name"><br />
                                     </div>
                                     <div class="col-sm-6">
-                        				<label>Address Type</label>
-                        				<select class="select2" id="type" name="type" style="width: 100% !important;">
+                        				<label>Address Type<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="type" name="type" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($addressType as $key => $val)
                                                 <option value="{{$key}}">{{$val}}</option>
@@ -50,8 +50,8 @@
                                         </select><br/>
                         			</div>
                                     <div class="col-sm-6">
-                                        <label>Mobile Number</label>
-                                        <input class="form-control" type="text" id="mobile_no" name="mobile_no" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br />
+                                        <label>Mobile Number<span style="color:#ff0000">*</span></label>
+                                        <input class="form-control required" type="text" id="mobile_no" name="mobile_no" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br />
                                     </div>
                                     <div class="col-sm-6">
                                         <label>Country<span style="color:#ff0000">*</span></label>

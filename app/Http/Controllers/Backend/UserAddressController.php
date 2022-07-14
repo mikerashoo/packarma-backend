@@ -295,10 +295,13 @@ class UserAddressController extends Controller
     {
         return \Validator::make($request->all(), [
             'user' => 'required|integer',
+            'address_name' => 'required|string',
+            'type' => 'required|string',
+            'mobile_no' => 'required|digits:10',
             'country' => 'required|integer',
             'state' => 'required|integer',
             'city_name' => 'required|string',
-            'pincode' => 'required|integer',
+            'pincode' => 'required|digits:6',
             'flat' => 'required|string',
             'area' => 'required|string',
             'landmark' => 'required|string'

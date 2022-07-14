@@ -24,8 +24,8 @@
                         				<input class="form-control required" type="text" id="product_name" name="product_name"><br/>
                         			</div>
                                     <div class="col-sm-6">
-                        				<label>Product Description<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" id="product_description" name="product_description"><br/>
+                        				<label>Product Description</label>
+                        				<input class="form-control" type="text" id="product_description" name="product_description"><br/>
                         			</div>
                                     <div class="col-sm-6">
                         				<label>Category<span style="color:#ff0000">*</span></label>
@@ -66,7 +66,7 @@
                                     <div class="col-sm-6">
                                         <label>Product Image<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PRODUCT'); ?></p>
-                                        <input type="file" id="product_image" name="product_image" class="form-control required" accept="product_image/png, product_image/jpg, product_image/jpeg" onchange="checkFiles(this.files)">
+                                        <input type="file" id="product_image" name="product_image" class="form-control required" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)">
                                     </div>
                         		</div>
                         		<hr>

@@ -377,7 +377,7 @@ class OrderController extends Controller
             'payment_mode' => 'required|string',
             'amount' => 'required|numeric',
             'transaction_date' => 'required|date',
-            'order_image' => 'mimes:jpeg,png,jpg'
+            'order_image' => 'mimes:jpeg,png,jpg,pdf'
         ])->errors();
     }
 

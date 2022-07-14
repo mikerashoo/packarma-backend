@@ -262,7 +262,7 @@ class ProductController extends Controller
     {
         return \Validator::make($request->all(), [
             'product_name' => 'required|string',
-            'product_description' => 'required|string',
+            'product_description' => 'string',
             'sub_category' => 'required|integer',
             'category' => 'required|integer',
             'product_form' => 'required|integer',
@@ -282,7 +282,7 @@ class ProductController extends Controller
     {
         return \Validator::make($request->all(), [
             'product_name' => 'required|string',
-            'product_description' => 'required|string',
+            'product_description' => 'string',
             'sub_category' => 'required|integer',
             'category' => 'required|integer',
             'product_form' => 'required|integer',

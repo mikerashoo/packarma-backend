@@ -23,7 +23,7 @@ class CreateBannersTable extends Migration
             $table->text('meta_title')->nullable();
             $table->text('meta_description')->nullable();
             $table->text('meta_keyword')->nullable();
-            $table->enum('status', [1, 0])->default(0);
+            $table->enum('status', [1, 0])->default(1);
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);
             $table->softDeletes();

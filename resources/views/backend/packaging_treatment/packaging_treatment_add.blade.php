@@ -25,12 +25,12 @@
                         			</div>
                                     <div class="col-sm-6">
                         				<label>Packaging Treatment Description</label>
-                        				<input class="form-control required" type="text" id="packaging_treatment_description" name="packaging_treatment_description"><br/>
+                        				<input class="form-control" type="text" id="packaging_treatment_description" name="packaging_treatment_description"><br/>
                         			</div>
                                     <div class="col-sm-6">
                                         <label>Packaging Treatment Image</label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PACKAGING_TREATMENT'); ?></p>
-                                        <input type="file" id="packaging_treatment_image" name="packaging_treatment_image" class="form-control" accept="packaging_treatment_image/png, packaging_treatment_image/jpg, packaging_treatment_image/jpeg" onchange="checkFiles(this.files)"><br/>
+                                        <input type="file" id="packaging_treatment_image" name="packaging_treatment_image" class="form-control" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)"><br/>
                                     </div>
                         		</div>
                         		<hr>

@@ -25,7 +25,7 @@
                         			</div>
                                     <div class="col-sm-6">
                         				<label>Material Description</label>
-                        				<input class="form-control required" type="text" id="material_description" name="material_description"><br/>
+                        				<input class="form-control" type="text" id="material_description" name="material_description"><br/>
                         			</div>
                                     <div class="col-sm-6">
                         				<label>Shelf Life<span style="color:#ff0000">*</span></label>

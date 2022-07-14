@@ -36,8 +36,8 @@
                             <div class="tab-pane fade mt-2 show active" id="details" role="tabpanel" aria-labelledby="details-tab">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <label>Company Name</label>
-                                            <input class="form-control" type="text" id="company_name" name="company_name" value="{{$data['data']->company_name}}"><br/>
+                                            <label>Company Name<span style="color:#ff0000">*</span></label>
+                                            <input class="form-control required" type="text" id="company_name" name="company_name" value="{{$data['data']->company_name}}"><br/>
                                         </div>
                                         <div class="col-sm-6">
                                             <label>Images</label>

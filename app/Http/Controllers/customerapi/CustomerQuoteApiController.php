@@ -227,7 +227,11 @@ class CustomerQuoteApiController extends Controller
                 if($request->enquiry_status == "reject"){
                     $quotationEnquiryStatusData = VendorQuotation::find($request->vendor_quotation_id)->update($request->all());
                     \Log::info("Customer Quotation Rejected Successfully");
-                    successMessage(__('customer_quote.quotation_rejected_successfully'));
+                    $quotationCountData = VendorQuotation::where([['user_id', $user_id],['customer_enquiry_id',$request->customer_enquiry_id]])
+                                                            ->whereIn('enquiry_status', ['quoted', 'viewed'])->get()->count();
+                    
+                    $responseData['total_records'] = $quotationCountData;
+                    successMessage(__('customer_quote.quotation_rejected_successfully', $responseData));
                 }
             }
             else
@@ -274,6 +278,7 @@ class CustomerQuoteApiController extends Controller
                     'vendor_quotations.id',
                     'vendor_quotations.vendor_id',
                     'vendors.vendor_name',
+                    'vendor_quotations.mrp',
                     'vendor_quotations.vendor_warehouse_id',
                     'vendor_warehouses.warehouse_name',
                 )
