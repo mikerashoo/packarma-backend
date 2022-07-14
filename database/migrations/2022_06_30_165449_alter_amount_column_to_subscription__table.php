@@ -18,7 +18,7 @@ class AlterAmountColumnToSubscriptionTable extends Migration
     public function up()
     {
         Schema::table('subscriptions', function (Blueprint $table) {
-            $table->decimal('amount', $precision = 8, $scale = 2)->change();
+            $table->decimal('amount', $precision = 15, $scale = 2)->change();
         });
     }
 
