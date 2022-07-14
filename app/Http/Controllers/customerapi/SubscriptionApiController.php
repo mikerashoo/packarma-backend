@@ -42,6 +42,9 @@ class SubscriptionApiController extends Controller
                 $offset=($page_no-1)*$limit;
                 $data = Subscription::select('id','subscription_type','amount');
                 $subscriptionData = Subscription::whereRaw("1 = 1");
+
+                
+
                 if($request->subscription_id)
                 {
                     $subscriptionData = $subscriptionData->where('id', $request->subscription_id);
@@ -65,6 +68,16 @@ class SubscriptionApiController extends Controller
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
+                //subscription button flag start
+                $i=0;
+                foreach ($data as $subs_listing){
+                    $renew_button = false;
+                    $subscribe_button = true;
+                    $data[$i]['renew_button'] = $renew_button;
+                    $data[$i]['subscribe_button'] = $subscribe_button;
+                    $i++;
+                }
+                //subscription button flag end
                 if(empty($data)) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
@@ -205,6 +218,7 @@ class SubscriptionApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                $show_renewal = 7;
                 $user_id = $token['sub'];
                 $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
                 $defaultSortByName = false;
@@ -222,13 +236,15 @@ class SubscriptionApiController extends Controller
                              $join->on('users.subscription_start', '=', 'user_subscription_payments.created_at');
                          })
                     ->where([['users.id', $user_id],['user_subscription_payments.payment_status','paid']]);
-                $data = $data->get()->toArray();
-                // if(empty($data)) {
-                //     errorMessage(__('subscription.subscription_not_found'), $msg_data);
-                // }
+                
+                $data = $data->first();
                 //subscription listing 
                 $subscription_list = Subscription::select('id','subscription_type','amount');
                 $subscriptionData = Subscription::whereRaw("1 = 1");
+                
+                // if(empty($data)) {
+                //     errorMessage(__('subscription.subscription_not_found'), $msg_data);
+                // }
                 if($request->subscription_id)
                 {
                     $subscriptionData = $subscriptionData->where('id', $request->subscription_id);
@@ -250,22 +266,36 @@ class SubscriptionApiController extends Controller
                     $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
                 }
                 $subscription_list = allOrderBy($subscription_list, $orderByArray);
+                
                 $subscription_total_records = $subscription_list->get()->count();
                 $subscription_list = $subscription_list->get()->toArray();
+                //subscription button flag start
+                $i=0;
+                foreach ($subscription_list as $subs_listing){
+                    $renew_button = false;
+                    $subscribe_button = false;
+                    if (!empty($data->subscription_id)){
+                        if($data->subscription_end < Carbon::now()->addDays($show_renewal)->format('Y-m-d H:i:s')){
+                            if($data->subscription_id == $subs_listing['id']){
+                                $renew_button = true;
+                            }else{
+                                $subscribe_button = true;
+                            }
+                        }
+                    }
+                    else{
+                        $subscribe_button = true;
+                    }
+                    $subscription_list[$i]['renew_button'] = $renew_button;
+                    $subscription_list[$i]['subscribe_button'] = $subscribe_button;
+                    $i++;
+                }
+                //subscription button flag end
                 if(empty($subscription_list)) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
-                $new_user = UserSubscriptionPayment::where('user_id', $user_id)->get()->count();
-                $show_renew_button = false;
-                $show_buy_button = true;
-                if($new_user > 0){
-                    $show_renew_button = true;
-                }
-                $responseData['show_buy_button'] = $show_buy_button;
-                $responseData['show_renew_button'] = $show_renew_button;
                 $responseData['subscription_listing'] = $subscription_list;
                 $responseData['total_records'] = $subscription_total_records;
-                // successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                 $responseData['my_subscription'] = $data;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }

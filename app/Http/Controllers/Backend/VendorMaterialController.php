@@ -248,9 +248,8 @@ class VendorMaterialController extends Controller
 
             'vendor' => 'required|integer',
             'material' => 'required|integer',
-            'commission_rate_per_kg' => 'required|regex:/^\d+(\.\d{0,3})?$/',
-            // 'commission_rate_per_qty' => 'required|regex:/^\d+(\.\d{0,3})?$/',
-            'vendor_price' => 'regex:/^\d+(\.\d{3})?$/',
+            'commission_rate_per_kg' => 'required|numeric',
+            'vendor_price' => 'sometimes|numeric'
         ])->errors();
     }
 

@@ -229,7 +229,6 @@ class CustomerQuoteApiController extends Controller
                     \Log::info("Customer Quotation Rejected Successfully");
                     $quotationCountData = VendorQuotation::where([['user_id', $user_id],['customer_enquiry_id',$request->customer_enquiry_id]])
                                                             ->whereIn('enquiry_status', ['quoted', 'viewed'])->get()->count();
-                    
                     $responseData['total_records'] = $quotationCountData;
                     successMessage(__('customer_quote.quotation_rejected_successfully', $responseData));
                 }
