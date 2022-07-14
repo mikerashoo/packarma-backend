@@ -29,6 +29,14 @@
                                             <input class="form-control mb-3" type="text" id="search_vendor_name" name="search_vendor_name">
                                         </div>
                                         <div class="col-md-4">
+                                            <label>Vendor Type</label>
+                                            <select class="form-control mb-3 select2" id="search_vendor_type" name="search_vendor_type" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                    <option value="not-deleted">Not Deleted</option>                                              
+                                                    <option value="deleted">Deleted</option>                                              
+                                            </select><br/>
+                                        </div>
+                                        <div class="col-md-4">
                                             <label>&nbsp;</label><br/>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>

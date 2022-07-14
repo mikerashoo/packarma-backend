@@ -55,7 +55,7 @@ class PaymentApiController extends Controller
                     'orders.created_at',
                     'customer_enquiries.address',
                     'states.state_name',
-                    'cities.city_name',
+                    'customer_enquiries.city_name',
                 )
 
                     ->leftjoin('customer_enquiries', 'orders.customer_enquiry_id', '=', 'customer_enquiries.id')

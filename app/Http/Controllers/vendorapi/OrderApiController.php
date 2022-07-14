@@ -79,7 +79,7 @@ class OrderApiController extends Controller
                     'packaging_materials.material_description',
                     'customer_enquiries.address',
                     'states.state_name',
-                    'cities.city_name',
+                    'customer_enquiries.city_name',
                 )
                     ->leftjoin('categories', 'orders.category_id', '=', 'categories.id')
                     ->leftjoin('sub_categories', 'orders.sub_category_id', '=', 'sub_categories.id')

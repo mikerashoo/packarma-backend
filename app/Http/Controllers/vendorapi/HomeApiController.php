@@ -114,7 +114,7 @@ class HomeApiController extends Controller
                     'products.product_description',
                     'categories.category_name',
                     'states.state_name',
-                    'cities.city_name',
+                    'customer_enquiries.city_name',
                 )
                     // ->leftjoin('products', 'vendor_quotations.product_id', '=', 'products.id')
                     // ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
