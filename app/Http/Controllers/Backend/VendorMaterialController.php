@@ -22,8 +22,8 @@ class VendorMaterialController extends Controller
     public function index()
     {
         try {
-            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name','asc')->get();
-            $data['packaging_material'] = PackagingMaterial::orderBy('packaging_material_name','asc')->get();
+            $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name', 'asc')->get();
+            $data['packaging_material'] = PackagingMaterial::orderBy('packaging_material_name', 'asc')->get();
             $data['vendor_material_map_add'] = checkPermission('vendor_material_map_add');
             $data['vendor_material_map_edit'] = checkPermission('vendor_material_map_edit');
             $data['vendor_material_map_view'] = checkPermission('vendor_material_map_view');
@@ -248,9 +248,11 @@ class VendorMaterialController extends Controller
 
             'vendor' => 'required|integer',
             'material' => 'required|integer',
-            'commission_rate_per_kg' => 'required|regex:/^\d+(\.\d{0,3})?$/',
+            // 'commission_rate_per_kg' => 'required|regex:/^\d+(\.\d{0,3})?$/',
+            'commission_rate_per_kg' => 'required|numeric',
             // 'commission_rate_per_qty' => 'required|regex:/^\d+(\.\d{0,3})?$/',
-            'vendor_price' => 'regex:/^\d+(\.\d{3})?$/',
+            'vendor_price' => 'required|numeric',
+            // 'vendor_price' => 'regex:/^\d+(\.\d{3})?$/',
         ])->errors();
     }
 
