@@ -18,7 +18,7 @@ class AlterProductWeightColumnToCustomerEnquiryTable extends Migration
     public function up()
     {
         Schema::table('customer_enquiries', function (Blueprint $table) {
-            $table->decimal('product_weight', $precision = 8, $scale = 2)->default(0.00)->change();
+            $table->decimal('product_weight', $precision = 15, $scale = 2)->default(0.00)->change();
         });
     }
 

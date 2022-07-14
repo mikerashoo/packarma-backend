@@ -18,7 +18,7 @@ class AlterColumnToVendorPaymentsTable extends Migration
     public function up()
     {
         Schema::table('vendor_payments', function (Blueprint $table) {
-            $table->decimal('amount', $precision = 8, $scale = 2)->comment('chunk payment')->change();
+            $table->decimal('amount', $precision = 15, $scale = 2)->comment('chunk payment')->change();
         });
     }
 

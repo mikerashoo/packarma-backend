@@ -18,7 +18,7 @@ class AlterApproxPriceColumnToPackagingMaterialTable extends Migration
     public function up()
     {
         Schema::table('packaging_materials', function (Blueprint $table) {
-            $table->decimal('approx_price', $precision = 8, $scale = 2)->default(0.00)->change();
+            $table->decimal('approx_price', $precision = 15, $scale = 2)->default(0.00)->change();
         });
     }
 

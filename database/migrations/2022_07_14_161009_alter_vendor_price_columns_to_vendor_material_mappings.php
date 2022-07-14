@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterColumnToVendorMaterialMappingsTable extends Migration
+class AlterVendorPriceColumnsToVendorMaterialMappings extends Migration
 {
     /**
      * Created by : Pradyumn Dwivedi
@@ -18,9 +18,9 @@ class AlterColumnToVendorMaterialMappingsTable extends Migration
     public function up()
     {
         Schema::table('vendor_material_mappings', function (Blueprint $table) {
-            $table->decimal('min_amt_profit', $precision = 15, $scale = 2)->default(0.00)->comment('Per Kg')->change();
+            $table->decimal('min_amt_profit', $precision = 15, $scale = 2)->default(0.00)->change();
             $table->decimal('min_stock_qty', $precision = 15, $scale = 2)->default(0.00)->change();
-            $table->decimal('vendor_price', $precision = 15, $scale = 2)->default(0.00)->comment('Per Kg')->change();
+            $table->decimal('vendor_price', $precision = 15, $scale = 2)->default(0.00)->change();
         });
     }
 
