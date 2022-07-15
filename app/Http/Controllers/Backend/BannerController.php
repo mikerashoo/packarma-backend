@@ -70,6 +70,10 @@ class BannerController extends Controller
                         if ($banner_edit) {
                             $actions .= ' <a href="banners_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                         }
+
+                        // $bannerCount = Banner::where('status','=', '1')->get();
+                        // print_r($bannerCount);exit;
+
                         if ($banner_status) {
                             if ($event->status == '1') {
                                 $actions .= ' <input type="checkbox" data-url="publishBanners" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
@@ -220,6 +224,7 @@ class BannerController extends Controller
      */
     public function updateStatus(Request $request)
     {
+        // errorMessage('dfh', array());
         $msg_data = array();
         $recordData = Banner::find($request->id);
         $recordData->status = $request->status;
