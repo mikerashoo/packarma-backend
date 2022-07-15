@@ -20,8 +20,8 @@
                     			@csrf
                         		<div class="row">
                                     <div class="col-sm-6 mb-3">
-                        				<label>Description<span style="color:#ff0000">*</span></label>
-                        				<textarea class="form-control required" id="description" value="" name="description"></textarea>
+                        				<label>Description</label>
+                        				<textarea class="form-control" id="description" value="" name="description"></textarea>
                         			</div>
                                     <div class="col-sm-6 mb-3">
                         				<label>User<span style="color:#ff0000">*</span></label>

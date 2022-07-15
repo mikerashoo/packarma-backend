@@ -234,4 +234,14 @@ class Order extends Model
     {
         return $this->belongsTo('App\Models\State');
     }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 12-july-2022
+     * uses : To check order id in review table
+     */
+    public function review()
+    {
+        return $this->belongsTo('App\Models\Review');
+    }
 }

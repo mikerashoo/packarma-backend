@@ -42,6 +42,9 @@ class SubscriptionApiController extends Controller
                 $offset=($page_no-1)*$limit;
                 $data = Subscription::select('id','subscription_type','amount');
                 $subscriptionData = Subscription::whereRaw("1 = 1");
+
+                
+
                 if($request->subscription_id)
                 {
                     $subscriptionData = $subscriptionData->where('id', $request->subscription_id);
@@ -65,6 +68,16 @@ class SubscriptionApiController extends Controller
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
+                //subscription button flag start
+                $i=0;
+                foreach ($data as $subs_listing){
+                    $renew_button = false;
+                    $subscribe_button = true;
+                    $data[$i]['renew_button'] = $renew_button;
+                    $data[$i]['subscribe_button'] = $subscribe_button;
+                    $i++;
+                }
+                //subscription button flag end
                 if(empty($data)) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
@@ -100,6 +113,8 @@ class SubscriptionApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                $payment_status = 'paid';
+                $payment_mode = 'cash';
                 $user_id = $token['sub'];
                 $user = User::find($user_id);
                 $subscription = Subscription::find($request->subscription_id);
@@ -160,7 +175,8 @@ class SubscriptionApiController extends Controller
                 $subscription_payment_data['subscription_id'] = $subscription->id;
                 $subscription_payment_data['amount'] = $subscription->amount;
                 $subscription_payment_data['subscription_type'] = $subscription->subscription_type;
-                $subscription_payment_data['payment_status'] = 'pending';
+                $subscription_payment_data['payment_mode'] = $payment_mode;
+                $subscription_payment_data['payment_status'] = $payment_status;
                 $subscription_payment_data['created_by'] = $user_id;
 
                 //store subsciption payment details to subscription payment table
@@ -202,6 +218,7 @@ class SubscriptionApiController extends Controller
             $token = readHeaderToken();
             if($token)
             {
+                $show_renewal = 7;
                 $user_id = $token['sub'];
                 $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
                 $defaultSortByName = false;
@@ -210,19 +227,24 @@ class SubscriptionApiController extends Controller
                     'users.type',
                     'subscriptions.subscription_type',
                     'users.subscription_start',
-                    'users.subscription_end',
+                    'users.subscription_end'
                 )
                     ->leftjoin('subscriptions', 'users.subscription_id', '=', 'subscriptions.id')
-                    ->leftjoin('user_subscription_payments', 'users.subscription_id', '=', 'user_subscription_payments.subscription_id')
+                    ->leftJoin('user_subscription_payments', function($join)
+                         {
+                             $join->on('users.subscription_id', '=', 'user_subscription_payments.subscription_id');
+                             $join->on('users.subscription_start', '=', 'user_subscription_payments.created_at');
+                         })
                     ->where([['users.id', $user_id],['user_subscription_payments.payment_status','paid']]);
-
-                $data = $data->get()->toArray();
-                // if(empty($data)) {
-                //     errorMessage(__('subscription.subscription_not_found'), $msg_data);
-                // }
+                
+                $data = $data->first();
                 //subscription listing 
                 $subscription_list = Subscription::select('id','subscription_type','amount');
                 $subscriptionData = Subscription::whereRaw("1 = 1");
+                
+                // if(empty($data)) {
+                //     errorMessage(__('subscription.subscription_not_found'), $msg_data);
+                // }
                 if($request->subscription_id)
                 {
                     $subscriptionData = $subscriptionData->where('id', $request->subscription_id);
@@ -238,20 +260,42 @@ class SubscriptionApiController extends Controller
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'subscription_type');
+                    $subscription_list = fullSearchQuery($subscriptionData, $request->search,'subscription_type');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
                 }
                 $subscription_list = allOrderBy($subscription_list, $orderByArray);
+                
                 $subscription_total_records = $subscription_list->get()->count();
                 $subscription_list = $subscription_list->get()->toArray();
+                //subscription button flag start
+                $i=0;
+                foreach ($subscription_list as $subs_listing){
+                    $renew_button = false;
+                    $subscribe_button = false;
+                    if (!empty($data->subscription_id)){
+                        if($data->subscription_end < Carbon::now()->addDays($show_renewal)->format('Y-m-d H:i:s')){
+                            if($data->subscription_id == $subs_listing['id']){
+                                $renew_button = true;
+                            }else{
+                                $subscribe_button = true;
+                            }
+                        }
+                    }
+                    else{
+                        $subscribe_button = true;
+                    }
+                    $subscription_list[$i]['renew_button'] = $renew_button;
+                    $subscription_list[$i]['subscribe_button'] = $subscribe_button;
+                    $i++;
+                }
+                //subscription button flag end
                 if(empty($subscription_list)) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
                 $responseData['subscription_listing'] = $subscription_list;
                 $responseData['total_records'] = $subscription_total_records;
-                // successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                 $responseData['my_subscription'] = $data;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             }

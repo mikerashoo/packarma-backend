@@ -14,8 +14,14 @@ class AlterVendorPriceAndCommissionAmtToVendorQuotationsTable extends Migration
     public function up()
     {
         Schema::table('vendor_quotations', function (Blueprint $table) {
-            $table->decimal('vendor_price', $precision = 8, $scale = 2)->comment('Per Kg')->change();
-            $table->decimal('commission_amt', $precision = 8, $scale = 2)->comment('Per Kg')->change();
+            $table->decimal('vendor_price', $precision = 15, $scale = 2)->comment('Per Kg')->change();
+            $table->decimal('commission_amt', $precision = 15, $scale = 2)->comment('Per Kg')->change();
+            $table->decimal('mrp', $precision = 15, $scale = 2)->change();
+            $table->decimal('sub_total', $precision = 15, $scale = 2)->change(); 
+            $table->decimal('gst_amount', $precision = 15, $scale = 2)->change();
+            $table->decimal('gst_percentage', $precision = 15, $scale = 2)->change();
+            $table->decimal('freight_amount', $precision = 15, $scale = 2)->change();
+            $table->decimal('total_amount', $precision = 15, $scale = 2)->change();
         });
     }
 

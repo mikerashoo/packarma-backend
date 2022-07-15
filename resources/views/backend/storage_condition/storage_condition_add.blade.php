@@ -25,7 +25,7 @@
                         			</div>
                                     <div class="col-sm-6">
                         				<label>Storage Condition Description</label>
-                        				<input class="form-control required" type="text" id="storage_condition_description" name="storage_condition_description"><br/>
+                        				<input class="form-control" type="text" id="storage_condition_description" name="storage_condition_description"><br/>
                         			</div>
                         		</div>
                         		<hr>

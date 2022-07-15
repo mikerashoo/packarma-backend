@@ -26,7 +26,7 @@
                                     <div class="col-sm-6">
                                         <label>Category Image<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.CATEGORY'); ?></p>
-                                        <input type="file" id="category_image" name="category_image" class="form-control required" accept="category_image/png, category_image/jpg, category_image/jpeg" onchange="checkFiles(this.files)"><br/>
+                                        <input type="file" id="category_image" name="category_image" class="form-control required" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)"><br/>
                                     </div>
                         		</div>
                         		<hr>

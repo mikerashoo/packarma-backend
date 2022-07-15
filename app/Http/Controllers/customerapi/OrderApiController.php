@@ -11,6 +11,7 @@ use App\Models\UserAddress;
 use App\Models\VendorQuotation;
 use App\Models\User;
 use App\Models\State;
+use App\Models\Review;
 use App\Models\Country;
 use Response;
 
@@ -96,6 +97,7 @@ class OrderApiController extends Controller
                 }
                 $i=0;
                 foreach($data as $row) {
+                    $data[$i]->odr_id = getFormatid($row->id, 'orders');
                     if(!empty($row->shipping_details)) {
                         $data[$i]->shipping_details = json_decode($row->shipping_details,true);
                     } else {
@@ -194,6 +196,12 @@ class OrderApiController extends Controller
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
+                $i=0;
+                foreach($data as $row) {
+                    $data[$i]->odr_id = getFormatid($row->id, 'orders');
+                    $i++;
+                }
+                
                 if(empty($data)) {
                     errorMessage(__('order.order_not_found'), $msg_data);
                 }
@@ -236,7 +244,6 @@ class OrderApiController extends Controller
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $user_id = $token['sub'];
-
                 $data = DB::table('orders')->select(
                     'orders.id',
                     // 'customer_enquiries.description',
@@ -286,11 +293,19 @@ class OrderApiController extends Controller
                     ->leftjoin('cities', 'cities.id', '=', 'customer_enquiries.city_id')
                     ->where([['orders.user_id', $user_id],['orders.id',$request->order_id]]);
 
-                
                 $data = $data->get()->toArray();
+                $reviewData = Review::where('order_id', $request->order_id)->get()->count();
                 $i=0;
                 foreach($data as $row) {
+                    $data[$i]->show_feedback_button = false;
+                    $data[$i]->show_cancel_button = false;
                     $data[$i]->order_id = getFormatid($row->id, 'orders');
+                    if($row->order_delivery_status == 'delivered' && $reviewData == 0){
+                        $data[$i]->show_feedback_button = true;
+                    }
+                    if($row->order_delivery_status != 'cancelled'){
+                        $data[$i]->show_cancel_button = true;
+                    }
                     if(!empty($row->billing_details)) {
                         $data[$i]->shipping_details = json_decode($row->shipping_details,true);
                         $data[$i]->billing_details = json_decode($row->billing_details,true);
@@ -532,7 +547,7 @@ class OrderApiController extends Controller
                     $billing_country_data = Country::find($shipping_address_data->country_id);
                     $shipping_state_data = State::find($shipping_address_data->state_id);
                     $shipping_country_data = Country::find($shipping_address_data->country_id);
-                    // print_r($billing_address_data);exit;
+                    // print_r($shipping_country_data->phone_code);exit;
                 }else{
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
                     $shipping_address_data = UserAddress::find($request->user_shipping_address_id);
@@ -575,6 +590,7 @@ class OrderApiController extends Controller
                     "packaging_material_id" => $request->packaging_material_id,
                 );
                 //store shipping details in json array
+                // print_r($shipping_country_data->phone_code);exit;
                 $shipping_detail=array(
                     "user_address_id" => $shipping_address_data->id,
                     "user_name"=> $user_data->name,
@@ -607,6 +623,7 @@ class OrderApiController extends Controller
                     "pincode" => $billing_address_data->pincode,
                     "gstin" => $billing_address_data->gstin
                 );
+
                 //json array in json columns
                 $order_request_data['order_details'] = json_encode($order_detail);
                 $order_request_data['product_details'] = json_encode($product_detail);
@@ -615,6 +632,10 @@ class OrderApiController extends Controller
 
                 // return $order_request_data;
                 $newOrderData = Order::create($order_request_data);
+
+                // print_r($newOrderData->id);exit;
+                $newOrderData->odr_id = getFormatid($newOrderData->id, 'orders');
+
                 \Log::info("My new order created successfully!");
 
                 $myOrderData = $newOrderData->toArray();

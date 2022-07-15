@@ -19,7 +19,7 @@ class CreateCurrenciesTable extends Migration
             $table->string('currency_symbol', 25);
             $table->char('currency_code', 6);
             $table->decimal('exchange_rate', $precision = 8, $scale = 3);
-            $table->enum('status', [1, 0])->default(0);
+            $table->enum('status', [1, 0])->default(1);
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);
             $table->softDeletes();

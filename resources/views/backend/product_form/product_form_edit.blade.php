@@ -25,12 +25,12 @@
                         			</div>
                                     <div class="col-sm-6">
                         				<label>Short Description</label>
-                        				<input class="form-control required" type="text" id="short_description" name="short_description" value="{{$data->short_description}}"><br/>
+                        				<input class="form-control" type="text" id="short_description" name="short_description" value="{{$data->short_description}}"><br/>
                         			</div>
                                     <div class="col-sm-6">
                                         <label>Category Image</label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PRODUCT_FORM'); ?></p>
-                                        <input class="form-control" type="file" id="product_form_image" name="product_form_image" accept="product_form_image/png, product_form_image/jpg, product_form_image/jpeg" onchange="checkFiles(this.files)"><br/>
+                                        <input class="form-control" type="file" id="product_form_image" name="product_form_image" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)"><br/>
                                         <img src="{{ $data->image_path}}" width="200px" height="auto">
                                     </div>
                         		</div>

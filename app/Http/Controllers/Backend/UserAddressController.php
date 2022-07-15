@@ -24,7 +24,7 @@ class UserAddressController extends Controller
     {
         try {
             $data['user'] = UserAddress::all();
-            $data['user'] = User::withTrashed()->where('approval_status','=', 'accepted')->orderBy('name','asc')->get();
+            $data['user'] = User::withTrashed()->where('approval_status', '=', 'accepted')->orderBy('name', 'asc')->get();
             $data['user_address_add'] = checkPermission('user_address_add');
             $data['user_address_view'] = checkPermission('user_address_view');
             $data['user_address_edit'] = checkPermission('user_address_edit');
@@ -33,11 +33,10 @@ class UserAddressController extends Controller
                 $data['id'] = Crypt::decrypt($_GET['id']);
             }
             return view('backend/customer_section/user_address_list/index', $data);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return redirect('404');
         }
-        catch (\Exception $e) {
-    		\Log::error($e->getMessage());
-    		return redirect('404');
-    	}
     }
 
     /**
@@ -51,7 +50,7 @@ class UserAddressController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = UserAddress::with('user','state')->orderBy('updated_at','desc')->withTrashed();
+                $query = UserAddress::with('user', 'state')->orderBy('updated_at', 'desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user']) && !is_null($request['search']['search_user'])) {
@@ -95,13 +94,12 @@ class UserAddressController extends Controller
                             }
                             if ($user_address_status) {
                                 if ($event->status == '1') {
-                                    $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery" checked>';
-                                }
-                                else {
-                                    $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery'.$event->id.'" data-id="'.$event->id.'" class="js-switch switchery">';
+                                    $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery" checked>';
+                                } else {
+                                    $actions .= ' <input type="checkbox" data-url="publishUserAddress" id="switchery' . $event->id . '" data-id="' . $event->id . '" class="js-switch switchery">';
                                 }
                             }
-                        }else {
+                        } else {
                             $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;"> Deleted</span>';
                         }
                         $actions .= '</span>';
@@ -109,8 +107,7 @@ class UserAddressController extends Controller
                     })
                     ->addIndexColumn()
                     ->rawColumns(['name', 'state', 'city', 'pincode', 'action'])->setRowId('id')->make(true);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
                     'draw' => 0,
@@ -134,13 +131,12 @@ class UserAddressController extends Controller
         if (isset($_GET['id'])) {
             $data['user'][] = User::find($_GET['id']);
             $data['id'] = $_GET['id'];
-        }
-        else {
-            $data['user'] = User::where('approval_status','accepted')->orderBy('name','asc')->get();
+        } else {
+            $data['user'] = User::where('approval_status', 'accepted')->orderBy('name', 'asc')->get();
         }
         $data['addressType'] = addressType();
-        $data['state'] = State::where('status', 1)->orderBy('state_name','asc')->get();
-        $data['country'] = Country::where('status', 1)->orderBy('country_name','asc')->get();
+        $data['state'] = State::where('status', 1)->orderBy('state_name', 'asc')->get();
+        $data['country'] = Country::where('status', 1)->orderBy('country_name', 'asc')->get();
         return view('backend/customer_section/user_address_list/user_address_add', $data);
     }
 
@@ -188,48 +184,43 @@ class UserAddressController extends Controller
         if (isset($_GET['id'])) {
             $isUpdateFlow = true;
             $getKeys = true;
-            $addressType = addressType('',$getKeys);
-            if(isset($request->type)){
-                if (in_array( $request->type, $addressType))
-                {
+            $addressType = addressType('', $getKeys);
+            if (isset($request->type)) {
+                if (in_array($request->type, $addressType)) {
                     $msg = "Data Updated Successfully";
-                }else{
+                } else {
                     errorMessage('Address Type Does not Exists.', $msg_data);
                 }
             }
             $tableObject = UserAddress::find($_GET['id']);
             $msg = "Data Updated Successfully";
-        }
-        else {
+        } else {
             $tableObject = new UserAddress;
             $getKeys = true;
-            $addressType = addressType('',$getKeys);
-            if(isset($request->type)){
-                if (in_array( $request->type, $addressType))
-                {
+            $addressType = addressType('', $getKeys);
+            if (isset($request->type)) {
+                if (in_array($request->type, $addressType)) {
                     $msg = "Data Updated Successfully";
-                }else{
+                } else {
                     errorMessage('Address Type Does not Exists.', $msg_data);
                 }
             }
             $msg = "Data Saved Successfully";
         }
 
-        if(isset($request->address_name)){
+        if (isset($request->address_name)) {
             $tableObject->address_name = $request->address_name;
         }
-        if(isset($request->type)){
+        if (isset($request->type)) {
             $getKeys = true;
-            $addressType = addressType('',$getKeys);
-            if (in_array( $request->type, $addressType))
-            {
+            $addressType = addressType('', $getKeys);
+            if (in_array($request->type, $addressType)) {
                 $tableObject->type = $request->type;
-            }else{
+            } else {
                 errorMessage('Address Type Does Not Exists.', $msg_data);
             }
-            
         }
-        if(isset($request->mobile_no)){
+        if (isset($request->mobile_no)) {
             $tableObject->mobile_no = $request->mobile_no;
         }
         $tableObject->user_id = $request->user;
@@ -242,8 +233,7 @@ class UserAddressController extends Controller
         $tableObject->land_mark = $request->landmark;
         if ($isUpdateFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }
-        else {
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
@@ -251,14 +241,15 @@ class UserAddressController extends Controller
     }
 
     /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 24-Mar-2022
-       *   Uses :  To view user address  
-       *   @param int $id
-       *   @return Response
-    */
-    public function view($id) {
-        $data['data'] = UserAddress::with('user','city','state','country')->find($id);
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 24-Mar-2022
+     *   Uses :  To view user address  
+     *   @param int $id
+     *   @return Response
+     */
+    public function view($id)
+    {
+        $data['data'] = UserAddress::with('user', 'city', 'state', 'country')->find($id);
         $data['addressType'] = addressType();
         return view('backend/customer_section//user_address_list/user_address_view', $data);
     }
@@ -278,27 +269,29 @@ class UserAddressController extends Controller
         $recordData->save();
         if ($request->status == 1) {
             successMessage('Published', $msg_data);
-        }
-        else {
+        } else {
             successMessage('Unpublished', $msg_data);
         }
     }
 
     /**
-       *   created by : Pradyumn Dwivedi
-       *   Created On : 24-Mar-2022
-       *   Uses :  User Address Form Validation part will be handle by below function
-       *   @param Request request
-       *   @return Response
-    */
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 24-Mar-2022
+     *   Uses :  User Address Form Validation part will be handle by below function
+     *   @param Request request
+     *   @return Response
+     */
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
             'user' => 'required|integer',
+            'address_name' => 'required|string',
+            'type' => 'required|string',
+            'mobile_no' => 'required|digits:10',
             'country' => 'required|integer',
             'state' => 'required|integer',
             'city_name' => 'required|string',
-            'pincode' => 'required|integer',
+            'pincode' => 'required|digits:6',
             'flat' => 'required|string',
             'area' => 'required|string',
             'landmark' => 'required|string'

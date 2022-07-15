@@ -18,9 +18,9 @@ class AlterApproxPriceColumnToRecommendationEngineTable extends Migration
     public function up()
     {
         Schema::table('recommendation_engines', function (Blueprint $table) {
-            $table->decimal('approx_price', $precision = 8, $scale = 2)->default(0.00)->change();
-            $table->decimal('min_weight', $precision = 8, $scale = 2)->default(0.00)->change();
-            $table->decimal('max_weight', $precision = 8, $scale = 2)->default(0.00)->change();
+            $table->decimal('approx_price', $precision = 15, $scale = 2)->default(0.00)->change();
+            $table->decimal('min_weight', $precision = 15, $scale = 2)->default(0.00)->change();
+            $table->decimal('max_weight', $precision = 15, $scale = 2)->default(0.00)->change();
         });
     }
 

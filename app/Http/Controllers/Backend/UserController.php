@@ -308,10 +308,10 @@ class UserController extends Controller
     {
         return \Validator::make($request->all(), [
             'name' => 'required|string',
-            // 'email' => 'required|email',
             'phone_country_code' => 'required|integer',
-            'phone' => 'required|integer',
-            // 'currency' => 'required|integer',
+            'phone' => 'required|digits:10',
+            'whatsapp_country_code' => 'integer',
+            'whatsapp_no' => 'digits:10'
         ])->errors();
     }
 
