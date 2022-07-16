@@ -156,6 +156,7 @@ function loadViewPageInModal(page_url, dataSize, dataTitle) {
 
             if (page_url.includes('map_vendor_form')) {
                 $('#vendor').select2();
+                $('#warehouse').select2();
 
             }
         }
@@ -201,16 +202,16 @@ function submitForm(form_id, form_method, errorOverlay = '') {
         formdata = new FormData(form[0]);
     }
     var can = 0;
-    $('#' + form_id).find(".required").each(function(){
+    $('#' + form_id).find(".required").each(function () {
         var here = $(this);
-        if(here.val() == '') {
+        if (here.val() == '') {
             // here.css({borderColor: 'red'});
             here.addClass('border-danger');
             here.siblings('.select2-container').find('.selection').find('.select2-selection').addClass('border-danger');
             can++;
         }
     });
-    if(can == 0) {
+    if (can == 0) {
         $.ajax({
             url: form.attr('action'),
             type: form_method,
@@ -256,7 +257,7 @@ function submitForm(form_id, form_method, errorOverlay = '') {
         });
     } else {
         var ih = $('.border-danger').last().closest('.tab-pane').attr('id');
-        $('#'+ih+'-tab').click(); 
+        $('#' + ih + '-tab').click();
     }
 }
 

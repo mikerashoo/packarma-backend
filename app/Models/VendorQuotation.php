@@ -32,6 +32,7 @@ class VendorQuotation extends Model
         'freight_amount',
         'total_amount',
         'quotation_expiry_datetime',
+        'vendor_warehouse_id',
         'lead_time',
         'created_by',
     ];

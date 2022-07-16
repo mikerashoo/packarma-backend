@@ -38,7 +38,7 @@ class CustomerEnquiryController extends Controller
      */
     public function index()
     {
-        $data['user'] = User::withTrashed()->where('approval_status','accepted')->orderBy('name','asc')->get();
+        $data['user'] = User::withTrashed()->where('approval_status', 'accepted')->orderBy('name', 'asc')->get();
         $data['enquiryType'] = customerEnquiryType();
         $data['quoteType'] = customerEnquiryQuoteType();
         $data['customer_enquiry_add'] = checkPermission('customer_enquiry_add');
@@ -133,7 +133,7 @@ class CustomerEnquiryController extends Controller
     public function addCustomerEnquiry()
     {
         $data['city'] = City::all();
-        $data['user'] = User::where([['approval_status','accepted'],['status', 1],['deleted_at',NULL]])->get();
+        $data['user'] = User::where([['approval_status', 'accepted'], ['status', 1], ['deleted_at', NULL]])->get();
         $data['state'] = State::all();
         $data['vendor'] = Vendor::all();
         $data['country'] = Country::all();
@@ -240,7 +240,7 @@ class CustomerEnquiryController extends Controller
         $data['data'] = CustomerEnquiry::find($id);
         $data['user_address'] = UserAddress::all();
         $data['addressType'] = addressType();
-        $data['recommendation_engine'] = RecommendationEngine::where('product_id', $data['data']->product_id)->first()->toArray();
+        $data['recommendation_engine'] = RecommendationEngine::withTrashed()->where('product_id', $data['data']->product_id)->first()->toArray();
         $data['packaging_material'] = PackagingMaterial::where('id', $data['recommendation_engine']['packaging_material_id'])->first()->toArray();
         $data['vendor_material_map'] = VendorMaterialMapping::with('vendor')->where('packaging_material_id', $data['recommendation_engine']['packaging_material_id'])->first()->toArray();
         $data['vendor'] = Vendor::all()->toArray();
@@ -373,29 +373,45 @@ class CustomerEnquiryController extends Controller
         $tblObj->customer_enquiry_id = $request->customer_enquiry_id;
         $tblObj->product_id = $request->product;
         $tblObj->vendor_id = $request->vendor;
+        $enquiry_state_id = (int)$request->enquiry_state_id;
+        $warehouse_with_state = explode('|', $request->warehouse);
+        $warehouse_state_id = (int)($warehouse_with_state[1]);
+        $warehouse = $warehouse_with_state[0];
         // $tblObj->vendor_warehouse_id= $request->warehouse;
         //amount calculation section started
         $tblObj->vendor_price =  $request->vendor_price;
         $tblObj->commission_amt =  $request->commission_rate;
         $tblObj->product_quantity = $request->product_quantity;
-        $tblObj->gst_type = $request->gst_type ?? 'cgst+sgst';
+        $gst = $request->gst_type ?? 'not_applicable';
         $tblObj->gst_percentage = $request->gst_percentage ?? 0.00;
         $mrp_rate =  $request->commission_rate + $request->vendor_price;
         $tblObj->mrp = $mrp_rate;
         $sub_total_amount = $request->product_quantity * $mrp_rate;
         $tblObj->sub_total = $sub_total_amount;
-        if ($tblObj->gst_type == 'cgst+sgst' || $tblObj->gst_type == 'igst') {
-            $tblObj->gst_type = $request->gst_type ?? 'cgst+sgst';
+        $tblObj->vendor_warehouse_id = $warehouse;
+        // print_r($warehouse_state_id);
+        // die;
+        if ($gst == 'applicable') {
+            if ($enquiry_state_id == $warehouse_state_id) {
+                $gst_type = 'cgst+sgst';
+            } else {
+                $gst_type = 'igst';
+            }
             $tblObj->gst_percentage = $request->gst_percentage ?? 0.00;
-            $gst_amount = $tblObj->gst_amount = $mrp_rate * $request->gst_percentage / 100;
+            $gst_amount = $mrp_rate * $request->gst_percentage / 100;
         } else {
-            $gst_amount = 0;
+
+            $gst_type = $gst;
+            $tblObj->gst_percentage = 0.00;
+            $gst_amount = 0.00;
         }
         if (isset($request->freight_amount)) {
             $tblObj->freight_amount = $request->freight_amount;
         } else {
             $freight_amount = 0;
         }
+        $tblObj->gst_type = $gst_type;
+        $tblObj->gst_amount = $gst_amount;
         $tblObj->total_amount = $sub_total_amount + $gst_amount + $freight_amount;
         // print_r($balance);exit;
         //storing quotation validity in variable for increasing current time with validity hours
@@ -425,6 +441,7 @@ class CustomerEnquiryController extends Controller
      */
     public function getVendorWarehouse(Request $request)
     {
+        $data['vendor_data'] = Vendor::select('gstin')->find($request->vendor_id);
         $data['vendor_warehouse'] = VendorWarehouse::where("vendor_id", $request->vendor_id)->get();
         $data['recommendationData'] = RecommendationEngine::where('product_id', $request->product_id)->get();
         $data['vendorMaterialMapData'] = VendorMaterialMapping::where('packaging_material_id', $data['recommendationData'][0]->packaging_material_id)
@@ -462,7 +479,7 @@ class CustomerEnquiryController extends Controller
     public function mapVendorForm($id, $customer_enquiry_id)
     {
         $data['vendor'] = Vendor::all()->toArray();
-        $data['customer_enquiry_data'] = CustomerEnquiry::find($customer_enquiry_id);
+        $data['customer_enquiry_data'] = CustomerEnquiry::with('user')->find($customer_enquiry_id);
 
         if ($id != -1) {
             $data['vender_quotation_details'] = DB::table('vendor_quotations')->select(
@@ -472,12 +489,18 @@ class CustomerEnquiryController extends Controller
                 'vendor_quotations.commission_amt',
                 'vendor_quotations.lead_time',
                 'vendor_quotations.vendor_id',
+                'vendor_quotations.gst_type',
+                'vendor_quotations.vendor_warehouse_id',
+                'vendor_quotations.gst_percentage',
                 'vendors.vendor_name',
+                'vendors.gstin',
             )
                 ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
-
                 ->where([['vendor_quotations.id', $id]])->first();
         }
+        // echo '<pre>';
+        // print_r($data['customer_enquiry_data']);
+        // die;
         // $data = VendorQuotation::find($id);
 
         return view('backend/customer_section//customer_enquiry/map_vendor_form', $data);
@@ -522,17 +545,18 @@ class CustomerEnquiryController extends Controller
         if ($for == 'vendor') {
             return \Validator::make($request->all(), [
                 'vendor' => 'required|numeric|unique:vendor_quotations,vendor_id,' . $request->id . ',id,customer_enquiry_id,' . $request->customer_enquiry_id,
-                // 'warehouse.*' => 'required|numeric',
-                'vendor_price' => 'required|numeric',
-                'commission_rate' => 'required|numeric',
+                'warehouse' => 'required',
+                'vendor_price' => 'required|numeric|min:0|not_in:0',
+                'commission_rate' => 'required|numeric|min:0|not_in:0',
                 // 'quotation_validity.*' => 'required|numeric',
-                'lead_time' => 'required|numeric',
+                'lead_time' => 'required|numeric|min:0|not_in:0',
                 // 'gst_type.*' => 'required',
-                // 'gst_percentage.*.gst_type' => 'required_if:gst_type.*.gst_percentage|in:cgst+sgst,igst',
+                'gst_percentage' => 'required_if:gst_type,=,applicable',
                 // 'gst_percentage.*' => 'required_if:gst_type.*,igst,cgst+sgst',
             ])->errors();
         } elseif ($for == 'addEnquiry') {
             return \Validator::make($request->all(), [
+                'description' => 'required|string',
                 'user' => 'required|integer',
                 'category' => 'required|integer',
                 'sub_category' => 'required|integer',
