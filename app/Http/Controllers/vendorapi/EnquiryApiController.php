@@ -46,6 +46,7 @@ class EnquiryApiController extends Controller
                     'vendor_quotations.id',
                     'vendor_quotations.vendor_price',
                     'vendor_quotations.enquiry_status',
+                    'vendor_quotations.vendor_warehouse_id',
                     'vendor_quotations.created_at',
                     'customer_enquiries.description',
                     'customer_enquiries.enquiry_type',
@@ -203,21 +204,52 @@ class EnquiryApiController extends Controller
                 if (!$request->vendor_price) {
                     errorMessage(__('quotation.vendor_price_require'), $msg_data);
                 }
+
+                $validationErrors = $this->validateSendQuotation($request);
+                if (count($validationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                }
+
+                if ($request->vendor_warehouse_id) {
+                    // if (!is_int($request->vendor_warehouse_id)) {
+                    //     errorMessage(__('quotation.wrong_vendor_warehouse'), $msg_data);
+                    // }
+                    $quotation_data['vendor_warehouse_id'] = $request->vendor_warehouse_id;
+                }
+
                 $id = $request->id;
-                $staus = $request->vendor_price;
-
-
                 $checkQuotation = VendorQuotation::where([['id', $id], ['vendor_id', $vendor_id], ['enquiry_status', 'mapped']])->first();
                 if (empty($checkQuotation)) {
                     errorMessage(__('quotation.enquiry_not_found_to_quote'), $msg_data);
                 }
-                $quotation_data = $request->all();
+
+
+                $existing_vendor_price = $checkQuotation->vendor_price;
+                $new_vendor_price = number_format((float)$request->vendor_price, 2, '.', '');
+
+                if ($new_vendor_price != $existing_vendor_price) {
+
+                    $commission_amt = $checkQuotation->commission_amt;
+                    $product_quantity = $checkQuotation->product_quantity;
+                    $gst_percentage = $checkQuotation->gst_percentage;
+                    $freight_amount = $checkQuotation->freight_amount;
+
+                    $mrp = $new_vendor_price + $commission_amt;
+                    $sub_total_amount = $product_quantity * $mrp;
+                    $gst_amount = $mrp * $gst_percentage / 100;
+                    $total_amount = $sub_total_amount + $gst_amount + $freight_amount;
+                    $quotation_data['mrp'] = $mrp;
+                    $quotation_data['sub_total'] = $sub_total_amount;
+                    $quotation_data['gst_amount'] = $gst_amount;
+                    $quotation_data['total_amount'] = $total_amount;
+                }
+
+                $quotation_data['vendor_price'] = $new_vendor_price;
                 $quotation_data['vendor_id'] = $vendor_id;
                 $quotation_data['enquiry_status'] = 'quoted';
                 $quotation_data['quotation_expiry_datetime'] = Carbon::now()->addDays(30)->format('Y-m-d H:i:s');
-                unset($quotation_data['id']);
-                // print_r($quotation_data);
-                // die;
+
                 $checkQuotation->update($quotation_data);
                 $quotationData = $checkQuotation;
 
@@ -235,5 +267,28 @@ class EnquiryApiController extends Controller
             \Log::error("Quotation sending failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
+    }
+
+    /**
+     * Validate request for forgot password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    private function validateSendQuotation(Request $request)
+    {
+        return \Validator::make(
+            $request->all(),
+            [
+                'vendor_price' => 'required|numeric|digits_between:1,5',
+                'vendor_warehouse_id' => 'required',
+
+            ],
+            [
+                'vendor_price.digits_between' => 'The vendor price must not be greater than 99999',
+                'vendor_warehouse_id.required' => 'Warehouse is require',
+            ]
+
+        )->errors();
     }
 }

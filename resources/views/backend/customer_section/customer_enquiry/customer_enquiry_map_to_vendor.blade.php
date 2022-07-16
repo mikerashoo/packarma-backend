@@ -130,6 +130,9 @@ function getVendorWarehouse(vendor,i)
                     var vendor_price = response['data']['vendorMaterialMapData'][0]['vendor_price']; 
                     var commission_rate = response['data']['vendorMaterialMapData'][0]['min_amt_profit'];
                 }
+
+               
+
                 if(vendor_price){
                     $("#vendor_price").val(vendor_price);
                     $("#commission_rate").val(commission_rate);
@@ -137,14 +140,15 @@ function getVendorWarehouse(vendor,i)
                     $("#vendor_price").val('');
                     $("#commission_rate").val('');
                 }
-                // $("#warehouse").empty();
-                // $("#warehouse").append('<option value="">Select</option>');
-                // for(var j=0; j<response['data']['vendor_warehouse'].length; j++)
-                // {
-                //     var warehouse_id = response['data']['vendor_warehouse'][j]['id'];
-                //     var warehouse_name = response['data']['vendor_warehouse'][j]['warehouse_name'];
-                //     $("#warehouse").append('<option value="'+warehouse_id+'">'+warehouse_name+'</option>');
-                // }
+                $("#warehouse").empty();
+                $("#warehouse").append('<option value="">Select</option>');
+                for(var j=0; j<response['data']['vendor_warehouse'].length; j++)
+                {
+                    var warehouse_id = response['data']['vendor_warehouse'][j]['id'];
+                    var warehouse_name = response['data']['vendor_warehouse'][j]['warehouse_name'];
+                    var warehouse_state_id = response['data']['vendor_warehouse'][j]['state_id'];
+                    $("#warehouse").append('<option value="'+warehouse_id+"|"+warehouse_state_id+'" warehouse_state_id ="'+warehouse_state_id+'">'+warehouse_name+'</option>');
+                }
             },
         });  
     }

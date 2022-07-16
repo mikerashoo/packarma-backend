@@ -44,10 +44,10 @@ class VendorBasicAuth
             exit;
         }
 
-        if (!is_numeric($request->header('version'))) {
-            errorMessage(__('auth.invalid_version'), $return_array);
-            exit;
-        }
+        // if (!is_numeric($request->header('version'))) {
+        //     errorMessage(__('auth.invalid_version'), $return_array);
+        //     exit;
+        // }
 
         if (!$request->header('imei-no')) {
             errorMessage(__('auth.imei_require'), $return_array);

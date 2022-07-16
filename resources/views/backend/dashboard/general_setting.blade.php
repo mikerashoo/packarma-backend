@@ -68,6 +68,12 @@
                                                         <span class="align-middle">App Version</span>
                                                     </a>
                                                 </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="customer_gst_details-tab" data-toggle="tab" href="#customer_gst_details" role="tab" aria-controls="customer_gst_details" aria-selected="false">
+                                                        <i class="ft-file mr-1 align-middle"></i>
+                                                        <span class="align-middle">Gst Details</span>
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="col-md-9">
@@ -255,6 +261,40 @@
                                                                     </div>
                                                                 </form>
                                                             </div>
+
+
+
+                                                            <!-- Gst details Tab -->
+                                                            <div class="tab-pane" id="customer_gst_details" role="tabpanel" aria-labelledby="customer_gst_details-tab">
+                                                                <form id="customerGstDetailsForm" method="post" action="updateSettingInfo?param=customerGstDetails">
+                                                                @csrf
+                                                                    <div class="row">
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="customer_gst_name">Name</label>
+                                                                            <div class="controls">
+                                                                                <input type="text" id="customer_gst_name" name="customer_gst_name" class="form-control" placeholder="" value="{{$data['customer_gst_name']}}" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="customer_gst_no">GST NO</label>
+                                                                            <div class="controls">
+                                                                                <input type="text" id="customer_gst_no" name="customer_gst_no"  class="form-control" placeholder="" aria-invalid="false" value="{{$data['customer_gst_no']}}">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="customer_gst_address">Address</label>
+                                                                            <div class="controls">
+                                                                                <input type="text" id="customer_gst_address" name="customer_gst_address"  class="form-control" placeholder="" aria-invalid="false" value="{{$data['customer_gst_address']}}">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
+                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitForm('customerGstDetailsForm','post')">Save Changes</button>
+                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+
 
 
                                                         </div>
