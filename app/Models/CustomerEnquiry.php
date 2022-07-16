@@ -215,22 +215,22 @@ class CustomerEnquiry extends Model
         return $this->belongsTo('App\Models\MeasurementUnit');
     }
 
-    
+
     /**
-        * Developed By : Pradyumn Dwivedi
-        * Created On : 11-may-2022
-        * uses : to get data of user address in customer enquiry table
-    */   
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 11-may-2022
+     * uses : to get data of user address in customer enquiry table
+     */
     public function user_address()
     {
         return $this->belongsTo('App\Models\UserAddress')->withTrashed();
     }
 
     /**
-        * Developed By : Pradyumn Dwivedi
-        * Created On : 17-may-2022
-        * uses : to get data of recommendation engine data customer enquiry table
-    */   
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 17-may-2022
+     * uses : to get data of recommendation engine data customer enquiry table
+     */
     public function recommendation_engine()
     {
         return $this->belongsTo('App\Models\RecommendationEngine');
