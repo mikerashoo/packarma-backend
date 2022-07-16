@@ -137,14 +137,14 @@ function getVendorWarehouse(vendor,i)
                     $("#vendor_price").val('');
                     $("#commission_rate").val('');
                 }
-                $("#warehouse").empty();
-                $("#warehouse").append('<option value="">Select</option>');
-                for(var j=0; j<response['data']['vendor_warehouse'].length; j++)
-                {
-                    var warehouse_id = response['data']['vendor_warehouse'][j]['id'];
-                    var warehouse_name = response['data']['vendor_warehouse'][j]['warehouse_name'];
-                    $("#warehouse").append('<option value="'+warehouse_id+'">'+warehouse_name+'</option>');
-                }
+                // $("#warehouse").empty();
+                // $("#warehouse").append('<option value="">Select</option>');
+                // for(var j=0; j<response['data']['vendor_warehouse'].length; j++)
+                // {
+                //     var warehouse_id = response['data']['vendor_warehouse'][j]['id'];
+                //     var warehouse_name = response['data']['vendor_warehouse'][j]['warehouse_name'];
+                //     $("#warehouse").append('<option value="'+warehouse_id+'">'+warehouse_name+'</option>');
+                // }
             },
         });  
     }
