@@ -284,6 +284,19 @@ class AdminController extends Controller
         ])->errors();
     }
 
+
+    /**
+     *   created by : Maaz Ansari
+     *   Created On : 16-july-2022
+     *   Uses :  Validate gst details for customer
+     */
+    private function validateCustomerGstDetails(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'customer_gst_no' => 'sometimes|required|regex:' . config('global.GST_NO_VALIDATION'),
+        ])->errors();
+    }
+
     // General settings:-F
     /**
      *   created by : Sagar Thokal
@@ -358,6 +371,17 @@ class AdminController extends Controller
                     case 'customerAppVersion':
                         GeneralSetting::where("type", 'customer_android_version')->update(["value" => $request->customer_android_version]);
                         GeneralSetting::where("type", 'customer_ios_version')->update(["value" => $request->customer_ios_version]);
+                        break;
+
+                    case 'customerGstDetails':
+                        $validationErrors = $this->validateCustomerGstDetails($request);
+                        if (count($validationErrors)) {
+                            \Log::error("Customer Gst details Validation Exception: " . implode(", ", $validationErrors->all()));
+                            errorMessage(implode("\n", $validationErrors->all()), $msg_data);
+                        }
+                        GeneralSetting::where("type", 'customer_gst_name')->update(["value" => $request->customer_gst_name]);
+                        GeneralSetting::where("type", 'customer_gst_no')->update(["value" => $request->customer_gst_no]);
+                        GeneralSetting::where("type", 'customer_gst_address')->update(["value" => $request->customer_gst_address]);
                         break;
 
                     default:

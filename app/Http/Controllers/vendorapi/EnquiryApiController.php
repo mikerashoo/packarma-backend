@@ -205,6 +205,12 @@ class EnquiryApiController extends Controller
                     errorMessage(__('quotation.vendor_price_require'), $msg_data);
                 }
 
+                $validationErrors = $this->validateSendQuotation($request);
+                if (count($validationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $validationErrors->all());
+                }
+
                 if ($request->vendor_warehouse_id) {
                     // if (!is_int($request->vendor_warehouse_id)) {
                     //     errorMessage(__('quotation.wrong_vendor_warehouse'), $msg_data);
@@ -261,5 +267,28 @@ class EnquiryApiController extends Controller
             \Log::error("Quotation sending failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
+    }
+
+    /**
+     * Validate request for forgot password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    private function validateSendQuotation(Request $request)
+    {
+        return \Validator::make(
+            $request->all(),
+            [
+                'vendor_price' => 'required|numeric|digits_between:1,5',
+                'vendor_warehouse_id' => 'required',
+
+            ],
+            [
+                'vendor_price.digits_between' => 'The vendor price must not be greater than 99999',
+                'vendor_warehouse_id.required' => 'Warehouse is require',
+            ]
+
+        )->errors();
     }
 }
