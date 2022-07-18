@@ -49,9 +49,9 @@ class PackagingMaterialController extends Controller
                     ->editColumn('material_description', function ($event) {
                         return $event->material_description;
                     })
-                    ->editColumn('shelf_life', function ($event) {
-                        return $event->shelf_life;
-                    })
+                    // ->editColumn('shelf_life', function ($event) {
+                    //     return $event->shelf_life;
+                    // })
                     ->editColumn('approx_price', function ($event) {
                         return $event->approx_price;
                     })
@@ -137,12 +137,12 @@ class PackagingMaterialController extends Controller
             if (isset($response[0])) {
                 errorMessage('Packaging Material Already Exist', $msg_data);
             }
-            if ($request->shelf_life == 0) {
-                errorMessage('Shelf Life Should be Greater Than 0', $msg_data);
-            }
-            if ($request->price == 0) {
-                errorMessage('Price Should be Greater Than 0', $msg_data);
-            }
+            // if ($request->shelf_life == 0) {
+            //     errorMessage('Shelf Life Should be Greater Than 0', $msg_data);
+            // }
+            // if ($request->price == 0) {
+            //     errorMessage('Price Should be Greater Than 0', $msg_data);
+            // }
             $tableObject = PackagingMaterial::find($_GET['id']);
             $msg = "Data Updated Successfully";
         } else {
@@ -151,30 +151,31 @@ class PackagingMaterialController extends Controller
             if (isset($response[0])) {
                 errorMessage('Packaging Material Already Exist', $msg_data);
             }
-            if ($request->shelf_life == 0) {
-                errorMessage('Shelf Life Should be Greater Than 0', $msg_data);
-            }
-            if ($request->price == 0) {
-                errorMessage('Price Should be Greater Than 0', $msg_data);
-            }
+            // if ($request->shelf_life == 0) {
+            //     errorMessage('Shelf Life Should be Greater Than 0', $msg_data);
+            // }
+            // if ($request->price == 0) {
+            //     errorMessage('Price Should be Greater Than 0', $msg_data);
+            // }
             $msg = "Data Saved Successfully";
         }
         $tableObject->packaging_material_name = $request->packaging_material_name;
         $tableObject->material_description = $request->material_description;
-        if ($request->shelf_life <= 30) {
-            $tableObject->shelf_life = 30;
-        } elseif ($request->shelf_life <= 60) {
-            $tableObject->shelf_life = 60;
-        } else {
-            $tableObject->shelf_life = 90;
-        }
-        $tableObject->approx_price = $request->price;
+        // if ($request->shelf_life <= 30) {
+        //     $tableObject->shelf_life = 30;
+        // } elseif ($request->shelf_life <= 60) {
+        //     $tableObject->shelf_life = 60;
+        // } else {
+        //     $tableObject->shelf_life = 90;
+        // }
+        // $tableObject->approx_price = $request->price ?? 0.00;
+        $tableObject->shelf_life = $request->shelf_life ?? 1;
         $tableObject->wvtr = $request->wvtr;
         $tableObject->otr = $request->otr;
         $tableObject->cof = $request->cof;
         $tableObject->sit = $request->sit;
-        $tableObject->gsm = $request->gsm;
-        $tableObject->special_feature = $request->special_feature;
+        $tableObject->gsm = $request->gsm ?? '1';
+        $tableObject->special_feature = $request->special_feature ?? '-';
         if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
         } else {
@@ -229,14 +230,14 @@ class PackagingMaterialController extends Controller
         return \Validator::make($request->all(), [
             'packaging_material_name' => 'required|string',
             // 'material_description' => 'required|string',
-            'shelf_life' => 'required|integer',
-            'price' => 'required|numeric',
+            // 'shelf_life' => 'required|integer',
+            // 'price' => 'required|numeric',
             'wvtr' => 'required|string',
             'otr' => 'required|string',
             'cof' => 'required|string',
             'sit' => 'required|string',
-            'gsm' => 'required|string',
-            'special_feature' => 'required|string',
+            // 'gsm' => 'required|string',
+            // 'special_feature' => 'required|string',
         ])->errors();
     }
 }
