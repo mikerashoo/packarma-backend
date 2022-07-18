@@ -15,9 +15,10 @@ return [
 
     'address_not_found' => 'Address not found',
     'created' => 'Address Added Successfully',
-    'id_require' => 'Address Updated Successfully',
+    'updated' => 'Address Updated Successfully',
     'id_require' => 'Adress id is Require!',
     'address_not_found' => 'Adress not found!',
     'deleted' => 'Address deleted successfully',
+    'address_entry_limit_reached' => 'You can not add more than 10 address',
 
 ];

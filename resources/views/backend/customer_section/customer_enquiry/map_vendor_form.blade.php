@@ -33,13 +33,13 @@
         </dd>
     </dl>
      <dl class="row">
-        <dt class="col-sm-5 text-left">Rate <span style="color:#ff0000">*</span></dt>
+        <dt class="col-sm-5 text-left">Vendor Price/Kg <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
             <input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->vendor_price ?? '' ;}}" id="vendor_price" name="vendor_price">
         </dd>
     </dl>
      <dl class="row">
-        <dt class="col-sm-5 text-left">Commission Rate <span style="color:#ff0000">*</span></dt>
+        <dt class="col-sm-5 text-left">Commission Price/Kg <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
            <input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->commission_amt ?? '' ;}}" id="commission_rate" name="commission_rate">
         </dd>

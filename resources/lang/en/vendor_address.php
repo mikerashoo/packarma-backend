@@ -19,5 +19,6 @@ return [
     'id_require' => 'Adress id is Require!',
     'address_not_found' => 'Adress not found!',
     'deleted' => 'Address deleted successfully',
+    'address_entry_limit_reached' => 'You can not add more than 10 address',
 
 ];

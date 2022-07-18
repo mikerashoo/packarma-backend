@@ -27,14 +27,14 @@
                         				<label>Material Description</label>
                         				<input class="form-control" type="text" id="material_description" name="material_description" value="{{ $data->material_description }}"><br/>
                         			</div>
-                                    <div class="col-sm-6">
+                                    {{-- <div class="col-sm-6">
                         				<label>Shelf Life<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" id="shelf_life" name="shelf_life" value="{{ $data->shelf_life }}"><br/>
                         			</div>
                                     <div class="col-sm-6">
                         				<label>Price<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" id="price" name="price" value="{{ $data->approx_price }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                        			</div>
+                        			</div> --}}
 									<div class="col-sm-6">
 										<label>WVTR<span style="color:#ff0000">*</span></label>
 										<input class="form-control required" type="text" id="wvtr" name="wvtr" value="{{ $data->wvtr }}"><br/>
@@ -52,12 +52,12 @@
 										<input class="form-control required" type="text" id="sit" name="sit" value="{{ $data->sit }}"><br/>
 									</div>
 									<div class="col-sm-6">
-										<label>GSM<span style="color:#ff0000">*</span></label>
-										<input class="form-control required" type="text" id="gsm" name="gsm" value="{{ $data->gsm }}"><br/>
+										<label>GSM</label>
+										<input class="form-control" type="text" id="gsm" name="gsm" value="{{ $data->gsm }}"><br/>
 									</div>
 									<div class="col-sm-6">
-										<label>Special Feature<span style="color:#ff0000">*</span></label>
-										<input class="form-control required" type="text" id="special_feature" name="special_feature" value="{{ $data->special_feature }}"><br/>
+										<label>Special Feature</label>
+										<input class="form-control" type="text" id="special_feature" name="special_feature" value="{{ $data->special_feature }}"><br/>
 									</div>
                         		</div>
                         		<hr>
