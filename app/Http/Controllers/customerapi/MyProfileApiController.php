@@ -71,7 +71,7 @@ class MyProfileApiController extends Controller
                 // foreach($data as $row)
                 // {
                     $data->visiting_card_front = getFile($data->visiting_card_front,'visiting_card/front',false,'front');
-                    $data->visiting_card_back = getFile($data->visiting_card_back, 'visiting_card/front',false,'back');
+                    $data->visiting_card_back = getFile($data->visiting_card_back, 'visiting_card/back',false,'back');
                     // $i++;
                 // }
                 $msg_data['result'] = $data;

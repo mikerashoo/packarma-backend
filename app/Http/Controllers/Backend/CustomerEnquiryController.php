@@ -240,7 +240,7 @@ class CustomerEnquiryController extends Controller
         $data['data'] = CustomerEnquiry::find($id);
         $data['user_address'] = UserAddress::all();
         $data['addressType'] = addressType();
-        $data['recommendation_engine'] = RecommendationEngine::withTrashed()->where('product_id', $data['data']->product_id)->first()->toArray();
+        $data['recommendation_engine'] = RecommendationEngine::withTrashed()->where('id', $data['data']->recommendation_engine_id)->first()->toArray();
         $data['packaging_material'] = PackagingMaterial::where('id', $data['recommendation_engine']['packaging_material_id'])->first()->toArray();
         $data['vendor_material_map'] = VendorMaterialMapping::with('vendor')->where('packaging_material_id', $data['recommendation_engine']['packaging_material_id'])->first()->toArray();
         $data['vendor'] = Vendor::all()->toArray();
