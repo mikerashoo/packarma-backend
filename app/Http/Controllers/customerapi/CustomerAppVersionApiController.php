@@ -25,23 +25,26 @@ class CustomerAppVersionApiController extends Controller
         \Log::info("Initiating Version check, starting at: " . Carbon::now()->format('H:i:s:u'));
         try {
             \Log::info("Version Check started!");
-            $platform = $request->header('platform');
-            $version = $request->header('version');
-            if ($platform == 'android') {
-                $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_android_version']])->first();
-                $update_url = GeneralSetting::select('value')->where([['type', 'customer_android_url']])->first();
-            } elseif ($platform == 'ios') {
-                $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_ios_version']])->first();
-                $update_url = GeneralSetting::select('value')->where([['type', 'customer_ios_url']])->first();
-            } elseif ($platform == 'web') {
-                $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_web_version']])->first();
-                $update_url = GeneralSetting::select('value')->where([['type', 'customer_web_url']])->first();
-            }
-            $dbversion = json_decode($dbVersionData->value, true);
+            $server = $request->header('server');
+            if ($server == 'P') {
+                $platform = $request->header('platform');
+                $version = $request->header('version');
+                if ($platform == 'android') {
+                    $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_android_version']])->first();
+                    $update_url = GeneralSetting::select('value')->where([['type', 'customer_android_url']])->first();
+                } elseif ($platform == 'ios') {
+                    $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_ios_version']])->first();
+                    $update_url = GeneralSetting::select('value')->where([['type', 'customer_ios_url']])->first();
+                } elseif ($platform == 'web') {
+                    $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_web_version']])->first();
+                    $update_url = GeneralSetting::select('value')->where([['type', 'customer_web_url']])->first();
+                }
+                $dbversion = json_decode($dbVersionData->value, true);
 
-            if (!in_array($version, $dbversion)) {
-                $msg_data['update_url'] = $update_url->value;
-                errorMessage(__('customer_version.update_app'), $msg_data);
+                if (!in_array($version, $dbversion)) {
+                    $msg_data['update_url'] = $update_url->value;
+                    errorMessage(__('customer_version.update_app'), $msg_data);
+                }
             }
             successMessage(__('vendor_version.app_ok'), $vendor_msg_data);
         } catch (\Exception $e) {
