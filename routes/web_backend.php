@@ -179,7 +179,7 @@ Route::group(['middleware' => ['customAuth']], function () {
 	//Customer Enquiry
 	Route::get('/customer_enquiry', 'CustomerEnquiryController@index');
 	Route::post('/customer_enquiry_data', 'CustomerEnquiryController@fetch')->name('customer_enquiry_data');
-	Route::get('/customer_enquiry_add', 'CustomerEnquiryController@addCustomerEnquiry');
+	// Route::get('/customer_enquiry_add', 'CustomerEnquiryController@addCustomerEnquiry');
 	Route::post('/saveCustomerEnquiry', 'CustomerEnquiryController@saveCustomerEnquiryFormData');
 	Route::get('/customer_enquiry_map_to_vendor/{id}', 'CustomerEnquiryController@customerEnquiryMapToVendor');
 	Route::post('saveEnquiryMapToVendor', 'CustomerEnquiryController@saveFormDataVendor');
