@@ -191,8 +191,8 @@ class RecommendationEngineController extends Controller
         $tableObject->engine_name = $request->packaging_solution;
         $tableObject->structure_type = $request->structure_type;
         $tableObject->product_id = $request->product;
-        $tableObject->min_shelf_life = $request->min_shelf_life;
-        $tableObject->max_shelf_life = $request->max_shelf_life;
+        $tableObject->min_shelf_life = $request->min_shelf_life ?? 1;
+        $tableObject->max_shelf_life = $request->max_shelf_life ?? 100;
         $tableObject->min_weight = $request->min_weight;
         $tableObject->max_weight = $request->max_weight;
         $tableObject->measurement_unit_id = $request->measurement_unit;
@@ -269,8 +269,8 @@ class RecommendationEngineController extends Controller
             'packaging_solution' => 'required|string|unique:recommendation_engines,engine_name,' . $request->id . ',id',
             'structure_type' => 'required|string',
             'product' => 'required|integer',
-            'min_shelf_life' => 'required|integer',
-            'max_shelf_life' => 'required|integer',
+            // 'min_shelf_life' => 'required|integer',
+            // 'max_shelf_life' => 'required|integer',
             'display_shelf_life' => 'required|integer',
             'min_weight' => 'required|numeric',
             'max_weight' => 'required|numeric',

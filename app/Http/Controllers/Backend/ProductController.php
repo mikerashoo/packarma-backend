@@ -21,8 +21,8 @@ class ProductController extends Controller
 
     public function index()
     {
-        $data['sub_category'] = SubCategory::orderBy('sub_category_name','asc')->get();
-        $data['category'] = Category::orderBy('category_name','asc')->get();
+        $data['sub_category'] = SubCategory::orderBy('sub_category_name', 'asc')->get();
+        $data['category'] = Category::orderBy('category_name', 'asc')->get();
         $data['product_add'] = checkPermission('product_add');
         $data['product_edit'] = checkPermission('product_edit');
         $data['product_view'] = checkPermission('product_view');
@@ -41,16 +41,16 @@ class ProductController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Product::with('category','sub_category')->orderBy('updated_at','desc');
+                $query = Product::with('category', 'sub_category')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_product_name']) && !is_null($request['search']['search_product_name'])) {
                             $query->where('product_name', 'like', "%" . $request['search']['search_product_name'] . "%");
                         }
-                        if (isset($request['search']['search_category']) && ! is_null($request['search']['search_category'])) {
+                        if (isset($request['search']['search_category']) && !is_null($request['search']['search_category'])) {
                             $query->where('category_id', $request['search']['search_category']);
                         }
-                        if (isset($request['search']['search_sub_category']) && ! is_null($request['search']['search_sub_category'])) {
+                        if (isset($request['search']['search_sub_category']) && !is_null($request['search']['search_sub_category'])) {
                             $query->where('sub_category_id', $request['search']['search_sub_category']);
                         }
                         $query->get();
@@ -68,10 +68,10 @@ class ProductController extends Controller
                         return $event->product_form->product_form_name;
                     })
                     ->editColumn('product_image_url', function ($event) {
-                        $imageUrl = ListingImageUrl('product',$event->product_thumb_image,'thumb');      
-                        return ' <img src="'. $imageUrl .'" />';
+                        $imageUrl = ListingImageUrl('product', $event->product_thumb_image, 'thumb');
+                        return ' <img src="' . $imageUrl . '" />';
                     })
-                    
+
                     ->editColumn('action', function ($event) {
                         $product_view = checkPermission('product_view');
                         $product_edit = checkPermission('product_edit');
@@ -94,7 +94,7 @@ class ProductController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['product_name', 'category_name','sub_category_name','product_form','product_image_url', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['product_name', 'category_name', 'sub_category_name', 'product_form', 'product_image_url', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -137,8 +137,8 @@ class ProductController extends Controller
         $data['product_form'] = ProductForm::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['data'] = Product::find($id);
-        if($data['data']){
-            $data['data']->image_path = getFile($data['data']->product_image,'product',true);
+        if ($data['data']) {
+            $data['data']->image_path = getFile($data['data']->product_image, 'product', true);
         }
         return view('backend/product/product_edit', $data);
     }
@@ -154,11 +154,11 @@ class ProductController extends Controller
     {
         $msg_data = array();
         $msg = "";
-        if(isset($_GET['id'])) {
-    		$validationErrors = $this->validateRequest($request);
-    	} else {
-    		$validationErrors = $this->validateNewRequest($request);
-    	}
+        if (isset($_GET['id'])) {
+            $validationErrors = $this->validateRequest($request);
+        } else {
+            $validationErrors = $this->validateNewRequest($request);
+        }
         //$validationErrors = $this->validateRequest($request);
         if (count($validationErrors)) {
             \Log::error("Product Validation Exception: " . implode(", ", $validationErrors->all()));
@@ -181,12 +181,12 @@ class ProductController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if($request->hasFile('product_image')) {
+        if ($request->hasFile('product_image')) {
             $fixedSize = config('global.SIZE.PRODUCT');
-            $size = $fixedSize/1000;
+            $size = $fixedSize / 1000;
             $fileSize = $request->file('product_image')->getSize();
-            if($fileSize >= $fixedSize){
-                errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
+            if ($fileSize >= $fixedSize) {
+                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
             };
         }
         $tableObject->product_name = $request->product_name;
@@ -195,17 +195,17 @@ class ProductController extends Controller
         $tableObject->sub_category_id = $request->sub_category;
         $tableObject->product_form_id = $request->product_form;
         $tableObject->packaging_treatment_id = $request->packaging_treatment;
-        if($isEditFlow){
+        if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
         $tableObject->save();
         $last_inserted_id = $tableObject->id;
-        if($request->hasFile('product_image')) {
+        if ($request->hasFile('product_image')) {
             $image = $request->file('product_image');
-            $actualImage = saveSingleImage($image,'product',$last_inserted_id);
-            $thumbImage = createThumbnail($image,'product',$last_inserted_id,'product');
+            $actualImage = saveSingleImage($image, 'product', $last_inserted_id);
+            $thumbImage = createThumbnail($image, 'product', $last_inserted_id, 'product');
             $bannerObj = Product::find($last_inserted_id);
             $bannerObj->product_image = $actualImage;
             $bannerObj->product_thumb_image = $thumbImage;
@@ -223,9 +223,9 @@ class ProductController extends Controller
      */
     public function view($id)
     {
-        $data['data'] = Product::with('sub_category','category','product_form','packaging_treatment')->find($id);
-        if($data['data']){
-            $data['data']->image_path = getFile($data['data']->product_image,'product',true);
+        $data['data'] = Product::with('sub_category', 'category', 'product_form', 'packaging_treatment')->find($id);
+        if ($data['data']) {
+            $data['data']->image_path = getFile($data['data']->product_image, 'product', true);
         }
         return view('backend/product/product_view', $data);
     }
@@ -243,11 +243,10 @@ class ProductController extends Controller
         $recordData = Product::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Published', $msg_data);
+        } else {
+            successMessage('Unpublished', $msg_data);
         }
     }
 
@@ -262,7 +261,7 @@ class ProductController extends Controller
     {
         return \Validator::make($request->all(), [
             'product_name' => 'required|string',
-            'product_description' => 'required|string',
+            // 'product_description' => 'required|string',
             'sub_category' => 'required|integer',
             'category' => 'required|integer',
             'product_form' => 'required|integer',
@@ -282,7 +281,7 @@ class ProductController extends Controller
     {
         return \Validator::make($request->all(), [
             'product_name' => 'required|string',
-            'product_description' => 'required|string',
+            // 'product_description' => 'required|string',
             'sub_category' => 'required|integer',
             'category' => 'required|integer',
             'product_form' => 'required|integer',

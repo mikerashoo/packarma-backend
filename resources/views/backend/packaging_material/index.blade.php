@@ -40,7 +40,7 @@
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="packaging_material" data-orderable="false" data-searchable="false">Packaging Material Name</th>
                                                     <th id="material_description" data-orderable="false" data-searchable="false">Packaging Material Description</th>
-                                                    <th id="shelf_life" data-orderable="false" data-searchable="false">Shelf Life</th>
+                                                    {{-- <th id="shelf_life" data-orderable="false" data-searchable="false">Shelf Life</th> --}}
                                                     <th id="approx_price" data-orderable="false" data-searchable="false">Price</th>
                                                     @if($data['packaging_material_edit'] || $data['packaging_material_status'] || $data['packaging_material_view'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>

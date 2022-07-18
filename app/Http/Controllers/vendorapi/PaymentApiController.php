@@ -84,8 +84,7 @@ class PaymentApiController extends Controller
                     })->get()->count();
 
                 $payments_received = Order::selectRaw('SUM(grand_total - vendor_pending_payment) as payments_received')
-                    ->where('vendor_id', $vendor_id)
-                    ->first();
+                    ->where('vendor_id', $vendor_id);
 
 
 
@@ -96,12 +95,18 @@ class PaymentApiController extends Controller
                     $date_from_no_of_days = Carbon::now()->subDays($request->last_no_of_days);
                     $paymentData = $paymentData->whereDate($main_table . '' . '.created_at', '>=', $date_from_no_of_days);
                     $data = $data->whereDate($main_table . '' . '.created_at', '>=', $date_from_no_of_days);
+                    $payments_received = $payments_received->whereDate($main_table . '' . '.created_at', '>=', $date_from_no_of_days);
                 }
                 if ($request->payment_status) {
                     $paymentData = $paymentData->where($main_table . '' . '.vendor_payment_status', $request->payment_status);
                     $data = $data->where($main_table . '' . '.vendor_payment_status', $request->payment_status);
                 }
 
+                $payments_received = $payments_received->first();
+
+                if (empty($payments_received->payments_received)) {
+                    $payments_received->payments_received = "0.00";
+                }
 
                 // if (empty($paymentData->first())) {
                 //     errorMessage(__('payment.payment_not_found'), $msg_data);

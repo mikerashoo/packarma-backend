@@ -92,6 +92,7 @@ class HomeApiController extends Controller
                     'vendor_quotations.vendor_price',
                     'vendor_quotations.enquiry_status',
                     'vendor_quotations.created_at',
+                    'vendor_quotations.vendor_warehouse_id',
                     'customer_enquiries.description',
                     'customer_enquiries.enquiry_type',
                     'customer_enquiries.product_weight',
