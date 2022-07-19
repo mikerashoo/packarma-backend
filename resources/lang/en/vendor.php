@@ -31,4 +31,6 @@ return [
     'phone_cant_update' => 'You can not change your phone no',
     'not_found' => 'No details Found',
     'status_fetched' => 'Your Status Fetched Successfully',
+    'load_page_require' => 'Load page is require',
+    'contact_us_stored' => 'Your Contact Details Recorded Will get back to you soon',
 ];
