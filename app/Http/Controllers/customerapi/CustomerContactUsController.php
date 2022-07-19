@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\vendorapi;
+namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
-use App\Models\Vendor;
-use App\Models\VendorContactUs;
+use App\Models\CustomerContactUs;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class VendorContactUsController extends Controller
+class CustomerContactUsController extends Controller
 {
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -19,26 +21,26 @@ class VendorContactUsController extends Controller
     {
         $msg_data = array();
         try {
-            $vendor_token = readVendorHeaderToken();
-            if ($vendor_token) {
-                $vendor_contact_us_details = array();
+            $token = readHeaderToken();
+            if ($token) {
+                $user_contact_us_details = array();
                 $load_page = $request->load_page;
 
                 if (!$load_page) {
-                    errorMessage(__('vendor.load_page_require'), $msg_data);
+                    errorMessage(__('user.load_page_require'), $msg_data);
                 }
-                $vendor_contact_us_details = $request->all();
+                $user_contact_us_details = $request->all();
 
                 if ($load_page == 'gst') {
                     $contactUsErrors = $this->validateContactUsForGstPage($request);
-                    $vendor_id = 0;
+                    $user_id = 0;
                 } else {
                     $contactUsErrors = $this->validateContactUsForHomePage($request);
-                    $vendor_id = $vendor_token['sub'];
-                    $vendorDetails = Vendor::where([['id', $vendor_id]])->first();
-                    $vendor_contact_us_details['email'] = $vendorDetails->vendor_email;
-                    $vendor_contact_us_details['name'] = $vendorDetails->vendor_name;
-                    $vendor_contact_us_details['mobile'] = $vendorDetails->phone;
+                    $user_id = $token['sub'];
+                    $userDetails = User::where([['id', $user_id]])->first();
+                    $user_contact_us_details['email'] = $userDetails->email;
+                    $user_contact_us_details['name'] = $userDetails->name;
+                    $user_contact_us_details['mobile'] = $userDetails->phone;
                 }
                 // Request Validation
                 if (count($contactUsErrors)) {
@@ -48,28 +50,26 @@ class VendorContactUsController extends Controller
                 \Log::info("Store Contact us Details");
 
                 $ip_address = request()->ip();
+                $user_contact_us_details['ip_address'] = $ip_address;
+                $user_contact_us_details['user_id'] = $user_id;
 
-                $vendor_contact_us_details['ip_address'] = $ip_address;
-                $vendor_contact_us_details['vendor_id'] = $vendor_id;
-
-                $vendorContactUs = VendorContactUs::create($vendor_contact_us_details);
+                $userContactUs = CustomerContactUs::create($user_contact_us_details);
 
                 // Store Gst Details
 
-                \Log::info("Contact us Details Stored Successfully");
-                $vendorContactUsData = $vendorContactUs;
+                \Log::info("Contact Us Details Stored Successfully");
+                $userContactUsData = $userContactUs;
+                $customerContactUsDetails = $userContactUsData->toArray();
+                $userContactUsData->created_at->toDateTimeString();
+                $userContactUsData->updated_at->toDateTimeString();
 
-                $vendorContactUsDetails = $vendorContactUsData->toArray();
-                $vendorContactUsData->created_at->toDateTimeString();
-                $vendorContactUsData->updated_at->toDateTimeString();
 
-
-                successMessage(__('vendor.contact_us_stored'), $msg_data);
+                successMessage(__('user.contact_us_stored'), $msg_data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("Contact us Details Store Failed: " . $e->getMessage());
+            \Log::error("Contact Us Details Store Failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

@@ -21,5 +21,7 @@ return [
     'gst_certificate_not_found' => 'Gst Certificate Not Found Please Upload',
     'gst_details_stored' => 'Your Gst Details Stored Successfully',
     'gst_details_fetched' => 'Gst Details Fetched Successfully',
+    'load_page_require' => 'Load page is require',
+    'contact_us_stored' => 'Your Contact Details Recorded Will get back to you soon',
 
 ];

@@ -23,13 +23,13 @@ Route::middleware(['basicAuth'])->group(function () {
     Route::post('/forgot_password_api', 'ForgotPasswordApiController@index');
     Route::middleware(['tokenAuth'])->group(function () {
         //Product
-    	Route::post('/products/listing', 'ProductApiController@index');
-    	// Route::post('/products/store', 'ProductApiController@store');
-    	// Route::post('/products/update', 'ProductApiController@update');
-    	// Route::post('/products/destroy', 'ProductApiController@destroy');
+        Route::post('/products/listing', 'ProductApiController@index');
+        // Route::post('/products/store', 'ProductApiController@store');
+        // Route::post('/products/update', 'ProductApiController@update');
+        // Route::post('/products/destroy', 'ProductApiController@destroy');
 
         //Category
-    	Route::post('/category/listing', 'CategoryApiController@index');
+        Route::post('/category/listing', 'CategoryApiController@index');
 
         //Sub Category
         Route::post('/sub_category/listing', 'SubCategoryApiController@index');
@@ -100,8 +100,8 @@ Route::middleware(['basicAuth'])->group(function () {
         //Customer Enquiry Quote 
         Route::post('/customer_quote/my_listing', 'CustomerQuoteApiController@index');
         Route::post('/customer_quote/my_accept_quotation', 'CustomerQuoteApiController@accept_quotation');
-        Route::post('/customer_quote/my_reject_quotation', 'CustomerQuoteApiController@reject_quotation');        
-        Route::post('/customer_quote/my_accepted_quotation_details', 'CustomerQuoteApiController@accepted_quotation_details');        
+        Route::post('/customer_quote/my_reject_quotation', 'CustomerQuoteApiController@reject_quotation');
+        Route::post('/customer_quote/my_accepted_quotation_details', 'CustomerQuoteApiController@accepted_quotation_details');
 
         //Order
         Route::post('/order/my_order_listing', 'OrderApiController@index');
@@ -135,5 +135,8 @@ Route::middleware(['basicAuth'])->group(function () {
         //GST Details
         Route::post('/user/show_gst_details', 'GstDetailsApiController@show');
         Route::post('/user/store_gst_details', 'GstDetailsApiController@store');
+
+        //Contact us api
+        Route::post('/store_customer_contact_us', 'CustomerContactUsController@store');
     });
 });

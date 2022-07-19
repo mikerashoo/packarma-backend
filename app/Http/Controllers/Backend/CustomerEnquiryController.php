@@ -255,6 +255,7 @@ class CustomerEnquiryController extends Controller
             'vendor_quotations.mrp',
             'vendor_quotations.commission_amt',
             'vendor_quotations.lead_time',
+            'vendor_quotations.enquiry_status',
             'vendors.vendor_name',
             'customer_enquiries.description',
             'customer_enquiries.enquiry_type',
