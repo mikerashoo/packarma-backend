@@ -237,17 +237,14 @@ class CustomerEnquiryController extends Controller
      */
     public function customerEnquiryMapToVendor($id)
     {
-        $data['data'] = CustomerEnquiry::find($id);
+        $data['data'] = CustomerEnquiry::with('packaging_material','recommendation_engine')->find($id);
         $data['user_address'] = UserAddress::all();
+        $data['vendor'] = Vendor::all();
         $data['addressType'] = addressType();
-        $data['recommendation_engine'] = RecommendationEngine::withTrashed()->where('id', $data['data']->recommendation_engine_id)->first()->toArray();
-        $data['packaging_material'] = PackagingMaterial::where('id', $data['recommendation_engine']['packaging_material_id'])->first()->toArray();
-        $data['vendor_material_map'] = VendorMaterialMapping::with('vendor')->where('packaging_material_id', $data['recommendation_engine']['packaging_material_id'])->first()->toArray();
-        $data['vendor'] = Vendor::all()->toArray();
         $data['customerEnquiryType'] = customerEnquiryType();
         $data['vendorEnquiryStatus'] = vendorEnquiryStatus();
         $data['customerEnquiryQuoteType'] = customerEnquiryQuoteType();
-        // $data['vendor_warehouse'] = VendorWarehouse::all()->toArray();  
+        // $data['vendor_warehouse'] = VendorWarehouse::all();  
 
         $data['mapped_vendor'] = DB::table('vendor_quotations')->select(
             'vendor_quotations.id',
