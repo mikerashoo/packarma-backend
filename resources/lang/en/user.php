@@ -33,4 +33,6 @@ return [
     'phone_already_registered' => 'Phone number ia already registered please use another number',
     'not_found' => 'User Not Found',
     'status_fetched' => 'Your Status Fetched Successfully',
+    'load_page_require' => 'Load page is require',
+    'contact_us_stored' => 'Your Contact Details Recorded Will get back to you soon',
 ];

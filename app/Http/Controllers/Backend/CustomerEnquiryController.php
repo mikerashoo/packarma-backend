@@ -252,6 +252,7 @@ class CustomerEnquiryController extends Controller
             'vendor_quotations.mrp',
             'vendor_quotations.commission_amt',
             'vendor_quotations.lead_time',
+            'vendor_quotations.enquiry_status',
             'vendors.vendor_name',
             'customer_enquiries.description',
             'customer_enquiries.enquiry_type',
@@ -548,7 +549,7 @@ class CustomerEnquiryController extends Controller
                 // 'quotation_validity.*' => 'required|numeric',
                 'lead_time' => 'required|numeric|min:0|not_in:0',
                 // 'gst_type.*' => 'required',
-                'gst_percentage' => 'required_if:gst_type,=,applicable|int|min:0|not_in:0',
+                'gst_percentage' => 'required_if:gst_type,applicable,numeric|min:0|not_in:0',
                 // 'gst_percentage.*' => 'required_if:gst_type.*,igst,cgst+sgst',
             ])->errors();
         } elseif ($for == 'addEnquiry') {

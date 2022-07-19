@@ -38,5 +38,6 @@ return [
     'PLATFORM' => ['ios', 'android', 'web'],
     'MAX_IMAGE_SIZE' => '2048',
     'VISITING_CARD_IMAGE_SIZE' => '500',
-    'GST_NO_VALIDATION' => '^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$^'
+    'GST_NO_VALIDATION' => '^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$^',
+    'MAX_VENDOR_ADDRESS_COUNT' => '10'
 ];

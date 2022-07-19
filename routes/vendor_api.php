@@ -48,5 +48,8 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
         Route::post('/address/delete', 'MyAddressController@destroy');
         Route::post('/show_gst_detils', 'GstDetailsController@show');
         Route::post('/store_gst_details', 'GstDetailsController@store');
+
+        //Contact us api
+        Route::post('/store_vendor_contact_us', 'VendorContactUsController@store');
     });
 });
