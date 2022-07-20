@@ -100,7 +100,7 @@ class MyAddressController extends Controller
             $vendor_token = readVendorHeaderToken();
             if ($vendor_token) {
                 $vendor_id = $vendor_token['sub'];
-                $max_count = 10;
+                $max_count = config('global.MAX_VENDOR_ADDRESS_COUNT');
                 $numberOfVendorWarehouse = VendorWarehouse::where([['vendor_id', $vendor_id], ['deleted_at', NULL]])->count();
                 if ($numberOfVendorWarehouse >= $max_count) {
                     errorMessage(__('vendor_address.address_entry_limit_reached'), $msg_data);
