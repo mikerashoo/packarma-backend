@@ -57,19 +57,14 @@ class CustomerEnquiryApiController extends Controller
                     'customer_enquiries.shelf_life',
                     'customer_enquiries.storage_condition_id',
                     'storage_conditions.storage_condition_title',
-                    // 'storage_conditions.storage_condition_description',
                     'customer_enquiries.packaging_machine_id',
                     'packaging_machines.packaging_machine_name',
-                    // 'packaging_machines.packaging_machine_description',
                     'customer_enquiries.product_form_id',
                     'product_forms.product_form_name',
-                    // 'product_forms.short_descrip[tion',
                     'customer_enquiries.packing_type_id',
                     'packing_types.packing_name',
-                    // 'packing_types.packaging_description',
                     'customer_enquiries.packaging_treatment_id',
                     'packaging_treatments.packaging_treatment_name',
-                    // 'packaging_treatments.packaging_treatment_description',
                     'customer_enquiries.user_address_id',
                     'user_addresses.address',
                     'user_addresses.pincode',
@@ -78,6 +73,7 @@ class CustomerEnquiryApiController extends Controller
                     'recommendation_engines.structure_type',
                     'recommendation_engines.display_shelf_life',
                     'customer_enquiries.packaging_material_id',
+                    'customer_enquiries.quote_type',
                     'customer_enquiries.created_at'
                 )
                     ->leftjoin('categories', 'categories.id', '=', 'customer_enquiries.category_id')
@@ -91,7 +87,8 @@ class CustomerEnquiryApiController extends Controller
                     ->leftjoin('packaging_treatments', 'packaging_treatments.id', '=', 'customer_enquiries.packaging_treatment_id')
                     ->leftjoin('user_addresses', 'user_addresses.id', '=', 'customer_enquiries.user_address_id')
                     ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'customer_enquiries.recommendation_engine_id')
-                    ->where('customer_enquiries.user_id', $user_id);
+                    ->where('customer_enquiries.user_id', $user_id)
+                    ->whereIn('customer_enquiries.quote_type', ['enquired', 'map_to_vendor', 'accept_cust']);
 
                 $customerEnquiryData = CustomerEnquiry::whereRaw("1 = 1");
                 if ($request->enquiry_id) {
@@ -211,7 +208,6 @@ class CustomerEnquiryApiController extends Controller
             'shelf_life' => 'required|numeric',
             'product_weight' => 'required|numeric',
             'measurement_unit_id' => 'required|numeric',
-            // 'product_quantity' => 'required|numeric',
             'storage_condition_id' => 'required|numeric',
             'packaging_machine_id' => 'required|numeric',
             'product_form_id' => 'required|numeric',

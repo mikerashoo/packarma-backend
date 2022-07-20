@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrderPayment;
+use App\Models\Customerenquiry;
 use App\Models\Order;
 use App\Models\UserAddress;
 use App\Models\VendorQuotation;
@@ -85,7 +86,7 @@ class OrderApiController extends Controller
                     errorMessage(__('order.order_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'order_payment_status|vendor_payment_status|order_delivery_status');
+                    $data = fullSearchQuery($data, $request->search,'orders.order_payment_status|orders.vendor_payment_status|orders.order_delivery_status');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['products.product_name' => 'ASC'];
@@ -108,11 +109,16 @@ class OrderApiController extends Controller
                         $data[$i]->igst_amount = $data[$i]->gst_amount;
                     }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
-                    if(!empty($row->shipping_details)) {
-                        $data[$i]->shipping_details = json_decode($row->shipping_details,true);
-                    } else {
-                        $data[$i]->shipping_details = null;
-                    }
+                    // if(!empty($row->shipping_details)) {
+                    //     $data[$i]->shipping_details = json_decode($row->shipping_details,true);
+                    // } else {
+                    //     $data[$i]->shipping_details = null;
+                    // }
+                    // if(!empty($row->billing_details)) {
+                    //     $data[$i]->billing_details = json_decode($row->billing_details,true);
+                    // } else {
+                    //     $data[$i]->billing_details = null;
+                    // }
                     $i++;
                 }
                 $responseData['result'] = $data;
@@ -245,7 +251,7 @@ class OrderApiController extends Controller
     /**
      * Created By : Pradyumn Dwivedi
      * Created at : 27-05-2022
-     * Uses : Display details of the selected order.
+     * Uses : Display details of the selected order details.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -267,7 +273,6 @@ class OrderApiController extends Controller
                 $user_id = $token['sub'];
                 $data = DB::table('orders')->select(
                     'orders.id',
-                    // 'customer_enquiries.description',
                     'orders.grand_total',
                     'orders.recommendation_engine_id',
                     'recommendation_engines.engine_name',
@@ -333,7 +338,7 @@ class OrderApiController extends Controller
                     if($row->order_delivery_status == 'delivered' && $reviewData == 0){
                         $data[$i]->show_feedback_button = true;
                     }
-                    if($row->order_delivery_status != 'cancelled'){
+                    if($row->order_delivery_status == 'processing' || $row->order_delivery_status == 'processing' || $row->order_delivery_status == 'out_for_delivery'){
                         $data[$i]->show_cancel_button = true;
                     }
                     if(!empty($row->billing_details)) {
@@ -391,9 +396,10 @@ class OrderApiController extends Controller
                     errorMessage(__('order.order_already_cancelled'), $msg_data);
                 }
                 if($request->order_delivery_status == "cancelled"){
+                    $order_details = Order::find($request->order_id);
                     $orderStatusData = Order::find($request->order_id)->update($request->all());
                     \Log::info("Order Cancelled Successfully");
-                    successMessage(__('order.order_cancelled_successfully'));
+                    successMessage(__('order.order_cancelled_successfully'), $msg_data);
                 }
             }
             else
@@ -660,7 +666,7 @@ class OrderApiController extends Controller
                 $order_request_data['billing_details'] = json_encode($billing_detail);
                 // return $order_request_data;
                 $newOrderData = Order::create($order_request_data);
-                // print_r($newOrderData->id);exit;
+                CustomerEnquiry::where('id', $request->customer_enquiry_id)->update(['quote_type' => 'order']);
                 $newOrderData->odr_id = getFormatid($newOrderData->id, 'orders');
                 \Log::info("My new order created successfully!");
                 $myOrderData = $newOrderData->toArray();

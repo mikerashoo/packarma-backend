@@ -56,7 +56,7 @@ class CustomerEnquiryController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = CustomerEnquiry::with('product', 'state', 'city', 'user', 'country', 'vendor_quotation')->orderBy('updated_at', 'desc')->withTrashed();
+                $query = CustomerEnquiry::with('product', 'state', 'city', 'user', 'country', 'vendor_quotation')->orderBy('id', 'desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user_name']) && !is_null($request['search']['search_user_name'])) {
@@ -244,6 +244,8 @@ class CustomerEnquiryController extends Controller
         $data['customerEnquiryType'] = customerEnquiryType();
         $data['vendorEnquiryStatus'] = vendorEnquiryStatus();
         $data['customerEnquiryQuoteType'] = customerEnquiryQuoteType();
+        $data['customer_enquiry_id'] = getFormatid($data['data']->id, 'customer_enquiries');
+
         // $data['vendor_warehouse'] = VendorWarehouse::all();  
 
         $data['mapped_vendor'] = DB::table('vendor_quotations')->select(
@@ -419,10 +421,8 @@ class CustomerEnquiryController extends Controller
         $tblObj->lead_time =  $request->lead_time;
         $tblObj->created_by = session('data')['id'];
         $final_val = $tblObj->toarray();
-        // print_r($tblObj->toarray());
-        // die;
         VendorQuotation::updateOrCreate(['id' => $request->id], $final_val);
-        // }
+        CustomerEnquiry::where('id', $request->customer_enquiry_id)->update(['quote_type' => 'map_to_vendor']);
         successMessage($msg, $msg_data);
     }
 
@@ -459,9 +459,10 @@ class CustomerEnquiryController extends Controller
         $data['data'] = CustomerEnquiry::find($id);
         $data['addressType'] = addressType();
         $data['user_address'] = UserAddress::all();
-
-        $data['vendor_id'] = VendorQuotation::where('customer_enquiry_id', '=', $data['data']->id)->pluck('vendor_id')->toArray();
-        $data['vendor'] = Vendor::whereIn('id', $data['vendor_id'])->get();
+        $data['customer_enquiry_id'] = getFormatid($data['data']->id, 'customer_enquiries');
+        $data['vendor_id'] = VendorQuotation::where('customer_enquiry_id', '=', $data['data']->id)->get();//->pluck('vendor_id')->toArray();
+        $data['vendor'] = Vendor::where('id', $data['vendor_id'][0]->vendor_id)->get();
+        $data['vendor_warehouse'] = VendorWarehouse::where('id', $data['vendor_id'][0]->vendor_warehouse_id)->get();
         return view('backend/customer_section/customer_enquiry/customer_enquiry_view', $data);
     }
 

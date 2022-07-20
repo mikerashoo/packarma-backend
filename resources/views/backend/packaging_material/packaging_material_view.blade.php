@@ -24,17 +24,20 @@
                                         </tr>
                                         <tr>
                                             <td><strong>Material Description</strong></td>
-                                            <td>{{$data->material_description}}</td>
+                                            @if($data->material_description)
+                                                <td>{{$data->material_description}}</td>
+                                            @else
+                                                <td>-</td>
+                                            @endif
                                         </tr>
-                                        <tr>
+                                        {{-- <tr>
                                             <td><strong>Shelf Life</strong></td>
                                             <td>{{$data->shelf_life}}</td>
-                                        </tr>
-                                        <tr>
+                                        </tr> --}}
+                                        {{-- <tr>
                                             <td><strong>Price</strong></td>
                                             <td>{{$data->approx_price}}</td>
-                                        </tr>
-                                        
+                                        </tr> --}}
                                         <tr>
                                             <td><strong>Packaging Material Status</strong></td>
                                             <td>{{displayStatus($data->status)}}</td>

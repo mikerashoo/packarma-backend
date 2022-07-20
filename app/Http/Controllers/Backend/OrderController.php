@@ -119,7 +119,7 @@ class OrderController extends Controller
                             $actions .= '  <a href="order_pdf/' . $event->id . '" class="btn btn-success btn-sm" title="Pdf" target="_blank"><i class="fa fa-file-pdf-o"></i></a>';
                         }
 
-                        if ($event->order_delivery_status != "delivered") {
+                        if ($event->order_delivery_status == 'pending' || $event->order_delivery_status == 'processing' || $event->order_delivery_status == 'out_for_delivery') {
                             if ($order_delivery_update) {
                                 $actions .= '  <a href="order_delivery_update/' . $event->id . '" class="btn btn-info btn-sm src_data" title="Update Delivery"><i class="fa fa-truck"></i></a>';
                             }
@@ -164,6 +164,7 @@ class OrderController extends Controller
         $data['data'] = Order::with('user', 'product', 'vendor', 'packaging_material')->find($id);
         $data['deliveryStatus'] = deliveryStatus();
         $data['paymentStatus'] = paymentStatus();
+        $data['order_id'] = getFormatid($data['data']->id, 'orders');
         return view('backend/order/order_list/order_delivery_status_update', $data);
     }
 
@@ -226,6 +227,7 @@ class OrderController extends Controller
         $data['deliveryStatus'] = deliveryStatus();
         $data['customerPaymentStatus'] = customerPaymentStatus();
         $data['onlinePaymentMode'] = onlinePaymentMode();
+        $data['order_id'] = getFormatid($data['data']->id, 'orders');
         return view('backend/order/order_list/order_payment_status_update', $data);
     }
 

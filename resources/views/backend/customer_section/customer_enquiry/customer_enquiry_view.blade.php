@@ -7,7 +7,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-12 col-sm-7">
-                                    <h5 class="pt-2">View Customer Enquiry Details</h5>
+                                    <h5 class="pt-2">View Customer Enquiry Details : {{ $customer_enquiry_id }}</h5>
                                 </div>
                                 <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                     <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
@@ -168,12 +168,19 @@
                                                         <th>Address</th>
                                                     </thead>
                                                     <tbody>
+                                                        @foreach ($vendor_warehouse as $warehouses)
+                                                            @php
+                                                                $warehouse_name = $warehouses->warehouse_name;
+                                                                $pincode = $warehouses->pincode;
+                                                                $state_name = $warehouses->state->state_name;
+                                                            @endphp
+                                                        @endforeach
                                                         @foreach ($vendor as $vendors)
                                                         <tr>
                                                             <td>{{ $vendors->vendor_name; }}</td>
                                                             <td>{{ $vendors->vendor_email; }}</td>
                                                             <td>{{ $vendors->phone; }}</td>
-                                                            <td>{{ $vendors->vendor_address; }}</td>                                                     </tr>
+                                                            <td>{{ $warehouse_name }}, {{ $state_name }}, {{ $pincode }}</td>                                                     </tr>
                                                         @endforeach
                                                         @if (empty($vendor->toArray())) 
                                                          <tr><td colspan="4" class="text-center col">No vendor map found</td></tr>  
