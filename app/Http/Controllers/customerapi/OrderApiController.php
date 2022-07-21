@@ -338,7 +338,7 @@ class OrderApiController extends Controller
                     if($row->order_delivery_status == 'delivered' && $reviewData == 0){
                         $data[$i]->show_feedback_button = true;
                     }
-                    if($row->order_delivery_status == 'processing' || $row->order_delivery_status == 'processing' || $row->order_delivery_status == 'out_for_delivery'){
+                    if($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing' || $row->order_delivery_status == 'out_for_delivery'){
                         $data[$i]->show_cancel_button = true;
                     }
                     if(!empty($row->billing_details)) {
