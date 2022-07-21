@@ -28,6 +28,16 @@
                                             <dt class="col-sm-4 text-left">Approval Status:</dt>
                                             <dd class="col-sm-8">{{ approvalStatusArray($data->approval_status) }} </dd>
                                         </dl>
+                                        <dl class="row">
+                                            <dt class="col-sm-4 text-left">Visiting Card Front:</dt>
+                                            {{-- <dd class="col-sm-8">{{ ($data->approval_status) }} </dd> --}}
+                                            @if (!empty($data->visiting_card_front))
+                                                    {{-- <td><img src="{{ListingImageUrl('visiting_card/front', $data->visiting_card_front)}}" width="150px" height="auto"/></td> --}}
+                                                <dd class="col-sm-8"><a href="{{ListingImageUrl('visiting_card/front',$data->visiting_card_front)}}" target="_blank"><img src="{{ListingImageUrl('visiting_card/front',$data->visiting_card_front)}}" width="150px" height="auto"/></a></dd>
+                                            @else
+                                                <dd class="col-sm-8">-</dd>
+                                            @endif
+                                        </dl>
                                     </div>
                                     <div class="col-md-6">
                                         <dl class="row">
@@ -37,6 +47,16 @@
                                         <dl class="row">
                                             <dt class="col-sm-4 text-left">Phone Number : </dt>
                                             <dd class="col-sm-8"><span>+{{ $data['phone_country']->phone_code }}</span><span> {{ $data->phone }}</span></dd>
+                                        </dl>
+                                        <dl class="row">
+                                            <dt class="col-sm-4 text-left">Visiting Card Back:</dt>
+                                            {{-- <dd class="col-sm-8">{{ ($data->approval_status) }} </dd> --}}
+                                            @if (!empty($data->visiting_card_front))
+                                                    {{-- <td><img src="{{ListingImageUrl('visiting_card/front', $data->visiting_card_front)}}" width="150px" height="auto"/></td> --}}
+                                                <dd class="col-sm-8"><a href="{{ListingImageUrl('visiting_card/back',$data->visiting_card_back)}}" target="_blank"><img src="{{ListingImageUrl('visiting_card/back',$data->visiting_card_back)}}" width="150px" height="auto"/></a></dd>
+                                            @else
+                                                <dd class="col-sm-8">-</dd>
+                                            @endif
                                         </dl>
                                         @if ($data->whatsapp_country_id != 0 && !empty($data->whatsapp_no))
                                             <dl class="row">

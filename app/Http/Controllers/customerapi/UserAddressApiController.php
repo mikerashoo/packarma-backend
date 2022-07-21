@@ -127,7 +127,7 @@ class UserAddressApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
-                $max_count = 10;
+                $max_count = config('global.MAX_USER_ADDRESS_COUNT');
                 $numberOfUserAddress = UserAddress::where([['user_id', $user_id], ['deleted_at', NULL]])->count();
                 if ($numberOfUserAddress >= $max_count) {
                     errorMessage(__('user_address.address_entry_limit_reached'), $msg_data);
@@ -137,6 +137,10 @@ class UserAddressApiController extends Controller
                 if (count($addressValidationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $addressValidationErrors->all()));
                     errorMessage($addressValidationErrors->all(), $addressValidationErrors->all());
+                }
+                $response = UserAddress::where([['gstin', strtolower($request->gstin)], ['user_id', '<>', $user_id]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage(__('user_address.gst_number_already_exist'), $msg_data);
                 }
                 \Log::info("User address creation started!");
                 $user_address_data = array();
@@ -198,6 +202,10 @@ class UserAddressApiController extends Controller
                 $checkUserAddress = UserAddress::where([['id', $id], ['user_id', $user_id]])->first();
                 if (empty($checkUserAddress)) {
                     errorMessage(__('user_address.address_not_found'), $msg_data);
+                }
+                $response = UserAddress::where([['gstin', strtolower($request->gstin)], ['user_id', '<>', $user_id]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage(__('user_address.gst_number_already_exist'), $msg_data);
                 }
                 $user_address_data = $request->all();
                 $user_address_data['user_id'] = $user_id;
@@ -284,7 +292,7 @@ class UserAddressApiController extends Controller
             'city_name' => 'required|string',
             'state_id' => 'required|numeric',
             'type' => 'required|in:shipping,billing',
-            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:user_addresses,gstin',
+            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION'),
         ])->errors();
     }
 
@@ -313,7 +321,8 @@ class UserAddressApiController extends Controller
             'city_name' => 'required|string',
             'state_id' => 'required|numeric',
             'type' => 'required|in:shipping,billing',
-            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:user_addresses,gstin' . ($request->id ? ",$request->id" : ''),
+            // 'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:user_addresses,gstin' . ($request->id ? ",$request->id" : ''),
+            'gstin'=> 'required_if:type,==,billing|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION')
         ])->errors();
     }
 }

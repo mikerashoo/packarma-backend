@@ -59,6 +59,23 @@
                                                 @endif
                                             </tr>
                                             <tr>
+                                                <td><strong>Visiting Card Front</strong></td>
+                                                @if (!empty($data->visiting_card_front))
+                                                    {{-- <td><img src="{{ListingImageUrl('visiting_card/front', $data->visiting_card_front)}}" width="150px" height="auto"/></td> --}}
+                                                    <td><a href="{{ListingImageUrl('visiting_card/front',$data->visiting_card_front)}}" target="_blank"><img src="{{ListingImageUrl('visiting_card/front',$data->visiting_card_front)}}" width="150px" height="auto"/></a></td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Visiting Card Back</strong></td>
+                                                @if (!empty($data->visiting_card_back))
+                                                <td><a href="{{ListingImageUrl('visiting_card/back',$data->visiting_card_back)}}" target="_blank"><img src="{{ListingImageUrl('visiting_card/front',$data->visiting_card_front)}}" width="150px" height="auto"/></a></td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                            </tr>
+                                            <tr>
                                                 <td><strong>Approval Status</strong></td>
                                                 <td>{{ approvalStatusArray($data->approval_status) }}</td>
                                             </tr>

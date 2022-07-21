@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\VendorQuotation;
+use App\Models\CustomerEnquiry;
 use Response;
 
 class CustomerQuoteApiController extends Controller
@@ -54,6 +55,8 @@ class CustomerQuoteApiController extends Controller
                     'vendor_quotations.vendor_warehouse_id',
                     'vendor_warehouses.warehouse_name',
                     'vendor_quotations.mrp',
+                    'vendor_quotations.gst_type',
+                    'vendor_quotations.gst_amount'
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
@@ -100,6 +103,19 @@ class CustomerQuoteApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 if(empty($data)) {
                     errorMessage(__('customer_quote.quotation_not_found'), $msg_data);
+                }
+                $i = 0;
+                foreach($data as $row){
+                    $data[$i]->cgst_amount = "0.00";
+                    $data[$i]->sgst_amount = "0.00";
+                    $data[$i]->igst_amount = "0.00";
+                    if ($row->gst_type == 'cgst+sgst') {
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+                    }
+                    if ($row->gst_type == 'igst') {
+                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                    }
+                    $i++;
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
@@ -160,7 +176,6 @@ class CustomerQuoteApiController extends Controller
                     }
                     $quotationEnquiryStatusData = VendorQuotation::find($request->vendor_quotation_id)->update($request->all());
                     \Log::info("Customer Quotation Accepted Successfully");
-                    // successMessage(__('customer_quote.quotation_accepted_successfully'));
                     if($quotationEnquiryStatusData){
                         $data = DB::table('vendor_quotations')->select(
                             'vendor_quotations.id',
@@ -168,6 +183,9 @@ class CustomerQuoteApiController extends Controller
                             'vendors.vendor_name',
                             'vendor_quotations.vendor_warehouse_id',
                             'vendor_warehouses.warehouse_name',
+                            'vendor_quotations.gst_type',
+                            'vendor_quotations.gst_amount',
+                            'vendor_quotations.customer_enquiry_id'
                         )
                             ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                             ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
@@ -181,6 +199,23 @@ class CustomerQuoteApiController extends Controller
                                                         ->update(['customer_enquiries.quote_type' => 'accept_cust']);
 
                         $data = $data->get()->toArray();
+                        $proceed_button = false;
+                        $customer_enq_data = CustomerEnquiry::where([['id',$data[0]->customer_enquiry_id], ['quote_type','accept_cust']])->get()->count();
+                        if($customer_enq_data){
+                            $data[0]->proceed_button = true;
+                        }else{
+                            $data[0]->proceed_button = false;
+                        }
+                        
+                        $data[0]->cgst_amount = "0.00";
+                        $data[0]->sgst_amount = "0.00";
+                        $data[0]->igst_amount = "0.00";
+                        if ($data[0]->gst_type == 'cgst+sgst') {
+                            $data[0]->sgst_amount = $data[0]->cgst_amount = number_format(($data[0]->gst_amount / 2), 2);
+                        }
+                        if ($data[0]->gst_type == 'igst') {
+                            $data[0]->igst_amount = $data[0]->gst_amount;
+                        }
                         $responseData['result'] = $data;
                         successMessage(__('success_msg.data_fetched_successfully'), $responseData);                
                     }
@@ -224,13 +259,12 @@ class CustomerQuoteApiController extends Controller
                     if($statusData->enquiry_status == "reject"){
                         errorMessage(__('customer_quote.quotation_already_rejected'), $msg_data);
                     }
-                if($request->enquiry_status == "reject"){
-                    $quotationEnquiryStatusData = VendorQuotation::find($request->vendor_quotation_id)->update($request->all());
-                    \Log::info("Customer Quotation Rejected Successfully");
-                    // $quotationCountData = VendorQuotation::where([['user_id', $user_id],['customer_enquiry_id',$request->customer_enquiry_id]])
-                    //                                         ->whereIn('enquiry_status', ['quoted', 'viewed'])->get()->count();
-                    // $responseData['total_records'] = $quotationCountData;
-                    successMessage(__('customer_quote.quotation_rejected_successfully', $responseData));
+                if($statusData->enquiry_status == 'quoted'){
+                    if($request->enquiry_status == "reject"){
+                        $quotationEnquiryStatusData = VendorQuotation::find($request->vendor_quotation_id)->update($request->all());
+                        \Log::info("Customer Quotation Rejected Successfully");
+                        successMessage(__('customer_quote.quotation_rejected_successfully', $msg_data));
+                    }
                 }
             }
             else
@@ -280,6 +314,9 @@ class CustomerQuoteApiController extends Controller
                     'vendor_quotations.mrp',
                     'vendor_quotations.vendor_warehouse_id',
                     'vendor_warehouses.warehouse_name',
+                    'vendor_quotations.gst_type',
+                    'vendor_quotations.gst_amount',
+                    'vendor_quotations.customer_enquiry_id'
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
@@ -310,6 +347,27 @@ class CustomerQuoteApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 if(empty($data)) {
                     errorMessage(__('customer_quote.quotation_not_found'), $msg_data);
+                }
+               
+                $i = 0;
+                foreach($data as $row){
+                    $proceed_button = false;
+                    $customer_enq_data = CustomerEnquiry::where([['id',$row->customer_enquiry_id], ['quote_type','accept_cust']])->first();
+                    if($customer_enq_data->quote_type == 'accept_cust'){
+                        $data[$i]->proceed_button = true;
+                    }else{
+                        $data[$i]->proceed_button = false;
+                    }
+                    $data[$i]->cgst_amount = "0.00";
+                    $data[$i]->sgst_amount = "0.00";
+                    $data[$i]->igst_amount = "0.00";
+                    if ($row->gst_type == 'cgst+sgst') {
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+                    }
+                    if ($row->gst_type == 'igst') {
+                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                    }
+                    $i++;
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
