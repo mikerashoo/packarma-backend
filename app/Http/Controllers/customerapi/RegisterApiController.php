@@ -27,6 +27,7 @@ class RegisterApiController extends Controller
         $msg_data = array();
         \Log::info("Initiating registeration process, starting at: " . Carbon::now()->format('H:i:s:u'));
         try {
+            $user = User::all();
             // Request Validation
             $validationErrors = $this->validateSignup($request);
             if (count($validationErrors)) {

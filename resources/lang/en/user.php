@@ -35,4 +35,5 @@ return [
     'status_fetched' => 'Your Status Fetched Successfully',
     'load_page_require' => 'Load page is require',
     'contact_us_stored' => 'Your Contact Details Recorded Will get back to you soon',
+    'email_already_exit' => 'Email already registered'
 ];
