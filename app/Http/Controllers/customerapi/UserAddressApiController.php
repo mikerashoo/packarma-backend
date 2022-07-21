@@ -127,7 +127,11 @@ class UserAddressApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
-                
+                $max_count = 10;
+                $numberOfUserAddress = UserAddress::where([['user_id', $user_id], ['deleted_at', NULL]])->count();
+                if ($numberOfUserAddress >= $max_count) {
+                    errorMessage(__('user_address.address_entry_limit_reached'), $msg_data);
+                }
                 // Request Validation
                 $addressValidationErrors = $this->validateAddressRegister($request);
                 if (count($addressValidationErrors)) {

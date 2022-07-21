@@ -16,9 +16,9 @@
                                         </div>
                                         <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                             <button class="btn btn-sm btn-outline-danger px-3 py-1 mr-2" id="listing-filter-toggle"><i class="fa fa-filter"></i> Filter</button>
-                                            @if($data['customer_enquiry_add'])
+                                            {{-- @if($data['customer_enquiry_add'])
                                                 <a href="customer_enquiry_add" class="btn btn-sm btn-outline-primary px-3 py-1 src_data"><i class="fa fa-plus"></i> Add Customer Enquiry</a>
-                                            @endif
+                                            @endif --}}
                                         </div>
                                     </div>
                                 </div>

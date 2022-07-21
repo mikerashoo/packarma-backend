@@ -118,6 +118,7 @@ class CustomerEnquiryApiController extends Controller
                 $i=0;
                 foreach($data as $row)
                 {
+                    $data[$i]->enquiry_id = getFormatid($row->id, 'customer_enquiries');
                     $quotationCount= VendorQuotation::where([['user_id',$user_id],['customer_enquiry_id',$row->id]])
                                                         ->whereIn('enquiry_status',['quoted','viewed'])->get()->count();
                     $data[$i]->quotation_count = $quotationCount;
@@ -179,6 +180,7 @@ class CustomerEnquiryApiController extends Controller
                 $request['user_id'] = $user_id;
                 // Store a new enquiry
                 $enquiryData = CustomerEnquiry::create($request->all());
+                $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
                 \Log::info("Customer Enquiry Created successfully");
                 successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
              }

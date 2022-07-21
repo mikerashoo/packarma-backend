@@ -17,5 +17,6 @@ return [
     'deleted_successfully' => 'Address Deleted Successfully',
     'id_required' => 'Address Id Required',
     'my_address_updated_successfully' => 'My address Updated Successfully',
-    'my_address_created_successfully' => 'My addrerss Created Successfully'
+    'my_address_created_successfully' => 'My addrerss Created Successfully',
+    'address_entry_limit_reached' => 'You can not add more than 10 address'
 ];

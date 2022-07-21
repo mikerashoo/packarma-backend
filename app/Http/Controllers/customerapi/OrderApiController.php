@@ -48,7 +48,6 @@ class OrderApiController extends Controller
 
                 $data = DB::table('orders')->select(
                     'orders.id',
-                    // 'customer_enquiries.description',
                     'orders.grand_total',
                     'packaging_materials.packaging_material_name',
                     'packaging_materials.material_description',
@@ -57,6 +56,8 @@ class OrderApiController extends Controller
                     'orders.product_quantity',
                     'measurement_units.unit_symbol',
                     'orders.created_at',
+                    'orders.gst_type',
+                    'orders.gst_amount'
                 )
                     ->leftjoin('packaging_materials', 'packaging_materials.id', '=', 'orders.packaging_material_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
@@ -97,6 +98,15 @@ class OrderApiController extends Controller
                 }
                 $i=0;
                 foreach($data as $row) {
+                    $data[$i]->cgst_amount = "0.00";
+                    $data[$i]->sgst_amount = "0.00";
+                    $data[$i]->igst_amount = "0.00";
+                    if ($row->gst_type == 'cgst+sgst') {
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+                    }
+                    if ($row->gst_type == 'igst') {
+                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                    }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
                     if(!empty($row->shipping_details)) {
                         $data[$i]->shipping_details = json_decode($row->shipping_details,true);
@@ -160,7 +170,9 @@ class OrderApiController extends Controller
                     'orders.order_delivery_status',
                     'orders.product_quantity',
                     'measurement_units.unit_symbol',
-                    'orders.created_at'
+                    'orders.created_at',
+                    'orders.gst_type',
+                    'orders.gst_amount'
                 )
                     ->leftjoin('packaging_materials', 'packaging_materials.id', '=', 'orders.packaging_material_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
@@ -198,6 +210,15 @@ class OrderApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $i=0;
                 foreach($data as $row) {
+                    $data[$i]->cgst_amount = "0.00";
+                    $data[$i]->sgst_amount = "0.00";
+                    $data[$i]->igst_amount = "0.00";
+                    if ($row->gst_type == 'cgst+sgst') {
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+                    }
+                    if ($row->gst_type == 'igst') {
+                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                    }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
                     $i++;
                 }
@@ -269,12 +290,12 @@ class OrderApiController extends Controller
                     'vendor_warehouses.warehouse_name',
                     'orders.product_quantity',
                     'measurement_units.unit_symbol',
-                    'orders.mrp',
-                    'orders.gst_amount',
-                    'orders.grand_total',
                     'orders.shipping_details',
-                    'orders.billing_details'
-
+                    'orders.billing_details',
+                    'orders.mrp',
+                    'orders.gst_type',
+                    'orders.gst_amount',
+                    'orders.grand_total'
                 )
                     ->leftjoin('customer_enquiries', 'customer_enquiries.id', '=', 'orders.customer_enquiry_id')
                     ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'orders.recommendation_engine_id')
@@ -297,9 +318,18 @@ class OrderApiController extends Controller
                 $reviewData = Review::where('order_id', $request->order_id)->get()->count();
                 $i=0;
                 foreach($data as $row) {
+                    $data[$i]->cgst_amount = "0.00";
+                    $data[$i]->sgst_amount = "0.00";
+                    $data[$i]->igst_amount = "0.00";
+                    if ($row->gst_type == 'cgst+sgst') {
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+                    }
+                    if ($row->gst_type == 'igst') {
+                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                    }
+                    $data[$i]->order_id = getFormatid($row->id, 'orders');
                     $data[$i]->show_feedback_button = false;
                     $data[$i]->show_cancel_button = false;
-                    $data[$i]->order_id = getFormatid($row->id, 'orders');
                     if($row->order_delivery_status == 'delivered' && $reviewData == 0){
                         $data[$i]->show_feedback_button = true;
                     }
@@ -623,27 +653,20 @@ class OrderApiController extends Controller
                     "pincode" => $billing_address_data->pincode,
                     "gstin" => $billing_address_data->gstin
                 );
-
                 //json array in json columns
                 $order_request_data['order_details'] = json_encode($order_detail);
                 $order_request_data['product_details'] = json_encode($product_detail);
                 $order_request_data['shipping_details'] = json_encode($shipping_detail);
                 $order_request_data['billing_details'] = json_encode($billing_detail);
-
                 // return $order_request_data;
                 $newOrderData = Order::create($order_request_data);
-
                 // print_r($newOrderData->id);exit;
                 $newOrderData->odr_id = getFormatid($newOrderData->id, 'orders');
-
                 \Log::info("My new order created successfully!");
-
                 $myOrderData = $newOrderData->toArray();
                 $newOrderData->created_at->toDateTimeString();
                 $newOrderData->updated_at->toDateTimeString();
-                
                 successMessage(__('order.my_order_created_successfully'), $myOrderData);     
-
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
@@ -652,8 +675,6 @@ class OrderApiController extends Controller
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
-
-
 
     /**
      * Created By : Pradyumn Dwivedi
@@ -727,5 +748,4 @@ class OrderApiController extends Controller
             'order_delivery_status' => 'required|string'
         ])->errors();
     }
-
 }

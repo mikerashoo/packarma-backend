@@ -27,32 +27,20 @@
                                             <dt class="col-sm-4 text-left">User Name:</dt>
                                             <dd class="col-sm-8">{{ $data['user']->name }}</dd>
                                         </dl>
-                                        {{-- <dl class="row">
-                                            <dt class="col-sm-4 text-left">Enquiry Type :</dt>
-                                            <dd class="col-sm-8">{{ customerEnquiryType($data->enquiry_type); }}</dd>
-                                        </dl> --}}
                                         <dl class="row">                                                                        
                                             <dt class="col-sm-4 text-left">User Address:</dt>
                                             <dd class="col-sm-8">{{$data->flat}}, {{$data->land_mark}}, {{$data->area}}, {{$data->city_name}}, {{$data->state->state_name}}</dd>
                                         </dl>
                                     </div>
                                     <div class="col-md-6">
-                                        {{-- <dl class="row">
-                                            <dt class="col-sm-5 text-left">Vendor Name :</dt>
-                                            <dd class="col-sm-7">{{ $vendor_material_map['vendor']['vendor_name'] }}</dd>
-                                        </dl> --}}
                                         <dl class="row">
                                             <dt class="col-sm-5 text-left">Packaging Material:</dt>
-                                            <dd class="col-sm-7">{{$packaging_material['packaging_material_name']}}</dd>
+                                            <dd class="col-sm-7">{{$data['packaging_material']->packaging_material_name}}</dd>
                                         </dl>
                                         <dl class="row">
                                             <dt class="col-sm-5 text-left">Recommendation Engine:</dt>
-                                            <dd class="col-sm-7">{{$recommendation_engine['engine_name']}}</dd>
+                                            <dd class="col-sm-7">{{$data['recommendation_engine']->engine_name}}</dd>
                                         </dl>
-                                        {{-- <dl class="row">                                                                        
-                                            <dt class="col-sm-5 text-left">Description :</dt>
-                                            <dd class="col-sm-7 ">{{ $data->description }} </dd>
-                                        </dl> --}}
                                     </div>                                       
                                 </div>   
                                 
