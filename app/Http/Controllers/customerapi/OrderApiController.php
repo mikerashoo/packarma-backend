@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrderPayment;
-use App\Models\Customerenquiry;
+use App\Models\CustomerEnquiry;
 use App\Models\Order;
 use App\Models\UserAddress;
 use App\Models\VendorQuotation;
@@ -103,7 +103,7 @@ class OrderApiController extends Controller
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $data[$i]->gst_amount;
@@ -220,7 +220,7 @@ class OrderApiController extends Controller
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $data[$i]->gst_amount;
@@ -327,7 +327,7 @@ class OrderApiController extends Controller
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $data[$i]->gst_amount;
@@ -338,7 +338,7 @@ class OrderApiController extends Controller
                     if($row->order_delivery_status == 'delivered' && $reviewData == 0){
                         $data[$i]->show_feedback_button = true;
                     }
-                    if($row->order_delivery_status == 'processing' || $row->order_delivery_status == 'processing' || $row->order_delivery_status == 'out_for_delivery'){
+                    if($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing' || $row->order_delivery_status == 'out_for_delivery'){
                         $data[$i]->show_cancel_button = true;
                     }
                     if(!empty($row->billing_details)) {
