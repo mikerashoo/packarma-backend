@@ -479,7 +479,11 @@ class CustomerEnquiryController extends Controller
      */
     public function mapVendorForm($id, $customer_enquiry_id)
     {
-        $data['vendor'] = Vendor::all()->toArray();
+        // $data['vendor'] = Vendor::all()->toArray();
+        $data['vendor'] = DB::table('vendors')->select('vendors.*')
+            ->join('vendor_material_mappings', 'vendor_material_mappings.vendor_id', '=', 'vendors.id')
+            ->groupBy('vendors.id')
+            ->get();
         $data['customer_enquiry_data'] = CustomerEnquiry::with('user')->find($customer_enquiry_id);
 
         if ($id != -1) {
