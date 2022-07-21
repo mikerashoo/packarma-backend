@@ -110,8 +110,7 @@ class CustomerQuoteApiController extends Controller
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
-                        $total_gst_amt = number_format(($data[$i]->gst_amount / 2), 2);
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = str_replace(",", "", $total_gst_amt);
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $data[$i]->gst_amount;
@@ -212,8 +211,7 @@ class CustomerQuoteApiController extends Controller
                         $data[0]->sgst_amount = "0.00";
                         $data[0]->igst_amount = "0.00";
                         if ($data[0]->gst_type == 'cgst+sgst') {
-                            $total_gst_amt = number_format(($data[$i]->gst_amount / 2), 2);
-                            $data[$i]->sgst_amount = $data[$i]->cgst_amount = str_replace(",", "", $total_gst_amt);
+                            $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
                         }
                         if ($data[0]->gst_type == 'igst') {
                             $data[0]->igst_amount = $data[0]->gst_amount;
@@ -364,8 +362,7 @@ class CustomerQuoteApiController extends Controller
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
-                        $total_gst_amt = number_format(($data[$i]->gst_amount / 2), 2);
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = str_replace(",", "", $total_gst_amt);
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $data[$i]->gst_amount;
