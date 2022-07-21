@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrderPayment;
-use App\Models\Customerenquiry;
+use App\Models\CustomerEnquiry;
 use App\Models\Order;
 use App\Models\UserAddress;
 use App\Models\VendorQuotation;
