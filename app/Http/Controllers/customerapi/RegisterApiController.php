@@ -96,7 +96,7 @@ class RegisterApiController extends Controller
         return \Validator::make($request->all(), [
             'name' => 'required|string',
             'phone' => 'required|numeric|digits:10',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
             'password' => 'required|string|min:8',
             'visiting_card_front' => 'max:' . config('global.MAX_IMAGE_SIZE'),
             'visiting_card_back' => 'max:' . config('global.MAX_IMAGE_SIZE')
