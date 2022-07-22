@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Storage;
 use Image as thumbimage;
+use PhpParser\Node\Stmt\Foreach_;
 
 if (!function_exists('errorMessage')) {
     function errorMessage($msg = '', $data = array(), $expireSessionCode = "")
@@ -722,5 +723,38 @@ if (!function_exists('convertNumberToWord')) {
         }
 
         return ucwords(implode(' ', $words));
+    }
+}
+
+
+/**
+ *   created by : Maaz Ansari
+ *   Created On : 21-july-2022
+ *   Uses :  to disply message  
+ */
+
+
+if (!function_exists('displayMessage')) {
+    function displayMessage($msg, $value = '')
+    {
+        switch ($msg) {
+            case 'qoutation_accepted_by_customer':
+                $final_msg = 'Customer has already accepted the qoutation for vendor  ' . $value;
+                break;
+
+            case 'enquiry_order':
+                $final_msg = 'Customer already placed order';
+                break;
+
+            case 'enquiry_closed':
+                $final_msg = 'Enquiry is closed';
+                break;
+
+            default:
+                # code...
+                break;
+        }
+        echo $final_msg;
+        exit();
     }
 }
