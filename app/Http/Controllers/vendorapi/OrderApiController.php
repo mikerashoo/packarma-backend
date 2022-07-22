@@ -51,6 +51,7 @@ class OrderApiController extends Controller
                     'orders.mrp',
                     'orders.gst_type',
                     'orders.gst_amount',
+                    'orders.gst_percentage',
                     'orders.grand_total',
                     'orders.shipping_details',
                     'orders.billing_details',
@@ -195,6 +196,7 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
+                    $vendor_gst_amount = $data[$i]->vendor_amount * ($data[$i]->gst_percentage / 100);
 
                     $data[$i]->odr_id = getFormatid($row->id, $main_table);
                     $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);
@@ -202,6 +204,7 @@ class OrderApiController extends Controller
                     $data[$i]->material_unit_symbol = 'kg';
                     $data[$i]->order_status = $row->order_delivery_status;
                     $data[$i]->show_update_button = true;
+                    $data[$i]->gst_amount = number_format(($vendor_gst_amount), 2, '.', '');
                     if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing') {
                         $data[$i]->order_status = 'pending';
                     }
@@ -221,11 +224,12 @@ class OrderApiController extends Controller
                     }
                     if ($row->gst_type == 'cgst+sgst') {
 
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($vendor_gst_amount / 2), 2, '.', '');
                     }
 
                     if ($row->gst_type == 'igst') {
-                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+
+                        $data[$i]->igst_amount = number_format(($vendor_gst_amount), 2, '.', '');
                     }
 
 
