@@ -237,7 +237,7 @@ class CustomerEnquiryController extends Controller
      */
     public function customerEnquiryMapToVendor($id)
     {
-        $data['data'] = CustomerEnquiry::with('packaging_material','recommendation_engine')->find($id);
+        $data['data'] = CustomerEnquiry::with('packaging_material', 'recommendation_engine')->find($id);
         $data['user_address'] = UserAddress::all();
         $data['vendor'] = Vendor::all();
         $data['addressType'] = addressType();
@@ -482,6 +482,23 @@ class CustomerEnquiryController extends Controller
             ->groupBy('vendors.id')
             ->get();
         $data['customer_enquiry_data'] = CustomerEnquiry::with('user')->find($customer_enquiry_id);
+
+        if ($data['customer_enquiry_data']->quote_type == 'accept_cust') {
+            $accepted_vendor = DB::table('vendor_quotations')->select(
+                'vendor_quotations.vendor_id',
+                'vendors.vendor_name',
+            )
+                ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
+                ->where([['vendor_quotations.customer_enquiry_id', $customer_enquiry_id]])->first();
+            $vendor_name = $accepted_vendor->vendor_name;
+
+            displayMessage('qoutation_accepted_by_customer', $vendor_name);
+            // return 'No more Vendors can be map, it is accepted for Vendor ' . $vendor_name;
+        } elseif ($data['customer_enquiry_data']->quote_type == 'order') {
+            displayMessage('enquiry_order');
+        } elseif ($data['customer_enquiry_data']->quote_type == 'closed') {
+            displayMessage('enquiry_closed');
+        }
 
         if ($id != -1) {
             $data['vender_quotation_details'] = DB::table('vendor_quotations')->select(

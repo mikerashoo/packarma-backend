@@ -108,24 +108,30 @@ class EnquiryApiController extends Controller
                     $from_date = $request->from_date;
                     $old_from_date = explode('/', $from_date);
                     $new_from_data = $old_from_date[2] . '-' . $old_from_date[1] . '-' . $old_from_date[0];
-                    $from = Carbon::parse($new_from_data)->format('Y-m-d H:i:s');
+                    $from = Carbon::parse($new_from_data)->format('Y-m-d 00:00:00');
 
 
                     $to_date = $request->to_date;
                     $old_to_date = explode('/', $to_date);
                     $new_to_data = $old_to_date[2] . '-' . $old_to_date[1] . '-' . $old_to_date[0];
-                    $to = Carbon::parse($new_to_data)->format('Y-m-d H:i:s');
+                    $to = Carbon::parse($new_to_data)->format('Y-m-d 23:59:59');
 
 
-                    $enquiryData = $enquiryData->whereBetween($main_table . '' . '.created_at', [
-                        $from, $to
-                    ]);
-                    $data = $data->whereBetween($main_table . '' . '.created_at', [$from, $to]);
+                    // $enquiryData = $enquiryData->whereBetween($main_table . '' . '.created_at', [
+                    //     $from, $to
+                    // ]);
+                    // $data = $data->whereBetween($main_table . '' . '.created_at', [$from, $to]);
+
+                    $enquiryData = $enquiryData->whereDate($main_table . '' . '.created_at', '>=', $from)
+                        ->whereDate($main_table . '' . '.created_at', '<=', $to);
+
+                    $data = $data->whereDate($main_table . '' . '.created_at', '>=', $from)
+                        ->whereDate($main_table . '' . '.created_at', '<=', $to);
                 } elseif ($request->from_date && !isset($request->to_date)) {
                     $from_date = $request->from_date;
                     $old_from_date = explode('/', $from_date);
                     $new_from_data = $old_from_date[2] . '-' . $old_from_date[1] . '-' . $old_from_date[0];
-                    $from = Carbon::parse($new_from_data)->format('Y-m-d H:i:s');
+                    $from = Carbon::parse($new_from_data)->format('Y-m-d 00:00:00');
 
                     $enquiryData = $enquiryData->whereDate($main_table . '' . '.created_at', '>=', $from);
                     $data = $data->whereDate($main_table . '' . '.created_at', '>=', $from);
@@ -133,7 +139,7 @@ class EnquiryApiController extends Controller
                     $to_date = $request->to_date;
                     $old_to_date = explode('/', $to_date);
                     $new_to_data = $old_to_date[2] . '-' . $old_to_date[1] . '-' . $old_to_date[0];
-                    $to = Carbon::parse($new_to_data)->format('Y-m-d H:i:s');
+                    $to = Carbon::parse($new_to_data)->format('Y-m-d 23:59:59');
                     $enquiryData = $enquiryData->whereDate($main_table . '' . '.created_at', '<=', $to);
                     $data = $data->whereDate($main_table . '' . '.created_at', '<=', $to);
                 }

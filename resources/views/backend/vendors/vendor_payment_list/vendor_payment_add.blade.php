@@ -21,7 +21,7 @@
                                         @foreach ($order as $orders)
                                             @if ($orders->id == $id )
                                                 @php
-                                                    $total_amount = $orders->grand_total;
+                                                    $total_amount = $orders->vendor_amount;
                                                     $pending_amount = $orders->vendor_pending_payment;
                                                 @endphp
                                             @endif
@@ -210,7 +210,7 @@
                 $dropdownData = '<option value="">Select</option>';
                 if(result.vendor_orders.length > 0){
                     $.each(result.vendor_orders,function(key,value){
-                        $dropdownData +='<option value="'+value.id+'" data-total="'+value.grand_total+'" data-amt="'+value.vendor_pending_payment+'">'+value.id+'</option>';
+                        $dropdownData +='<option value="'+value.id+'" data-total="'+value.vendor_amount+'" data-amt="'+value.vendor_pending_payment+'">'+value.id+'</option>';
                     });
                     $("#order_id").html($dropdownData);
                 }else{

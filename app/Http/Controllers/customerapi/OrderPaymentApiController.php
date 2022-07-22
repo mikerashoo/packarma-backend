@@ -7,25 +7,46 @@ use Illuminate\Http\Request;
 // require_once __DIR__ . "Razorpay/Razorpay.php";
 use Razorpay\Api\Api;
 use App\Models\Order;
+use App\Models\OrderPayment;
 use App\Models\User;
 use Response;
 
 class OrderPaymentApiController extends Controller
 {
     /**
-     * Created By Pradyumn Dwivedi
-     * Created at : 02/06/2022
+     * Created By Maaz Ansari
+     * Created at : 22/07/2022
      * Uses : To start payment process and store in table
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function new_order_payment(Request $request){
+
+
+    private $testRazerpayKeyId;
+    private $testRazerpayKeySecrete;
+    private $liveRazerpayKeyId;
+    private $liveRazerpayKeySecrete;
+
+    public function __construct()
+    {
+        $this->testRazerpayKeyId = 'rzp_test_IbGrIYYPsUpuDu';
+        $this->testRazerpayKeySecrete = 'eQ0raEWDhl22k47atkqZXAvm';
+        $this->liveRazerpayKeyId = '';
+        $this->liveRazerpayKeySecrete = '';
+    }
+
+
+
+    public function new_order_payment(Request $request)
+    {
         $msg_data = array();
         try {
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
+                $platform = $request->header('platform');
+                $ip_address = request()->ip();
 
                 $validationErrors = $this->validateNewOrderPayment($request);
                 if (count($validationErrors)) {
@@ -36,62 +57,55 @@ class OrderPaymentApiController extends Controller
 
                 // $user = User::find(auth('api')->user()->id);
                 $order = Order::find($request->order_id);
-                if($order){
-                    $data =[];
-                    
-                    if($order->customer_pending_payment == 0){
+                if ($order) {
+                    $data = [];
+
+                    if ($order->grand_total == 0) {
                         $payment_status = 'fully_paid';
                         $razorpay_order_id = NULL;
-                    }else{
+                    } else {
                         $payment_status = 'pending';
-                        $api = new Api('rzp_live_bR8azqSzFdzMBU','c9emzzGMOhWxXsACsEKfQKwi');
-
-                        print_r($api->order->fetch('order_JdMgJNcDrkslK8')); exit;
-
-                        $payment_data = $api->order->create(array('receipt' => '123', 'amount' => 100, 'currency' => 'INR', 'notes'=> array('key1'=> 'value3','key2'=> 'value2')));
-                        print_r($payment_data); exit;
-                        // $api = new Api('rzp_live_bR8azqSzFdzMBU','c9emzzGMOhWxXsACsEKfQKwi');
-                        // $input = array(
-                        //     'amount' => $order->customer_pending_payment * 100,
-                        //     'currency' => 'INR'
-                        // );
-                        // $api = new Api('rzp_live_bR8azqSzFdzMBU','c9emzzGMOhWxXsACsEKfQKwi');
-  
-                        // $payment = $api->payment->fetch('*');
-                        // return $payment;
-                        // if(count($input)  && !empty($input['razorpay_payment_id'])) {
-                        //     $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount'=>$order->customer_pending_payment)); 
-                        // }
-
-                        // $razorpay_order_id = $input['razorpay_payment_id'];
+                        $api = new Api($this->testRazerpayKeyId, $this->testRazerpayKeySecrete);
+                        $razorpay_order = $api->order->create(
+                            array(
+                                'amount' => $order->grand_total * 100,
+                                'currency' => 'INR'
+                            )
+                        );
+                        $razorpay_order_id = $razorpay_order['id'];
                     }
 
-                    $orderPayment = new OrderPayment;
+                    $orderPayment = new OrderPayment();
                     $orderPayment->user_id = $user_id;
                     $orderPayment->order_id = $order->id;
-                    $orderPayment->amount = $order->customer_pending_payment;
+                    $orderPayment->product_id = $order->product_id;
+                    $orderPayment->vendor_id = $order->vendor_id;
+                    $orderPayment->amount = $order->grand_total;
                     $orderPayment->gateway_id = $razorpay_order_id;
                     $orderPayment->payment_status = $payment_status;
+                    $orderPayment->transaction_date = date('Y-m-d');
+                    $orderPayment->call_from = $platform;
+                    $orderPayment->ip_address = $ip_address;
                     $orderPayment->save();
 
-                    if($order->customer_pending_payment == 0){
+                    if ($order->grand_total == 0) {
                         $data['gateway_id'] = '';
                         $data['razorpay_api_key'] = '';
                         $data['currency'] = '';
-                        $data['amount'] = $order->customer_pending_payment;
+                        $data['amount'] = $order->grand_total;
                         $data['gateway_call'] = 'no';
                         $data['msg'] = 'Thank you, you have successfully completed your Payment';
-                    }else{
+                    } else {
                         $data['gateway_id'] = $razorpay_order_id;
-                        $data['razorpay_api_key'] = 'rzp_live_bR8azqSzFdzMBU';
+                        $data['razorpay_api_key'] = $this->testRazerpayKeyId;
                         $data['currency'] = 'INR';
-                        $data['amount'] = $order->customer_pending_payment;
+                        $data['amount'] = $order->grand_total;
                         $data['gateway_call'] = 'yes';
                         $data['msg'] = 'Please continue to pay the order amount';
                     }
                     return response()->json($data)->setStatusCode(200);
-                }else{
-                    return response()->json(['msg' => 'Order not found'],400);
+                } else {
+                    errorMessage(__('order.order_not_found'), $msg_data, 400);
                 }
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
@@ -103,19 +117,22 @@ class OrderPaymentApiController extends Controller
     }
 
     /**
-     * Created By Pradyumn Dwivedi
-     * Created at : 02/06/2022
+     * Created By Maaz Ansari
+     * Created at : 22/07/2022
      * Uses : To check payment success status
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function order_payment_success(Request $request){
+    public function order_payment_success(Request $request)
+    {
         $msg_data = array();
         try {
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
+                $platform = $request->header('platform');
+                $ip_address = request()->ip();
 
                 $validationErrors = $this->validatePaymentSuccess($request);
                 if (count($validationErrors)) {
@@ -124,35 +141,40 @@ class OrderPaymentApiController extends Controller
                 }
                 \Log::info("Checking Payment success status!");
 
-            // $user = User::find(auth('api')->user()->id);
+                // $user = User::find(auth('api')->user()->id);
 
-                $api = new Api('rzp_live_bR8azqSzFdzMBU','c9emzzGMOhWxXsACsEKfQKwi');
-                try{
-                    $payment = $api->payment->fetch($request->payment_id);
-                }catch (\Exception $e) {
-                    return response()->json(['msg' => 'Payment ID given not correct, Payment failed'],400);
+                $api = new Api($this->testRazerpayKeyId, $this->testRazerpayKeySecrete);
+                try {
+                    $payment = $api->payment->fetch($request->gateway_key);
+                } catch (\Exception $e) {
+                    // return response()->json(['msg' => 'Gateway Key given not correct, Payment failed'], 400);
+                    errorMessage(__('payment.wrong_gateway_key'), $msg_data, 400);
                 }
-                    
-                if($payment){
-                    $orderPayment = OrderPayment::where('gateway_id',$request->gateway_id)->first();
-                    if($orderPayment){
+
+                if ($payment) {
+                    $orderPayment = OrderPayment::where('gateway_id', $request->gateway_id)->first();
+                    if ($orderPayment) {
                         $orderPayment->gateway_key = $payment->id;
+                        $orderPayment->transaction_date = date('Y-m-d');
+                        $orderPayment->call_from = $platform;
+                        $orderPayment->ip_address = $ip_address;
                         $orderPayment->status = 'fully_paid';
                         $orderPayment->save();
 
-                        //update customer pending payment and vendor pending payment 
-                        $orderTable = new Order;
-                        $orderTable->customer_pending_payment = 0;
-                        $orderTable->vendor_pending_payment = $order->vendor_price;
+                        //update order status in order table 
+                        $orderTable = Order::find($orderPayment->order_id);;
+                        $orderTable->status = 'fully_paid';
                         $orderTable->save();
-
-                        return response()->json(['msg' => 'Order placed successfully'],200);
-                    }else{
-                        return response()->json(['msg' => 'Order not found'],400);
+                        successMessage(__('order.order_placed'), $msg_data);
+                        // return response()->json(['msg' => 'Order placed successfully'], 200);
+                    } else {
+                        // return response()->json(['msg' => 'Order not found'], 400);
+                        errorMessage(__('order.order_not_found'), $msg_data, 400);
                     }
-                }else{
-                    return response()->json(['msg' => 'Payment failed'],400);
-                }            
+                } else {
+                    errorMessage(__('payment.payment_failed'), $msg_data, 400);
+                    // return response()->json(['msg' => 'Payment failed'], 400);
+                }
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
@@ -164,8 +186,8 @@ class OrderPaymentApiController extends Controller
 
 
     /**
-     * Created By : Pradyumn Dwivedi
-     * Created at : 02/06/2022
+     * Created By : Maaz Ansari
+     * Created at : 22/07/2022
      * Uses : To validate order payment request
      * 
      * Validate request for registeration.
@@ -181,8 +203,8 @@ class OrderPaymentApiController extends Controller
     }
 
     /**
-     * Created By : Pradyumn Dwivedi
-     * Created at : 02/06/2022
+     * Created By : Maaz Ansari
+     * Created at : 22/07/2022
      * Uses : To validate payment success request
      * 
      * Validate request for registeration.
@@ -193,8 +215,8 @@ class OrderPaymentApiController extends Controller
     private function validatePaymentSuccess(Request $request)
     {
         return \Validator::make($request->all(), [
-            'order_id' => 'required|numeric',
-            'payment_id' => 'required|numeric'
+            'gateway_id' => 'required',
+            'gateway_key' => 'required'
         ])->errors();
     }
 }

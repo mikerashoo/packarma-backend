@@ -132,22 +132,28 @@ class OrderApiController extends Controller
                     $from_date = $request->from_date;
                     $old_from_date = explode('/', $from_date);
                     $new_from_data = $old_from_date[2] . '-' . $old_from_date[1] . '-' . $old_from_date[0];
-                    $from = Carbon::parse($new_from_data)->format('Y-m-d H:i:s');
+                    $from = Carbon::parse($new_from_data)->format('Y-m-d 00:00:00');
 
 
                     $to_date = $request->to_date;
                     $old_to_date = explode('/', $to_date);
                     $new_to_data = $old_to_date[2] . '-' . $old_to_date[1] . '-' . $old_to_date[0];
-                    $to = Carbon::parse($new_to_data)->format('Y-m-d H:i:s');
+                    $to = Carbon::parse($new_to_data)->format('Y-m-d 23:59:59');
 
 
-                    $orderData = $orderData->whereBetween($main_table . '' . '.created_at', [$from, $to]);
-                    $data = $data->whereBetween($main_table . '' . '.created_at', [$from, $to]);
+                    // $orderData = $orderData->whereBetween($main_table . '' . '.created_at', [$from, $to]);
+                    // $data = $data->whereBetween($main_table . '' . '.created_at', [$from, $to]);
+
+                    $orderData = $orderData->whereDate($main_table . '' . '.created_at', '>=', $from)
+                        ->whereDate($main_table . '' . '.created_at', '<=', $to);
+
+                    $data = $data->whereDate($main_table . '' . '.created_at', '>=', $from)
+                        ->whereDate($main_table . '' . '.created_at', '<=', $to);
                 } elseif ($request->from_date && !isset($request->to_date)) {
                     $from_date = $request->from_date;
                     $old_from_date = explode('/', $from_date);
                     $new_from_data = $old_from_date[2] . '-' . $old_from_date[1] . '-' . $old_from_date[0];
-                    $from = Carbon::parse($new_from_data)->format('Y-m-d H:i:s');
+                    $from = Carbon::parse($new_from_data)->format('Y-m-d 00:00:00');
 
                     $orderData = $orderData->whereDate($main_table . '' . '.created_at', '>=', $from);
                     $data = $data->whereDate($main_table . '' . '.created_at', '>=', $from);
@@ -155,7 +161,7 @@ class OrderApiController extends Controller
                     $to_date = $request->to_date;
                     $old_to_date = explode('/', $to_date);
                     $new_to_data = $old_to_date[2] . '-' . $old_to_date[1] . '-' . $old_to_date[0];
-                    $to = Carbon::parse($new_to_data)->format('Y-m-d H:i:s');
+                    $to = Carbon::parse($new_to_data)->format('Y-m-d 23:59:59');
                     $orderData = $orderData->whereDate($main_table . '' . '.created_at', '<=', $to);
                     $data = $data->whereDate($main_table . '' . '.created_at', '<=', $to);
                 }
@@ -214,7 +220,8 @@ class OrderApiController extends Controller
                         $data[$i]->customer_payment_status = 'pending';
                     }
                     if ($row->gst_type == 'cgst+sgst') {
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
                     }
 
                     if ($row->gst_type == 'igst') {
