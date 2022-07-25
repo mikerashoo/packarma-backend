@@ -197,7 +197,7 @@ class PackagingMaterialApiController extends Controller
                 'vendor_price' => 'required|numeric|between:1,99999.999',
             ],
             [
-                'vendor_price.digits_between' => 'The vendor price must not be greater than 99999',
+                'vendor_price.between' => 'The vendor price must not be greater than 99999.99',
             ]
         )->errors();
     }

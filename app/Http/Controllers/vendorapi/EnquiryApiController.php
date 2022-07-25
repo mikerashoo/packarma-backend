@@ -291,7 +291,7 @@ class EnquiryApiController extends Controller
 
             ],
             [
-                'vendor_price.digits_between' => 'The vendor price must not be greater than 99999',
+                'vendor_price.between' => 'The vendor price must not be greater than 99999.99',
                 'vendor_warehouse_id.required' => 'Warehouse is require',
                 'vendor_warehouse_id.gt' => 'Warehouse not found',
             ]
