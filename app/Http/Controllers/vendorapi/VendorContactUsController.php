@@ -48,7 +48,8 @@ class VendorContactUsController extends Controller
                 \Log::info("Store Contact us Details");
 
                 $ip_address = request()->ip();
-
+                $platform = $request->header('platform');
+                $vendor_contact_us_details['call_from'] = $platform;
                 $vendor_contact_us_details['ip_address'] = $ip_address;
                 $vendor_contact_us_details['vendor_id'] = $vendor_id;
 
@@ -85,11 +86,9 @@ class VendorContactUsController extends Controller
                 'email' => 'required|email',
                 'subject' => 'required|string',
                 'details' => 'required|string',
-                'call_from' => 'required|string',
             ],
             [
                 'details.required' => 'Message is Require',
-                'call_from.required' => 'Device Type is Require'
             ]
         )->errors();
     }
@@ -101,11 +100,9 @@ class VendorContactUsController extends Controller
             [
                 'subject' => 'required|string',
                 'details' => 'required|string',
-                'call_from' => 'required|string',
             ],
             [
                 'details.required' => 'Message is Require',
-                'call_from.required' => 'Device Type is Require'
             ]
         )->errors();
     }

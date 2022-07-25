@@ -50,6 +50,8 @@ class CustomerContactUsController extends Controller
                 \Log::info("Store Contact us Details");
 
                 $ip_address = request()->ip();
+                $platform = $request->header('platform');
+                $user_contact_us_details['call_from'] = $platform;
                 $user_contact_us_details['ip_address'] = $ip_address;
                 $user_contact_us_details['user_id'] = $user_id;
 
@@ -85,11 +87,9 @@ class CustomerContactUsController extends Controller
                 'email' => 'required|email',
                 'subject' => 'required|string',
                 'details' => 'required|string',
-                'call_from' => 'required|string',
             ],
             [
                 'details.required' => 'Message is Require',
-                'call_from.required' => 'Device Type is Require'
             ]
         )->errors();
     }
@@ -101,11 +101,9 @@ class CustomerContactUsController extends Controller
             [
                 'subject' => 'required|string',
                 'details' => 'required|string',
-                'call_from' => 'required|string',
             ],
             [
                 'details.required' => 'Message is Require',
-                'call_from.required' => 'Device Type is Require'
             ]
         )->errors();
     }

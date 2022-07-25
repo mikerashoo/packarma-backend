@@ -51,6 +51,7 @@ class OrderApiController extends Controller
                     'orders.mrp',
                     'orders.gst_type',
                     'orders.gst_amount',
+                    'orders.gst_percentage',
                     'orders.grand_total',
                     'orders.shipping_details',
                     'orders.billing_details',
@@ -132,22 +133,28 @@ class OrderApiController extends Controller
                     $from_date = $request->from_date;
                     $old_from_date = explode('/', $from_date);
                     $new_from_data = $old_from_date[2] . '-' . $old_from_date[1] . '-' . $old_from_date[0];
-                    $from = Carbon::parse($new_from_data)->format('Y-m-d H:i:s');
+                    $from = Carbon::parse($new_from_data)->format('Y-m-d 00:00:00');
 
 
                     $to_date = $request->to_date;
                     $old_to_date = explode('/', $to_date);
                     $new_to_data = $old_to_date[2] . '-' . $old_to_date[1] . '-' . $old_to_date[0];
-                    $to = Carbon::parse($new_to_data)->format('Y-m-d H:i:s');
+                    $to = Carbon::parse($new_to_data)->format('Y-m-d 23:59:59');
 
 
-                    $orderData = $orderData->whereBetween($main_table . '' . '.created_at', [$from, $to]);
-                    $data = $data->whereBetween($main_table . '' . '.created_at', [$from, $to]);
+                    // $orderData = $orderData->whereBetween($main_table . '' . '.created_at', [$from, $to]);
+                    // $data = $data->whereBetween($main_table . '' . '.created_at', [$from, $to]);
+
+                    $orderData = $orderData->whereDate($main_table . '' . '.created_at', '>=', $from)
+                        ->whereDate($main_table . '' . '.created_at', '<=', $to);
+
+                    $data = $data->whereDate($main_table . '' . '.created_at', '>=', $from)
+                        ->whereDate($main_table . '' . '.created_at', '<=', $to);
                 } elseif ($request->from_date && !isset($request->to_date)) {
                     $from_date = $request->from_date;
                     $old_from_date = explode('/', $from_date);
                     $new_from_data = $old_from_date[2] . '-' . $old_from_date[1] . '-' . $old_from_date[0];
-                    $from = Carbon::parse($new_from_data)->format('Y-m-d H:i:s');
+                    $from = Carbon::parse($new_from_data)->format('Y-m-d 00:00:00');
 
                     $orderData = $orderData->whereDate($main_table . '' . '.created_at', '>=', $from);
                     $data = $data->whereDate($main_table . '' . '.created_at', '>=', $from);
@@ -155,7 +162,7 @@ class OrderApiController extends Controller
                     $to_date = $request->to_date;
                     $old_to_date = explode('/', $to_date);
                     $new_to_data = $old_to_date[2] . '-' . $old_to_date[1] . '-' . $old_to_date[0];
-                    $to = Carbon::parse($new_to_data)->format('Y-m-d H:i:s');
+                    $to = Carbon::parse($new_to_data)->format('Y-m-d 23:59:59');
                     $orderData = $orderData->whereDate($main_table . '' . '.created_at', '<=', $to);
                     $data = $data->whereDate($main_table . '' . '.created_at', '<=', $to);
                 }
@@ -189,6 +196,7 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
+                    $vendor_gst_amount = $data[$i]->vendor_amount * ($data[$i]->gst_percentage / 100);
 
                     $data[$i]->odr_id = getFormatid($row->id, $main_table);
                     $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);
@@ -196,6 +204,7 @@ class OrderApiController extends Controller
                     $data[$i]->material_unit_symbol = 'kg';
                     $data[$i]->order_status = $row->order_delivery_status;
                     $data[$i]->show_update_button = true;
+                    $data[$i]->gst_amount = number_format(($vendor_gst_amount), 2, '.', '');
                     if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing') {
                         $data[$i]->order_status = 'pending';
                     }
@@ -214,11 +223,13 @@ class OrderApiController extends Controller
                         $data[$i]->customer_payment_status = 'pending';
                     }
                     if ($row->gst_type == 'cgst+sgst') {
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2);
+
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($vendor_gst_amount / 2), 2, '.', '');
                     }
 
                     if ($row->gst_type == 'igst') {
-                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+
+                        $data[$i]->igst_amount = number_format(($vendor_gst_amount), 2, '.', '');
                     }
 
 

@@ -23,4 +23,5 @@ return [
     'order_already_delivered' => 'Order Already Delivered',
     'my_order_created_successfully' => 'My Order Created Successfully',
     'billing_details_calculated_successfully' => 'Billing Details Calculated Successfully',
+    'order_placed' => 'Order placed successfully',
 ];

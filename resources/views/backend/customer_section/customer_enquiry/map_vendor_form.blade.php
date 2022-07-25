@@ -16,11 +16,11 @@
         <dd class="col-sm-7">
             <select class="select2" id="vendor" value="" name="vendor" style="width:100%;" onchange="getVendorWarehouse(this.value)">
                 <option value="" style="width=100%;">Select Vendor</option>
-                @if(is_array($vendor))
+                {{-- @if(is_array($vendor)) --}}
         @foreach($vendor as $ven)
-            <option value="{{$ven['id']}}" @isset($vender_quotation_details->vendor_id) {{ ($ven['id'] == $vender_quotation_details->vendor_id) ? 'selected':'';}} @endisset>{{$ven['vendor_name']}}</option>;
+            <option value="{{$ven->id}}" @isset($vender_quotation_details->vendor_id) {{ ($ven->id == $vender_quotation_details->vendor_id) ? 'selected':'';}} @endisset>{{$ven->vendor_name}}</option>;
         @endforeach
-            @endif
+            {{-- @endif --}}
             </select>
         </dd>
     </dl>
