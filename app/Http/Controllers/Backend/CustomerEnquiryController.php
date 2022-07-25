@@ -372,7 +372,7 @@ class CustomerEnquiryController extends Controller
         $tblObj->product_id = $request->product;
         $tblObj->vendor_id = $request->vendor;
         $enquiry_state_id = (int)$request->enquiry_state_id;
-        $warehouse_with_state = explode('|', $request->warehouse);
+        $warehouse_with_state = explode('|', $request->warehouse ?? '0|0');
         $warehouse_state_id = (int)($warehouse_with_state[1]);
         $warehouse = $warehouse_with_state[0];
         // $tblObj->vendor_warehouse_id= $request->warehouse;
@@ -564,7 +564,7 @@ class CustomerEnquiryController extends Controller
         if ($for == 'vendor') {
             return \Validator::make($request->all(), [
                 'vendor' => 'required|numeric|unique:vendor_quotations,vendor_id,' . $request->id . ',id,customer_enquiry_id,' . $request->customer_enquiry_id,
-                'warehouse' => 'required',
+                // 'warehouse' => 'required',
                 'vendor_price' => 'required|numeric|min:0|not_in:0',
                 'commission_rate' => 'required|numeric|min:0|not_in:0',
                 // 'quotation_validity.*' => 'required|numeric',

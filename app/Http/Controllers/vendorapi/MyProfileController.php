@@ -219,6 +219,10 @@ class MyProfileController extends Controller
                     errorMessage(__('vendor.not_active'), $msg_data);
                 }
 
+                if (empty($vendorData->gst_certificate)) {
+                    $vendorData->gst_certificate =  getFile('default_vendor_gst_file.jpeg', 'vendor_gst_certificate');
+                }
+
                 $vendorData->load_page = $default_home_page;
                 successMessage(__('vendor.status_fetched'), $vendorData->toArray());
             } else {

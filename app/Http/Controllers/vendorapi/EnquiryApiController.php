@@ -287,12 +287,13 @@ class EnquiryApiController extends Controller
             $request->all(),
             [
                 'vendor_price' => 'required|numeric|between:1,99999.999',
-                'vendor_warehouse_id' => 'required',
+                'vendor_warehouse_id' => 'required|integer|gt:0',
 
             ],
             [
                 'vendor_price.digits_between' => 'The vendor price must not be greater than 99999',
                 'vendor_warehouse_id.required' => 'Warehouse is require',
+                'vendor_warehouse_id.gt' => 'Warehouse not found',
             ]
 
         )->errors();

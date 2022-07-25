@@ -28,7 +28,7 @@ class PaymentApiController extends Controller
                 $vendor_id = $vendor_token['sub'];
                 $page_no = 1;
                 $limit = 10;
-                $orderByArray = ['orders.updated_at' => 'DESC',];
+                $orderByArray = ['orders.updated_at' => 'DESC'];
                 $defaultSortById = false;
 
                 if (isset($request->page_no) && !empty($request->page_no)) {
