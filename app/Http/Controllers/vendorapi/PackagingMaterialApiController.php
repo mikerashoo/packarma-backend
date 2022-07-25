@@ -194,10 +194,10 @@ class PackagingMaterialApiController extends Controller
         return \Validator::make(
             $request->all(),
             [
-                'vendor_price' => 'required|numeric|digits_between:1,5',
+                'vendor_price' => 'required|numeric|between:1,99999.999',
             ],
             [
-                'vendor_price.digits_between' => 'The vendor price must not be greater than 99999',
+                'vendor_price.between' => 'The vendor price must not be greater than 99999.99',
             ]
         )->errors();
     }

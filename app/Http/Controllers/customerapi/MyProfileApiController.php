@@ -26,7 +26,7 @@ class MyProfileApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
-                $data = User::select('name', 'email', 'phone_country_id','approval_status', 'phone', 'whatsapp_country_id', 'whatsapp_no','visiting_card_front','visiting_card_back')
+                $data = User::select('name', 'email', 'phone_country_id', 'approval_status', 'phone', 'whatsapp_country_id', 'whatsapp_no', 'visiting_card_front', 'visiting_card_back')
                     ->with(['phone_country' => function ($query) {
                         $query->select('id', 'country_name', 'phone_code');
                     }])
@@ -70,9 +70,9 @@ class MyProfileApiController extends Controller
                 // // print_r($data);exit;
                 // foreach($data as $row)
                 // {
-                    $data->visiting_card_front = getFile($data->visiting_card_front,'visiting_card/front',false,'front');
-                    $data->visiting_card_back = getFile($data->visiting_card_back, 'visiting_card/back',false,'back');
-                    // $i++;
+                $data->visiting_card_front = getFile($data->visiting_card_front, 'visiting_card/front', false, 'front');
+                $data->visiting_card_back = getFile($data->visiting_card_back, 'visiting_card/back', false, 'back');
+                // $i++;
                 // }
                 $msg_data['result'] = $data;
                 $msg_data['flags'] = $flags;
@@ -132,6 +132,7 @@ class MyProfileApiController extends Controller
                 $userData->updated_at->toDateTimeString();
                 $input = array();
                 //Storing visiting card Front and Back
+
                 if ($request->hasFile('visiting_card_front')) {
                     \Log::info("Storing visiting card front image.");
                     $visiting_card_front = $request->file('visiting_card_front');
@@ -139,7 +140,16 @@ class MyProfileApiController extends Controller
                     $imgname_front = $user['id'] . '_front_' . Carbon::now()->format('dmYHis') . '.' . $extension;
                     $visiting_card_front->storeAs('uploads/visiting_card/front', $imgname_front, 'public');
                     $user['visiting_card_front'] = $input['visiting_card_front'] = $imgname_front;
+                } else {
+
+                    $file_to_unlink =  getFile($checkUser->visiting_card_front, 'visiting_card/front', FALSE, 'unlink');
+                    if ($file_to_unlink != 'file_not_found') {
+                        unlink($file_to_unlink);
+                    }
+                    $user['visiting_card_front'] = $input['visiting_card_front'] = NULL;
                 }
+
+
                 if ($request->hasFile('visiting_card_back')) {
                     \Log::info("Storing visiting card back image.");
                     $visiting_card_back = $request->file('visiting_card_back');
@@ -147,7 +157,15 @@ class MyProfileApiController extends Controller
                     $imgname_back = $user['id'] . '_back_' . Carbon::now()->format('dmYHis') . '.' . $extension;
                     $visiting_card_back->storeAs('uploads/visiting_card/back', $imgname_back, 'public');
                     $user['visiting_card_back'] = $input['visiting_card_back'] = $imgname_back;
+                } else {
+                    $file_to_unlink =  getFile($checkUser->visiting_card_back, 'visiting_card/back', FALSE, 'unlink');
+                    if ($file_to_unlink != 'file_not_found') {
+                        unlink($file_to_unlink);
+                    }
+                    $user['visiting_card_back'] = $input['visiting_card_back'] = NULL;
                 }
+
+
                 if (!empty($input)) {
                     User::find($user_id)->update($input);
                 }
@@ -190,7 +208,7 @@ class MyProfileApiController extends Controller
         }
     }
 
-   /**
+    /**
      * Created By Pradyumn Dwivedi
      * Created at : 07/07/2022
      * Uses : To check customer status
@@ -252,8 +270,8 @@ class MyProfileApiController extends Controller
     {
         return \Validator::make($request->all(), [
             'name' => 'required|string',
-            'visiting_card_front' => 'mimes:jpeg,png,jpg'. config('global.VISITING_CARD_IMAGE_SIZE'),
-            'visiting_card_back' => 'mimes:jpeg,png,jpg'. config('global.VISITING_CARD_IMAGE_SIZE')
+            'visiting_card_front' => 'mimes:jpeg,png,jpg' . config('global.VISITING_CARD_IMAGE_SIZE'),
+            'visiting_card_back' => 'mimes:jpeg,png,jpg' . config('global.VISITING_CARD_IMAGE_SIZE')
         ])->errors();
     }
 }

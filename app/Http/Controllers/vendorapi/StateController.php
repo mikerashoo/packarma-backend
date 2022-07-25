@@ -26,6 +26,8 @@ class StateController extends Controller
             if ($vendor_token) {
                 $page_no = 1;
                 $limit = 10;
+                $orderByArray = ['states.state_name' => 'ASC'];
+                $defaultSortById = false;
 
                 if (isset($request->page_no) && !empty($request->page_no)) {
                     $page_no = $request->page_no;
@@ -65,6 +67,13 @@ class StateController extends Controller
                 if (isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search, 'state_name');
                 }
+
+                if ($defaultSortById) {
+                    $orderByArray = ['states.id' => 'DESC'];
+                }
+
+                $data = allOrderBy($data, $orderByArray);
+
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
 

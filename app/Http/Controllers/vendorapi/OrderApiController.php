@@ -196,7 +196,7 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
-                    $vendor_gst_amount = $data[$i]->vendor_amount * ($data[$i]->gst_percentage / 100);
+                    $vendor_gst_amount = $row->vendor_amount * ($row->gst_percentage / 100);
 
                     $data[$i]->odr_id = getFormatid($row->id, $main_table);
                     $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);

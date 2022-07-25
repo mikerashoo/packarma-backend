@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
+use Razorpay\Api\Api;
 use App\Models\Subscription;
 use App\Models\UserSubscriptionPayment;
 use Illuminate\Http\Request;
-use Razorpay\Api\Api;
 use App\Models\User;
 use Response;
 
@@ -63,7 +63,7 @@ class UserSubscriptionPaymentApiController extends Controller
                     } else {
                         $payment_status = 'pending';
                         $api = new Api($this->testRazerpayKeyId, $this->testRazerpayKeySecrete);
-                        $razorpay_order = $api->subscription_payment->create(
+                        $razorpay_order = $api->order->create(
                             array(
                                 'amount' => $Subscription->amount * 100,
                                 'currency' => 'INR'
