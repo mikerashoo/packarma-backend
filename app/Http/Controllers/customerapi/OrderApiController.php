@@ -103,10 +103,10 @@ class OrderApiController extends Controller
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
-                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                        $data[$i]->igst_amount = $row->gst_amount;
                     }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
                     // if(!empty($row->shipping_details)) {
@@ -220,10 +220,10 @@ class OrderApiController extends Controller
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
-                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                        $data[$i]->igst_amount = $row->gst_amount;
                     }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
                     $i++;
@@ -327,10 +327,10 @@ class OrderApiController extends Controller
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
-                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                        $data[$i]->igst_amount = $row->gst_amount;
                     }
                     $data[$i]->order_id = getFormatid($row->id, 'orders');
                     $data[$i]->show_feedback_button = false;
@@ -477,8 +477,20 @@ class OrderApiController extends Controller
                 //calculate total amount
                 $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price;
 
+               
                 //create an array and store all value
                 $quantity_calculation_data =  array();
+                //gst amount show
+                $quantity_calculation_data['cgst_amount'] = "0.00";
+                $quantity_calculation_data['sgst_amount'] = "0.00";
+                $quantity_calculation_data['igst_amount'] = "0.00";
+                if ($vendor_quotation_data->gst_type == 'cgst+sgst') {
+                    $$quantity_calculation_data['cgst_amount'] = $quantity_calculation_data['sgst_amount'] = number_format(($gst_amount_price / 2), 2, '.', '');
+                }
+                if ($vendor_quotation_data->gst_type == 'igst') {
+                    $quantity_calculation_data['igst_amount'] = $gst_amount_price;
+                }
+
                 $quantity_calculation_data['quantity'] = $product_quantity;
                 $quantity_calculation_data['rate'] = $mrp_rate_price;
                 $quantity_calculation_data['gst_amount'] = $gst_amount_price;
