@@ -40,7 +40,7 @@ class RegisterApiController extends Controller
             unset($request->password);
             $request['password'] = $password;
 
-            $checkUser = User::where('phone', $request->phone)->first();
+            $checkUser = User::where('phone', $request->phone)->orWhere('email', strtolower($request->email))->first();
             if (empty($checkUser)) {
                 // Store a new user
                 $userData = User::create($request->all());
@@ -96,7 +96,7 @@ class RegisterApiController extends Controller
         return \Validator::make($request->all(), [
             'name' => 'required|string',
             'phone' => 'required|numeric|digits:10',
-            'email' => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
+            'email' => 'required|email',
             'password' => 'required|string|min:8',
             'visiting_card_front' => 'max:' . config('global.MAX_IMAGE_SIZE'),
             'visiting_card_back' => 'max:' . config('global.MAX_IMAGE_SIZE')

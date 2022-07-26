@@ -33,14 +33,14 @@ class RegisterApiController extends Controller
             unset($request->vendor_password);
             $request['vendor_password'] = $vendor_password;
 
-            $checkVendor = Vendor::where('phone', $request->phone)->first();
+            $checkVendor = Vendor::where('phone', $request->phone)->orWhere('vendor_email', strtolower($request->vendor_email))->first();
             if (empty($checkVendor)) {
                 // Store a new vendor
                 $vendorData = Vendor::create($request->all());
                 \Log::info("Vendor registered successfully with email id: " . $request->vendor_email . " and phone number: " . $request->phone);
             } else {
                 if ($checkVendor->is_verified == 'Y') {
-                    errorMessage(__('vendor.phone_already_exist'), $vendor_msg_data);
+                    errorMessage(__('vendor.vendor_already_exist'), $vendor_msg_data);
                 }
                 // Update existing vendor
                 $checkVendor->update($request->all());
@@ -75,7 +75,7 @@ class RegisterApiController extends Controller
             'vendor_company_name' => 'required|string',
             'phone_country_id' => 'required|numeric',
             'phone' => 'required|numeric|digits:10',
-            'vendor_email' => 'required|email|unique:vendors,vendor_email,NULL,id,deleted_at,NULL',
+            'vendor_email' => 'required|email',
             'vendor_password' => 'required|string|min:8'
 
         ])->errors();
