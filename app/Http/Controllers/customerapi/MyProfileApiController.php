@@ -247,6 +247,11 @@ class MyProfileApiController extends Controller
                 if ($userData->status == 0 && $userData->approval_status == 'accepted') {
                     errorMessage(__('user.not_active'), $msg_data);
                 }
+
+                if (empty($userData->gst_certificate)) {
+                    $userData->gst_certificate =  getFile('default_user_gst_file.jpeg', 'gst_certificate');
+                }
+
                 $userData->load_page = $default_home_page;
                 successMessage(__('user.status_fetched'), $userData->toArray());
             } else {

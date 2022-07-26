@@ -28,23 +28,21 @@ class OrderApiController extends Controller
     public function index(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 $user_id = $token['sub'];
-                $page_no=1;
-                $limit=10;
+                $page_no = 1;
+                $limit = 10;
                 $orderByArray = ['orders.id' => 'DESC',];
                 $defaultSortByName = false;
-                if(isset($request->page_no) && !empty($request->page_no)) {
-                    $page_no=$request->page_no;
+                if (isset($request->page_no) && !empty($request->page_no)) {
+                    $page_no = $request->page_no;
                 }
-                if(isset($request->limit) && !empty($request->limit)) {
-                    $limit=$request->limit;
+                if (isset($request->limit) && !empty($request->limit)) {
+                    $limit = $request->limit;
                 }
-                $offset=($page_no-1)*$limit;
+                $offset = ($page_no - 1) * $limit;
 
                 $data = DB::table('orders')->select(
                     'orders.id',
@@ -61,7 +59,7 @@ class OrderApiController extends Controller
                 )
                     ->leftjoin('packaging_materials', 'packaging_materials.id', '=', 'orders.packaging_material_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
-                    ->where('orders.user_id', $user_id)->whereIn('orders.order_delivery_status', ['pending', 'processing','out_for_delivery']);
+                    ->where('orders.user_id', $user_id)->whereIn('orders.order_delivery_status', ['pending', 'processing', 'out_for_delivery']);
 
                 $orderData = Order::whereRaw("1 = 1");
                 if ($request->order_id) {
@@ -80,12 +78,11 @@ class OrderApiController extends Controller
                     $orderData = $orderData->where('orders' . '' . '.product_id', $request->product_id);
                     $data = $data->where('orders' . '' . '.product_id', $request->product_id);
                 }
-                if(empty($orderData->first()))
-                {
+                if (empty($orderData->first())) {
                     errorMessage(__('order.order_not_found'), $msg_data);
                 }
-                if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'order_payment_status|vendor_payment_status|order_delivery_status');
+                if (isset($request->search) && !empty($request->search)) {
+                    $data = fullSearchQuery($data, $request->search, 'order_payment_status|vendor_payment_status|order_delivery_status');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['products.product_name' => 'ASC'];
@@ -93,11 +90,11 @@ class OrderApiController extends Controller
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                if(empty($data)) {
+                if (empty($data)) {
                     errorMessage(__('order.order_not_found'), $msg_data);
                 }
-                $i=0;
-                foreach($data as $row) {
+                $i = 0;
+                foreach ($data as $row) {
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
@@ -108,8 +105,8 @@ class OrderApiController extends Controller
                         $data[$i]->igst_amount = $data[$i]->gst_amount;
                     }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
-                    if(!empty($row->shipping_details)) {
-                        $data[$i]->shipping_details = json_decode($row->shipping_details,true);
+                    if (!empty($row->shipping_details)) {
+                        $data[$i]->shipping_details = json_decode($row->shipping_details, true);
                     } else {
                         $data[$i]->shipping_details = null;
                     }
@@ -118,14 +115,10 @@ class OrderApiController extends Controller
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Order List fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -142,23 +135,21 @@ class OrderApiController extends Controller
     public function completed_orders(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 $user_id = $token['sub'];
-                $page_no=1;
-                $limit=10;
+                $page_no = 1;
+                $limit = 10;
                 $orderByArray = ['orders.updated_at' => 'DESC'];
                 $defaultSortByName = false;
-                if(isset($request->page_no) && !empty($request->page_no)) {
-                    $page_no=$request->page_no;
+                if (isset($request->page_no) && !empty($request->page_no)) {
+                    $page_no = $request->page_no;
                 }
-                if(isset($request->limit) && !empty($request->limit)) {
-                    $limit=$request->limit;
+                if (isset($request->limit) && !empty($request->limit)) {
+                    $limit = $request->limit;
                 }
-                $offset=($page_no-1)*$limit;
+                $offset = ($page_no - 1) * $limit;
 
                 $data = DB::table('orders')->select(
                     'orders.id',
@@ -195,12 +186,11 @@ class OrderApiController extends Controller
                     $orderData = $orderData->where('orders' . '' . '.product_id', $request->product_id);
                     $data = $data->where('orders' . '' . '.product_id', $request->product_id);
                 }
-                if(empty($orderData->first()))
-                {
+                if (empty($orderData->first())) {
                     errorMessage(__('order.order_not_found'), $msg_data);
                 }
-                if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'order_payment_status|vendor_payment_status|order_delivery_status');
+                if (isset($request->search) && !empty($request->search)) {
+                    $data = fullSearchQuery($data, $request->search, 'order_payment_status|vendor_payment_status|order_delivery_status');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['products.product_name' => 'ASC'];
@@ -208,8 +198,8 @@ class OrderApiController extends Controller
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                $i=0;
-                foreach($data as $row) {
+                $i = 0;
+                foreach ($data as $row) {
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
@@ -222,21 +212,17 @@ class OrderApiController extends Controller
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
                     $i++;
                 }
-                
-                if(empty($data)) {
+
+                if (empty($data)) {
                     errorMessage(__('order.order_not_found'), $msg_data);
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Order List fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -253,11 +239,9 @@ class OrderApiController extends Controller
     public function show(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 //Request Validation
                 $validationErrors = $this->validateShowOrder($request);
                 if (count($validationErrors)) {
@@ -312,12 +296,12 @@ class OrderApiController extends Controller
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
                     ->leftjoin('states', 'states.id', '=', 'customer_enquiries.state_id')
                     ->leftjoin('cities', 'cities.id', '=', 'customer_enquiries.city_id')
-                    ->where([['orders.user_id', $user_id],['orders.id',$request->order_id]]);
+                    ->where([['orders.user_id', $user_id], ['orders.id', $request->order_id]]);
 
                 $data = $data->get()->toArray();
                 $reviewData = Review::where('order_id', $request->order_id)->get()->count();
-                $i=0;
-                foreach($data as $row) {
+                $i = 0;
+                foreach ($data as $row) {
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
@@ -330,15 +314,15 @@ class OrderApiController extends Controller
                     $data[$i]->order_id = getFormatid($row->id, 'orders');
                     $data[$i]->show_feedback_button = false;
                     $data[$i]->show_cancel_button = false;
-                    if($row->order_delivery_status == 'delivered' && $reviewData == 0){
+                    if ($row->order_delivery_status == 'delivered' && $reviewData == 0) {
                         $data[$i]->show_feedback_button = true;
                     }
-                    if($row->order_delivery_status != 'cancelled'){
+                    if ($row->order_delivery_status != 'cancelled') {
                         $data[$i]->show_cancel_button = true;
                     }
-                    if(!empty($row->billing_details)) {
-                        $data[$i]->shipping_details = json_decode($row->shipping_details,true);
-                        $data[$i]->billing_details = json_decode($row->billing_details,true);
+                    if (!empty($row->billing_details)) {
+                        $data[$i]->shipping_details = json_decode($row->shipping_details, true);
+                        $data[$i]->billing_details = json_decode($row->billing_details, true);
                     } else {
                         $data[$i]->shipping_details = null;
                         $data[$i]->billing_details = null;
@@ -347,14 +331,10 @@ class OrderApiController extends Controller
                 }
                 $responseData['result'] = $data;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Show Selected Order Details fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -371,11 +351,9 @@ class OrderApiController extends Controller
     public function cancel_order(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 $user_id = $token['sub'];
                 // Request Validation
                 $validationErrors = $this->validateCancelOrder($request);
@@ -383,26 +361,22 @@ class OrderApiController extends Controller
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
-                $statusData = Order::where('id',$request->order_id)->first();
-                if($statusData->order_delivery_status == "delivered"){
+                $statusData = Order::where('id', $request->order_id)->first();
+                if ($statusData->order_delivery_status == "delivered") {
                     errorMessage(__('order.order_already_delivered'), $msg_data);
                 }
-                if($statusData->order_delivery_status == "cancelled"){
+                if ($statusData->order_delivery_status == "cancelled") {
                     errorMessage(__('order.order_already_cancelled'), $msg_data);
                 }
-                if($request->order_delivery_status == "cancelled"){
+                if ($request->order_delivery_status == "cancelled") {
                     $orderStatusData = Order::find($request->order_id)->update($request->all());
                     \Log::info("Order Cancelled Successfully");
                     successMessage(__('order.order_cancelled_successfully'));
                 }
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Quotation Reject failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -415,7 +389,7 @@ class OrderApiController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     private function validateShowOrder(Request $request)
     {
         return \Validator::make($request->all(), [
@@ -432,7 +406,8 @@ class OrderApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function final_quantity(Request $request){
+    public function final_quantity(Request $request)
+    {
         $msg_data = array();
         try {
             $token = readHeaderToken();
@@ -449,10 +424,10 @@ class OrderApiController extends Controller
                 $customer_enquiry_id = $request->customer_enquiry_id;
                 $vendor_quotation_id = $request->vendor_quotation_id;
                 $product_quantity = $request->product_quantity;
-                
+
                 //fetching data of vendor quotation by vendor quotation id
-                $vendor_quotation_data = VendorQuotation::where([['id',$vendor_quotation_id],['customer_enquiry_id', $customer_enquiry_id],['user_id', $user_id]])->first();
-                
+                $vendor_quotation_data = VendorQuotation::where([['id', $vendor_quotation_id], ['customer_enquiry_id', $customer_enquiry_id], ['user_id', $user_id]])->first();
+
                 //storing values in variable from vendor quotation table
                 $mrp_rate_price = $vendor_quotation_data->mrp;
                 $freight_amount_price = $vendor_quotation_data->freight_amount;
@@ -462,9 +437,9 @@ class OrderApiController extends Controller
                 $sub_total_price = $product_quantity * $mrp_rate_price;
 
                 //calculate gst amount
-                if($gst_percentage != 0){
+                if ($gst_percentage != 0) {
                     $gst_amount_price = $sub_total_price * $gst_percentage / 100;
-                }else{
+                } else {
                     $gst_amount_price = 0;
                 }
 
@@ -478,8 +453,7 @@ class OrderApiController extends Controller
                 $quantity_calculation_data['gst_amount'] = $gst_amount_price;
                 $quantity_calculation_data['total_amount'] = $total_amount_price;
 
-                successMessage(__('order.billing_details_calculated_successfully'), $quantity_calculation_data);     
-
+                successMessage(__('order.billing_details_calculated_successfully'), $quantity_calculation_data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
@@ -499,7 +473,8 @@ class OrderApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function new_order(Request $request){
+    public function new_order(Request $request)
+    {
         $msg_data = array();
         try {
             $token = readHeaderToken();
@@ -517,10 +492,10 @@ class OrderApiController extends Controller
                 $customer_enquiry_id = $request->customer_enquiry_id;
                 $vendor_quotation_id = $request->vendor_quotation_id;
                 $product_quantity = $request->product_quantity;
-                
+
                 //fetching data of vendor quotation by vendor quotation id
-                $vendor_quotation_data = VendorQuotation::where('id',$vendor_quotation_id)->first();
-                
+                $vendor_quotation_data = VendorQuotation::where('id', $vendor_quotation_id)->first();
+
                 //storing values in variable from vendor quotation table
                 $sub_total_price = $vendor_quotation_data->sub_total;
                 $mrp_rate_price = $vendor_quotation_data->mrp;
@@ -537,9 +512,9 @@ class OrderApiController extends Controller
                 $sub_total_price = $product_quantity * $mrp_rate_price;
 
                 //calculate gst amount
-                if($gst_percentage != 0){
+                if ($gst_percentage != 0) {
                     $gst_amount_price = $sub_total_price * $gst_percentage / 100;
-                }else{
+                } else {
                     $gst_amount_price = 0;
                 }
 
@@ -569,7 +544,7 @@ class OrderApiController extends Controller
                 $order_request_data['currency_id'] = $vendor_quotation_data->currency_id;
 
                 //checking address checkbox
-                if($request->same_address_checkbox == 'yes'){
+                if ($request->same_address_checkbox == 'yes') {
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
                     $shipping_address_data = $billing_address_data;
 
@@ -578,7 +553,7 @@ class OrderApiController extends Controller
                     $shipping_state_data = State::find($shipping_address_data->state_id);
                     $shipping_country_data = Country::find($shipping_address_data->country_id);
                     // print_r($shipping_country_data->phone_code);exit;
-                }else{
+                } else {
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
                     $shipping_address_data = UserAddress::find($request->user_shipping_address_id);
                     $billing_state_data = State::find($billing_address_data->state_id);
@@ -587,7 +562,7 @@ class OrderApiController extends Controller
                     $shipping_country_data = Country::find($shipping_address_data->country_id);
                 }
                 //store order details in json array
-                $order_detail=array(
+                $order_detail = array(
                     'user_name' => $user_data->name,
                     'product_quantity' => $product_quantity,
                     'mrp' => $mrp_rate_price,
@@ -603,9 +578,9 @@ class OrderApiController extends Controller
                     'vendor_pending_payment' => 0,
                 );
                 //store product details in json array
-                $product_detail=array(
-                    "category_id"=> $request->category_id,
-                    "sub_category_id"=> $request->sub_category_id,
+                $product_detail = array(
+                    "category_id" => $request->category_id,
+                    "sub_category_id" => $request->sub_category_id,
                     "product_id" => $request->product_id,
                     "shelf_life" => $request->shelf_life,
                     "product_weight" => $request->product_weight,
@@ -621,10 +596,10 @@ class OrderApiController extends Controller
                 );
                 //store shipping details in json array
                 // print_r($shipping_country_data->phone_code);exit;
-                $shipping_detail=array(
+                $shipping_detail = array(
                     "user_address_id" => $shipping_address_data->id,
-                    "user_name"=> $user_data->name,
-                    "address_name"=> $shipping_address_data->address_name,
+                    "user_name" => $user_data->name,
+                    "address_name" => $shipping_address_data->address_name,
                     "type" => $shipping_address_data->type,
                     "phone_code" => $shipping_country_data->phone_code,
                     "mobile_no" => $shipping_address_data->mobile_no,
@@ -637,10 +612,10 @@ class OrderApiController extends Controller
                     "pincode" => $shipping_address_data->pincode
                 );
                 //store billing details in json array
-                $billing_detail=array(
-                    "user_address_id"=> $billing_address_data->id,
-                    "user_name"=> $user_data->name,
-                    "address_name"=> $billing_address_data->address_name,
+                $billing_detail = array(
+                    "user_address_id" => $billing_address_data->id,
+                    "user_name" => $user_data->name,
+                    "address_name" => $billing_address_data->address_name,
                     "type" => $billing_address_data->type,
                     "phone_code" => $billing_country_data->phone_code,
                     "mobile_no" => $billing_address_data->mobile_no,
@@ -666,7 +641,7 @@ class OrderApiController extends Controller
                 $myOrderData = $newOrderData->toArray();
                 $newOrderData->created_at->toDateTimeString();
                 $newOrderData->updated_at->toDateTimeString();
-                successMessage(__('order.my_order_created_successfully'), $myOrderData);     
+                successMessage(__('order.my_order_created_successfully'), $myOrderData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
@@ -696,7 +671,7 @@ class OrderApiController extends Controller
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
-            'shelf_life' => 'required|numeric',
+            'shelf_life' => 'required|int|digits_between:1,3',
             'product_weight' => 'required|numeric',
             'measurement_unit_id' => 'required|numeric',
             'product_quantity' => 'required|numeric',
@@ -729,7 +704,7 @@ class OrderApiController extends Controller
         return \Validator::make($request->all(), [
             'customer_enquiry_id' => 'required|numeric',
             'vendor_quotation_id' => 'required|numeric',
-            'product_quantity' => 'required|numeric'
+            'product_quantity' => 'required|int|digits_between:1,4'
         ])->errors();
     }
 
@@ -740,7 +715,7 @@ class OrderApiController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     private function validateCancelOrder(Request $request)
     {
         return \Validator::make($request->all(), [
