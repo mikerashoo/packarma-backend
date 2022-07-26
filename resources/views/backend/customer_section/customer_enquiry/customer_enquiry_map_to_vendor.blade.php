@@ -8,7 +8,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-12 col-sm-7">
-                                    <h5 class="pt-2">Map Vendors To Customer Enquiry : {{ $data->id }}</h5>
+                                    <h5 class="pt-2">Map Vendors To Customer Enquiry : {{ $customer_enquiry_id }}</h5>
                                 </div>
                                 <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                     <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>

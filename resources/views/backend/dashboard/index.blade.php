@@ -20,7 +20,7 @@
                                         <div class="media">
                                             <div class="media-body text-left">
                                                 <h3 class="mb-1 success">{{ $data['user']; }}</h3>
-                                                <span>Total Customers</span><br><br><br>
+                                                <span>Approved Customers</span><br><br><br>
                                             </div>
                                             <div class="media-right align-self-center">
                                                 <i class="ft-users success font-large-2 float-right"></i>
@@ -54,7 +54,7 @@
                                         <div class="media">
                                             <div class="media-body text-left">
                                                 <h3 class="mb-1 success">{{ $data['vendor'] }}</h3>
-                                                <span>Total Vendors</span><br><br><br>
+                                                <span>Approved Vendors</span><br><br><br>
                                             </div>
                                             <div class="media-right align-self-center">
                                                 <i class="ft-users success font-large-2 float-right"></i>
@@ -105,7 +105,7 @@
                                         <div class="media">
                                             <div class="media-body text-left">
                                                 <h3 class="mb-1 primary">{{ $data['today_sales']; }}</h3>
-                                                <span>Today's Sales</span><br><br>
+                                                <span>Order Generated Today</span><br><br>
                                             </div>
                                             <div class="media-right align-self-center">
                                                 <i class="ft-briefcase primary font-large-2 float-right"></i>
@@ -155,8 +155,8 @@
                                     <div class="card-body">
                                         <div class="media">
                                             <div class="media-body text-left">
-                                                <h3 class="mb-1 success">{{ $data['today_orders'] }}</h3>
-                                                <span>Today's Orders</span><br><br>
+                                                <h3 class="mb-1 success">{{ $data['total_orders'] }}</h3>
+                                                <span>Total Orders</span><br><br>
                                             </div>
                                             <div class="media-right align-self-center">
                                                 <i class="ft-briefcase success font-large-2 float-right"></i>

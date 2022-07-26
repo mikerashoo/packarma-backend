@@ -52,9 +52,9 @@ class PackagingMaterialController extends Controller
                     // ->editColumn('shelf_life', function ($event) {
                     //     return $event->shelf_life;
                     // })
-                    ->editColumn('approx_price', function ($event) {
-                        return $event->approx_price;
-                    })
+                    // ->editColumn('approx_price', function ($event) {
+                    //     return $event->approx_price;
+                    // })
                     ->editColumn('action', function ($event) {
                         $packaging_material_view = checkPermission('packaging_material_view');
                         $packaging_material_edit = checkPermission('packaging_material_edit');
@@ -77,7 +77,7 @@ class PackagingMaterialController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['packaging_material', 'material_description', 'shelf_life', 'approx_price', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['packaging_material', 'material_description', 'shelf_life', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([

@@ -126,7 +126,7 @@ class SubscriptionController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'amount' => 'required|numeric',
+            'amount' => 'required|numeric|gt:.99',
         ])->errors();
     }
 }

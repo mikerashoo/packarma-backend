@@ -251,6 +251,7 @@ if (!function_exists('customerEnquiryQuoteType')) {
             'enquired' => 'Enquired',
             'map_to_vendor' => 'Map To Vendor',
             'accept_cust' => 'Accept By Customer',
+            'order' => 'Order Placed',
             'closed' => 'Closed',
             'auto_reject' => 'Auto Reject'
         );

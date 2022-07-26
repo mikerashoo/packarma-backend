@@ -51,10 +51,10 @@ class BasicAuth
             exit;
         }
 
-        if (!is_numeric($request->header('version'))) {
-            errorMessage(__('auth.invalid_version'), $return_array);
-            exit;
-        }
+        // if (!is_numeric($request->header('version'))) {
+        //     errorMessage(__('auth.invalid_version'), $return_array);
+        //     exit;
+        // }
 
         if (!$request->header('device-id')) {
             errorMessage(__('auth.device_id_require'), $return_array);

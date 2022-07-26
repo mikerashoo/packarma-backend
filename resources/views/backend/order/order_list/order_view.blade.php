@@ -7,7 +7,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-12 col-sm-7">
-                                    <h5 class="pt-2">View Order Details</h5>
+                                    <h5 class="pt-2">View Order Details : {{ $data[0]['order_id']}}</h5>
                                 </div>
                                 <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                     <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
@@ -151,7 +151,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Shelf Life</strong></td>
-                                                        <td>{{$data[0]['shelf_life']}}</td>
+                                                        <td>{{$data[0]['shelf_life']}} Days</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Product Weight</strong></td>
