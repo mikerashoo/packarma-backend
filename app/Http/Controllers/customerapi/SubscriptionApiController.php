@@ -24,43 +24,38 @@ class SubscriptionApiController extends Controller
     public function index(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
-                $page_no=1;
-                $limit=10;
+            if ($token) {
+                $page_no = 1;
+                $limit = 10;
                 $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
                 $defaultSortByName = false;
-                if(isset($request->page_no) && !empty($request->page_no)) {
-                    $page_no=$request->page_no;
+                if (isset($request->page_no) && !empty($request->page_no)) {
+                    $page_no = $request->page_no;
                 }
-                if(isset($request->limit) && !empty($request->limit)) {
-                    $limit=$request->limit;
+                if (isset($request->limit) && !empty($request->limit)) {
+                    $limit = $request->limit;
                 }
-                $offset=($page_no-1)*$limit;
-                $data = Subscription::select('id','subscription_type','amount');
+                $offset = ($page_no - 1) * $limit;
+                $data = Subscription::select('id', 'subscription_type', 'amount');
                 $subscriptionData = Subscription::whereRaw("1 = 1");
 
-                
 
-                if($request->subscription_id)
-                {
+
+                if ($request->subscription_id) {
                     $subscriptionData = $subscriptionData->where('id', $request->subscription_id);
-                    $data = $data->where('id',$request->subscription_id);
+                    $data = $data->where('id', $request->subscription_id);
                 }
-                if($request->subscription_type)
-                {
-                    $subscriptionData = $subscriptionData->where('subscription_type',$request->subscription_type);
-                    $data = $data->where('subscription_type',$request->subscription_type);
+                if ($request->subscription_type) {
+                    $subscriptionData = $subscriptionData->where('subscription_type', $request->subscription_type);
+                    $data = $data->where('subscription_type', $request->subscription_type);
                 }
-                if(empty($subscriptionData->first()))
-                {
+                if (empty($subscriptionData->first())) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
-                if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'subscription_type');
+                if (isset($request->search) && !empty($request->search)) {
+                    $data = fullSearchQuery($data, $request->search, 'subscription_type');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
@@ -69,8 +64,8 @@ class SubscriptionApiController extends Controller
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 //subscription button flag start
-                $i=0;
-                foreach ($data as $subs_listing){
+                $i = 0;
+                foreach ($data as $subs_listing) {
                     $renew_button = false;
                     $subscribe_button = true;
                     $data[$i]['renew_button'] = $renew_button;
@@ -78,20 +73,16 @@ class SubscriptionApiController extends Controller
                     $i++;
                 }
                 //subscription button flag end
-                if(empty($data)) {
+                if (empty($data)) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Subscription fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -108,45 +99,43 @@ class SubscriptionApiController extends Controller
     public function buy_subscription(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 $payment_status = 'paid';
                 $payment_mode = 'cash';
                 $user_id = $token['sub'];
                 $user = User::find($user_id);
                 $subscription = Subscription::find($request->subscription_id);
-                if($subscription->subscription_type == 'monthly'){
+                if ($subscription->subscription_type == 'monthly') {
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
 
                     $newDateTime = Carbon::now()->addDays(30)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
-                if($subscription->subscription_type == 'quarterly'){
+                if ($subscription->subscription_type == 'quarterly') {
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
 
                     $newDateTime = Carbon::now()->addDays(90)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
-                if($subscription->subscription_type == 'semi_yearly'){
+                if ($subscription->subscription_type == 'semi_yearly') {
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
 
                     $newDateTime = Carbon::now()->addDays(180)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
-                if($subscription->subscription_type == 'yearly'){
+                if ($subscription->subscription_type == 'yearly') {
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
 
                     $newDateTime = Carbon::now()->addDays(360)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
-                if($user->subscription_end != null && $user->subscription_end > $subscription_start_date){
+                if ($user->subscription_end != null && $user->subscription_end > $subscription_start_date) {
                     $diff_days = strtotime($user->subscription_end) - strtotime($subscription_start_date);
                     // 1 day = 24 hours
                     // 24 * 60 * 60 = 86400 seconds
@@ -189,14 +178,10 @@ class SubscriptionApiController extends Controller
 
                 // successMessage(__('subscription.subscription_payment_entry_created_successfully'), $subscriptionPaymentData);
                 successMessage(__('subscription.you_have_successfully_subscribed'), $subscribed);
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Subscription fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -213,11 +198,9 @@ class SubscriptionApiController extends Controller
     public function my_subscription(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 $show_renewal = 7;
                 $user_id = $token['sub'];
                 $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
@@ -230,60 +213,55 @@ class SubscriptionApiController extends Controller
                     'users.subscription_end'
                 )
                     ->leftjoin('subscriptions', 'users.subscription_id', '=', 'subscriptions.id')
-                    ->leftJoin('user_subscription_payments', function($join)
-                         {
-                             $join->on('users.subscription_id', '=', 'user_subscription_payments.subscription_id');
-                             $join->on('users.subscription_start', '=', 'user_subscription_payments.created_at');
-                         })
-                    ->where([['users.id', $user_id],['user_subscription_payments.payment_status','paid']]);
-                
+                    ->leftJoin('user_subscription_payments', function ($join) {
+                        $join->on('users.subscription_id', '=', 'user_subscription_payments.subscription_id');
+                        $join->on('users.subscription_start', '=', 'user_subscription_payments.created_at');
+                    })
+                    ->where([['users.id', $user_id], ['user_subscription_payments.payment_status', 'paid']]);
+
                 $data = $data->first();
                 //subscription listing 
-                $subscription_list = Subscription::select('id','subscription_type','amount');
+                $subscription_list = Subscription::select('id', 'subscription_type', 'amount');
                 $subscriptionData = Subscription::whereRaw("1 = 1");
-                
+
                 // if(empty($data)) {
                 //     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 // }
-                if($request->subscription_id)
-                {
+                if ($request->subscription_id) {
                     $subscriptionData = $subscriptionData->where('id', $request->subscription_id);
-                    $subscription_list = $subscription_list->where('id',$request->subscription_id);
+                    $subscription_list = $subscription_list->where('id', $request->subscription_id);
                 }
-                if($request->subscription_type)
-                {
-                    $subscriptionData = $subscriptionData->where('subscription_type',$request->subscription_type);
-                    $subscription_list = $subscription_list->where('subscription_type',$request->subscription_type);
+                if ($request->subscription_type) {
+                    $subscriptionData = $subscriptionData->where('subscription_type', $request->subscription_type);
+                    $subscription_list = $subscription_list->where('subscription_type', $request->subscription_type);
                 }
-                if(empty($subscriptionData->first()))
-                {
+                if (empty($subscriptionData->first())) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
-                if(isset($request->search) && !empty($request->search)) {
-                    $subscription_list = fullSearchQuery($subscriptionData, $request->search,'subscription_type');
+                if (isset($request->search) && !empty($request->search)) {
+                    $subscription_list = fullSearchQuery($subscriptionData, $request->search, 'subscription_type');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['subscriptions.subscription_type' => 'ASC'];
                 }
                 $subscription_list = allOrderBy($subscription_list, $orderByArray);
-                
+
                 $subscription_total_records = $subscription_list->get()->count();
                 $subscription_list = $subscription_list->get()->toArray();
                 //subscription button flag start
-                $i=0;
-                foreach ($subscription_list as $subs_listing){
+                $i = 0;
+                foreach ($subscription_list as $subs_listing) {
                     $renew_button = false;
                     $subscribe_button = false;
-                    if (!empty($data->subscription_id)){
-                        if($data->subscription_end < Carbon::now()->addDays($show_renewal)->format('Y-m-d H:i:s')){
-                            if($data->subscription_id == $subs_listing['id']){
+                    if (!empty($data->subscription_id)) {
+                        if ($data->subscription_end < Carbon::now()->addDays($show_renewal)->format('Y-m-d H:i:s')) {
+                            if ($data->subscription_id == $subs_listing['id']) {
                                 $renew_button = true;
-                            }else{
+                            } else {
                                 $subscribe_button = true;
                             }
                         }
-                    }
-                    else{
+                    } else {
                         $subscribe_button = true;
                     }
                     $subscription_list[$i]['renew_button'] = $renew_button;
@@ -291,21 +269,17 @@ class SubscriptionApiController extends Controller
                     $i++;
                 }
                 //subscription button flag end
-                if(empty($subscription_list)) {
+                if (empty($subscription_list)) {
                     errorMessage(__('subscription.subscription_not_found'), $msg_data);
                 }
                 $responseData['subscription_listing'] = $subscription_list;
                 $responseData['total_records'] = $subscription_total_records;
                 $responseData['my_subscription'] = $data;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Subscription fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
