@@ -49,6 +49,7 @@ class OrderApiController extends Controller
                     'orders.order_delivery_status',
                     'orders.product_quantity',
                     'orders.mrp',
+                    'vendor_quotations.vendor_price',
                     'orders.gst_type',
                     'orders.gst_amount',
                     'orders.gst_percentage',
@@ -96,6 +97,7 @@ class OrderApiController extends Controller
                     ->leftjoin('recommendation_engines', 'orders.recommendation_engine_id', '=', 'recommendation_engines.id')
                     ->leftjoin('packaging_materials', 'orders.packaging_material_id', '=', 'packaging_materials.id')
                     ->leftjoin('customer_enquiries', 'orders.customer_enquiry_id', '=', 'customer_enquiries.id')
+                    ->leftjoin('vendor_quotations', 'orders.vendor_quotation_id', '=', 'vendor_quotations.id')
                     ->leftjoin('states', 'customer_enquiries.state_id', '=', 'states.id')
                     ->leftjoin('cities', 'customer_enquiries.city_id', '=', 'cities.id')
                     ->where([[$main_table . '' . '.vendor_id', $vendor_id], [$main_table . '' . '.deleted_at', NULL]]);
@@ -205,6 +207,7 @@ class OrderApiController extends Controller
                     $data[$i]->order_status = $row->order_delivery_status;
                     $data[$i]->show_update_button = true;
                     $data[$i]->gst_amount = number_format(($vendor_gst_amount), 2, '.', '');
+                    $data[$i]->grand_total = number_format(($row->vendor_amount + $vendor_gst_amount), 2, '.', '');
                     if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing') {
                         $data[$i]->order_status = 'pending';
                     }

@@ -158,12 +158,12 @@ class OrderPaymentApiController extends Controller
                         $orderPayment->transaction_date = date('Y-m-d');
                         $orderPayment->call_from = $platform;
                         $orderPayment->ip_address = $ip_address;
-                        $orderPayment->status = 'fully_paid';
+                        $orderPayment->payment_status = 'fully_paid';
                         $orderPayment->save();
 
                         //update order status in order table 
                         $orderTable = Order::find($orderPayment->order_id);;
-                        $orderTable->status = 'fully_paid';
+                        $orderTable->customer_payment_status = 'fully_paid';
                         $orderTable->save();
                         successMessage(__('order.order_placed'), $msg_data);
                         // return response()->json(['msg' => 'Order placed successfully'], 200);
