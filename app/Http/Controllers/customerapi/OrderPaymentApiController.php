@@ -22,22 +22,6 @@ class OrderPaymentApiController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
-    private $testRazerpayKeyId;
-    private $testRazerpayKeySecrete;
-    private $liveRazerpayKeyId;
-    private $liveRazerpayKeySecrete;
-
-    public function __construct()
-    {
-        $this->testRazerpayKeyId = 'rzp_test_IbGrIYYPsUpuDu';
-        $this->testRazerpayKeySecrete = 'eQ0raEWDhl22k47atkqZXAvm';
-        $this->liveRazerpayKeyId = '';
-        $this->liveRazerpayKeySecrete = '';
-    }
-
-
-
     public function new_order_payment(Request $request)
     {
         $msg_data = array();
@@ -65,7 +49,7 @@ class OrderPaymentApiController extends Controller
                         $razorpay_order_id = NULL;
                     } else {
                         $payment_status = 'pending';
-                        $api = new Api($this->testRazerpayKeyId, $this->testRazerpayKeySecrete);
+                        $api = new Api(config('app.testRazerpayKeyId'), config('app.testRazerpayKeySecrete'));
                         $razorpay_order = $api->order->create(
                             array(
                                 'amount' => $order->grand_total * 100,
@@ -97,7 +81,7 @@ class OrderPaymentApiController extends Controller
                         $data['msg'] = 'Thank you, you have successfully completed your Payment';
                     } else {
                         $data['gateway_id'] = $razorpay_order_id;
-                        $data['razorpay_api_key'] = $this->testRazerpayKeyId;
+                        $data['razorpay_api_key'] = config('app.testRazerpayKeyId');
                         $data['currency'] = 'INR';
                         $data['amount'] = $order->grand_total;
                         $data['gateway_call'] = 'yes';
@@ -143,7 +127,7 @@ class OrderPaymentApiController extends Controller
 
                 // $user = User::find(auth('api')->user()->id);
 
-                $api = new Api($this->testRazerpayKeyId, $this->testRazerpayKeySecrete);
+                $api = new Api(config('app.testRazerpayKeyId'), config('app.testRazerpayKeySecrete'));
                 try {
                     $payment = $api->payment->fetch($request->gateway_key);
                 } catch (\Exception $e) {

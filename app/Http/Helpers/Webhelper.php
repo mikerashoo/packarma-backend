@@ -5,6 +5,8 @@ use App\Models\User;
 use App\Models\Vendor;
 use App\Models\VendorDevice;
 use App\Models\CustomerDevice;
+use App\Models\Subscription;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -756,5 +758,74 @@ if (!function_exists('displayMessage')) {
         }
         echo $final_msg;
         exit();
+    }
+}
+
+
+
+/**
+ *   created by : Maaz Ansari
+ *   Created On : 27-july-2022
+ *   Uses :  calculate subscription  
+ */
+
+
+if (!function_exists('calcCustomerSubscription')) {
+    function calcCustomerSubscription($user_id, $subscription_id)
+    {
+        $user = User::find($user_id);
+        $subscription = Subscription::find($subscription_id);
+        if ($subscription->subscription_type == 'monthly') {
+            $currentDateTime = Carbon::now()->toArray();
+            $subscription_start_date = $currentDateTime['formatted'];
+
+            $newDateTime = Carbon::now()->addDays(30)->toArray();
+            $subscription_end_date =  $newDateTime['formatted'];
+        }
+        if ($subscription->subscription_type == 'quarterly') {
+            $currentDateTime = Carbon::now()->toArray();
+            $subscription_start_date = $currentDateTime['formatted'];
+
+            $newDateTime = Carbon::now()->addDays(90)->toArray();
+            $subscription_end_date =  $newDateTime['formatted'];
+        }
+        if ($subscription->subscription_type == 'semi_yearly') {
+            $currentDateTime = Carbon::now()->toArray();
+            $subscription_start_date = $currentDateTime['formatted'];
+
+            $newDateTime = Carbon::now()->addDays(180)->toArray();
+            $subscription_end_date =  $newDateTime['formatted'];
+        }
+        if ($subscription->subscription_type == 'yearly') {
+            $currentDateTime = Carbon::now()->toArray();
+            $subscription_start_date = $currentDateTime['formatted'];
+
+            $newDateTime = Carbon::now()->addDays(360)->toArray();
+            $subscription_end_date =  $newDateTime['formatted'];
+        }
+        if ($user->subscription_end != null && $user->subscription_end > $subscription_start_date) {
+            $diff_days = strtotime($user->subscription_end) - strtotime($subscription_start_date);
+            // 1 day = 24 hours
+            // 24 * 60 * 60 = 86400 seconds
+            $interval = abs(round($diff_days / 86400));
+            $subscription_end_date = Carbon::createFromFormat('Y-m-d H:i:s', $subscription_end_date);
+            $subscription_end_date = $subscription_end_date->addDays($interval);
+        }
+        //data to enter in user table of selected user id
+        $subscription_request_data = array();
+        $subscription_request_data['subscription_id'] = $subscription->id;
+        $subscription_request_data['subscription_start'] = $subscription_start_date;
+        $subscription_request_data['subscription_end'] = $subscription_end_date;
+        $subscription_request_data['type'] = 'premium';
+
+        //update subscription data of user
+        $user->update($subscription_request_data);
+        $subscription_data = $user;
+        $subscribed = $subscription_data->toArray();
+        $subscription_data->created_at->toDateTimeString();
+        $subscription_data->updated_at->toDateTimeString();
+        \Log::info("Subscription, user subscribed successfully!");
+
+        return true;
     }
 }
