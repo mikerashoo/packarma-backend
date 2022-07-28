@@ -5,6 +5,8 @@ namespace App\Http\Controllers\customerapi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RecommendationEngine;
+use App\Models\User;
+use Carbon\Carbon;
 use Response;
 
 class PackagingSolutionApiController extends Controller
@@ -20,49 +22,57 @@ class PackagingSolutionApiController extends Controller
     public function index(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        $isSubscribed = true;
+
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
 
                 $validationErrors = $this->validateRequest($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage($validationErrors->all(), $validationErrors->all());
-                }
-                else{
-                    $page_no=1;
-                    $limit=10;
+                } else {
+                    $page_no = 1;
+                    $limit = 10;
                     $orderByArray = ['recommendation_engines.engine_name' => 'ASC'];
                     $defaultSortByName = false;
-                    if(isset($request->page_no) && !empty($request->page_no)) {
-                        $page_no=$request->page_no;
-                    }
-                    if(isset($request->limit) && !empty($request->limit)) {
-                        $limit=$request->limit;
-                    }
-                    $offset=($page_no-1)*$limit;
+                    $user_id = $token['sub'];
+                    $userSubscriptionCheck = User::find($user_id);
+                    $subscriptionEndDate = $userSubscriptionCheck->subscription_end;
+                    $todaysDate = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now());
 
-                    $data = RecommendationEngine::select('id','engine_name','structure_type','display_shelf_life')
-                                                        ->where([['status','1'],['category_id',$request->category_id],['product_id', $request->product_id],['storage_condition_id',$request->storage_condition_id],['product_form_id', $request->product_form_id],['packing_type_id',$request->packing_type_id]]);
+
+                    if (($userSubscriptionCheck->subscription_id == 0) || ($subscriptionEndDate < $todaysDate)) {
+                        $isSubscribed = false;
+                        $msg_data['is_subscribed'] = $isSubscribed;
+                        errorMessage(__('user.no_active_subscription'), $msg_data);
+                    }
+
+                    if (isset($request->page_no) && !empty($request->page_no)) {
+                        $page_no = $request->page_no;
+                    }
+                    if (isset($request->limit) && !empty($request->limit)) {
+                        $limit = $request->limit;
+                    }
+                    $offset = ($page_no - 1) * $limit;
+
+                    $data = RecommendationEngine::select('id', 'engine_name', 'structure_type', 'display_shelf_life')
+                        ->where([['status', '1'], ['category_id', $request->category_id], ['product_id', $request->product_id], ['storage_condition_id', $request->storage_condition_id], ['product_form_id', $request->product_form_id], ['packing_type_id', $request->packing_type_id]]);
                     $engineData = RecommendationEngine::whereRaw('1 = 1');
-                    if($request->engine_id)
-                    {
+                    if ($request->engine_id) {
                         $engineData = $engineData->where('id', $request->engine_id);
-                        $data = $data->where('id',$request->engine_id);
+                        $data = $data->where('id', $request->engine_id);
                     }
-                    if($request->engine_name)
-                    {
-                        $engineData = $engineData->where('engine_name',$request->engine_name);
-                        $data = $data->where('engine_name',$request->engine_name);
+                    if ($request->engine_name) {
+                        $engineData = $engineData->where('engine_name', $request->engine_name);
+                        $data = $data->where('engine_name', $request->engine_name);
                     }
-                    if(empty($engineData->first()))
-                    {
+                    if (empty($engineData->first())) {
                         errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
                     }
-                    if(isset($request->search) && !empty($request->search)) {
-                        $data = fullSearchQuery($data, $request->search,'engine_name|structure_type');
+                    if (isset($request->search) && !empty($request->search)) {
+                        $data = fullSearchQuery($data, $request->search, 'engine_name|structure_type');
                     }
                     if ($defaultSortByName) {
                         $orderByArray = ['recommendation_engines.engine_name' => 'ASC'];
@@ -70,21 +80,19 @@ class PackagingSolutionApiController extends Controller
                     $data = allOrderBy($data, $orderByArray);
                     $total_records = $data->get()->count();
                     $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                    if(empty($data)) {
+                    if (empty($data)) {
                         errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
                     }
+
                     $responseData['result'] = $data;
+                    $responseData['is_subscribed'] = $isSubscribed;
                     $responseData['total_records'] = $total_records;
                     successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                 }
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Packaging Solution fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -97,7 +105,7 @@ class PackagingSolutionApiController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [

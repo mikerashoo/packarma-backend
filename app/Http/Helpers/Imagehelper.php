@@ -26,6 +26,12 @@ if (!function_exists('getFile')) {
             } else {
                 return  'file_not_found';
             }
+        } elseif ($for == 'front' || $for == 'back') {
+            if (!empty($name) && file_exists(storage_path('app/public') . '/uploads/' . $type . '/' . $name)) {
+                return URL::to('/') . '/storage/app/public' . '/uploads/' . $type . '/' . $name . '?d=' . time();
+            } else {
+                return  'file_not_found';
+            }
         } else {
             if (!empty($name) && file_exists(storage_path('app/public') . '/uploads/' . $type . '/' . $name)) {
                 return URL::to('/') . '/storage/app/public' . '/uploads/' . $type . '/' . $name . '?d=' . time();
