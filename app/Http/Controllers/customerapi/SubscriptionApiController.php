@@ -213,11 +213,7 @@ class SubscriptionApiController extends Controller
                     'users.subscription_end'
                 )
                     ->leftjoin('subscriptions', 'users.subscription_id', '=', 'subscriptions.id')
-                    ->leftJoin('user_subscription_payments', function ($join) {
-                        $join->on('users.subscription_id', '=', 'user_subscription_payments.subscription_id');
-                        $join->on('users.subscription_start', '=', 'user_subscription_payments.created_at');
-                    })
-                    ->where([['users.id', $user_id], ['user_subscription_payments.payment_status', 'paid']]);
+                    ->where([['users.id', $user_id]]);
 
                 $data = $data->first();
                 //subscription listing 

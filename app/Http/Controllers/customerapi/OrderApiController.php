@@ -99,6 +99,8 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
+                    $payNowButton = false;
+
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                     }
@@ -106,6 +108,12 @@ class OrderApiController extends Controller
                         $data[$i]->igst_amount = $row->gst_amount;
                     }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
+
+                    if ($row->customer_payment_status == 'pending') {
+                        $payNowButton = true;
+                    }
+                    $data[$i]->pay_now =  $payNowButton;
+
                     // if(!empty($row->shipping_details)) {
                     //     $data[$i]->shipping_details = json_decode($row->shipping_details,true);
                     // } else {
@@ -443,12 +451,15 @@ class OrderApiController extends Controller
                 //calculate sub total amount and store in variable
                 $sub_total_price = $product_quantity * $mrp_rate_price;
 
+
+
                 //calculate gst amount
                 if ($gst_percentage != 0.00) {
                     $gst_amount_price = $sub_total_price * ($gst_percentage / 100.00);
                 } else {
                     $gst_amount_price = 0.00;
                 }
+
 
                 //calculate total amount
                 $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price;
@@ -466,7 +477,8 @@ class OrderApiController extends Controller
                 if ($vendor_quotation_data->gst_type == 'igst') {
                     $quantity_calculation_data['igst_amount'] = $gst_amount_price;
                 }
-
+                // print_r($quantity_calculation_data);
+                // die;
                 $quantity_calculation_data['quantity'] = $product_quantity;
                 $quantity_calculation_data['rate'] = $mrp_rate_price;
                 $quantity_calculation_data['gst_amount'] = $gst_amount_price;
