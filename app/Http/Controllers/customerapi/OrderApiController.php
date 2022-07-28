@@ -461,7 +461,7 @@ class OrderApiController extends Controller
                 $quantity_calculation_data['sgst_amount'] = "0.00";
                 $quantity_calculation_data['igst_amount'] = "0.00";
                 if ($vendor_quotation_data->gst_type == 'cgst+sgst') {
-                    $$quantity_calculation_data['cgst_amount'] = $quantity_calculation_data['sgst_amount'] = number_format(($gst_amount_price / 2), 2, '.', '');
+                    $quantity_calculation_data['cgst_amount'] = $quantity_calculation_data['sgst_amount'] = number_format(($gst_amount_price / 2), 2, '.', '');
                 }
                 if ($vendor_quotation_data->gst_type == 'igst') {
                     $quantity_calculation_data['igst_amount'] = $gst_amount_price;
