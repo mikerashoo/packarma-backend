@@ -224,8 +224,13 @@ class BannerController extends Controller
      */
     public function updateStatus(Request $request)
     {
-        // errorMessage('dfh', array());
         $msg_data = array();
+        if($request->status == 0) {
+            $activeCount = Banner::where('status', 1)->get()->count();
+            if($activeCount == 1){
+                errorMessage('Last One Banner Must Be Active',$msg_data);
+            }
+        }
         $recordData = Banner::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
