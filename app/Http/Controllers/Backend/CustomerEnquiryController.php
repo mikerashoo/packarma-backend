@@ -398,7 +398,7 @@ class CustomerEnquiryController extends Controller
                 $gst_type = 'igst';
             }
             $tblObj->gst_percentage = $request->gst_percentage ?? 0.00;
-            $gst_amount = $mrp_rate * $request->gst_percentage / 100;
+            $gst_amount = $mrp_rate * ($request->gst_percentage / 100.00);
         } else {
 
             $gst_type = $gst;
@@ -461,7 +461,7 @@ class CustomerEnquiryController extends Controller
         $data['addressType'] = addressType();
         $data['user_address'] = UserAddress::all();
         $data['customer_enquiry_id'] = getFormatid($data['data']->id, 'customer_enquiries');
-        $data['vendor_id'] = VendorQuotation::where('customer_enquiry_id', '=', $data['data']->id)->get();//->pluck('vendor_id')->toArray();
+        $data['vendor_id'] = VendorQuotation::where('customer_enquiry_id', '=', $data['data']->id)->get(); //->pluck('vendor_id')->toArray();
         $data['vendor'] = Vendor::where('id', $data['vendor_id'][0]->vendor_id)->get();
         $data['vendor_warehouse'] = VendorWarehouse::where('id', $data['vendor_id'][0]->vendor_warehouse_id)->get();
         return view('backend/customer_section/customer_enquiry/customer_enquiry_view', $data);

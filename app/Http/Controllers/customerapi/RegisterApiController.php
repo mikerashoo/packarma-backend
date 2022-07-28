@@ -47,7 +47,7 @@ class RegisterApiController extends Controller
                 \Log::info("User registered successfully with email id: " . $request->email . " and phone number: " . $request->phone);
             } else {
                 if ($checkUser->is_verified == 'Y') {
-                    errorMessage(__('user.phone_already_exist'), $msg_data);
+                    errorMessage(__('user.user_already_exist'), $msg_data);
                 }
                 // Update existing user
                 $checkUser->update($request->all());

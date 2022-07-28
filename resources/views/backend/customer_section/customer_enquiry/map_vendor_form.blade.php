@@ -25,7 +25,7 @@
         </dd>
     </dl>
     <dl class="row">
-        <dt class="col-sm-5 text-left">Vendor Warehouse<span style="color:#ff0000">*</span></dt>
+        <dt class="col-sm-5 text-left">Vendor Warehouse</dt>
         <dd class="col-sm-7">
             <select class="select2" id="warehouse" value="" name="warehouse" style="width:100%;">
                <option value="">Select</option>

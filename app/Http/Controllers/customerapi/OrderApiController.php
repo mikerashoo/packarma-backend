@@ -432,7 +432,8 @@ class OrderApiController extends Controller
                 $product_quantity = $request->product_quantity;
 
                 //fetching data of vendor quotation by vendor quotation id
-                $vendor_quotation_data = VendorQuotation::where([['id', $vendor_quotation_id], ['customer_enquiry_id', $customer_enquiry_id], ['user_id', $user_id]])->first();
+                // $vendor_quotation_data = VendorQuotation::where([['id', $vendor_quotation_id], ['customer_enquiry_id', $customer_enquiry_id], ['user_id', $user_id]])->first();
+                $vendor_quotation_data = VendorQuotation::where([['id', $vendor_quotation_id]])->first();
 
                 //storing values in variable from vendor quotation table
                 $mrp_rate_price = $vendor_quotation_data->mrp;
@@ -443,10 +444,10 @@ class OrderApiController extends Controller
                 $sub_total_price = $product_quantity * $mrp_rate_price;
 
                 //calculate gst amount
-                if ($gst_percentage != 0) {
-                    $gst_amount_price = $sub_total_price * $gst_percentage / 100;
+                if ($gst_percentage != 0.00) {
+                    $gst_amount_price = $sub_total_price * ($gst_percentage / 100.00);
                 } else {
-                    $gst_amount_price = 0;
+                    $gst_amount_price = 0.00;
                 }
 
                 //calculate total amount
@@ -720,7 +721,7 @@ class OrderApiController extends Controller
     private function validateFinalQuantityRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'customer_enquiry_id' => 'required|numeric',
+            // 'customer_enquiry_id' => 'required|numeric',
             'vendor_quotation_id' => 'required|numeric',
             'product_quantity' => 'required|int|digits_between:1,4'
         ])->errors();
