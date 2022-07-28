@@ -211,7 +211,7 @@ class CustomerEnquiryApiController extends Controller
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
-            'shelf_life' => 'required|numeric',
+            'shelf_life' => 'required|integer|between:1,10000',
             'product_weight' => 'required|numeric',
             'measurement_unit_id' => 'required|numeric',
             'storage_condition_id' => 'required|numeric',
