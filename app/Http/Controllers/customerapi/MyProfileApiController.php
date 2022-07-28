@@ -72,6 +72,14 @@ class MyProfileApiController extends Controller
                 // {
                 $data->visiting_card_front = getFile($data->visiting_card_front, 'visiting_card/front', false, 'front');
                 $data->visiting_card_back = getFile($data->visiting_card_back, 'visiting_card/back', false, 'back');
+
+                if ($data->visiting_card_front == 'file_not_found') {
+                    $data->visiting_card_front = null;
+                }
+
+                if ($data->visiting_card_back == 'file_not_found') {
+                    $data->visiting_card_back = null;
+                }
                 // $i++;
                 // }
                 $msg_data['result'] = $data;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\CustomerEnquiry;
+use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\VendorQuotation;
 use Carbon\Carbon;
@@ -24,24 +25,22 @@ class CustomerEnquiryApiController extends Controller
     public function index(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 $user_id = $token['sub'];
-                $page_no=1;
-                $limit=10;
+                $page_no = 1;
+                $limit = 10;
                 $orderByArray = ['customer_enquiries.id' => 'DESC',];
                 $defaultSortByName = false;
-                
-                if(isset($request->page_no) && !empty($request->page_no)) {
-                    $page_no=$request->page_no;
+
+                if (isset($request->page_no) && !empty($request->page_no)) {
+                    $page_no = $request->page_no;
                 }
-                if(isset($request->limit) && !empty($request->limit)) {
-                    $limit=$request->limit;
+                if (isset($request->limit) && !empty($request->limit)) {
+                    $limit = $request->limit;
                 }
-                $offset=($page_no-1)*$limit;
+                $offset = ($page_no - 1) * $limit;
                 $main_table = 'customer_enquiries';
                 $data = DB::table('customer_enquiries')->select(
                     'customer_enquiries.id',
@@ -99,12 +98,11 @@ class CustomerEnquiryApiController extends Controller
                     $customerEnquiryData = $customerEnquiryData->where($main_table . '' . '.product_id', $request->product_id);
                     $data = $data->where($main_table . '' . '.product_id', $request->product_id);
                 }
-                if(empty($customerEnquiryData->first()))
-                {
+                if (empty($customerEnquiryData->first())) {
                     errorMessage(__('customer_enquiry.customer_enquiry_not_found'), $msg_data);
                 }
-                if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'description');
+                if (isset($request->search) && !empty($request->search)) {
+                    $data = fullSearchQuery($data, $request->search, 'description');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['products.product_name' => 'ASC'];
@@ -112,29 +110,24 @@ class CustomerEnquiryApiController extends Controller
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                $i=0;
-                foreach($data as $row)
-                {
+                $i = 0;
+                foreach ($data as $row) {
                     $data[$i]->enquiry_id = getFormatid($row->id, 'customer_enquiries');
-                    $quotationCount= VendorQuotation::where([['user_id',$user_id],['customer_enquiry_id',$row->id]])
-                                                        ->whereIn('enquiry_status',['quoted','viewed'])->get()->count();
+                    $quotationCount = VendorQuotation::where([['user_id', $user_id], ['customer_enquiry_id', $row->id]])
+                        ->whereIn('enquiry_status', ['quoted', 'viewed'])->get()->count();
                     $data[$i]->quotation_count = $quotationCount;
                     $i++;
                 }
-                if(empty($data)) {
+                if (empty($data)) {
                     errorMessage(__('customer_enquiry.customer_enquiry_not_found'), $msg_data);
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Customer Enquiry fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -151,19 +144,35 @@ class CustomerEnquiryApiController extends Controller
     public function store(Request $request)
     {
         $msg_data = array();
+        $isSubscribed = true;
+
         \Log::info("Initiating Customer Enquiry process, starting at: " . Carbon::now()->format('H:i:s:u'));
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 $user_id = $token['sub'];
                 // Request Validation
+
+                $userSubscriptionCheck = User::find($user_id);
+                $subscriptionEndDate = $userSubscriptionCheck->subscription_end;
+                $todaysDate = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now());
+
+                if (($userSubscriptionCheck->subscription_id == 0) || ($subscriptionEndDate < $todaysDate)) {
+                    $isSubscribed = false;
+                    $msg_data['is_subscribed'] = $isSubscribed;
+                    errorMessage(__('user.no_active_subscription'), $msg_data);
+                }
+
+
                 $validationErrors = $this->validateEnquiry($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
+
+
+
+
                 //getting user address details from userAddress and putting value to request to store in cumstomer enquiry table
                 $userAddress = UserAddress::find($request->user_address_id);
                 $request['country_id'] = $userAddress->country_id;
@@ -178,16 +187,13 @@ class CustomerEnquiryApiController extends Controller
                 // Store a new enquiry
                 $enquiryData = CustomerEnquiry::create($request->all());
                 $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
+                $enquiryData->is_subscribed = $isSubscribed;
                 \Log::info("Customer Enquiry Created successfully");
                 successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
-             }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Customer enquiry creation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -198,7 +204,7 @@ class CustomerEnquiryApiController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     private function validateEnquiry(Request $request)
     {
         return \Validator::make($request->all(), [
