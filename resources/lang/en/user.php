@@ -15,7 +15,7 @@ return [
 
     'registered_successfully' => 'User registered successfully!',
     'otp_sent' => 'OTP sent successfully.',
-    'phone_already_exist' => 'User has already been registered with this phone number.',
+    'user_already_exist' => 'You are already registered with this phone no or email.',
     'login_failed' => 'Invalid login credentials',
     'logged_in_successfully' => 'Logged in successfully!',
     'update_successfully' => 'Your details updated successfully!',

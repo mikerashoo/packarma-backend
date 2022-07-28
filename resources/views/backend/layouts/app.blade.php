@@ -420,12 +420,12 @@
                             <li class="has-sub nav-item {{ $lastParam ==  'contactus' ? 'open' : ''  }} {{ $lastParam ==  'vendorContactus' ? 'open' : ''  }}">
                                 <a href="javascript:;" class="dropdown-parent"><i class="ft-phone"></i><span data-i18n="" class="menu-title">Contact us</span></a>
                                 <ul class="menu-content">
-                                    @if(in_array('contact_us', $permission_array))
+                                    @if(in_array('contact_us', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="nav-item {{ $lastParam ==  'contactus' ? 'active' : ''  }}">
                                             <a href="contactus"><i class="fa fa-circle fs_i"></i><span class="menu-title" >Customer</span></a>
                                         </li>
                                     @endif
-                                    @if(in_array('vendor_contact_us', $permission_array))
+                                    @if(in_array('vendor_contact_us', $permission_array) || session('data')['role_id'] == 1)
                                         <li class="nav-item {{ $lastParam ==  'vendorContactus' ? 'active' : ''  }}">
                                             <a href="vendorContactus"><i class="fa fa-circle fs_i"></i><span class="menu-title" >Vendor</span></a>
                                         </li>
