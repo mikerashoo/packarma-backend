@@ -43,8 +43,8 @@ class LoginApiController extends Controller
                 $query->select('id', 'currency_name', 'currency_symbol', 'currency_code');
             }])->with(['phone_country' => function ($query) {
                 $query->select('id', 'phone_code', 'country_name');
-            }])->where([['email', strtolower($request->email)], ['password', md5(strtolower($request->email).$request->password)],['is_verified', 'Y']])->first(); //, ['status', '1'], ['deleted_at', NULL]
-            
+            }])->where([['email', strtolower($request->email)], ['password', md5(strtolower($request->email) . $request->password)], ['is_verified', 'Y']])->first(); //, ['status', '1'], ['deleted_at', NULL]
+
             if (empty($userData)) {
                 errorMessage(__('user.login_failed'), $msg_data);
             }
@@ -61,7 +61,11 @@ class LoginApiController extends Controller
             if ($userData->status == 0 && $userData->approval_status == 'accepted') {
                 errorMessage(__('user.not_active'), $msg_data);
             }
-            
+
+            if (empty($userData->gst_certificate)) {
+                $userData->gst_certificate =  getFile('default_user_gst_file.jpeg', 'gst_certificate');
+            }
+
             $imei_no = $request->header('device-id');
             $token = JWTAuth::fromUser($userData);
             $users = User::find($userData->id);

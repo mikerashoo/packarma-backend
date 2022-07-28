@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
+use Razorpay\Api\Api;
 use App\Models\Subscription;
 use App\Models\UserSubscriptionPayment;
 use Illuminate\Http\Request;
-use Razorpay\Api\Api;
 use App\Models\User;
 use Response;
 
@@ -20,20 +20,6 @@ class UserSubscriptionPaymentApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-
-    private $testRazerpayKeyId;
-    private $testRazerpayKeySecrete;
-    private $liveRazerpayKeyId;
-    private $liveRazerpayKeySecrete;
-
-    public function __construct()
-    {
-        $this->testRazerpayKeyId = 'rzp_test_IbGrIYYPsUpuDu';
-        $this->testRazerpayKeySecrete = 'eQ0raEWDhl22k47atkqZXAvm';
-        $this->liveRazerpayKeyId = '';
-        $this->liveRazerpayKeySecrete = '';
-    }
 
     public function new_subscription_payment(Request $request)
     {
@@ -62,8 +48,8 @@ class UserSubscriptionPaymentApiController extends Controller
                         $razorpay_order_id = NULL;
                     } else {
                         $payment_status = 'pending';
-                        $api = new Api($this->testRazerpayKeyId, $this->testRazerpayKeySecrete);
-                        $razorpay_order = $api->subscription_payment->create(
+                        $api = new Api(config('app.testRazerpayKeyId'), config('app.testRazerpayKeySecrete'));
+                        $razorpay_order = $api->order->create(
                             array(
                                 'amount' => $Subscription->amount * 100,
                                 'currency' => 'INR'
@@ -93,7 +79,7 @@ class UserSubscriptionPaymentApiController extends Controller
                         $data['msg'] = 'Thank you, you have successfully completed your Payment';
                     } else {
                         $data['gateway_id'] = $razorpay_order_id;
-                        $data['razorpay_api_key'] = $this->testRazerpayKeyId;
+                        $data['razorpay_api_key'] = config('app.testRazerpayKeyId');
                         $data['currency'] = 'INR';
                         $data['amount'] = $Subscription->amount;
                         $data['gateway_call'] = 'yes';
@@ -139,7 +125,7 @@ class UserSubscriptionPaymentApiController extends Controller
 
                 // $user = User::find(auth('api')->user()->id);
 
-                $api = new Api($this->testRazerpayKeyId, $this->testRazerpayKeySecrete);
+                $api = new Api(config('app.testRazerpayKeyId'), config('app.testRazerpayKeySecrete'));
                 try {
                     $payment = $api->payment->fetch($request->gateway_key);
                 } catch (\Exception $e) {
@@ -156,13 +142,8 @@ class UserSubscriptionPaymentApiController extends Controller
                         $subscriptionPayment->ip_address = $ip_address;
                         $subscriptionPayment->payment_status = 'paid';
                         $subscriptionPayment->save();
-
-
-                        //update order status in order table 
-                        $User = User::find($user_id);
-                        $User->subscription_id = $subscriptionPayment->subscription_id;
-                        $User->save();
-
+                        //update subscription status in users table 
+                        $updateUser = calcCustomerSubscription($user_id, $subscriptionPayment->subscription_id);
                         // return response()->json(['msg' => 'Subscribed successfully'], 200);
                         successMessage(__('subscription.you_have_successfully_subscribed'), $msg_data);
                     } else {

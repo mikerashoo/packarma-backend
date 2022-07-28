@@ -39,7 +39,7 @@
                                     <div class="col-sm-6">
                                         <label>Sub Category Image<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.SUB_CATEGORY'); ?></p>
-                                        <input class="form-control required" type="file" id="sub_category_image" name="sub_category_image" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)"><br/>
+                                        <input class="form-control" type="file" id="sub_category_image" name="sub_category_image" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)"><br/>
                                         <img src="{{ $data->image_path}}" width="200px" height="auto">
                                     </div>
                         		</div>

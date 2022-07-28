@@ -48,6 +48,12 @@ Route::group(['middleware' => ['customAuth']], function () {
 	//ContactUs
 	Route::get('/contactus', 'ContactusController@index');
 	Route::post('/contactus_data', 'ContactusController@fetch')->name('contactus_data');
+	Route::get('/contact_us_view/{id}', 'ContactusController@contactusView');
+
+
+	Route::get('/vendorContactus', 'ContactusController@vendorContactus');
+	Route::post('/vendor_contactus_data', 'ContactusController@fetchVendorContactus')->name('vendor_contactus_data');
+	Route::get('/vendor_contact_us_view/{id}', 'ContactusController@vendorContactusView');
 
 	//Reviews
 	Route::get('/review', 'ReviewController@index');

@@ -123,6 +123,9 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'testRazerpayKeyId' => env('TEST_RAZORPAY_KEY_ID'),
+    'testRazerpayKeySecrete' => env('TEST_RAZORPAY_KEY_SECRETE'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

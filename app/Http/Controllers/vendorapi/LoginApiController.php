@@ -89,6 +89,14 @@ class LoginApiController extends Controller
                 errorMessage(__('vendor.not_active'), $msg_data);
             }
 
+            if ($vendorData->status == 0 && $vendorData->approval_status == 'accepted') {
+                errorMessage(__('vendor.not_active'), $msg_data);
+            }
+
+            if (empty($vendorData->gst_certificate)) {
+                $vendorData->gst_certificate =  getFile('default_vendor_gst_file.jpeg', 'vendor_gst_certificate');
+            }
+
 
 
 

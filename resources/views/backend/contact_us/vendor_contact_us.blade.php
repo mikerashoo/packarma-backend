@@ -12,7 +12,7 @@
                                 <div class="card-header">
                                     <div class="row">
                                         <div class="col-12 col-sm-7">
-                                            <h5 class="pt-2">Manage Customer ContactUs List</h5>
+                                            <h5 class="pt-2">Manage Vendor ContactUs List</h5>
                                         </div>
                                         <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                             <button class="btn btn-sm btn-outline-danger px-3 py-1 mr-2" id="listing-filter-toggle"><i class="fa fa-filter"></i> Filter</button>
@@ -40,14 +40,14 @@
                                         </div>
                                     </div> 
                             		<div class="table-responsive">
-                                        <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="contactus_data">
+                                        <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="vendor_contactus_data">
 				                            <thead>
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="name" data-orderable="false" data-searchable="false">Contact Name</th>
                                                     <th id="email" data-orderable="false" data-searchable="false">Contact Email</th>
                                                     <th id="mobile" data-orderable="false" data-searchable="false">Contact Number</th>
-                                                      @if($contact_us_view)
+                                                    @if($vendor_contact_us_view)
                                                     <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
 				                                </tr>

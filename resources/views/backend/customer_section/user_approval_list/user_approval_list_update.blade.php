@@ -86,7 +86,7 @@
                                     <div class="col-sm-6">
                                         {{-- id="gstin_div" --}}
                                         <label>GST Number<span style="color:#ff0000">*</span></label>
-                                        <input class="form-control required" type="text" id="gstin" name="gstin" value="{{$data->gstin}}"><br/>
+                                        <input class="form-control" type="text" id="gstin" name="gstin" value="{{$data->gstin}}"><br/>
                                     </div>   
                                     <div class="col-sm-6">
                                         {{-- id="gst_certificate_div" --}}
@@ -99,7 +99,7 @@
                                             @endif
                                         @else 
                                             <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.GSTCERTIFICATE'); ?></p>
-                                            <input class="form-control required" type="file" id="gst_certificate" name="gst_certificate" accept="image/png, image/jpg, image/jpeg, application/pdf" onchange="checkFiles(this.files)"><br/>
+                                            <input class="form-control" type="file" id="gst_certificate" name="gst_certificate" accept="image/png, image/jpg, image/jpeg, application/pdf" onchange="checkFiles(this.files)"><br/>
                                         @endif
                                     </div>
                                     <div class="col-sm-6" id="remark">
