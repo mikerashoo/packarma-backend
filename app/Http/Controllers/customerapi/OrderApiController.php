@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\State;
 use App\Models\Review;
 use App\Models\Country;
+use App\Models\Currency;
 use Response;
 
 class OrderApiController extends Controller
@@ -297,7 +298,8 @@ class OrderApiController extends Controller
                     'orders.mrp',
                     'orders.gst_type',
                     'orders.gst_amount',
-                    'orders.grand_total'
+                    'orders.grand_total',
+                    'currencies.currency_symbol',
                 )
                     ->leftjoin('customer_enquiries', 'customer_enquiries.id', '=', 'orders.customer_enquiry_id')
                     ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'orders.recommendation_engine_id')
@@ -312,6 +314,7 @@ class OrderApiController extends Controller
                     ->leftjoin('vendors', 'vendors.id', '=', 'orders.vendor_id')
                     ->leftjoin('vendor_warehouses', 'vendor_warehouses.id', '=', 'orders.vendor_warehouse_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
+                    ->leftjoin('currencies', 'currencies.id', '=', 'orders.currency_id')
                     ->leftjoin('states', 'states.id', '=', 'customer_enquiries.state_id')
                     ->leftjoin('cities', 'cities.id', '=', 'customer_enquiries.city_id')
                     ->where([['orders.user_id', $user_id], ['orders.id', $request->order_id]]);
@@ -493,10 +496,13 @@ class OrderApiController extends Controller
                 }
                 // print_r($quantity_calculation_data);
                 // die;
+                $currency_symbol = Currency::where('id', $vendor_quotation_data->currency_id)->pluck('currency_symbol')->first();
+
                 $quantity_calculation_data['quantity'] = $product_quantity;
                 $quantity_calculation_data['rate'] = $mrp_rate_price;
                 $quantity_calculation_data['gst_amount'] = $gst_amount_price;
                 $quantity_calculation_data['total_amount'] = $total_amount_price;
+                $quantity_calculation_data['currency_symbol'] = $currency_symbol;
 
                 successMessage(__('order.billing_details_calculated_successfully'), $quantity_calculation_data);
             } else {
