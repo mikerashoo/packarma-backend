@@ -419,7 +419,7 @@ class CustomerEnquiryController extends Controller
         $currentDateTime = Carbon::now();
         $newDateTime = Carbon::now()->addHours($validity_hours)->toArray();
         $tblObj->quotation_expiry_datetime =  $newDateTime['formatted'];
-        $tblObj->lead_time =  $request->lead_time;
+        $tblObj->lead_time =  $request->lead_time ?? 7;
         $tblObj->created_by = session('data')['id'];
         $final_val = $tblObj->toarray();
         VendorQuotation::updateOrCreate(['id' => $request->id], $final_val);
@@ -478,10 +478,12 @@ class CustomerEnquiryController extends Controller
     public function mapVendorForm($id, $customer_enquiry_id)
     {
         // $data['vendor'] = Vendor::all()->toArray();
+        $data['view_only'] = false;
         $data['vendor'] = DB::table('vendors')->select('vendors.*')
             ->join('vendor_material_mappings', 'vendor_material_mappings.vendor_id', '=', 'vendors.id')
             ->groupBy('vendors.id')
             ->get();
+
         $data['customer_enquiry_data'] = CustomerEnquiry::with('user')->find($customer_enquiry_id);
 
         if ($data['customer_enquiry_data']->quote_type == 'accept_cust') {
@@ -492,14 +494,24 @@ class CustomerEnquiryController extends Controller
                 ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                 ->where([['vendor_quotations.customer_enquiry_id', $customer_enquiry_id]])->first();
             $vendor_name = $accepted_vendor->vendor_name;
+            $data['view_only'] = true;
 
-            displayMessage('qoutation_accepted_by_customer', $vendor_name);
+            if ($id == -1) {
+                displayMessage('qoutation_accepted_by_customer', $vendor_name);
+            }
             // return 'No more Vendors can be map, it is accepted for Vendor ' . $vendor_name;
         } elseif ($data['customer_enquiry_data']->quote_type == 'order') {
-            displayMessage('enquiry_order');
+            $data['view_only'] = true;
+            if ($id == -1) {
+                displayMessage('enquiry_order');
+            }
         } elseif ($data['customer_enquiry_data']->quote_type == 'closed') {
-            displayMessage('enquiry_closed');
+            $data['view_only'] = true;
+            if ($id == -1) {
+                displayMessage('enquiry_closed');
+            }
         }
+
 
         if ($id != -1) {
             $data['vender_quotation_details'] = DB::table('vendor_quotations')->select(
@@ -569,9 +581,9 @@ class CustomerEnquiryController extends Controller
                 'vendor_price' => 'required|numeric|min:0|not_in:0',
                 'commission_rate' => 'required|numeric|min:0|not_in:0',
                 // 'quotation_validity.*' => 'required|numeric',
-                'lead_time' => 'required|numeric|min:0|not_in:0',
+                // 'lead_time' => 'required|numeric|min:0|not_in:0',
                 // 'gst_type.*' => 'required',
-                'gst_percentage' => 'required_if:gst_type,applicable,numeric|min:0|not_in:0',
+                'gst_percentage' => 'required_if:gst_type,applicable,numeric|gt:0.9|lt:100',
                 // 'gst_percentage.*' => 'required_if:gst_type.*,igst,cgst+sgst',
             ])->errors();
         } elseif ($for == 'addEnquiry') {

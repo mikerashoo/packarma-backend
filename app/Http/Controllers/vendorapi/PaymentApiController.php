@@ -83,7 +83,7 @@ class PaymentApiController extends Controller
                             ->orWhere('enquiry_status', '=', 'requote');
                     })->get()->count();
 
-                $payments_received = Order::selectRaw('SUM(grand_total - vendor_pending_payment) as payments_received')
+                $payments_received = Order::selectRaw('SUM(vendor_amount - vendor_pending_payment) as payments_received')
                     ->where('vendor_id', $vendor_id);
 
 

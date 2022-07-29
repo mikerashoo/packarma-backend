@@ -517,8 +517,8 @@ class UserController extends Controller
     {
         return \Validator::make($request->all(), [
             'approval_status' => 'required|string',
-            'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : '') : '',
-            'gst_certificate' => ($request->approval_status == 'accepted') ?  'sometimes|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
+            'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : '') : 'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : ''),
+            'gst_certificate' => ($request->approval_status == 'accepted') ?  'required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
         ])->errors();
     }
 }

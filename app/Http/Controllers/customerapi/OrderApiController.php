@@ -217,6 +217,7 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
+
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                     }
@@ -224,6 +225,10 @@ class OrderApiController extends Controller
                         $data[$i]->igst_amount = $row->gst_amount;
                     }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
+
+
+
+
                     $i++;
                 }
 
@@ -318,6 +323,8 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
+                    $payNowButton = false;
+
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                     }
@@ -330,7 +337,7 @@ class OrderApiController extends Controller
                     if ($row->order_delivery_status == 'delivered' && $reviewData == 0) {
                         $data[$i]->show_feedback_button = true;
                     }
-                    if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing' || $row->order_delivery_status == 'out_for_delivery') {
+                    if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing') {
                         $data[$i]->show_cancel_button = true;
                     }
                     if (!empty($row->billing_details)) {
@@ -340,6 +347,13 @@ class OrderApiController extends Controller
                         $data[$i]->shipping_details = null;
                         $data[$i]->billing_details = null;
                     }
+
+                    if ($row->customer_payment_status == 'pending') {
+                        $payNowButton = true;
+                    }
+                    $data[$i]->pay_now =  $payNowButton;
+
+
                     $i++;
                 }
                 $responseData['result'] = $data;
