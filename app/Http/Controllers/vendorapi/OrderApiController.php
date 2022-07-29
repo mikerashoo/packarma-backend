@@ -284,6 +284,7 @@ class OrderApiController extends Controller
                 $staus = $request->order_delivery_status;
 
                 $status_array = ['pending', 'processing', 'out_for_delivery', 'delivered', 'cancelled'];
+                $block_status_array = [];
                 if (!in_array($staus, $status_array)) {
                     errorMessage(__('order.wrong_status'), $msg_data);
                 }
@@ -292,6 +293,29 @@ class OrderApiController extends Controller
                 if (empty($checkOrder)) {
                     errorMessage(__('order.order_not_found'), $msg_data);
                 }
+
+                $previousDeliveryStatus = $checkOrder->order_delivery_status;
+
+                if ($previousDeliveryStatus == 'processing') {
+                    $block_status_array = ['pending'];
+                }
+
+                if ($previousDeliveryStatus == 'out_for_delivery') {
+                    $block_status_array = ['pending', 'processing'];
+                }
+
+                if ($previousDeliveryStatus == 'delivered') {
+                    $block_status_array = ['pending', 'processing', 'out_for_delivery'];
+                }
+
+                if ($previousDeliveryStatus == 'cancelled') {
+                    $block_status_array = ['pending', 'processing', 'out_for_delivery', 'delivered'];
+                }
+
+                if (in_array($staus, $block_status_array)) {
+                    errorMessage(__('order.cant_revese_delivery_status'), $msg_data);
+                }
+
                 $order_data = $request->all();
                 $order_data['vendor_id'] = $vendor_id;
                 unset($order_data['id']);

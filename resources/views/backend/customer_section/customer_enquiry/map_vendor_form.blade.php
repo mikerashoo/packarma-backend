@@ -1,3 +1,18 @@
+@if($view_only)
+
+@php
+$readonly = 'disabled';
+@endphp
+
+@else
+
+@php
+$readonly = '';
+@endphp
+
+@endif
+
+
 <form id="customerEnquiryMapToVendorForm" method="post" action="saveEnquiryMapToVendor">
 
     <div class="row form-error"></div>
@@ -14,7 +29,7 @@
     <dl class="row">
         <dt class="col-sm-5 text-left">Select Vendor <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
-            <select class="select2" id="vendor" value="" name="vendor" style="width:100%;" onchange="getVendorWarehouse(this.value)">
+            <select class="select2" id="vendor" value="" name="vendor" style="width:100%;" onchange="getVendorWarehouse(this.value)" {{$readonly}}>
                 <option value="" style="width=100%;">Select Vendor</option>
                 {{-- @if(is_array($vendor)) --}}
         @foreach($vendor as $ven)
@@ -27,7 +42,7 @@
     <dl class="row">
         <dt class="col-sm-5 text-left">Vendor Warehouse</dt>
         <dd class="col-sm-7">
-            <select class="select2" id="warehouse" value="" name="warehouse" style="width:100%;">
+            <select class="select2" id="warehouse" value="" name="warehouse" style="width:100%;" {{$readonly}}>
                <option value="">Select</option>
              </select>
         </dd>
@@ -35,21 +50,21 @@
      <dl class="row">
         <dt class="col-sm-5 text-left">Vendor Price/Kg <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
-            <input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->vendor_price ?? '' ;}}" id="vendor_price" name="vendor_price">
+            <input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->vendor_price ?? '' ;}}" id="vendor_price" name="vendor_price" {{$readonly}}>
         </dd>
     </dl>
      <dl class="row">
         <dt class="col-sm-5 text-left">Commission Price/Kg <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
-           <input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->commission_amt ?? '' ;}}" id="commission_rate" name="commission_rate">
+           <input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->commission_amt ?? '' ;}}" id="commission_rate" name="commission_rate" {{$readonly}}>
         </dd>
     </dl>
-     <dl class="row">
+     {{-- <dl class="row">
         <dt class="col-sm-5 text-left">Delivery In <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
             <input class="form-control" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->lead_time ?? '' ;}}" id="lead_time" name="lead_time">
         </dd>
-    </dl>
+    </dl> --}}
     <dl class="row">
         <dt class="col-sm-5 text-left">GST <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
@@ -62,7 +77,7 @@
                 </li>
                 <li class="d-inline-block mr-2">
                     <div class="radio">
-                        <input type="radio" name="gst_type" id="not_applicable" class="gst_type" onclick="taxValueToggle('not_applicable')" value="not_applicable" @isset($vender_quotation_details->gst_type) {{ ($vender_quotation_details->gst_type == 'not_applicable') ? 'checked':'';}} @endisset>
+                        <input type="radio" name="gst_type" id="not_applicable" class="gst_type" onclick="taxValueToggle('not_applicable')" value="not_applicable" @isset($vender_quotation_details->gst_type) {{ ($vender_quotation_details->gst_type == 'not_applicable') ? 'checked':'';}} @endisset {{$readonly}}>
                         <label for="not_applicable">No</label>
                     </div>
                 </li>
@@ -72,13 +87,15 @@
      <dl class="row" id="gst_percentage_div">
         <dt class="col-sm-5 text-left">Gst Pecentage <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
-            <input class="form-control" type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->gst_percentage ?? '' ;}}" id="gst_percentage" name="gst_percentage" min=0 max=100>
+            <input class="form-control" type="text" inputmode="numeric" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->gst_percentage ?? '' ;}}" id="gst_percentage" name="gst_percentage" min=0 max=100>
         </dd>
     </dl>
     <div class="row">
            <div class="col-sm-12">
                 <div class="pull-right">
+                    @if(!$view_only)
                     <button type="button" class="btn btn-sm btn-success px-3 py-1" onclick="submitModalForm('customerEnquiryMapToVendorForm','post')">Add</button>
+                    @endif
                     <a href="javascript:;" class="btn btn-sm btn-primary px-3 py-1 bootbox-close-button">Back</a>
                 </div>
             </div>

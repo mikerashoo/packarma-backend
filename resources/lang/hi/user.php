@@ -36,6 +36,6 @@ return [
     'load_page_require' => 'Load page is require',
     'contact_us_stored' => 'Your Contact Details Recorded Will get back to you soon',
     'email_already_exit' => 'Email already registered',
-    'no_active_subscription' => 'You need to have an active subscription to place the enquiry'
+    'no_active_subscription' => 'You need to have an active subscription to place the enquiry. Would you like to buy subscription ?'
 
 ];

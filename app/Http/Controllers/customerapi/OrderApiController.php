@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\State;
 use App\Models\Review;
 use App\Models\Country;
+use App\Models\Currency;
 use Response;
 
 class OrderApiController extends Controller
@@ -217,6 +218,7 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
+
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                     }
@@ -224,6 +226,10 @@ class OrderApiController extends Controller
                         $data[$i]->igst_amount = $row->gst_amount;
                     }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
+
+
+
+
                     $i++;
                 }
 
@@ -292,7 +298,8 @@ class OrderApiController extends Controller
                     'orders.mrp',
                     'orders.gst_type',
                     'orders.gst_amount',
-                    'orders.grand_total'
+                    'orders.grand_total',
+                    'currencies.currency_symbol',
                 )
                     ->leftjoin('customer_enquiries', 'customer_enquiries.id', '=', 'orders.customer_enquiry_id')
                     ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'orders.recommendation_engine_id')
@@ -307,6 +314,7 @@ class OrderApiController extends Controller
                     ->leftjoin('vendors', 'vendors.id', '=', 'orders.vendor_id')
                     ->leftjoin('vendor_warehouses', 'vendor_warehouses.id', '=', 'orders.vendor_warehouse_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
+                    ->leftjoin('currencies', 'currencies.id', '=', 'orders.currency_id')
                     ->leftjoin('states', 'states.id', '=', 'customer_enquiries.state_id')
                     ->leftjoin('cities', 'cities.id', '=', 'customer_enquiries.city_id')
                     ->where([['orders.user_id', $user_id], ['orders.id', $request->order_id]]);
@@ -318,6 +326,8 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
+                    $payNowButton = false;
+
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                     }
@@ -330,7 +340,7 @@ class OrderApiController extends Controller
                     if ($row->order_delivery_status == 'delivered' && $reviewData == 0) {
                         $data[$i]->show_feedback_button = true;
                     }
-                    if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing' || $row->order_delivery_status == 'out_for_delivery') {
+                    if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing') {
                         $data[$i]->show_cancel_button = true;
                     }
                     if (!empty($row->billing_details)) {
@@ -340,6 +350,13 @@ class OrderApiController extends Controller
                         $data[$i]->shipping_details = null;
                         $data[$i]->billing_details = null;
                     }
+
+                    if ($row->customer_payment_status == 'pending') {
+                        $payNowButton = true;
+                    }
+                    $data[$i]->pay_now =  $payNowButton;
+
+
                     $i++;
                 }
                 $responseData['result'] = $data;
@@ -479,10 +496,13 @@ class OrderApiController extends Controller
                 }
                 // print_r($quantity_calculation_data);
                 // die;
+                $currency_symbol = Currency::where('id', $vendor_quotation_data->currency_id)->pluck('currency_symbol')->first();
+
                 $quantity_calculation_data['quantity'] = $product_quantity;
                 $quantity_calculation_data['rate'] = $mrp_rate_price;
                 $quantity_calculation_data['gst_amount'] = $gst_amount_price;
                 $quantity_calculation_data['total_amount'] = $total_amount_price;
+                $quantity_calculation_data['currency_symbol'] = $currency_symbol;
 
                 successMessage(__('order.billing_details_calculated_successfully'), $quantity_calculation_data);
             } else {
