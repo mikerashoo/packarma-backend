@@ -53,6 +53,7 @@ class OrderApiController extends Controller
                     'orders.gst_type',
                     'orders.gst_amount',
                     'orders.gst_percentage',
+                    'orders.sub_total',
                     'orders.grand_total',
                     'orders.shipping_details',
                     'orders.billing_details',

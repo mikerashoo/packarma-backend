@@ -166,7 +166,7 @@
                                                     <td>{{  $val['amount'] }}</td>
                                                     <td>{{  date('d-m-Y', strtotime($val['transaction_date']))}}</td>
                                                     <td>{{  $val['remark'] }}</td>
-                                                    <td>{{  date('d-m-Y H:i A', strtotime($val['updated_at'])) }}</td>
+                                                    <td>{{  date('d-m-Y h:i A', strtotime($val['updated_at'])) }}</td>
                                                 </tr>
                                                 @endforeach
                                             @elseif (empty($payment_details))

@@ -7,7 +7,7 @@
 return [
     'UTF8_ENABLED' => TRUE,
     'DIMENTIONS' =>  [
-        "BANNER" => "1200X800 pixels (3:2), Max Size 500Kb and .jpg format image",
+        "BANNER" => "1200X500 pixels (3:2), Max Size 500Kb and .jpg format image",
         "CATEGORY" => "500X500 pixels (1:1), Max Size 500Kb and .jpg format image",
         "SUB_CATEGORY" => "500X500 pixels (1:1), Max Size 500Kb and .jpg format image",
         "COMPANY" => "500X500 pixels (1:1), Max Size 500Kb and .jpg format image",

@@ -125,7 +125,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Order Date Time</strong></td>
-                                                        <td>{{date('d-m-Y H:i A', strtotime($data[0]['updated_at'])) }}</td>
+                                                        <td>{{date('d-m-Y h:i A', strtotime($data[0]['updated_at'])) }}</td>
                                                     </tr>
                                                 </table>
                                             </div>

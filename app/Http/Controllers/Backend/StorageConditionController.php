@@ -49,7 +49,7 @@ class StorageConditionController extends Controller
                         return $event->storage_condition_description;
                     })
                     ->editColumn('updated_at', function ($event) {
-                        return date('d-m-Y H:i A', strtotime($event->updated_at));
+                        return date('d-m-Y h:i A', strtotime($event->updated_at));
                     })
                     ->editColumn('action', function ($event) {
                         $storage_condition_view = checkPermission('storage_condition_view');

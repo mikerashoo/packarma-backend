@@ -81,7 +81,7 @@
                         			</div>
                                     <div class="col-sm-6">
                                         <label>Product Image<span style="color:#ff0000">*</span></label>
-                                        <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PRODUCT '); ?></p>
+                                        <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PRODUCT'); ?></p>
                                         <input class="form-control" type="file" id="product_image" name="product_image" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)">
                                         <img src="{{ $data->image_path}}" width="200px" height="auto">
                                     </div>

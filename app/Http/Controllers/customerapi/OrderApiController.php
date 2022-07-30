@@ -271,7 +271,6 @@ class OrderApiController extends Controller
                 $user_id = $token['sub'];
                 $data = DB::table('orders')->select(
                     'orders.id',
-                    'orders.grand_total',
                     'orders.recommendation_engine_id',
                     'recommendation_engines.engine_name',
                     'recommendation_engines.structure_type',
@@ -298,6 +297,8 @@ class OrderApiController extends Controller
                     'orders.mrp',
                     'orders.gst_type',
                     'orders.gst_amount',
+                    'orders.gst_percentage',
+                    'orders.sub_total',
                     'orders.grand_total',
                     'currencies.currency_symbol',
                 )
@@ -340,7 +341,7 @@ class OrderApiController extends Controller
                     if ($row->order_delivery_status == 'delivered' && $reviewData == 0) {
                         $data[$i]->show_feedback_button = true;
                     }
-                    if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing') {
+                    if ($row->order_delivery_status == 'pending') {
                         $data[$i]->show_cancel_button = true;
                     }
                     if (!empty($row->billing_details)) {

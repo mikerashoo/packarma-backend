@@ -36,7 +36,7 @@ class ContactusController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = CustomerContactUs::select('*');
+                $query = CustomerContactUs::select('*')->orderBy('id', 'desc');
 
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
@@ -127,7 +127,7 @@ class ContactusController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = VendorContactUs::select('*');
+                $query = VendorContactUs::select('*')->orderBy('id', 'desc');
 
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
