@@ -92,6 +92,8 @@
                                         {{-- id="gst_certificate_div" --}}
                                         <label>GST Certificate<span style="color:#ff0000">*</span></label><br>
                                         @if (!empty($data->gst_certificate))
+                                            <input class="form-control" type="hidden" id="gst_certificate" name="gst_certificate" value="{{$data->gst_certificate}}" accept="image/png, image/jpg, image/jpeg, application/pdf" onchange="checkFiles(this.files)"><br/>
+
                                             @if(str_contains($data->gst_certificate, '.pdf'))
                                                 <span><a href="{{ListingImageUrl('gst_certificate',$data->gst_certificate)}}" target="_blank"><i class="fa fa-file"></i>  {{ $data->gst_certificate}}</a></span>
                                             @else

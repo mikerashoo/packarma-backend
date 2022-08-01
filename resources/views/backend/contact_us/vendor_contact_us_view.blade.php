@@ -31,7 +31,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Created Date Time</strong></td>
-                                                <td>{{date('d-m-Y H:i A', strtotime($data->created_at)) }}</td>
+                                                <td>{{date('d-m-Y h:i A', strtotime($data->created_at)) }}</td>
                                             </tr>
                                         </table>
                                     </div>

@@ -169,12 +169,16 @@ class CustomerQuoteApiController extends Controller
                             'vendors.vendor_name',
                             'vendor_quotations.vendor_warehouse_id',
                             'vendor_warehouses.warehouse_name',
+                            'vendor_warehouses.city_name',
+                            'states.state_name',
+                            'vendor_warehouses.pincode',
                             'vendor_quotations.gst_type',
                             'vendor_quotations.gst_amount',
                             'vendor_quotations.customer_enquiry_id'
                         )
                             ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                             ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
+                            ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
                             ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.id', $request->vendor_quotation_id]]);
 
                         $autoRejectQuotations = DB::table('vendor_quotations')->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id]])

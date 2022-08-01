@@ -32,7 +32,7 @@
                                             <label>Vendor Type</label>
                                             <select class="form-control mb-3 select2" id="search_vendor_type" name="search_vendor_type" style="width: 100% !important;">
                                                 <option value="">Select</option>
-                                                    <option value="not-deleted">Not Deleted</option>                                              
+                                                    <option value="not-deleted">Approved</option>                                              
                                                     <option value="deleted">Deleted</option>                                              
                                             </select><br/>
                                         </div>

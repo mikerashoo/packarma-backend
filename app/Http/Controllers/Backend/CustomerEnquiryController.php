@@ -85,7 +85,7 @@ class CustomerEnquiryController extends Controller
                         return customerEnquiryQuoteType($event->quote_type);
                     })
                     ->editColumn('updated_at', function ($event) {
-                        return date('d-m-Y H:i A', strtotime($event->updated_at));
+                        return date('d-m-Y h:i A', strtotime($event->updated_at));
                     })
                     ->editColumn('action', function ($event) {
                         $isUserDeleted = isRecordDeleted($event->user->deleted_at);

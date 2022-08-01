@@ -65,14 +65,6 @@
                                                 <input class="form-control required" type="text" id="display_shelf_life" name="display_shelf_life" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Minimum Weight<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="min_weight" name="min_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Maximum Weight<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="max_weight" name="max_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                            </div>
-                                            <div class="col-sm-6">
                                                 <label>Measurement Unit<span style="color:#ff0000">*</span></label>
                                                 <select class="select2 required" id="measurement_unit" name="measurement_unit" style="width: 100% !important;">
                                                     <option value="">Select</option>
@@ -80,6 +72,14 @@
                                                         <option value="{{$units->id}}">{{$units->unit_symbol}}</option>
                                                     @endforeach
                                                 </select><br/><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Minimum Weight<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="min_weight" name="min_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Maximum Weight<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="max_weight" name="max_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                         </div>
                                     </div>

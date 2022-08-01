@@ -82,7 +82,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Creation Date Time</strong></td>
-                                                <td>{{date('d-m-Y H:i A', strtotime($data->created_at)) }}</td>
+                                                <td>{{date('d-m-Y h:i A', strtotime($data->created_at)) }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -112,7 +112,7 @@
                                                         <td>{{ $value->min_amt_profit }}</td>
                                                         {{-- <td>{{ $value->min_stock_qty }}</td> --}}
                                                         <td>{{ $value->vendor_price }}</td>
-                                                        <td>{{ date('d-m-Y H:i A', strtotime($value->updated_at)) }}</td>
+                                                        <td>{{ date('d-m-Y h:i A', strtotime($value->updated_at)) }}</td>
                                                     </tr>
                                                 @endforeach
                                                 @if (empty($vendor_material_mapping->toArray()))

@@ -78,7 +78,7 @@ class UserController extends Controller
                         }
                     })
                     ->editColumn('created_at', function ($event) {
-                        return date('d-m-Y H:i A', strtotime($event->created_at));
+                        return date('d-m-Y h:i A', strtotime($event->created_at));
                     })
                     ->editColumn('email', function ($event) {
                         return $event->email;
@@ -391,7 +391,7 @@ class UserController extends Controller
                         return $approvalStatus;
                     })
                     ->editColumn('created_at', function ($event) {
-                        return date('d-m-Y H:i A', strtotime($event->created_at));
+                        return date('d-m-Y h:i A', strtotime($event->created_at));
                     })
                     ->editColumn('action', function ($event) {
                         $user_approval_view = checkPermission('user_approval_view');
@@ -515,10 +515,16 @@ class UserController extends Controller
      */
     private function validateRequestApprovalList(Request $request, $id)
     {
-        return \Validator::make($request->all(), [
-            'approval_status' => 'required|string',
-            'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : '') : 'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : ''),
-            'gst_certificate' => ($request->approval_status == 'accepted') ?  'required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
-        ])->errors();
+        return \Validator::make(
+            $request->all(),
+            [
+                'approval_status' => 'required|string',
+                'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : '') : 'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : ''),
+                'gst_certificate' => ($request->approval_status == 'accepted' && empty($request->gst_certificate)) ?  'required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : ''
+            ],
+            [
+                'gst_certificate.max' => 'The gst certificate must not be greater than 2MB.',
+            ]
+        )->errors();
     }
 }

@@ -410,7 +410,7 @@ class VendorController extends Controller
                         return $approvalStatus;
                     })
                     ->editColumn('created_at', function ($event) {
-                        return date('d-m-Y H:i A', strtotime($event->created_at));
+                        return date('d-m-Y h:i A', strtotime($event->created_at));
                     })
                     ->editColumn('action', function ($event) {
                         $vendor_approval_list_view = checkPermission('vendor_approval_list_view');
@@ -534,12 +534,18 @@ class VendorController extends Controller
      */
     private function validateRequest(Request $request, $id)
     {
-        return \Validator::make($request->all(), [
-            'approval_status' => 'required',
-            'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin' . ($id ? ",$id" : '') : 'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : ''),
-            'gst_certificate' => ($request->approval_status == 'accepted') ?  'required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : '',
+        return \Validator::make(
+            $request->all(),
+            [
+                'approval_status' => 'required',
+                'gstin' => ($request->approval_status == 'accepted') ? 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin' . ($id ? ",$id" : '') : 'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin' . ($id ? ",$id" : ''),
+                'gst_certificate' => ($request->approval_status == 'accepted' && empty($request->gst_certificate)) ?  'required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE') : '',
 
-        ])->errors();
+            ],
+            [
+                'gst_certificate.max' => 'The gst certificate must not be greater than 2MB.',
+            ]
+        )->errors();
     }
 
     /**
@@ -551,18 +557,23 @@ class VendorController extends Controller
      */
     private function validateAddVendorRequest(Request $request)
     {
-        return \Validator::make($request->all(), [
-            'vendor_name' => 'required|string',
-            'vendor_email' => 'required|string',
-            'vendor_password' => 'required|string|min:8',
-            'vendor_company_name' => 'required|string',
-            'gstin' => 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
-            'phone_country_code' => 'required|integer',
-            'phone' => 'required|integer',
-            'currency' => 'required|integer',
-            'gst_certificate' => 'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
-
-        ])->errors();
+        return \Validator::make(
+            $request->all(),
+            [
+                'vendor_name' => 'required|string',
+                'vendor_email' => 'required|string',
+                'vendor_password' => 'required|string|min:8',
+                'vendor_company_name' => 'required|string',
+                'gstin' => 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
+                'phone_country_code' => 'required|integer',
+                'phone' => 'required|integer',
+                'currency' => 'required|integer',
+                'gst_certificate' => 'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
+            ],
+            [
+                'gst_certificate.max' => 'The gst certificate must not be greater than 2MB.',
+            ]
+        )->errors();
     }
 
     /**
@@ -574,16 +585,22 @@ class VendorController extends Controller
      */
     private function validateEditVendorRequest(Request $request)
     {
-        return \Validator::make($request->all(), [
-            'vendor_name' => 'required|string',
-            'vendor_company_name' => 'required|string',
-            'gstin' => 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
-            'phone_country_code' => 'required|integer',
-            'phone' => 'required|integer',
-            'currency' => 'required|integer',
-            'gst_certificate' => 'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
+        return \Validator::make(
+            $request->all(),
+            [
+                'vendor_name' => 'required|string',
+                'vendor_company_name' => 'required|string',
+                'gstin' => 'required|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION') . '|unique:vendors,gstin' . ($request->id ? ",$request->id" : ''),
+                'phone_country_code' => 'required|integer',
+                'phone' => 'required|integer',
+                'currency' => 'required|integer',
+                'gst_certificate' => 'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
 
-        ])->errors();
+            ],
+            [
+                'gst_certificate.max' => 'The gst certificate must not be greater than 2MB.',
+            ]
+        )->errors();
     }
 
 
