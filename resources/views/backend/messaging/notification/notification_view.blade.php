@@ -30,7 +30,7 @@
                                         </tr>
                                         <tr>
                                             <td><strong>Last Time Sent</strong></td>
-                                            <td>{{date('d-m-Y H:i A', strtotime($data->notification_date)) }}</td>
+                                            <td>{{date('d-m-Y h:i A', strtotime($data->notification_date)) }}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Notification Image</strong></td>

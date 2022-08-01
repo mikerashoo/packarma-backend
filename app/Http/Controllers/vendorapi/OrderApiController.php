@@ -53,6 +53,7 @@ class OrderApiController extends Controller
                     'orders.gst_type',
                     'orders.gst_amount',
                     'orders.gst_percentage',
+                    'orders.sub_total',
                     'orders.grand_total',
                     'orders.shipping_details',
                     'orders.billing_details',
@@ -198,7 +199,8 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
-                    $vendor_gst_amount = $row->vendor_amount * ($row->gst_percentage / 100);
+                    // $vendor_gst_amount = $row->vendor_amount * ($row->gst_percentage / 100);
+                    $vendor_gst_amount = $row->gst_amount;
 
                     $data[$i]->odr_id = getFormatid($row->id, $main_table);
                     $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);
@@ -206,8 +208,8 @@ class OrderApiController extends Controller
                     $data[$i]->material_unit_symbol = 'kg';
                     $data[$i]->order_status = $row->order_delivery_status;
                     $data[$i]->show_update_button = true;
-                    $data[$i]->gst_amount = number_format(($vendor_gst_amount), 2, '.', '');
-                    $data[$i]->grand_total = number_format(($row->vendor_amount + $vendor_gst_amount), 2, '.', '');
+                    // $data[$i]->gst_amount = number_format(($vendor_gst_amount), 2, '.', '');
+                    // $data[$i]->grand_total = number_format(($row->vendor_amount + $vendor_gst_amount), 2, '.', '');
                     if ($row->order_delivery_status == 'pending' || $row->order_delivery_status == 'processing') {
                         $data[$i]->order_status = 'pending';
                     }
@@ -283,6 +285,7 @@ class OrderApiController extends Controller
                 $staus = $request->order_delivery_status;
 
                 $status_array = ['pending', 'processing', 'out_for_delivery', 'delivered', 'cancelled'];
+                $block_status_array = [];
                 if (!in_array($staus, $status_array)) {
                     errorMessage(__('order.wrong_status'), $msg_data);
                 }
@@ -291,6 +294,29 @@ class OrderApiController extends Controller
                 if (empty($checkOrder)) {
                     errorMessage(__('order.order_not_found'), $msg_data);
                 }
+
+                $previousDeliveryStatus = $checkOrder->order_delivery_status;
+
+                if ($previousDeliveryStatus == 'processing') {
+                    $block_status_array = ['pending'];
+                }
+
+                if ($previousDeliveryStatus == 'out_for_delivery') {
+                    $block_status_array = ['pending', 'processing'];
+                }
+
+                if ($previousDeliveryStatus == 'delivered') {
+                    $block_status_array = ['pending', 'processing', 'out_for_delivery'];
+                }
+
+                if ($previousDeliveryStatus == 'cancelled') {
+                    $block_status_array = ['pending', 'processing', 'out_for_delivery', 'delivered'];
+                }
+
+                if (in_array($staus, $block_status_array)) {
+                    errorMessage(__('order.cant_revese_delivery_status'), $msg_data);
+                }
+
                 $order_data = $request->all();
                 $order_data['vendor_id'] = $vendor_id;
                 unset($order_data['id']);

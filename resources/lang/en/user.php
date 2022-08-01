@@ -15,7 +15,7 @@ return [
 
     'registered_successfully' => 'User registered successfully!',
     'otp_sent' => 'OTP sent successfully.',
-    'phone_already_exist' => 'User has already been registered with this phone number.',
+    'user_already_exist' => 'You are already registered with this phone no or email.',
     'login_failed' => 'Invalid login credentials',
     'logged_in_successfully' => 'Logged in successfully!',
     'update_successfully' => 'Your details updated successfully!',
@@ -35,5 +35,6 @@ return [
     'status_fetched' => 'Your Status Fetched Successfully',
     'load_page_require' => 'Load page is require',
     'contact_us_stored' => 'Your Contact Details Recorded Will get back to you soon',
-    'email_already_exit' => 'Email already registered'
+    'email_already_exit' => 'Email already registered',
+    'no_active_subscription' => 'You need to have an active subscription to place the enquiry. Would you like to buy subscription ?'
 ];

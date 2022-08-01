@@ -61,7 +61,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Date Time</strong></td>
-                                                <td>{{date('d-m-Y H:i A', strtotime($data->updated_at)) }}</td>
+                                                <td>{{date('d-m-Y h:i A', strtotime($data->updated_at)) }}</td>
                                             </tr>
                                         </table>
                                     </div>

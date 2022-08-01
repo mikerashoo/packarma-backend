@@ -22,11 +22,9 @@ class CustomerQuoteApiController extends Controller
     public function index(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 // Request Validation
                 $validationErrors = $this->validateRequest($request);
                 if (count($validationErrors)) {
@@ -35,18 +33,18 @@ class CustomerQuoteApiController extends Controller
                 }
 
                 $user_id = $token['sub'];
-                $page_no=1;
-                $limit=10;
+                $page_no = 1;
+                $limit = 10;
                 $orderByArray = ['vendor_quotations.updated_at' => 'DESC',];
                 $defaultSortByName = false;
-                
-                if(isset($request->page_no) && !empty($request->page_no)) {
-                    $page_no=$request->page_no;
+
+                if (isset($request->page_no) && !empty($request->page_no)) {
+                    $page_no = $request->page_no;
                 }
-                if(isset($request->limit) && !empty($request->limit)) {
-                    $limit=$request->limit;
+                if (isset($request->limit) && !empty($request->limit)) {
+                    $limit = $request->limit;
                 }
-                $offset=($page_no-1)*$limit;
+                $offset = ($page_no - 1) * $limit;
 
                 $data = DB::table('vendor_quotations')->select(
                     'vendor_quotations.id',
@@ -60,40 +58,34 @@ class CustomerQuoteApiController extends Controller
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
-                    ->where([['vendor_quotations.user_id', $user_id],['vendor_quotations.customer_enquiry_id',$request->customer_enquiry_id]])->whereIn('vendor_quotations.enquiry_status', ['quoted', 'viewed']);
+                    ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id]])->whereIn('vendor_quotations.enquiry_status', ['quoted', 'viewed']);
 
                 $quotationData = VendorQuotation::whereRaw("1 = 1");
-                if($request->customer_enquiry_id)
-                {
-                    $quotationData = $quotationData->where('vendor_quotations.customer_enquiry_id',$request->customer_enquiry_id);
-                    $data = $data->where('vendor_quotations.customer_enquiry_id',$request->customer_enquiry_id);
+                if ($request->customer_enquiry_id) {
+                    $quotationData = $quotationData->where('vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id);
+                    $data = $data->where('vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id);
                 }
-                if($request->product_id)
-                {
-                    $quotationData = $quotationData->where('vendor_quotations.product_id',$request->product_id);
-                    $data = $data->where('vendor_quotations.product_id',$request->product_id);
+                if ($request->product_id) {
+                    $quotationData = $quotationData->where('vendor_quotations.product_id', $request->product_id);
+                    $data = $data->where('vendor_quotations.product_id', $request->product_id);
                 }
-                if($request->vendor_quotation_id)
-                {
-                    $quotationData = $quotationData->where('vendor_quotations.id',$request->vendor_quotation_id);
-                    $data = $data->where('vendor_quotations.id',$request->vendor_quotation_id);
+                if ($request->vendor_quotation_id) {
+                    $quotationData = $quotationData->where('vendor_quotations.id', $request->vendor_quotation_id);
+                    $data = $data->where('vendor_quotations.id', $request->vendor_quotation_id);
                 }
-                if($request->vendor_id)
-                {
-                    $quotationData = $quotationData->where('vendor_quotations.vendor_id',$request->vendor_id);
-                    $data = $data->where('vendor_quotations.vendor_id',$request->vendor_id);
+                if ($request->vendor_id) {
+                    $quotationData = $quotationData->where('vendor_quotations.vendor_id', $request->vendor_id);
+                    $data = $data->where('vendor_quotations.vendor_id', $request->vendor_id);
                 }
-                if($request->vendor_warehouse_id)
-                {
-                    $quotationData = $quotationData->where('vendor_quotations.vendor_warehouse_id',$request->vendor_warehouse_id);
-                    $data = $data->where('vendor_quotations.vendor_warehouse_id',$request->vendor_warehouse_id);
+                if ($request->vendor_warehouse_id) {
+                    $quotationData = $quotationData->where('vendor_quotations.vendor_warehouse_id', $request->vendor_warehouse_id);
+                    $data = $data->where('vendor_quotations.vendor_warehouse_id', $request->vendor_warehouse_id);
                 }
-                if(empty($quotationData->first()))
-                {
+                if (empty($quotationData->first())) {
                     errorMessage(__('customer_quote.quotation_not_found'), $msg_data);
                 }
-                if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'vendor_price');
+                if (isset($request->search) && !empty($request->search)) {
+                    $data = fullSearchQuery($data, $request->search, 'vendor_price');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['products.product_name' => 'ASC'];
@@ -101,11 +93,11 @@ class CustomerQuoteApiController extends Controller
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                if(empty($data)) {
+                if (empty($data)) {
                     errorMessage(__('customer_quote.quotation_not_found'), $msg_data);
                 }
                 $i = 0;
-                foreach($data as $row){
+                foreach ($data as $row) {
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
@@ -120,14 +112,10 @@ class CustomerQuoteApiController extends Controller
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Quotation fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -138,7 +126,7 @@ class CustomerQuoteApiController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
@@ -157,11 +145,9 @@ class CustomerQuoteApiController extends Controller
     public function accept_quotation(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 // Request Validation
                 $validationErrors = $this->validateAcceptQuotaion($request);
                 if (count($validationErrors)) {
@@ -169,65 +155,65 @@ class CustomerQuoteApiController extends Controller
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $user_id = $token['sub'];
-                if($request->enquiry_status == "accept"){
-                    $statusData = VendorQuotation::where('id',$request->vendor_quotation_id)->first();
-                    if($statusData->enquiry_status == "accept"){
+                if ($request->enquiry_status == "accept") {
+                    $statusData = VendorQuotation::where('id', $request->vendor_quotation_id)->first();
+                    if ($statusData->enquiry_status == "accept") {
                         errorMessage(__('customer_quote.quotation_already_accepted'), $msg_data);
                     }
                     $quotationEnquiryStatusData = VendorQuotation::find($request->vendor_quotation_id)->update($request->all());
                     \Log::info("Customer Quotation Accepted Successfully");
-                    if($quotationEnquiryStatusData){
+                    if ($quotationEnquiryStatusData) {
                         $data = DB::table('vendor_quotations')->select(
                             'vendor_quotations.id',
                             'vendor_quotations.vendor_id',
                             'vendors.vendor_name',
                             'vendor_quotations.vendor_warehouse_id',
                             'vendor_warehouses.warehouse_name',
+                            'vendor_warehouses.city_name',
+                            'states.state_name',
+                            'vendor_warehouses.pincode',
                             'vendor_quotations.gst_type',
                             'vendor_quotations.gst_amount',
                             'vendor_quotations.customer_enquiry_id'
                         )
                             ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                             ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
-                            ->where([['vendor_quotations.user_id', $user_id],['vendor_quotations.id',$request->vendor_quotation_id]]);
+                            ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
+                            ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.id', $request->vendor_quotation_id]]);
 
-                        $autoRejectQuotations = DB::table('vendor_quotations')->where([['vendor_quotations.user_id', $user_id],['vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id]])
-                                                    ->whereIn('vendor_quotations.enquiry_status', ['quoted', 'viewed'])
-                                                    ->update(['vendor_quotations.enquiry_status' => 'auto_reject']);
-                        
-                        $customerEnquiryQuoteType = DB::table('customer_enquiries')->where([['customer_enquiries.user_id',$user_id],['customer_enquiries.id',$request->customer_enquiry_id]])
-                                                        ->update(['customer_enquiries.quote_type' => 'accept_cust']);
+                        $autoRejectQuotations = DB::table('vendor_quotations')->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id]])
+                            ->whereIn('vendor_quotations.enquiry_status', ['quoted', 'viewed'])
+                            ->update(['vendor_quotations.enquiry_status' => 'auto_reject']);
+
+                        $customerEnquiryQuoteType = DB::table('customer_enquiries')->where([['customer_enquiries.user_id', $user_id], ['customer_enquiries.id', $request->customer_enquiry_id]])
+                            ->update(['customer_enquiries.quote_type' => 'accept_cust']);
 
                         $data = $data->get()->toArray();
                         $proceed_button = false;
-                        $customer_enq_data = CustomerEnquiry::where([['id',$data[0]->customer_enquiry_id], ['quote_type','accept_cust']])->get()->count();
-                        if($customer_enq_data){
+                        $customer_enq_data = CustomerEnquiry::where([['id', $data[0]->customer_enquiry_id], ['quote_type', 'accept_cust']])->get()->count();
+                        if ($customer_enq_data) {
                             $data[0]->proceed_button = true;
-                        }else{
+                        } else {
                             $data[0]->proceed_button = false;
                         }
-                        
+
                         $data[0]->cgst_amount = "0.00";
                         $data[0]->sgst_amount = "0.00";
                         $data[0]->igst_amount = "0.00";
                         if ($data[0]->gst_type == 'cgst+sgst') {
-                            $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
+                            $data[0]->sgst_amount = $data[0]->cgst_amount = number_format(($data[0]->gst_amount / 2), 2, '.', '');
                         }
                         if ($data[0]->gst_type == 'igst') {
                             $data[0]->igst_amount = $data[0]->gst_amount;
                         }
                         $responseData['result'] = $data;
-                        successMessage(__('success_msg.data_fetched_successfully'), $responseData);                
+                        successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                     }
-                }                    
-            }
-            else
-            {
+                }
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Quotation fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -244,36 +230,30 @@ class CustomerQuoteApiController extends Controller
     public function reject_quotation(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 // Request Validation
                 $validationErrors = $this->validateRejectQuotaion($request);
                 if (count($validationErrors)) {
                     \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
-                $statusData = VendorQuotation::where('id',$request->vendor_quotation_id)->first();
-                    if($statusData->enquiry_status == "reject"){
-                        errorMessage(__('customer_quote.quotation_already_rejected'), $msg_data);
-                    }
-                if($statusData->enquiry_status == 'quoted'){
-                    if($request->enquiry_status == "reject"){
+                $statusData = VendorQuotation::where('id', $request->vendor_quotation_id)->first();
+                if ($statusData->enquiry_status == "reject") {
+                    errorMessage(__('customer_quote.quotation_already_rejected'), $msg_data);
+                }
+                if ($statusData->enquiry_status == 'quoted') {
+                    if ($request->enquiry_status == "reject") {
                         $quotationEnquiryStatusData = VendorQuotation::find($request->vendor_quotation_id)->update($request->all());
                         \Log::info("Customer Quotation Rejected Successfully");
                         successMessage(__('customer_quote.quotation_rejected_successfully', $msg_data));
                     }
                 }
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Quotation Reject failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -290,22 +270,20 @@ class CustomerQuoteApiController extends Controller
     public function accepted_quotation_details(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
+            if ($token) {
                 $user_id = $token['sub'];
-                $page_no=1;
-                $limit=10;
-                
-                if(isset($request->page_no) && !empty($request->page_no)) {
-                    $page_no=$request->page_no;
+                $page_no = 1;
+                $limit = 10;
+
+                if (isset($request->page_no) && !empty($request->page_no)) {
+                    $page_no = $request->page_no;
                 }
-                if(isset($request->limit) && !empty($request->limit)) {
-                    $limit=$request->limit;
+                if (isset($request->limit) && !empty($request->limit)) {
+                    $limit = $request->limit;
                 }
-                $offset=($page_no-1)*$limit;
+                $offset = ($page_no - 1) * $limit;
                 $main_table  = 'vendor_quotations';
                 $data = DB::table('vendor_quotations')->select(
                     'vendor_quotations.id',
@@ -320,7 +298,7 @@ class CustomerQuoteApiController extends Controller
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
-                    ->where([['vendor_quotations.user_id', $user_id],['vendor_quotations.enquiry_status','accept']]);
+                    ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.enquiry_status', 'accept']]);
 
                 $acceptedQuotationData = VendorQuotation::whereRaw("1 = 1");
                 if ($request->customer_enquiry_id) {
@@ -339,23 +317,22 @@ class CustomerQuoteApiController extends Controller
                     $acceptedQuotationData = $acceptedQuotationData->where($main_table . '' . '.vendor_id', $request->vendor_id);
                     $data = $data->where($main_table . '' . '.vendor_id', $request->vendor_id);
                 }
-                if(empty($acceptedQuotationData->first()))
-                {
+                if (empty($acceptedQuotationData->first())) {
                     errorMessage(__('customer_quote.quotation_not_found'), $msg_data);
                 }
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                if(empty($data)) {
+                if (empty($data)) {
                     errorMessage(__('customer_quote.quotation_not_found'), $msg_data);
                 }
-               
+
                 $i = 0;
-                foreach($data as $row){
+                foreach ($data as $row) {
                     $proceed_button = false;
-                    $customer_enq_data = CustomerEnquiry::where([['id',$row->customer_enquiry_id], ['quote_type','accept_cust']])->first();
-                    if($customer_enq_data->quote_type == 'accept_cust'){
+                    $customer_enq_data = CustomerEnquiry::where([['id', $row->customer_enquiry_id], ['quote_type', 'accept_cust']])->first();
+                    if ($customer_enq_data->quote_type == 'accept_cust') {
                         $data[$i]->proceed_button = true;
-                    }else{
+                    } else {
                         $data[$i]->proceed_button = false;
                     }
                     $data[$i]->cgst_amount = "0.00";
@@ -372,14 +349,10 @@ class CustomerQuoteApiController extends Controller
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
-            }
-            else
-            {
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Accepted Quotation Details fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -392,7 +365,7 @@ class CustomerQuoteApiController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     private function validateAcceptQuotaion(Request $request)
     {
         return \Validator::make($request->all(), [
@@ -402,14 +375,14 @@ class CustomerQuoteApiController extends Controller
         ])->errors();
     }
 
-     /**
+    /**
      * Created By : Pradyumn Dwivedi
      * Created on : 26/05/2022
      * Uses : To Validate request for Customer Reject Quotation.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     private function validateRejectQuotaion(Request $request)
     {
         return \Validator::make($request->all(), [

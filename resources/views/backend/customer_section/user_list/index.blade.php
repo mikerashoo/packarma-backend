@@ -37,7 +37,7 @@
                                             <label>User Type</label>
                                             <select class="form-control mb-3 select2" id="search_user_type" name="search_user_type" style="width: 100% !important;">
                                                 <option value="">Select</option>
-                                                    <option value="not-deleted">Not Deleted</option>                                              
+                                                    <option value="not-deleted">Approved</option>                                              
                                                     <option value="deleted">Deleted</option>                                              
                                             </select><br/>
                                         </div>

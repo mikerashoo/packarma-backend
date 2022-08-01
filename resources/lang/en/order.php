@@ -24,4 +24,5 @@ return [
     'my_order_created_successfully' => 'My Order Created Successfully',
     'billing_details_calculated_successfully' => 'Billing Details Calculated Successfully',
     'order_placed' => 'Order placed successfully',
+    'cant_revese_delivery_status' => 'Delivery Status can not be reversed',
 ];
