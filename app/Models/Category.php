@@ -21,4 +21,17 @@ class Category extends Model
         'category_name',
         'category_image'
     ];
+
+    /**
+     * Developed By : Maaz Ansari
+     * Created On : 01-Aug-2022
+     * uses : to change name to Camel Casing
+     */
+
+    // mutators start
+    public function setCategoryNameAttribute($value)
+    {
+        $this->attributes['category_name'] = ucwords(strtolower($value));
+    }
+    // mutators end
 }

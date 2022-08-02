@@ -502,6 +502,8 @@ class OrderApiController extends Controller
                 $quantity_calculation_data['quantity'] = $product_quantity;
                 $quantity_calculation_data['rate'] = $mrp_rate_price;
                 $quantity_calculation_data['gst_amount'] = $gst_amount_price;
+                $quantity_calculation_data['gst_percentage'] = $gst_percentage;
+                $quantity_calculation_data['sub_total'] = $sub_total_price;
                 $quantity_calculation_data['total_amount'] = $total_amount_price;
                 $quantity_calculation_data['currency_symbol'] = $currency_symbol;
 

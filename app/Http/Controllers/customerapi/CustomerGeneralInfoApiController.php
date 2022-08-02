@@ -30,7 +30,7 @@ class CustomerGeneralInfoApiController extends Controller
                 if ($request->info_type) {
                     $type = array($request->info_type);
                 } else {
-                    $type = array('customer_about_us', 'customer_terms_condition', 'customer_privacy_policy', 'customer_help_and_support');
+                    $type = array('about_us', 'terms_condition', 'privacy_policy', 'help_and_support');
                 }
                 $data = GeneralSetting::select('type', 'value')->whereIn('type', $type)->get();
                 if (count($data) == 0) {

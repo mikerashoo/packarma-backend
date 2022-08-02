@@ -75,4 +75,36 @@ class UserAddress extends Model
     {
         return $this->belongsTo('App\Models\User')->withTrashed();
     }
+
+    /**
+     * Developed By : Maaz
+     * Created On : 01-Aug-2022
+     */
+
+    // mutators start
+
+    public function setAddressNameAttribute($value)
+    {
+        $this->attributes['address_name'] = ucwords(strtolower($value));
+    }
+
+    public function setCityNameAttribute($value)
+    {
+        $this->attributes['city_name'] = ucwords(strtolower($value));
+    }
+
+    public function setFlatAttribute($value)
+    {
+        $this->attributes['flat'] = ucwords(strtolower($value));
+    }
+    public function setAreaAttribute($value)
+    {
+        $this->attributes['area'] = ucwords(strtolower($value));
+    }
+
+    public function setLandMarkAttribute($value)
+    {
+        $this->attributes['land_mark'] = ucwords(strtolower($value));
+    }
+    // mutators end
 }

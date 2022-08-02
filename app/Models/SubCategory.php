@@ -22,14 +22,27 @@ class SubCategory extends Model
         'category_id',
         'sub_category_image'
     ];
-    
+
     /**
-        * Developed By : Pradyumn Dwivedi
-        * Created On : 29-mar-2022
-        * uses : to get data of category model in sub category model 
-    */
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 29-mar-2022
+     * uses : to get data of category model in sub category model 
+     */
     public function category()
     {
         return $this->belongsTo('App\Models\Category');
     }
+
+    /**
+     * Developed By : Maaz Ansari
+     * Created On : 01-Aug-2022
+     * uses : to change name to Camel Casing
+     */
+
+    // mutators start
+    public function setSubCategoryNameAttribute($value)
+    {
+        $this->attributes['sub_category_name'] = ucwords(strtolower($value));
+    }
+    // mutators end
 }

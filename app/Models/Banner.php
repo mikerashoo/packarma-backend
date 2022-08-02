@@ -7,6 +7,7 @@
     *	Created On : 28-01-2022
     *	http ://www.mypcot.com
 */
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +20,7 @@ class Banner extends Model
     use SoftDeletes;
     protected $dates = ['deleted_at'];
 
-     /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -28,4 +29,30 @@ class Banner extends Model
         'title',
         'banner_image'
     ];
+
+
+
+    /**
+     * Developed By : Maaz Ansari
+     * Created On : 01-Aug-2022
+     * uses : to change name to Camel Casing
+     */
+
+    // mutators start
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = ucwords(strtolower($value));
+    }
+
+    public function setMetaTitleAttribute($value)
+    {
+        $this->attributes['meta_title'] = ucwords(strtolower($value));
+    }
+
+    public function setMetaDescriptionAttribute($value)
+    {
+        $this->attributes['meta_description'] = ucwords(strtolower($value));
+    }
+
+    // mutators end
 }
