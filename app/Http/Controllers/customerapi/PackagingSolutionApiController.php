@@ -23,6 +23,7 @@ class PackagingSolutionApiController extends Controller
     {
         $msg_data = array();
         $isSubscribed = true;
+        $placeEnquiry = true;
 
         try {
             $token = readHeaderToken();
@@ -82,11 +83,15 @@ class PackagingSolutionApiController extends Controller
                     $total_records = $data->get()->count();
                     $data = $data->limit($limit)->offset($offset)->get()->toArray();
                     if (empty($data)) {
+                        $placeEnquiry = false;
+                        $msg_data['is_subscribed'] = $isSubscribed;
+                        $msg_data['place_enquiry'] = $placeEnquiry;
                         errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
                     }
 
                     $responseData['result'] = $data;
                     $responseData['is_subscribed'] = $isSubscribed;
+                    $responseData['place_enquiry'] = $placeEnquiry;
                     $responseData['total_records'] = $total_records;
                     successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                 }

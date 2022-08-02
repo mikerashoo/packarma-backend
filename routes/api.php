@@ -21,6 +21,8 @@ Route::middleware(['basicAuth'])->group(function () {
     Route::post('/verify_otp', 'OtpApiController@verifyOtp');
     Route::post('/login_api', 'LoginApiController@index');
     Route::post('/forgot_password_api', 'ForgotPasswordApiController@index');
+    Route::post('/customer_general_info_all', 'CustomerGeneralInfoApiController@customerGeneralInforAll');
+
     Route::middleware(['tokenAuth'])->group(function () {
         //Product
         Route::post('/products/listing', 'ProductApiController@index');

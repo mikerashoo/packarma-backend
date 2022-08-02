@@ -94,7 +94,7 @@ class LoginApiController extends Controller
             }
 
             if (empty($vendorData->gst_certificate)) {
-                $vendorData->gst_certificate =  getFile('default_vendor_gst_file.jpeg', 'vendor_gst_certificate');
+                $vendorData->gst_certificate =  getFile('default_vendor_gst_file.png', 'vendor_gst_certificate');
             }
 
 

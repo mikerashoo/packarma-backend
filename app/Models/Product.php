@@ -51,4 +51,23 @@ class Product extends Model
     {
         return $this->belongsTo('App\Models\PackagingTreatment');
     }
+
+
+    /**
+     * Developed By : Maaz Ansari
+     * Created On : 01-Aug-2022
+     * uses : to change name to Camel Casing
+     */
+
+    // mutators start
+    public function setProductNameAttribute($value)
+    {
+        $this->attributes['product_name'] = ucwords(strtolower($value));
+    }
+
+    public function setProductDescriptionAttribute($value)
+    {
+        $this->attributes['product_description'] = ucwords(strtolower($value));
+    }
+    // mutators end
 }

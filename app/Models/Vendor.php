@@ -118,5 +118,15 @@ class Vendor extends Model implements JWTSubject
     {
         $this->attributes['gstin'] = strtoupper($value);
     }
+
+    public function setVendorNameAttribute($value)
+    {
+        $this->attributes['vendor_name'] = ucwords(strtolower($value));
+    }
+
+    public function setVendorCompanyNameAttribute($value)
+    {
+        $this->attributes['vendor_company_name'] = ucwords(strtolower($value));
+    }
     // mutators end
 }

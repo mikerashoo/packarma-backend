@@ -1,4 +1,5 @@
 @extends('backend.layouts.applogin')
+@section('title', 'Login')
 @section('content')
 <div class="wrapper">
     <div class="main-panel">
@@ -20,11 +21,27 @@
                                                 @csrf
                                                 <h4 class="mb-2 card-title">Admin Team Login</h4>
                                                 <br/>
+                                                        @php
+                                                        $status = session('status');
+                                                        @endphp
+                                                        @if($status)
+                                                            <div class='badge bg-light-success mb-1 mr-2'>
+                                                                {{ $status }}
+                                                            </div>
+                                                        @endif
                                                 <div class="mb-3">
                                                     <input type="email" class="form-control" placeholder="Email" required="" name="email">
                                                 </div>
                                                 <div class="mb-3">
                                                     <input type="password" class="form-control mb-2" placeholder="Password" required="" name="password">
+
+                                                    <div class="d-sm-flex justify-content-between mb-3 font-small-2">
+                                                            @if(Route::has('password.request'))
+                                                                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                                                                {{ __('Forgot your password?') }}
+                                                                </a>
+                                                            @endif
+                                                        </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-12">

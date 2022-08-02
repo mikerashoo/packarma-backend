@@ -63,7 +63,7 @@ class LoginApiController extends Controller
             }
 
             if (empty($userData->gst_certificate)) {
-                $userData->gst_certificate =  getFile('default_user_gst_file.jpeg', 'gst_certificate');
+                $userData->gst_certificate =  getFile('default_user_gst_file.png', 'gst_certificate');
             }
 
             $imei_no = $request->header('device-id');
