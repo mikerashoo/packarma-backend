@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'vendorbasicAuth' => \App\Http\Middleware\VendorBasicAuth::class,
         'tokenAuth' => \App\Http\Middleware\TokenAuth::class,
         'vendorTokenAuth' => \App\Http\Middleware\VendorTokenAuth::class,
+        'url' => \App\Http\Middleware\UrlExpired::class,
     ];
 }
