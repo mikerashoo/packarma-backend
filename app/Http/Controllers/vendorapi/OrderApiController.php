@@ -230,6 +230,7 @@ class OrderApiController extends Controller
                     if ($row->gst_type == 'cgst+sgst') {
 
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($vendor_gst_amount / 2), 2, '.', '');
+                        $data[$i]->gst_percentage = number_format(($row->gst_percentage / 2), 2, '.', '');
                     }
 
                     if ($row->gst_type == 'igst') {

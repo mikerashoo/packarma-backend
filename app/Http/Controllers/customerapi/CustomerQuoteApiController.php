@@ -54,7 +54,8 @@ class CustomerQuoteApiController extends Controller
                     'vendor_warehouses.warehouse_name',
                     'vendor_quotations.mrp',
                     'vendor_quotations.gst_type',
-                    'vendor_quotations.gst_amount'
+                    'vendor_quotations.gst_amount',
+                    'vendor_quotations.gst_percentage'
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
@@ -103,6 +104,7 @@ class CustomerQuoteApiController extends Controller
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
+                        $data[$i]->gst_percentage = number_format(($row->gst_percentage / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $data[$i]->gst_amount;
@@ -294,6 +296,7 @@ class CustomerQuoteApiController extends Controller
                     'vendor_warehouses.warehouse_name',
                     'vendor_quotations.gst_type',
                     'vendor_quotations.gst_amount',
+                    'vendor_quotations.gst_percentage',
                     'vendor_quotations.customer_enquiry_id'
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
@@ -340,6 +343,7 @@ class CustomerQuoteApiController extends Controller
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
+                        $data[$i]->gst_percentage = number_format(($row->gst_percentage / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $data[$i]->gst_amount;
