@@ -60,7 +60,7 @@ class PackagingSolutionApiController extends Controller
 
                     // $data = RecommendationEngine::select('id', 'engine_name', 'structure_type', 'display_shelf_life')
                     $data = RecommendationEngine::with('packaging_material')
-                        ->where([['status', '1'], ['category_id', $request->category_id], ['product_id', $request->product_id], ['storage_condition_id', $request->storage_condition_id], ['product_form_id', $request->product_form_id], ['packing_type_id', $request->packing_type_id]]);
+                        ->where([['status', '1'], ['category_id', $request->category_id], ['product_id', $request->product_id], ['storage_condition_id', $request->storage_condition_id], ['product_form_id', $request->product_form_id], ['packing_type_id', $request->packing_type_id], ['display_shelf_life', '>=', $request->shelf_life]]);
                     $engineData = RecommendationEngine::whereRaw('1 = 1');
                     if ($request->engine_id) {
                         $engineData = $engineData->where('id', $request->engine_id);
@@ -70,6 +70,7 @@ class PackagingSolutionApiController extends Controller
                         $engineData = $engineData->where('engine_name', $request->engine_name);
                         $data = $data->where('engine_name', $request->engine_name);
                     }
+
                     if (empty($engineData->first())) {
                         errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
                     }
@@ -119,7 +120,8 @@ class PackagingSolutionApiController extends Controller
             'product_id' => 'required|numeric',
             'storage_condition_id' => 'required|numeric',
             'product_form_id' => 'required|numeric',
-            'packing_type_id' => 'required|numeric'
+            'packing_type_id' => 'required|numeric',
+            'shelf_life' => 'required|integer'
         ])->errors();
     }
 }

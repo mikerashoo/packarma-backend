@@ -130,7 +130,7 @@ class LoginController extends Controller
         $action_link =  URL::temporarySignedRoute(
             'password.reset',
             now()->addHours(48),
-            ['token' => $token, 'email' => $email]
+            ['token' => $token]
         );
         $body = "We received a request to reset the passoword for PACKARMA account associated with " . $email . " You can reset the password by clicking the link below";
         Mail::send('backend/auth/email-forgot', ['link' => $action_link, 'body' => $body], function ($message) use ($email) {
@@ -148,8 +148,8 @@ class LoginController extends Controller
      */
     public function passwordReset(Request $request)
     {
-        $email = strtolower($request->email);
-        $check_token = DB::table('password_resets')->where(['email' => $email])->first();
+        $token = $request->token;
+        $check_token = DB::table('password_resets')->where(['token' => $token])->first();
         if (!$check_token) {
             return view('backend/auth/page-not-found');
         }
