@@ -57,7 +57,8 @@ class OrderApiController extends Controller
                     'measurement_units.unit_symbol',
                     'orders.created_at',
                     'orders.gst_type',
-                    'orders.gst_amount'
+                    'orders.gst_amount',
+                    'orders.gst_percentage'
                 )
                     ->leftjoin('packaging_materials', 'packaging_materials.id', '=', 'orders.packaging_material_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
@@ -104,6 +105,7 @@ class OrderApiController extends Controller
 
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
+                        $data[$i]->gst_percentage = number_format(($row->gst_percentage / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $row->gst_amount;
@@ -178,7 +180,8 @@ class OrderApiController extends Controller
                     'measurement_units.unit_symbol',
                     'orders.created_at',
                     'orders.gst_type',
-                    'orders.gst_amount'
+                    'orders.gst_amount',
+                    'orders.gst_percentage'
                 )
                     ->leftjoin('packaging_materials', 'packaging_materials.id', '=', 'orders.packaging_material_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
@@ -221,6 +224,7 @@ class OrderApiController extends Controller
 
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
+                        $data[$i]->gst_percentage = number_format(($row->gst_percentage / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $row->gst_amount;
@@ -331,6 +335,7 @@ class OrderApiController extends Controller
 
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
+                        $data[$i]->gst_percentage = number_format(($row->gst_percentage / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
                         $data[$i]->igst_amount = $row->gst_amount;
@@ -502,6 +507,8 @@ class OrderApiController extends Controller
                 $quantity_calculation_data['quantity'] = $product_quantity;
                 $quantity_calculation_data['rate'] = $mrp_rate_price;
                 $quantity_calculation_data['gst_amount'] = $gst_amount_price;
+                $quantity_calculation_data['gst_percentage'] = $gst_percentage;
+                $quantity_calculation_data['sub_total'] = $sub_total_price;
                 $quantity_calculation_data['total_amount'] = $total_amount_price;
                 $quantity_calculation_data['currency_symbol'] = $currency_symbol;
 

@@ -257,7 +257,7 @@ class MyProfileApiController extends Controller
                 }
 
                 if (empty($userData->gst_certificate)) {
-                    $userData->gst_certificate =  getFile('default_user_gst_file.jpeg', 'gst_certificate');
+                    $userData->gst_certificate =  getFile('default_user_gst_file.png', 'gst_certificate');
                 }
 
                 $userData->load_page = $default_home_page;
