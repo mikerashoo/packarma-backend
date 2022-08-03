@@ -151,9 +151,15 @@ class LoginController extends Controller
         $token = $request->token;
         $check_token = DB::table('password_resets')->where(['token' => $token])->first();
         if (!$check_token) {
-            return view('backend/auth/page-not-found');
+            return redirect()->route('urlexpired');
         }
         return view('backend/auth/reset-password', ['request' => $request]);
+    }
+
+
+    public function urlExpired(Request $request)
+    {
+        return view('backend/auth/page-not-found');
     }
 
 
