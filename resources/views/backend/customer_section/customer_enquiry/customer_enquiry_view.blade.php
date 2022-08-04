@@ -168,21 +168,21 @@
                                                         <th>Address</th>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($vendor_warehouse as $warehouses)
+                                                        {{-- @foreach ($vendor_warehouse as $warehouses)
                                                             @php
                                                                 $warehouse_name = $warehouses->warehouse_name;
                                                                 $pincode = $warehouses->pincode;
                                                                 $state_name = $warehouses->state->state_name;
                                                             @endphp
-                                                        @endforeach
-                                                        @foreach ($vendor as $vendors)
+                                                        @endforeach --}}
+                                                        @foreach ($vendors as $vendor)
                                                         <tr>
-                                                            <td>{{ $vendors->vendor_name; }}</td>
-                                                            <td>{{ $vendors->vendor_email; }}</td>
-                                                            <td>{{ $vendors->phone; }}</td>
-                                                            <td>{{ $warehouse_name }}, {{ $state_name }}, {{ $pincode }}</td>                                                     </tr>
+                                                            <td>{{ $vendor->vendor_name; }}</td>
+                                                            <td>{{ $vendor->vendor_email; }}</td>
+                                                            <td>{{ $vendor->phone; }}</td>
+                                                            <td>{{ $vendor->warehouse_name ?? '' }}, {{ $vendor->state_name ?? '' }}, {{ $vendor->pincode ?? ''}}</td>                                                     </tr>
                                                         @endforeach
-                                                        @if (empty($vendor->toArray())) 
+                                                        @if (empty($vendors)) 
                                                          <tr><td colspan="4" class="text-center col">No vendor map found</td></tr>  
                                                         @endif
                                                     </tbody>
