@@ -65,6 +65,7 @@ class EnquiryApiController extends Controller
                     'recommendation_engines.structure_type',
                     'recommendation_engines.min_shelf_life',
                     'recommendation_engines.max_shelf_life',
+                    'recommendation_engines.display_shelf_life',
                     'packaging_materials.packaging_material_name',
                     'products.product_name',
                     'products.product_description',
