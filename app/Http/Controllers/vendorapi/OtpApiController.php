@@ -38,6 +38,11 @@ class OtpApiController extends Controller
                 ->where('workflow', $request->workflow)
                 ->first();
             $vendor_otp_data['mobile_no'] = $vendor_otp_data['mobile_no_with_code'] = $request->phone;
+
+            // sending otp -- START
+            sendOTPSms($otp, $request->phone);
+            //sending otp -- END
+
             if (empty($checkOtp)) {
                 $vendor_otp_data['verify_count'] = "1";
                 \Log::info("OTP saved.");
