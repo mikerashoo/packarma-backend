@@ -294,6 +294,8 @@ class OrderApiController extends Controller
                     'packaging_treatments.packaging_treatment_name',
                     'vendors.vendor_name',
                     'vendor_warehouses.warehouse_name',
+                    'vendor_warehouses.city_name',
+                    'states.state_name',
                     'orders.product_quantity',
                     'measurement_units.unit_symbol',
                     'orders.shipping_details',
@@ -317,11 +319,10 @@ class OrderApiController extends Controller
                     ->leftjoin('packing_types', 'packing_types.id', '=', 'orders.packing_type_id')
                     ->leftjoin('packaging_treatments', 'packaging_treatments.id', '=', 'orders.packaging_treatment_id')
                     ->leftjoin('vendors', 'vendors.id', '=', 'orders.vendor_id')
-                    ->leftjoin('vendor_warehouses', 'vendor_warehouses.id', '=', 'orders.vendor_warehouse_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
                     ->leftjoin('currencies', 'currencies.id', '=', 'orders.currency_id')
-                    ->leftjoin('states', 'states.id', '=', 'customer_enquiries.state_id')
-                    ->leftjoin('cities', 'cities.id', '=', 'customer_enquiries.city_id')
+                    ->leftjoin('vendor_warehouses', 'vendor_warehouses.id', '=', 'orders.vendor_warehouse_id')
+                    ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
                     ->where([['orders.user_id', $user_id], ['orders.id', $request->order_id]]);
 
                 $data = $data->get()->toArray();

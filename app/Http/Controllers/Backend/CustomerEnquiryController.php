@@ -461,9 +461,24 @@ class CustomerEnquiryController extends Controller
         $data['addressType'] = addressType();
         $data['user_address'] = UserAddress::all();
         $data['customer_enquiry_id'] = getFormatid($data['data']->id, 'customer_enquiries');
-        $data['vendor_id'] = VendorQuotation::where('customer_enquiry_id', '=', $data['data']->id)->get(); //->pluck('vendor_id')->toArray();
-        $data['vendor'] = Vendor::where('id', $data['vendor_id'][0]->vendor_id)->get();
-        $data['vendor_warehouse'] = VendorWarehouse::where('id', $data['vendor_id'][0]->vendor_warehouse_id)->get();
+        // $data['vendors'] = VendorQuotation::with('vendor', 'vendor_warehouse')->where('customer_enquiry_id', '=', $data['data']->id)->get(); //->pluck('vendor_id')->toArray();
+
+        $data['vendors'] = DB::table('vendor_quotations')->select(
+            'vendor_quotations.id',
+            'vendors.vendor_name',
+            'vendors.vendor_email',
+            'vendors.phone',
+            'vendor_warehouses.warehouse_name',
+            'vendor_warehouses.pincode',
+            'states.state_name',
+        )
+            ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
+            ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
+            ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
+            ->where('vendor_quotations.customer_enquiry_id', '=', $data['data']->id)->get();
+
+        // $data['vendor'] = Vendor::where('id', $data['vendor_id'][0]->vendor_id)->get();
+        // $data['vendor_warehouse'] = VendorWarehouse::where('id', $data['vendor_id'][0]->vendor_warehouse_id)->get();
         return view('backend/customer_section/customer_enquiry/customer_enquiry_view', $data);
     }
 
@@ -583,7 +598,7 @@ class CustomerEnquiryController extends Controller
                 // 'quotation_validity.*' => 'required|numeric',
                 // 'lead_time' => 'required|numeric|min:0|not_in:0',
                 // 'gst_type.*' => 'required',
-                'gst_percentage' => 'required_if:gst_type,applicable,numeric|gt:0.9|lt:100',
+                'gst_percentage' => $request->gst_type == 'applicable' ? 'required|numeric|gt:0.9|lt:100' : '',
                 // 'gst_percentage.*' => 'required_if:gst_type.*,igst,cgst+sgst',
             ])->errors();
         } elseif ($for == 'addEnquiry') {

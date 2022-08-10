@@ -145,6 +145,7 @@ class VendorPaymentController extends Controller
      */
     public function saveVendorPaymentStatusData(Request $request)
     {
+
         $msg_data = array();
         $msg = "";
         $validationErrors = $this->validatePaymentRequest($request);
@@ -153,6 +154,7 @@ class VendorPaymentController extends Controller
             errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
         $orderData = Order::find($request->order_id);
+
         // $orderData = Order::find($_GET['id']);
         if (isset($request->order_id)) {
             $getKeys = true;
@@ -177,6 +179,10 @@ class VendorPaymentController extends Controller
                 errorMessage('Payment Status Does not Exists.', $msg_data);
             }
         }
+
+
+
+
         $tableObject  = new VendorPayment;
         $tableObject->vendor_id = $request->vendor;
         $tableObject->order_id = $request->order_id;
@@ -193,9 +199,12 @@ class VendorPaymentController extends Controller
         $tableObject->created_by =  session('data')['id'];
         $tableObject->save();
         //decreasing pending_payment by amount in order table
+        $request_number =  number_format(($request->amount), 2, '.', '');
+        $vendor_pending_payment =  number_format(($orderData->vendor_pending_payment), 2, '.', '');
+
         Order::where('id',  $request->order_id)->decrement('vendor_pending_payment', $request->amount);
-        if (($request->payment_status == 'fully_paid') && ($request->amount == $orderData->pending_payment)) {
-            Order::where("id", '=',  $_GET['id'])->update(['vendor_payment_status' => 'fully_paid']);
+        if (($request->payment_status == 'fully_paid') && ($request_number == $vendor_pending_payment)) {
+            Order::where('id', $request->order_id)->update(['vendor_payment_status' => 'fully_paid']);
             successMessage($msg, $msg_data);
         }
         successMessage($msg, $msg_data);

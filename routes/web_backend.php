@@ -24,8 +24,9 @@ Route::get('/', 'LoginController@index')->name('login');
 Route::post('login', 'LoginController@login');
 Route::get('/forgot-password', 'LoginController@forgotPassword')->name('password.request');
 Route::post('/forgot-password', 'LoginController@forgotPasswordStore')->name('password.email');
-Route::get('/reset-password/{token}', 'LoginController@passwordReset')->name('password.reset')->middleware('signed');
+Route::get('/reset-password/{token}', 'LoginController@passwordReset')->name('password.reset')->middleware('url');
 Route::post('/reset-password', 'LoginController@passwordUpdate')->name('password.update');
+Route::get('/url-expired', 'LoginController@urlExpired')->name('urlexpired');
 Route::group(['middleware' => ['customAuth']], function () {
 	Route::get('dashboard', 'DashboardController@index');
 	Route::get('dashboard/test', 'DashboardController@index_phpinfo');
