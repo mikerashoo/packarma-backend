@@ -7,6 +7,7 @@ use App\Models\VendorDevice;
 use App\Models\CustomerDevice;
 use App\Models\Subscription;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -827,5 +828,47 @@ if (!function_exists('calcCustomerSubscription')) {
         \Log::info("Subscription, user subscribed successfully!");
 
         return true;
+    }
+}
+
+
+if (!function_exists('sendOTPSms')) {
+    function sendOTPSms($randomNumber = '', $mobile_number = '', $lang = 'en')
+    {
+        if (isset($mobile_number) && !empty($mobile_number) && !empty($randomNumber)) {
+            $message = DB::table('message_sms')
+                ->leftjoin('languages', 'languages.id', '=', 'message_sms.language_id')
+                ->where([['operation', 'otp_request'], ['language_code', $lang]])->pluck('message')->first();
+            if ($message) {
+                $sms_body_content = $message;
+                $sms_body_content = str_replace('$$OTP$$', $randomNumber, $sms_body_content);
+                smsGetCall($sms_body_content, $mobile_number);
+            }
+        }
+    }
+}
+
+
+
+if (!function_exists('smsGetCall')) {
+    function
+    smsGetCall($sms_body = '', $mobile_number = '')
+    {
+        if (strlen($mobile_number) == 10) {
+            $mobile_number =  '91' . $mobile_number;
+        }
+        $sms_body = urlencode($sms_body);
+
+        $apiKey = config('global.TEST_SMS_API');
+
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://platform.clickatell.com/messages/http/send?apiKey=' . $apiKey . '&to=' . $mobile_number . '&content=' . $sms_body,
+        ]);
+        $resp = curl_exec($curl);
+        // print_r($resp);
+        // die;
+        curl_close($curl);
     }
 }
