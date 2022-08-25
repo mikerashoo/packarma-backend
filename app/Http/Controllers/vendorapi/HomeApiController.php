@@ -98,6 +98,8 @@ class HomeApiController extends Controller
                     'customer_enquiries.product_weight',
                     'customer_enquiries.product_quantity',
                     'customer_enquiries.shelf_life',
+                    'customer_enquiries.entered_shelf_life',
+                    'customer_enquiries.entered_shelf_life_unit',
                     'customer_enquiries.address',
                     'measurement_units.unit_name',
                     'measurement_units.unit_symbol',

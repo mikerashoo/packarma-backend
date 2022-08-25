@@ -44,7 +44,7 @@ class BannerController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = Banner::select('*')->orderBy('updated_at','desc');
+                $query = Banner::select('*')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_banner_title']) && !is_null($request['search']['search_banner_title'])) {
@@ -56,8 +56,8 @@ class BannerController extends Controller
                         return $event->title;
                     })
                     ->editColumn('banner_image_url', function ($event) {
-                        $imageUrl = ListingImageUrl('banner',$event->banner_thumb_image,'thumb');      
-                        return ' <img src="'. $imageUrl .'" />';
+                        $imageUrl = ListingImageUrl('banner', $event->banner_thumb_image, 'thumb');
+                        return ' <img src="' . $imageUrl . '" />';
                     })
                     ->editColumn('action', function ($event) {
                         $banner_view = checkPermission('banner_view');
@@ -85,7 +85,7 @@ class BannerController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['title','banner_image_url', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['title', 'banner_image_url', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -119,10 +119,10 @@ class BannerController extends Controller
     public function edit($id)
     {
         $data = Banner::find($id);
-        if($data){
-            $data->image_path = getFile($data->banner_image,'banner',true);
+        if ($data) {
+            $data->image_path = getFile($data->banner_image, 'banner', true);
         }
-        return view('backend/banners/banners_edit', ["data"=>$data]);
+        return view('backend/banners/banners_edit', ["data" => $data]);
     }
 
     /**
@@ -136,11 +136,11 @@ class BannerController extends Controller
     {
         $msg_data = array();
         $msg = "";
-        if(isset($_GET['id'])) {
-    		$validationErrors = $this->validateRequest($request);
-    	} else {
-    		$validationErrors = $this->validateNewRequest($request);
-    	}
+        if (isset($_GET['id'])) {
+            $validationErrors = $this->validateRequest($request);
+        } else {
+            $validationErrors = $this->validateNewRequest($request);
+        }
         //$validationErrors = $this->validateRequest($request);
         if (count($validationErrors)) {
             \Log::error("Banner Validation Exception: " . implode(", ", $validationErrors->all()));
@@ -163,12 +163,12 @@ class BannerController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if($request->hasFile('banner_image')) {
+        if ($request->hasFile('banner_image')) {
             $fixedSize = config('global.SIZE.BANNER');
-            $size = $fixedSize/1000;
+            $size = $fixedSize / 1000;
             $fileSize = $request->file('banner_image')->getSize();
-            if($fileSize >= $fixedSize){
-                errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
+            if ($fileSize >= $fixedSize) {
+                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
             };
         }
         $tableObject->title = $request->title;
@@ -178,19 +178,19 @@ class BannerController extends Controller
         $tableObject->meta_title = $request->meta_title;
         $tableObject->meta_description = $request->meta_description;
         $tableObject->meta_keyword = $request->meta_keyword;
-        if($isEditFlow){
+        if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
-        }else{
+        } else {
             $tableObject->created_by = session('data')['id'];
         }
 
         $tableObject->save();
         $last_inserted_id = $tableObject->id;
-        
-        if($request->hasFile('banner_image')) {
+
+        if ($request->hasFile('banner_image')) {
             $image = $request->file('banner_image');
-            $actualImage = saveSingleImage($image,'banner',$last_inserted_id);
-            $thumbImage = createThumbnail($image,'banner',$last_inserted_id,'banner');
+            $actualImage = saveSingleImage($image, 'banner', $last_inserted_id);
+            $thumbImage = createThumbnail($image, 'banner', $last_inserted_id, 'banner');
             $bannerObj = Banner::find($last_inserted_id);
             $bannerObj->banner_image = $actualImage;
             $bannerObj->banner_thumb_image = $thumbImage;
@@ -209,10 +209,10 @@ class BannerController extends Controller
     public function view($id)
     {
         $data = Banner::find($id);
-        if($data){
-            $data->image_path = getFile($data->banner_image,'banner',true);
+        if ($data) {
+            $data->image_path = getFile($data->banner_image, 'banner', true);
         }
-        return view('backend/banners/banners_view', ["data"=>$data]);
+        return view('backend/banners/banners_view', ["data" => $data]);
     }
 
     /**
@@ -229,11 +229,10 @@ class BannerController extends Controller
         $recordData = Banner::find($request->id);
         $recordData->status = $request->status;
         $recordData->save();
-        if($request->status == 1) {
-        	successMessage('Published', $msg_data);
-        }
-        else {
-        	successMessage('Unpublished', $msg_data);
+        if ($request->status == 1) {
+            successMessage('Published', $msg_data);
+        } else {
+            successMessage('Unpublished', $msg_data);
         }
     }
 

@@ -129,9 +129,11 @@ class LoginController extends Controller
         // $action_link = route('password.reset', ['token' => $token, 'email' => $email]);
         $action_link =  URL::temporarySignedRoute(
             'password.reset',
-            now()->addHours(48),
+            now()->addHours(config('global.TEMP_URL_EXP_HOUR')),
             ['token' => $token]
         );
+
+        // sendEmail($action_link, $email);
         $body = "We received a request to reset the passoword for PACKARMA account associated with " . $email . " You can reset the password by clicking the link below";
         Mail::send('backend/auth/email-forgot', ['link' => $action_link, 'body' => $body], function ($message) use ($email) {
             $message->from('crm2@mypcot.com', 'PACKARMA');
