@@ -57,6 +57,7 @@ class OrderApiController extends Controller
                     'orders.grand_total',
                     'orders.shipping_details',
                     'orders.billing_details',
+                    'orders.product_details',
                     'orders.shelf_life',
                     'orders.created_at',
                     'categories.category_name',
@@ -205,6 +206,7 @@ class OrderApiController extends Controller
                     $data[$i]->odr_id = getFormatid($row->id, $main_table);
                     $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);
                     $data[$i]->billing_details = json_decode($row->billing_details, TRUE);
+                    $data[$i]->product_details = json_decode($row->product_details, TRUE);
                     $data[$i]->material_unit_symbol = 'kg';
                     $data[$i]->order_status = $row->order_delivery_status;
                     $data[$i]->show_update_button = true;
