@@ -9,6 +9,7 @@ use App\Models\Subscription;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Storage;
@@ -870,5 +871,20 @@ if (!function_exists('smsGetCall')) {
         // print_r($resp);
         // die;
         curl_close($curl);
+    }
+}
+
+
+if (!function_exists('sendEmail')) {
+    function sendEmail($action_link, $email)
+    {
+
+        $msg_data = DB::table('message_emails')->select('*')->where('mail_key', 'USER_FORGOT_PASS')->first();
+        $body = $msg_data->content;
+
+        Mail::send('backend/auth/email-forgot', ['link' => $action_link, 'body' => $body], function ($message) use ($email) {
+            $message->from('crm2@mypcot.com', 'PACKARMA');
+            $message->to($email, 'PACKARMA')->subject('Reset Password');
+        });
     }
 }

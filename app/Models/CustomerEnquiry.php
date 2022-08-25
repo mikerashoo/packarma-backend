@@ -24,6 +24,8 @@ class CustomerEnquiry extends Model
         'sub_category_id',
         'product_id',
         'shelf_life',
+        'entered_shelf_life',
+        'entered_shelf_life_unit',
         'product_weight',
         'measurement_unit_id',
         'product_quantity',

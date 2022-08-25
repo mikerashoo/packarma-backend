@@ -31,7 +31,7 @@ class CreateOrdersTable extends Migration
             $table->integer('packaging_treatment_id')->default(0);
             $table->integer('packaging_material_id')->default(0);
             $table->integer('country_id')->default(1);
-            $table->integer('currency_id')->default(1); 
+            $table->integer('currency_id')->default(1);
             $table->decimal('sub_total', $precision = 8, $scale = 3);
             $table->decimal('grand_total', $precision = 8, $scale = 3);
             $table->decimal('customer_pending_payment', $precision = 8, $scale = 3);

@@ -21,6 +21,7 @@ return [
     'order_cancelled_successfully' => 'Order Cancelled Successfully',
     'order_already_cancelled' => 'Order Already Cancelled',
     'order_already_delivered' => 'Order Already Delivered',
+    'order_already_processing' => 'Order Already In Process',
     'my_order_created_successfully' => 'My Order Created Successfully',
     'billing_details_calculated_successfully' => 'Billing Details Calculated Successfully',
     'order_placed' => 'Order placed successfully',

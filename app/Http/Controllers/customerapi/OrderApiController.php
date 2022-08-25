@@ -287,6 +287,8 @@ class OrderApiController extends Controller
                     'products.product_name',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.shelf_life',
+                    'customer_enquiries.entered_shelf_life',
+                    'customer_enquiries.entered_shelf_life_unit',
                     'storage_conditions.storage_condition_title',
                     'packaging_machines.packaging_machine_name',
                     'product_forms.product_form_name',
@@ -399,6 +401,11 @@ class OrderApiController extends Controller
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
                 $statusData = Order::where('id', $request->order_id)->first();
+
+                if ($statusData->order_delivery_status == "processing" || $statusData->order_delivery_status == "out_for_delivery") {
+                    errorMessage(__('order.order_already_processing'), $msg_data);
+                }
+
                 if ($statusData->order_delivery_status == "delivered") {
                     errorMessage(__('order.order_already_delivered'), $msg_data);
                 }
