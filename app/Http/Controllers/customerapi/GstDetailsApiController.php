@@ -95,12 +95,13 @@ class GstDetailsApiController extends Controller
                 $user_id = $token['sub'];
 
                 $userGstData = User::select('name', 'gstin', 'gst_certificate')->where('id', $user_id)->get()->toArray();
-                
+
                 $i = 0;
                 foreach ($userGstData as $row) {
 
                     $userGstData[$i]['file_type'] = explode('.', $row['gst_certificate'])['1'] ?? '';
-                    $userGstData[$i]['gst_certificate'] = getFile($row['gst_certificate'], 'gst_certificate', false);
+
+                    $userGstData[$i]['gst_certificate'] = getFile($row['gst_certificate'], 'gst_certificate', false, 'gst_certificate');
                     $i++;
                 }
 

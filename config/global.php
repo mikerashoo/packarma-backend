@@ -43,5 +43,6 @@ return [
     'MAX_USER_ADDRESS_COUNT' => '10',
     'TEST_SMS_API' => 'LyzXxi-fREC0WvhfAeqaPA==',
     'TEMP_URL_EXP_HOUR' => '48',
+    'TEMP_URL_EXP_HOUR_FOR_INVOICE' => '1',
     'MONTH_TO_MULTIPLY_SHELF_LIFE' => '30',
 ];

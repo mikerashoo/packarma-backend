@@ -32,7 +32,7 @@
                                                         @endif
                                                         <input type="email" name="email" class="form-control mb-3" placeholder="Email" value="{{old('email')}}">
                                                         <div class="d-flex flex-sm-row flex-column justify-content-between">
-                                                            <a href="{{url('/')}}" class="btn bg-light-primary mb-2 mb-sm-0">Back To Login</a>
+                                                            <a href="{{url('/webadmin')}}" class="btn bg-light-primary mb-2 mb-sm-0">Back To Login</a>
                                                             <button class="btn btn-primary" type="submit">Recover</button>
                                                             
                                                         </div><br>

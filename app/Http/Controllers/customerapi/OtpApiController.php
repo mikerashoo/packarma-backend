@@ -138,14 +138,20 @@ class OtpApiController extends Controller
      */
     private function validateRequestOtp(Request $request)
     {
-        return \Validator::make($request->all(), [
-            'phone' =>  [
-                'required',
-                'numeric',
-                Rule::exists('users', 'phone')->where('phone', $request->phone)
+        return \Validator::make(
+            $request->all(),
+            [
+                'phone' =>  [
+                    'required',
+                    'numeric',
+                    Rule::exists('users', 'phone')->where('phone', $request->phone)
+                ],
+                'workflow' => 'required'
             ],
-            'workflow' => 'required'
-        ])->errors();
+            [
+                'phone.exists' => 'Phone number is not registered with us',
+            ]
+        )->errors();
     }
 
     /**
@@ -156,14 +162,20 @@ class OtpApiController extends Controller
      */
     private function validateVerifyOtp(Request $request)
     {
-        return \Validator::make($request->all(), [
-            'phone' =>  [
-                'required',
-                'numeric',
-                Rule::exists('users', 'phone')->where('phone', $request->phone)
+        return \Validator::make(
+            $request->all(),
+            [
+                'phone' =>  [
+                    'required',
+                    'numeric',
+                    Rule::exists('users', 'phone')->where('phone', $request->phone)
+                ],
+                'workflow' => 'required',
+                'otp_code' => 'required'
             ],
-            'workflow' => 'required',
-            'otp_code' => 'required'
-        ])->errors();
+            [
+                'phone.exists' => 'Phone number is not registered with us',
+            ]
+        )->errors();
     }
 }

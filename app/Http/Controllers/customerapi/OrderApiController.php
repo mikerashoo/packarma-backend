@@ -15,6 +15,8 @@ use App\Models\State;
 use App\Models\Review;
 use App\Models\Country;
 use App\Models\Currency;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\URL;
 use Response;
 
 class OrderApiController extends Controller
@@ -366,8 +368,15 @@ class OrderApiController extends Controller
                     }
 
                     if ($invoiceButton) {
+                        $orderID = Crypt::encrypt($row->id);
+                        $url = URL::temporarySignedRoute(
+                            'invoice_pdf',
+                            now()->addMinutes(config('global.TEMP_URL_EXP_HOUR_FOR_INVOICE')),
+                            [$orderID]
+                        );
+                        // $url = url('webadmin/order_pdf/' . $orderID);
                         $data[$i]->invoice_button =  $invoiceButton;
-                        $data[$i]->invoice_url =  'http://www.africau.edu/images/default/sample.pdf';
+                        $data[$i]->invoice_url =  $url;
                         $payNowButton = true;
                     }
                     $data[$i]->pay_now =  $payNowButton;
