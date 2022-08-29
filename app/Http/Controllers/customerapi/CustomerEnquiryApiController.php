@@ -172,7 +172,15 @@ class CustomerEnquiryApiController extends Controller
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
 
+                $shelf_life = config('global.DEFAULT_SHELF_LIFE');
+                $shelf_life_unit = config('global.DEFAULT_SHELF_LIFE_UNIT');
+                if ($request->shelf_life) {
+                    $shelf_life = $request->shelf_life;
+                }
 
+                if ($request->shelf_life_unit) {
+                    $shelf_life_unit = $request->shelf_life_unit;
+                }
 
                 //getting user address details from userAddress and putting value to request to store in cumstomer enquiry table
                 $userAddress = UserAddress::find($request->user_address_id);
@@ -185,12 +193,14 @@ class CustomerEnquiryApiController extends Controller
                 $request['land_mark'] = $userAddress->land_mark;
                 $request['pincode'] = $userAddress->pincode;
                 $request['user_id'] = $user_id;
-                $request['entered_shelf_life'] = $request->shelf_life;
-                $request['entered_shelf_life_unit'] = $request->shelf_life_unit;
+                $request['entered_shelf_life'] = $shelf_life;
+                $request['entered_shelf_life_unit'] = $shelf_life_unit;
 
 
-                if ($request->shelf_life_unit == 'months') {
-                    $request['shelf_life'] = $request->shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
+                if ($shelf_life_unit == 'months') {
+                    $request['shelf_life'] = $shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
+                } else {
+                    $request['shelf_life'] =  $shelf_life;
                 }
                 // print_r($request->all());
                 // die;
@@ -222,8 +232,8 @@ class CustomerEnquiryApiController extends Controller
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
-            'shelf_life' => 'required|integer|between:1,10000',
-            'shelf_life_unit' => 'required',
+            // 'shelf_life' => 'required|integer|between:1,10000',
+            // 'shelf_life_unit' => 'required',
             'product_weight' => 'required|numeric',
             'measurement_unit_id' => 'required|numeric',
             'storage_condition_id' => 'required|numeric',

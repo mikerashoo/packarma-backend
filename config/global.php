@@ -45,4 +45,6 @@ return [
     'TEMP_URL_EXP_HOUR' => '48',
     'TEMP_URL_EXP_DAYS_FOR_INVOICE' => '365',
     'MONTH_TO_MULTIPLY_SHELF_LIFE' => '30',
+    'DEFAULT_SHELF_LIFE' => '0',
+    'DEFAULT_SHELF_LIFE_UNIT' => 'days',
 ];

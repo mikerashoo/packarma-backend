@@ -377,7 +377,6 @@ class OrderApiController extends Controller
                         // $url = url('webadmin/order_pdf/' . $orderID);
                         $data[$i]->invoice_button =  $invoiceButton;
                         $data[$i]->invoice_url =  $url;
-                        $payNowButton = true;
                     }
                     $data[$i]->pay_now =  $payNowButton;
 
@@ -608,13 +607,23 @@ class OrderApiController extends Controller
                 $commission = $commission_price * $product_quantity;
                 $vendor_amount = $vendor_amount_price * $product_quantity;
 
+                $shelf_life = config('global.DEFAULT_SHELF_LIFE');
+                $shelf_life_unit = config('global.DEFAULT_SHELF_LIFE_UNIT');
+
+                if ($request->shelf_life) {
+                    $shelf_life = $request->shelf_life;
+                }
+
+                if ($request->shelf_life_unit) {
+                    $shelf_life_unit = $request->shelf_life_unit;
+                }
 
 
-                $entered_shelf_life = $request->shelf_life;
-                $entered_shelf_life_unit = $request->shelf_life_unit;
 
-                if ($entered_shelf_life_unit == 'months') {
-                    $request['shelf_life'] = $request->shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
+                if ($shelf_life_unit == 'months') {
+                    $request['shelf_life'] = $shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
+                } else {
+                    $request['shelf_life'] =  $shelf_life;
                 }
 
 
@@ -676,8 +685,8 @@ class OrderApiController extends Controller
                     "sub_category_id" => $request->sub_category_id,
                     "product_id" => $request->product_id,
                     "shelf_life" => $request->shelf_life,
-                    "entered_shelf_life" => $entered_shelf_life,
-                    "entered_shelf_life_unit" => $entered_shelf_life_unit,
+                    "entered_shelf_life" => $shelf_life,
+                    "entered_shelf_life_unit" => $shelf_life_unit,
                     "product_weight" => $request->product_weight,
                     "measurement_unit_id" => $request->measurement_unit_id,
                     "product_quantity" => $request->product_weight,
@@ -766,8 +775,8 @@ class OrderApiController extends Controller
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
-            'shelf_life' => 'required|int|digits_between:1,3',
-            'shelf_life_unit' => 'required',
+            // 'shelf_life' => 'required|int|digits_between:1,3',
+            // 'shelf_life_unit' => 'required',
             'product_weight' => 'required|numeric',
             'measurement_unit_id' => 'required|numeric',
             'product_quantity' => 'required|numeric',
