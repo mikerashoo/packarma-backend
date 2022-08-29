@@ -188,7 +188,7 @@ function loadViewPage(page_url) {
                     var status = document.getElementById("approval_status").value;
                     (status == 'rejected') ? $("#remark").show() : $("#remark").hide();
                     // (status == 'accepted') ? $("#gstin_div").show() : $("#gstin_div").hide();
-                    // (status == 'accepted') ? $("#gst_certificate_div").show() : $("#gst_certificate_div").hide();
+                    // (status == 'accepted') ? $("#gst_certificate_div").show() : $("#gst_certificate_div").hide();  
                 }
             }
         }
@@ -536,3 +536,24 @@ function getProductDetails(product) {
     });
 }
 
+
+//added by :Pradyumn, added on: 29/08/2022, uses fetch subcategory based on category in product add/edit form :- START:-
+$(document).on('change', '#category', function () {
+    $("#sub_category").html('<option value="">Select</option>');
+    var category = document.getElementById("category").value;
+    $.ajax({
+        url: "fetch_sub_category",
+        type: "POST",
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            category_id: category
+        },
+        success: function (result) {
+            response = JSON.parse(result);
+            $.each(response['data']['sub_category'], function (key, value){
+                $("#sub_category").append('<option value="' + value['id'] + '">' + value['sub_category_name'] + '</option>');
+            });
+        },
+    });
+});
+//added by :Pradyumn, added on: 29/08/2022, uses fetch subcategory based on category in product add/edit form :- END:-

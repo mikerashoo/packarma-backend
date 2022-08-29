@@ -311,6 +311,7 @@ Route::group(['middleware' => ['customAuth']], function () {
 	Route::get('/product_edit/{id}', 'ProductController@edit');
 	Route::post('/publishProduct', 'ProductController@updateStatus');
 	Route::get('/product_view/{id}', 'ProductController@view');
+	Route::post('/fetch_sub_category', 'ProductController@getSubCategory');
 
 	//Packaging material
 	Route::get('/packaging_material', 'PackagingMaterialController@index');
