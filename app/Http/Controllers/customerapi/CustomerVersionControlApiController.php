@@ -30,26 +30,26 @@ class CustomerVersionControlApiController extends Controller
             \Log::info("Version Check started!");
             // Password Creation
             $server = $request->header('server');
-            if ($server == 'P') {
-                $platform = $request->header('platform');
-                $version = $request->header('version');
-                if ($platform == 'android') {
-                    $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_android_version']])->first();
-                    $update_url = GeneralSetting::select('value')->where([['type', 'customer_android_url']])->first();
-                } elseif ($platform == 'ios') {
-                    $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_ios_version']])->first();
-                    $update_url = GeneralSetting::select('value')->where([['type', 'customer_ios_url']])->first();
-                } elseif ($platform == 'web') {
-                    $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_web_version']])->first();
-                    $update_url = GeneralSetting::select('value')->where([['type', 'customer_web_url']])->first();
-                }
-                $dbversion = json_decode($dbVersionData->value, true);
-
-                if (!in_array($version, $dbversion)) {
-                    $customer_msg_data['update_url'] = $update_url->value;
-                    errorMessage(__('customer_version.update_app'), $customer_msg_data);
-                }
+            // if ($server == 'P') {
+            $platform = $request->header('platform');
+            $version = $request->header('version');
+            if ($platform == 'android') {
+                $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_android_version']])->first();
+                $update_url = GeneralSetting::select('value')->where([['type', 'customer_android_url']])->first();
+            } elseif ($platform == 'ios') {
+                $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_ios_version']])->first();
+                $update_url = GeneralSetting::select('value')->where([['type', 'customer_ios_url']])->first();
+            } elseif ($platform == 'web') {
+                $dbVersionData = GeneralSetting::select('value')->where([['type', 'customer_web_version']])->first();
+                $update_url = GeneralSetting::select('value')->where([['type', 'customer_web_url']])->first();
             }
+            $dbversion = json_decode($dbVersionData->value, true);
+
+            if (!in_array($version, $dbversion)) {
+                $customer_msg_data['update_url'] = $update_url->value;
+                errorMessage(__('customer_version.update_app'), $customer_msg_data);
+            }
+            // }
             successMessage(__('customer_version.app_ok'), $customer_msg_data);
         } catch (\Exception $e) {
             \Log::error("Customer Version Check failed: " . $e->getMessage());
