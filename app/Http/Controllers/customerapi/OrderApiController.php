@@ -371,7 +371,7 @@ class OrderApiController extends Controller
                         $orderID = Crypt::encrypt($row->id);
                         $url = URL::temporarySignedRoute(
                             'invoice_pdf',
-                            now()->addMinutes(config('global.TEMP_URL_EXP_HOUR_FOR_INVOICE')),
+                            now()->addDays(config('global.TEMP_URL_EXP_DAYS_FOR_INVOICE')),
                             [$orderID]
                         );
                         // $url = url('webadmin/order_pdf/' . $orderID);

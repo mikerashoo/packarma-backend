@@ -110,7 +110,7 @@ class OrderController extends Controller
 
                         $url = URL::temporarySignedRoute(
                             'invoice_pdf',
-                            now()->addMinutes(config('global.TEMP_URL_EXP_HOUR_FOR_INVOICE')),
+                            now()->addDays(config('global.TEMP_URL_EXP_DAYS_FOR_INVOICE')),
                             [$orderID]
                         );
                         $order_view = checkPermission('order_view');
