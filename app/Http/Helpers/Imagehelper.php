@@ -32,6 +32,18 @@ if (!function_exists('getFile')) {
             } else {
                 return  'file_not_found';
             }
+        } elseif ($for == 'gst_certificate') {
+            if (!empty($name) && file_exists(storage_path('app/public') . '/uploads/' . $type . '/' . $name)) {
+                return URL::to('/') . '/storage/app/public' . '/uploads/' . $type . '/' . $name . '?d=' . time();
+            } else {
+                return  URL::to('/') . '/storage/app/public' . '/uploads/' . $type . '/default_user_gst_file.png?d=' . time();
+            }
+        } elseif ($for == 'vendor_gst_certificate') {
+            if (!empty($name) && file_exists(storage_path('app/public') . '/uploads/' . $type . '/' . $name)) {
+                return URL::to('/') . '/storage/app/public' . '/uploads/' . $type . '/' . $name . '?d=' . time();
+            } else {
+                return  URL::to('/') . '/storage/app/public' . '/uploads/' . $type . '/default_vendor_gst_file.png?d=' . time();
+            }
         } else {
             if (!empty($name) && file_exists(storage_path('app/public') . '/uploads/' . $type . '/' . $name)) {
                 return URL::to('/') . '/storage/app/public' . '/uploads/' . $type . '/' . $name . '?d=' . time();

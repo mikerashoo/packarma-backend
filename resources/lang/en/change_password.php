@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'password_not_match' => 'Your current password does not match with the password',
+    'password_not_match' => 'The current password is incorrect',
     'new_password_cannot_same_current_password' => 'New password can not be same as your current password.',
     'password_mismatch' => 'Confirm Password does not match with new password',
     'changed' => 'Password successfully changed!',

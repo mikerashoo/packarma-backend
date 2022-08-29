@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use PDF;
 use Elibyy\TCPDF\Facades\TCPDF;
+use Illuminate\Support\Facades\URL;
 
 class OrderController extends Controller
 {
@@ -37,8 +38,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $data['user'] = User::withTrashed()->where('approval_status','accepted')->get();
-        $data['vendor'] = Vendor::withTrashed()->where('approval_status','accepted')->get();
+        $data['user'] = User::withTrashed()->where('approval_status', 'accepted')->get();
+        $data['vendor'] = Vendor::withTrashed()->where('approval_status', 'accepted')->get();
         $data['paymentStatus'] = paymentStatus();
         $data['deliveryStatus'] = deliveryStatus();
         $data['order_view'] = checkPermission('order_view');
@@ -105,6 +106,13 @@ class OrderController extends Controller
                         return $event->packaging_material->packaging_material_name;
                     })
                     ->editColumn('action', function ($event) {
+                        $orderID = Crypt::encrypt($event->id);
+
+                        $url = URL::temporarySignedRoute(
+                            'invoice_pdf',
+                            now()->addDays(config('global.TEMP_URL_EXP_DAYS_FOR_INVOICE')),
+                            [$orderID]
+                        );
                         $order_view = checkPermission('order_view');
                         $order_pdf = checkPermission('order_pdf');
                         $order_delivery_update = checkPermission('order_delivery_update');
@@ -116,7 +124,7 @@ class OrderController extends Controller
                         }
 
                         if ($order_pdf) {
-                            $actions .= '  <a href="order_pdf/' . $event->id . '" class="btn btn-success btn-sm" title="Pdf" target="_blank"><i class="fa fa-file-pdf-o"></i></a>';
+                            $actions .= '  <a href="' . $url . '" class="btn btn-success btn-sm" title="Pdf" target="_blank"><i class="fa fa-file-pdf-o"></i></a>';
                         }
 
                         if ($event->order_delivery_status == 'pending' || $event->order_delivery_status == 'processing' || $event->order_delivery_status == 'out_for_delivery') {
@@ -124,7 +132,7 @@ class OrderController extends Controller
                                 $actions .= '  <a href="order_delivery_update/' . $event->id . '" class="btn btn-info btn-sm src_data" title="Update Delivery"><i class="fa fa-truck"></i></a>';
                             }
                         }
-                        if ($event->customer_pending_payment != 0) {
+                        if ($event->customer_pending_payment != 0.00) {
                             if ($order_payment_update) {
                                 $actions .= '  <a href="orderPaymentUpdate/' . $event->id . '" class="btn btn-secondary btn-sm src_data" title="Customer Payment"><i class="fa fa-money"></i></a>';
                             }
@@ -390,12 +398,12 @@ class OrderController extends Controller
      *   @param Request request
      *   @return Response
      */
-    public function orderPdf($id)
+    public function orderPdf($enc_id)
     {
         try {
             \Log::info("Order Invoice Generation Starts " . Carbon::now()->format('H:i:s:u'));
             $main_table = 'orders';
-
+            $id = Crypt::decrypt($enc_id);
             $data = DB::table('orders')->select(
                 'orders.id',
                 'orders.product_weight',
@@ -540,5 +548,61 @@ class OrderController extends Controller
             \Log::error("Order Invoice Generation Failed " . $e->getMessage());
             return redirect()->back()->withErrors(array("msg" => "Something went wrong"));
         }
+    }
+
+
+    public function expirePdf()
+    {
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Nicola Asuni');
+        $pdf->SetTitle('TCPDF Example 002');
+        $pdf->SetSubject('TCPDF Tutorial');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+        // remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
+            require_once(dirname(__FILE__) . '/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+
+        // ---------------------------------------------------------
+
+        // set font
+        $pdf->SetFont('times', 'BI', 20);
+
+        // add a page
+        $pdf->AddPage();
+
+        // set some text to print
+        $txt = <<<EOD
+                The link is broken please try after some time
+                EOD;
+
+        // print a block of text using Write()
+        $pdf->Write(0, $txt, '', 0, 'C', true, 0, false, false, 0);
+
+        // ---------------------------------------------------------
+
+        //Close and output PDF document
+        $pdf->Output('example_002.pdf', 'I');
     }
 }

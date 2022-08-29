@@ -15,6 +15,8 @@ use App\Models\State;
 use App\Models\Review;
 use App\Models\Country;
 use App\Models\Currency;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\URL;
 use Response;
 
 class OrderApiController extends Controller
@@ -335,6 +337,7 @@ class OrderApiController extends Controller
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     $payNowButton = false;
+                    $invoiceButton = true;
 
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
@@ -361,6 +364,19 @@ class OrderApiController extends Controller
                     }
 
                     if ($row->customer_payment_status == 'pending') {
+                        $payNowButton = true;
+                    }
+
+                    if ($invoiceButton) {
+                        $orderID = Crypt::encrypt($row->id);
+                        $url = URL::temporarySignedRoute(
+                            'invoice_pdf',
+                            now()->addDays(config('global.TEMP_URL_EXP_DAYS_FOR_INVOICE')),
+                            [$orderID]
+                        );
+                        // $url = url('webadmin/order_pdf/' . $orderID);
+                        $data[$i]->invoice_button =  $invoiceButton;
+                        $data[$i]->invoice_url =  $url;
                         $payNowButton = true;
                     }
                     $data[$i]->pay_now =  $payNowButton;
@@ -592,6 +608,16 @@ class OrderApiController extends Controller
                 $commission = $commission_price * $product_quantity;
                 $vendor_amount = $vendor_amount_price * $product_quantity;
 
+
+
+                $entered_shelf_life = $request->shelf_life;
+                $entered_shelf_life_unit = $request->shelf_life_unit;
+
+                if ($entered_shelf_life_unit == 'months') {
+                    $request['shelf_life'] = $request->shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
+                }
+
+
                 //adding additional data in request order
                 $order_request_data = $request->all();
                 $order_request_data['user_id'] = $user_id;
@@ -650,6 +676,8 @@ class OrderApiController extends Controller
                     "sub_category_id" => $request->sub_category_id,
                     "product_id" => $request->product_id,
                     "shelf_life" => $request->shelf_life,
+                    "entered_shelf_life" => $entered_shelf_life,
+                    "entered_shelf_life_unit" => $entered_shelf_life_unit,
                     "product_weight" => $request->product_weight,
                     "measurement_unit_id" => $request->measurement_unit_id,
                     "product_quantity" => $request->product_weight,
@@ -739,6 +767,7 @@ class OrderApiController extends Controller
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
             'shelf_life' => 'required|int|digits_between:1,3',
+            'shelf_life_unit' => 'required',
             'product_weight' => 'required|numeric',
             'measurement_unit_id' => 'required|numeric',
             'product_quantity' => 'required|numeric',

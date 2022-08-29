@@ -148,6 +148,7 @@ class OrderPaymentApiController extends Controller
                         //update order status in order table 
                         $orderTable = Order::find($orderPayment->order_id);;
                         $orderTable->customer_payment_status = 'fully_paid';
+                        $orderTable->customer_pending_payment = 0.00;
                         $orderTable->save();
                         successMessage(__('order.order_placed'), $msg_data);
                         // return response()->json(['msg' => 'Order placed successfully'], 200);

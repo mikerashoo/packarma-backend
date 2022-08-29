@@ -30,7 +30,7 @@ class CustomerVersionControlApiController extends Controller
             \Log::info("Version Check started!");
             // Password Creation
             $server = $request->header('server');
-            if ($server == 'P') {
+            if ($server != 'L') {
                 $platform = $request->header('platform');
                 $version = $request->header('version');
                 if ($platform == 'android') {

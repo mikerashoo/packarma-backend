@@ -27,6 +27,8 @@ Route::post('/forgot-password', 'LoginController@forgotPasswordStore')->name('pa
 Route::get('/reset-password/{token}', 'LoginController@passwordReset')->name('password.reset')->middleware('url');
 Route::post('/reset-password', 'LoginController@passwordUpdate')->name('password.update');
 Route::get('/url-expired', 'LoginController@urlExpired')->name('urlexpired');
+Route::get('/order_pdf/{id}', 'OrderController@orderPdf')->name('invoice_pdf')->middleware('invoiceUrlExpire');
+Route::get('/expire_pdf', 'OrderController@expirePdf')->name('expire_pdf');
 Route::group(['middleware' => ['customAuth']], function () {
 	Route::get('dashboard', 'DashboardController@index');
 	Route::get('dashboard/test', 'DashboardController@index_phpinfo');
@@ -339,7 +341,7 @@ Route::group(['middleware' => ['customAuth']], function () {
 	Route::get('/order_payment_update/{id}', 'OrderController@updateOrderPayment');
 	Route::post('/saveOrderPaymentStatus', 'OrderController@updatePaymentStatusData');
 	Route::get('/order_view/{id}', 'OrderController@viewOrder');
-	Route::get('/order_pdf/{id}', 'OrderController@orderPdf');
+	// Route::get('/order_pdf/{id}', 'OrderController@orderPdf'); commented and define outside login middleware
 
 	//order payment
 	Route::get('/order_payment_list', 'OrderPaymentController@index');
