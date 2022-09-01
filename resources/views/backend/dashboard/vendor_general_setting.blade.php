@@ -166,10 +166,10 @@
                                                                             <input id="vendor_switchery1" type="checkbox" data-url="publishVendorEmailNotification"  data-id="trigger_vendor_email_notification" class="js-switch switchery" <?php echo ( isset($data['trigger_vendor_email_notification']) && $data['trigger_vendor_email_notification'] == 1) ? 'checked' : ''; ?> >
                                                                             <label for="vendor_switchery1">Trigger Email Notification</label>
                                                                     </div>
-                                                                    <div class="col-12 mb-2">
+                                                                    {{-- <div class="col-12 mb-2">
                                                                             <input id="vendor_switchery2" type="checkbox" data-url="publishVendorWhatsappNotification"  data-id="trigger_vendor_whatsapp_notification" class="js-switch switchery" <?php echo (isset($data['trigger_vendor_whatsapp_notification']) && $data['trigger_vendor_whatsapp_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="vendor_switchery2">Trigger Whatsapp Notification</label>
-                                                                    </div>
+                                                                    </div> --}}
                                                                     <div class="col-12 mb-2">
                                                                             <input id="vendor_switchery3" type="checkbox" data-url="publishVendorSMSNotification"  data-id="trigger_vendor_sms_notification" class="js-switch switchery" <?php echo (isset($data['trigger_vendor_sms_notification']) && $data['trigger_vendor_sms_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="vendor_switchery3">Trigger SMS Notification</label>

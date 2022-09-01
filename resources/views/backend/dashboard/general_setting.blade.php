@@ -201,10 +201,10 @@
                                                                             <input id="switchery1" type="checkbox" data-url="publishEmailNotification"  data-id="trigger_email_notification" class="js-switch switchery" <?php echo ($data['trigger_email_notification'] == 1) ? 'checked' : ''; ?> >
                                                                             <label for="switchery1">Trigger Email Notification</label>
                                                                     </div>
-                                                                    <div class="col-12 mb-2">
+                                                                    {{-- <div class="col-12 mb-2">
                                                                             <input id="switchery2" type="checkbox" data-url="publishWhatsappNotification"  data-id="trigger_whatsapp_notification" class="js-switch switchery" <?php echo ($data['trigger_whatsapp_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="switchery2">Trigger Whatsapp Notification</label>
-                                                                    </div>
+                                                                    </div> --}}
                                                                     <div class="col-12 mb-2">
                                                                             <input id="switchery3" type="checkbox" data-url="publishSMSNotification"  data-id="trigger_sms_notification" class="js-switch switchery" <?php echo ($data['trigger_sms_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="switchery3">Trigger SMS Notification</label>
