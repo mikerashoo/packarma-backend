@@ -65,7 +65,7 @@
                                                 <input class="form-control required" type="text" id="max_shelf_life" name="max_shelf_life" value="{{ $data->max_shelf_life }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div> --}}
                                             <div class="col-sm-6">
-                                                <label>Display Shelf Life<span style="color:#ff0000">*</span></label>
+                                                <label>Display Shelf Life (Days)<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="display_shelf_life" name="display_shelf_life" value="{{ $data->display_shelf_life }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                             <div class="col-sm-6">

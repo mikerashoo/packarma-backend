@@ -117,7 +117,11 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Shelf Life</strong></td>
-                                                        <td>{{$data->shelf_life }}</td>
+                                                        <td>{{$data->shelf_life}} (Days)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Entered Shelf Life</strong></td>
+                                                        <td>{{$data->entered_shelf_life}} ({{ucfirst($data->entered_shelf_life_unit)}})</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Product Weight</strong></td>
