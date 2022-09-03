@@ -494,12 +494,14 @@ class CustomerEnquiryController extends Controller
     {
         // $data['vendor'] = Vendor::all()->toArray();
         $data['view_only'] = false;
+
+
+        $data['customer_enquiry_data'] = CustomerEnquiry::with('user')->find($customer_enquiry_id);
         $data['vendor'] = DB::table('vendors')->select('vendors.*')
+            ->where([['vendor_material_mappings.packaging_material_id', $data['customer_enquiry_data']->packaging_material_id], ['vendors.deleted_at', NULL], ['vendors.status', 1]])
             ->join('vendor_material_mappings', 'vendor_material_mappings.vendor_id', '=', 'vendors.id')
             ->groupBy('vendors.id')
             ->get();
-
-        $data['customer_enquiry_data'] = CustomerEnquiry::with('user')->find($customer_enquiry_id);
 
         if ($data['customer_enquiry_data']->quote_type == 'accept_cust') {
             $accepted_vendor = DB::table('vendor_quotations')->select(
