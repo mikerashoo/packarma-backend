@@ -49,15 +49,25 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Payment Status</strong></td>
-                                                <td>{{subscriptionPaymentStatus($data->payment_status);}}</td>
+                                                @if ($data->payment_status == 'pending'){
+                                                    <td>Failed</td>
+                                                }
+                                                @else
+                                                    <td>{{subscriptionPaymentStatus($data->payment_status);}}</td>
+                                                @endif
                                             </tr>
                                             <tr>
-                                                <td><strong>Payment Reference Number</strong></td>
-                                                <td>{{$data->payment_reference}}</td>
+                                                <td><strong>Payment Gateway ID</strong></td>
+                                                <td>{{$data->gateway_id}}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Payment Unique ID</strong></td>
-                                                <td>{{$data->payment_unique_id}}</td>
+                                                <td><strong>Payment Gateway Key</strong></td>
+                                                @if ($data->gateway_key){
+                                                    <td>{{$data->gateway_key}}</td>
+                                                }
+                                                @else
+                                                    <td>-</td>
+                                                @endif
                                             </tr>
                                             <tr>
                                                 <td><strong>Date Time</strong></td>

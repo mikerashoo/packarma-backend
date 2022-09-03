@@ -187,8 +187,11 @@ function loadViewPage(page_url) {
                 if (document.getElementById("approval_status")) {
                     var status = document.getElementById("approval_status").value;
                     (status == 'rejected') ? $("#remark").show() : $("#remark").hide();
-                    // (status == 'accepted') ? $("#gstin_div").show() : $("#gstin_div").hide();
                     // (status == 'accepted') ? $("#gst_certificate_div").show() : $("#gst_certificate_div").hide();  
+                }
+                if (document.getElementById("address_type")) {
+                    var type = document.getElementById("address_type").value;
+                    (type == 'billing') ? $("#gst_no_input").show() : $("#gst_no_input").hide();
                 }
             }
         }
@@ -557,3 +560,15 @@ $(document).on('change', '#category', function () {
     });
 });
 //added by :Pradyumn, added on: 29/08/2022, uses fetch subcategory based on category in product add/edit form :- END:-
+
+//added by :Pradyumn, added on: 03/09/2022, uses : To show/hide gst input based on address type : START
+$(document).on('change', '#address_type', function () {
+    var type = document.getElementById("address_type").value;
+    if (type == 'billing') {
+        $("#gst_no_input").show();
+    }
+    else {
+        $("#gst_no_input").hide();
+    }
+});
+//added by :Pradyumn, added on: 03/09/2022, uses : To show/hide gst input based on address type : END

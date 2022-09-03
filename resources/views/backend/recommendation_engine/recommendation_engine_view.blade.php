@@ -28,15 +28,15 @@
                                         </tr>
                                         <tr>
                                             <td><strong>Minimum Shelf Life</strong></td>
-                                            <td>{{$data->min_shelf_life}}</td>
+                                            <td>{{$data->min_shelf_life}} (Days)</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Maximum Shelf Life</strong></td>
-                                            <td>{{$data->max_shelf_life}}</td>
+                                            <td>{{$data->max_shelf_life}} (Days)</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Display Shelf Life</strong></td>
-                                            <td>{{$data->display_shelf_life}}</td>
+                                            <td>{{$data->display_shelf_life}} (Days)</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Minimum Weight</strong></td>

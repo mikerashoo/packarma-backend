@@ -38,7 +38,7 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Address Type</label>
-                                                <select class="select2" id="type" name="type" style="width: 100% !important;">
+                                                <select class="select2" id="address_type" name="address_type" style="width: 100% !important;">
                                                     <option value="">Select</option>
                                                     @foreach($addressType as $key => $val)
                                                         @if ($key == $data->type)
@@ -98,6 +98,10 @@
                                             <div class="col-sm-6">
                                                 <label>Landmark<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="landmark" name="landmark" value="{{ $data->land_mark }}"><br />
+                                            </div>
+                                            <div class="col-sm-6" id="gst_no_input">
+                                                <label>GST Number<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control" type="text" id="gst_no" name="gst_no" value="{{ $data->gstin }}"><br/>
                                             </div>
                                         </div>
                                     </div>
