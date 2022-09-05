@@ -50,7 +50,7 @@ class VendorBasicAuth
         // }
 
         if (!$request->header('imei-no')) {
-            errorMessage(__('auth.imei_require'), $return_array);
+            errorMessage(__('auth.device_id_require'), $return_array);
             exit;
         }
 

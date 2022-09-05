@@ -70,6 +70,17 @@ class MyProfileController extends Controller
                 $msg_data['result'] = $data;
                 $msg_data['flags'] = $flags;
 
+                $fcm_id = NULL;
+                if ($request->fcm_id && !empty($request->fcm_id)) {
+                    $fcm_id = $request->fcm_id;
+                }
+                $imei_no = $request->header('imei-no');
+
+                VendorDevice::updateOrCreate(
+                    ['vendor_id' => $vendor_id, 'imei_no' => $imei_no],
+                    ['fcm_id' => $fcm_id]
+                );
+
                 successMessage(__('my_profile.info_fetch'), $msg_data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
@@ -236,9 +247,47 @@ class MyProfileController extends Controller
 
 
 
+    /**
+     * Use to update vendor fcm_id.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateFcmId(Request $request)
+    {
+        $msg_data = array();
+        \Log::info("Fcm Id Update, starting at: " . Carbon::now()->format('H:i:s:u'));
+        try {
+            $vendor_token = readVendorHeaderToken();
+            if ($vendor_token) {
+                $vendor_id = $vendor_token['sub'];
+                $vendorValidationErrors = $this->validateUpdateFcmId($request);
+                if (count($vendorValidationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $vendorValidationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $vendorValidationErrors->all());
+                }
+                \Log::info("Fcm Id Update Start!");
 
+                $fcm_id = NULL;
+                if ($request->fcm_id && !empty($request->fcm_id)) {
+                    $fcm_id = $request->fcm_id;
+                }
+                $imei_no = $request->header('imei-no');
 
-
+                VendorDevice::updateOrCreate(
+                    ['vendor_id' => $vendor_id, 'imei_no' => $imei_no],
+                    ['fcm_id' => $fcm_id]
+                );
+                successMessage(__('vendor.update_successfully'), $msg_data);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Fcm Id Update failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
 
 
 
@@ -250,6 +299,15 @@ class MyProfileController extends Controller
             'phone_country_id' => 'required|numeric',
             'phone' => 'required|numeric|digits:10',
             'vendor_email' => 'required|email',
+
+        ])->errors();
+    }
+
+
+    private function validateUpdateFcmId(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'fcm_id' => 'required'
 
         ])->errors();
     }
