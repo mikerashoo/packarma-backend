@@ -124,7 +124,7 @@
                         				<div class="pull-right">
                                             <span id="show_history_btn"><button type="button" class="btn btn-warning" id="showHideHistory">Show Transaction History</button></span>
                         					<button type="button" class="btn btn-success" onclick="submitForm('updateVendorPaymentStatus','post')">Update</button>
-                                            <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <a href="{{URL::previous()}}" class="btn btn-danger px-3 py-1"></i>Cancel</a>
                         				</div>
                         			</div>
                         		</div>

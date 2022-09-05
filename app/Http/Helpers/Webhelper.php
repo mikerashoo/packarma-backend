@@ -671,7 +671,7 @@ if (!function_exists('getFormatid')) {
                 break;
 
             default:
-                $prefix = '#MYP';
+                $prefix = '#PCK';
                 break;
         }
         $formatId = str_pad($id, 6, 0, STR_PAD_LEFT);

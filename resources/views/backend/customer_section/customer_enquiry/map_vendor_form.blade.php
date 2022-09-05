@@ -96,7 +96,7 @@ $readonly = '';
                     @if(!$view_only)
                     <button type="button" class="btn btn-sm btn-success px-3 py-1" onclick="submitModalForm('customerEnquiryMapToVendorForm','post')">Add</button>
                     @endif
-                    <a href="javascript:;" class="btn btn-sm btn-primary px-3 py-1 bootbox-close-button">Back</a>
+                    <a href="javascript:;" class="btn btn-danger px-3 py-1 bootbox-close-button">Cancel</a>
                 </div>
             </div>
     </div>                         
