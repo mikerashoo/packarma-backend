@@ -888,3 +888,83 @@ if (!function_exists('sendEmail')) {
         });
     }
 }
+
+
+if (!function_exists('sendFcmNotification')) {
+    function sendFcmNotification($fcm_ids = array(), $notification_data = array(), $landingPage = "homepage")
+    {
+
+        if (is_array($fcm_ids) && !empty($fcm_ids[0])) {
+            $auth_token = array(
+                'Authorization: key=' . config('global.TEST_FCM_SERVER_KEY'),
+                'Content-Type: application/json'
+            );
+            // print_r($auth_token);
+            // die;
+            if (is_array($fcm_ids)) {
+                $auth_token = $auth_token;
+
+                //FCM MSG DATA
+                $data_array['title']        = $notification_data['title'];
+                $data_array['body']         = $notification_data['body'];
+                $data_array['image']        = $notification_data['image_path'];
+                $data_array['type']         = $landingPage;
+                $data_array['sound']        = "default";
+                //$data_array['click_action'] ="FCM_PLUGIN_ACTIVITY";
+                //FCM ID 
+                $device_array = $fcm_ids;
+
+                $array_chunk_length = 500;
+                $deviceArrayChunk = array_chunk($device_array, $array_chunk_length, true);
+                $is_post = true;
+                // print_r($deviceArrayChunk);
+                // die;
+
+                foreach ($deviceArrayChunk as $deviceArray) {
+                    $fields = array(
+                        'registration_ids' => $deviceArray,
+                        'notification' => $data_array,
+                        'data'             => $data_array,
+                    );
+                    $postdata = json_encode($fields);
+
+                    $result =  fcmCallingToCurl($auth_token, $is_post, $postdata);
+                }
+            }
+        }
+    }
+}
+
+if (!function_exists('fcmCallingToCurl')) {
+    function fcmCallingToCurl($auth_token, $is_post = false, $post_data = array())
+    {
+        $url = "https://fcm.googleapis.com/fcm/send";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        if (is_array($auth_token)) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $auth_token);
+        }
+        if ($is_post) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+        }
+        $result = curl_exec($ch);
+
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err = curl_error($ch);
+        $err_no_curl = curl_errno($ch);
+        curl_close($ch);
+
+        if ($err) {
+            \Log::error("Fcm Curl Call has Error number " . $err_no_curl . " and Error is ::" . $err);
+        } else {
+            \Log::error("Fcm Curl Call Success has :: " . $result);
+
+            return $result;
+        }
+
+        // return $result;
+    }
+}

@@ -13,6 +13,7 @@ use App\Models\Product;
 use App\Models\Country;
 use App\Models\Currency;
 use App\Models\Category;
+use App\Models\GeneralSetting;
 use App\Models\SubCategory;
 use App\Models\ProductForm;
 use App\Models\PackingType;
@@ -429,6 +430,10 @@ class OrderController extends Controller
                 'vendors.gstin',
                 'vendors.vendor_address',
                 'vendors.phone',
+                'users.name',
+                'users.email',
+                'users.phone as user_phone',
+                'users.gstin as user_gstin',
                 'categories.category_name',
                 'sub_categories.sub_category_name',
                 'products.product_name',
@@ -456,6 +461,7 @@ class OrderController extends Controller
             )
                 ->leftjoin('categories', 'orders.category_id', '=', 'categories.id')
                 ->leftjoin('vendors', 'orders.vendor_id', '=', 'vendors.id')
+                ->leftjoin('users', 'orders.user_id', '=', 'users.id')
                 ->leftjoin('sub_categories', 'orders.sub_category_id', '=', 'sub_categories.id')
                 ->leftjoin('products', 'orders.product_id', '=', 'products.id')
                 ->leftjoin('measurement_units', 'orders.measurement_unit_id', '=', 'measurement_units.id')
@@ -507,6 +513,12 @@ class OrderController extends Controller
             $in_words = convertNumberToWord($grand_total);
             $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
 
+
+            $adminBankName = GeneralSetting::where("type", 'admin_bank_name')->first();
+            $adminBankAccountNo = GeneralSetting::where("type", 'admin_account_no')->first();
+            $adminBankIfsc = GeneralSetting::where("type", 'admin_ifsc')->first();
+
+
             $result = [
                 'data' => $data,
                 'invoice_date' => $invoice_date,
@@ -530,7 +542,10 @@ class OrderController extends Controller
                 'dc_igst_amount' => $dc_igst_amount,
                 'in_words' => $in_words,
                 'financialYear' => $financialYear,
-                'no_image' => getFile('mypcot.jpg', 'mypcot'),
+                'admin_bank_name' => $adminBankName->value ?? '',
+                'admin_account_no' => $adminBankAccountNo->value ?? '',
+                'admin_ifsc' => $adminBankIfsc->value ?? '',
+                'no_image' => getFile('packarma_logo.svg', 'notification'),
             ];
             // $result['data'] = $data;
             // echo '<pre>';

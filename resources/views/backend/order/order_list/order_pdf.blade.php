@@ -11,9 +11,9 @@
       <img src="{{$no_image}}" alt="" width="80" height="80">
         </td>
         <td width="70%" style="border-left-color: black; border-right-color: rgb(207, 2, 2); border-top-color:rgb(207, 2, 2);"><br>
-            <h3>&nbsp;&nbsp;&nbsp;{{$data->vendor_company_name}}</h3><br>
-            &nbsp;&nbsp;{{$data->vendor_address}}<br>
-            &nbsp;&nbsp;<b>Tel:</b>{{$data->phone}} &nbsp;&nbsp; <b>Email ID:</b>{{$data->vendor_email}}
+            <h3>&nbsp;&nbsp;&nbsp;{{$data->email}}</h3><br>
+            &nbsp;&nbsp;{{$billing_data->flat ??''}} ,{{$billing_data->area ??''}},{{$billing_data->land_mark ??''}}<br><br>
+            &nbsp;&nbsp;<b>Tel:</b>{{$data->user_phone}} &nbsp;&nbsp; <b>Email ID:</b>{{$data->email}}
         </td>
     </tr>
     <tr class="table_row">
@@ -45,15 +45,15 @@
         <td width="50%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; text-align:center; border-bottom-color: black; background-color:#bdd8f0;"><b>Ship to Party</b></td>
     </tr>
      <tr class="table_row">
-        <td width="50%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Name: {{$billing_data->username ??''}} </td>
-        <td width="50%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">Name: {{$shipping_data->username ??''}}</td>
+        <td width="50%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Name: {{$billing_data->user_name ??''}} </td>
+        <td width="50%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">Name: {{$shipping_data->user_name ??''}}</td>
     </tr>
      <tr class="table_row">
-        <td width="50%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Address: {{$billing_data->address_line1 ??''}} ,{{$billing_data->address_line2 ??''}} </td>
-        <td width="50%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">Address: {{$shipping_data->address_line1 ??''}} ,{{$shipping_data->address_line2 ??''}}</td>
+        <td width="50%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Address: {{$billing_data->flat ??''}} ,{{$billing_data->area ??''}},{{$billing_data->land_mark ??''}} </td>
+        <td width="50%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">Address: {{$shipping_data->flat ??''}} ,{{$shipping_data->area ??''}},{{$shipping_data->land_mark ??''}}</td>
     </tr>
      <tr class="table_row">
-        <td width="50%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">GSTIN/UIN: {{$billing_data->gst_no ??''}} </td>
+        <td width="50%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">GSTIN/UIN: {{$billing_data->gstin ??''}} </td>
         <td width="50%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">GSTIN: NA</td>
     </tr>
      <tr class="table_row">
@@ -86,7 +86,7 @@
 
     <tr>
         <td width="5%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; border-right-color: black; font-size: 7px; text-align:center;">1</td>
-        <td width="9%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->product_description ?? ''}}</td>
+        <td width="9%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->packaging_material_name ?? ''}}</td>
         <td width="6%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->hsn_code ?? '996819'}}</td>
         <td width="5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->unit_symbol ?? ''}}</td>
         <td width="5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->product_quantity ?? ''}}</td>
@@ -103,7 +103,7 @@
         <td width="8%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;"> {{$data->grand_total ?? ''}}</td>
     </tr>
 
-     <tr>
+     {{-- <tr>
         <td width="5%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; border-right-color: black; font-size: 7px; text-align:center;">2</td>
         <td width="9%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">Delivery Charge</td>
         <td width="6%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->hsn_code ?? '996819'}}</td>
@@ -120,7 +120,7 @@
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_igst}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_igst_amount}}</td>
         <td width="8%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_amount??0}}</td>
-    </tr>
+    </tr> --}}
 
        <tr>
         <td width="25%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; border-right-color: black; font-size: 9px; text-align:center;"><b>Grand Total</b></td>
@@ -146,17 +146,17 @@
         <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">State: Maharashtra</td>
     </tr>
      <tr class="table_row">
-        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black;">Bank A/C:</td>
+        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black;">Bank Name: {{$admin_bank_name?? '-'}}</td>
         <td width="33.33%" style="border-left-color: black;border-top-color: black;border-right-color: black;"></td>
         <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">Ceritified that the particular given above are true and correct</td>
     </tr>
      <tr class="table_row">
-        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Bank IFSC:</td>
+        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Bank A/C: {{$admin_account_no ?? '-'}}</td>
         <td width="33.33%" style="border-left-color: border-right-color: black;"></td>
-        <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-left-color: black; text-align:center">For {{$data->vendor_company_name}}</td>
+        <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-left-color: black; text-align:center">For Packarma</td>
     </tr>
      <tr class="table_row">
-        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: rgb(207, 2, 2);border-right-color: black;text-align:center"> <br><br><br><br> Terms & Conditions</td>
+        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: rgb(207, 2, 2);border-right-color: black;">Bank IFSC: {{$admin_ifsc ?? '-'}}</td>
         <td width="33.33%" style="border-left-color: border-right-color: black; border-bottom-color: rgb(207, 2, 2);text-align:center"><br><br><br><br>Common Seal</td>
         <td width="33.33%" style="border-right-color: rgb(207, 2, 2); border-left-color: black; border-bottom-color: rgb(207, 2, 2); text-align:center"><br><br><br><br>Authorized Signatory</td>
     </tr>
