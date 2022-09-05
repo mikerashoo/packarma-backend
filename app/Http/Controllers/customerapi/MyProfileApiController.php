@@ -84,6 +84,18 @@ class MyProfileApiController extends Controller
                 // }
                 $msg_data['result'] = $data;
                 $msg_data['flags'] = $flags;
+
+                $fcm_id = NULL;
+                if ($request->fcm_id && !empty($request->fcm_id)) {
+                    $fcm_id = $request->fcm_id;
+                }
+                $imei_no = $request->header('imei-no');
+
+                CustomerDevice::updateOrCreate(
+                    ['user_id' => $user_id, 'imei_no' => $imei_no],
+                    ['fcm_id' => $fcm_id]
+                );
+
                 successMessage(__('my_profile.info_fetch'), $msg_data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
@@ -271,6 +283,51 @@ class MyProfileApiController extends Controller
         }
     }
 
+
+    /**
+     * Use to update customer fcm_id.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateFcmId(Request $request)
+    {
+        $msg_data = array();
+        \Log::info("Fcm Id Update, starting at: " . Carbon::now()->format('H:i:s:u'));
+        try {
+            $token = readHeaderToken();
+            if ($token) {
+                $user_id = $token['sub'];
+                $userValidationErrors = $this->validateUpdateFcmId($request);
+                if (count($userValidationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $userValidationErrors->all()));
+                    errorMessage(__('auth.validation_failed'), $userValidationErrors->all());
+                }
+                \Log::info("Fcm Id Update Start!");
+
+                $fcm_id = NULL;
+                if ($request->fcm_id && !empty($request->fcm_id)) {
+                    $fcm_id = $request->fcm_id;
+                }
+                $imei_no = $request->header('imei-no');
+
+                CustomerDevice::updateOrCreate(
+                    ['user_id' => $user_id, 'imei_no' => $imei_no],
+                    ['fcm_id' => $fcm_id]
+                );
+                successMessage(__('user.update_successfully'), $msg_data);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Fcm Id Update failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+
+
     /**
      * Created By Pradyumn Dwivedi
      * Created at : 03/06/2022
@@ -285,6 +342,14 @@ class MyProfileApiController extends Controller
             'name' => 'required|string',
             'visiting_card_front' => 'mimes:jpeg,png,jpg' . config('global.VISITING_CARD_IMAGE_SIZE'),
             'visiting_card_back' => 'mimes:jpeg,png,jpg' . config('global.VISITING_CARD_IMAGE_SIZE')
+        ])->errors();
+    }
+
+    private function validateUpdateFcmId(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'fcm_id' => 'required'
+
         ])->errors();
     }
 }
