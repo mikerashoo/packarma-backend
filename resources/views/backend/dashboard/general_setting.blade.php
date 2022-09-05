@@ -49,12 +49,12 @@
                                                         <span class="align-middle">Social Links</span>
                                                     </a>
                                                 </li>
-                                                <li class="nav-item">
+                                                {{-- <li class="nav-item">
                                                     <a class="nav-link" id="notification-tab" data-toggle="tab" href="#notification" role="tab" aria-controls="notification" aria-selected="false">
                                                         <i class="ft-bell mr-1 align-middle"></i>
                                                         <span class="align-middle">Notification</span>
                                                     </a>
-                                                </li>
+                                                </li> --}}
                                                 
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="customer_app_link-tab" data-toggle="tab" href="#customer_app_link" role="tab" aria-controls="customer_app_link" aria-selected="false">

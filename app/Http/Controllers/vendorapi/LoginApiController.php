@@ -98,7 +98,10 @@ class LoginApiController extends Controller
             }
 
 
-
+            $fcm_id = NULL;
+            if ($request->fcm_id && !empty($request->fcm_id)) {
+                $fcm_id = $request->fcm_id;
+            }
 
             $imei_no = $request->header('imei-no');
             $vendor_token = JWTAuth::fromUser($vendorData);
@@ -110,7 +113,7 @@ class LoginApiController extends Controller
 
             VendorDevice::updateOrCreate(
                 ['vendor_id' => $vendorData->id, 'imei_no' => $imei_no],
-                ['remember_token' => $vendor_token]
+                ['remember_token' => $vendor_token, 'fcm_id' => $fcm_id]
             );
 
             successMessage(__('vendor.logged_in_successfully'), $vendorData->toArray());

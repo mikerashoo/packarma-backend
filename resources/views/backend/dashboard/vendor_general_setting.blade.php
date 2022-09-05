@@ -44,12 +44,12 @@
                                                     </a>
                                                 </li>
                                               
-                                                <li class="nav-item">
+                                                {{-- <li class="nav-item">
                                                     <a class="nav-link" id="vendor_notification-tab" data-toggle="tab" href="#vendor_notification" role="tab" aria-controls="vendor_notification" aria-selected="false">
                                                         <i class="ft-bell mr-1 align-middle"></i>
                                                         <span class="align-middle">Notification</span>
                                                     </a>
-                                                </li>
+                                                </li> --}}
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="vendor_app_link-tab" data-toggle="tab" href="#vendor_app_link" role="tab" aria-controls="vendor_app_link" aria-selected="false">
                                                         <i class="ft-link mr-1 align-middle"></i>

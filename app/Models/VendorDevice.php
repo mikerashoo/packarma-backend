@@ -18,6 +18,7 @@ class VendorDevice extends Model
         'vendor_id',
         'imei_no',
         'remember_token',
+        'fcm_id',
         'created_at',
         'updated_at',
     ];
