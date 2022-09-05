@@ -19,6 +19,7 @@ class CustomerDevice extends Model
     protected $fillable = [
         'user_id',
         'imei_no',
+        'fcm_id',
         'remember_token',
         'created_at',
         'updated_at',

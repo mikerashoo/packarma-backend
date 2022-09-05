@@ -65,6 +65,10 @@ class LoginApiController extends Controller
             if (empty($userData->gst_certificate)) {
                 $userData->gst_certificate =  getFile('default_user_gst_file.png', 'gst_certificate');
             }
+            $fcm_id = NULL;
+            if ($request->fcm_id && !empty($request->fcm_id)) {
+                $fcm_id = $request->fcm_id;
+            }
 
             $imei_no = $request->header('device-id');
             $token = JWTAuth::fromUser($userData);
@@ -75,7 +79,7 @@ class LoginApiController extends Controller
             $users->save();
             CustomerDevice::updateOrCreate(
                 ['user_id' => $userData->id, 'imei_no' => $imei_no],
-                ['remember_token' => $token]
+                ['remember_token' => $token, 'fcm_id' => $fcm_id]
             );
             successMessage(__('user.logged_in_successfully'), $userData->toArray());
         } catch (\Exception $e) {
