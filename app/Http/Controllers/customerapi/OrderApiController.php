@@ -647,16 +647,39 @@ class OrderApiController extends Controller
 
                 //checking address checkbox
                 if ($request->same_address_checkbox == 'yes') {
-                    $billing_address_data = UserAddress::find($request->user_billing_address_id);
+                    //checking address_id required
+                    $user_address_id = 0;
+                    if(isset($request->user_billing_address_id) && !empty($request->user_billing_address_id)){
+                        $user_address_id = $request->user_billing_address_id;
+                    }
+                    elseif(isset($request->user_shipping_address_id) && !empty($request->user_shipping_address_id)){
+                        $user_address_id = $request->user_shipping_address_id;
+                    }
+                    else{
+                        errorMessage(__('user_address.user_billing_or_shipping_address_is_required'), $msg_data);
+                    }
+                    $billing_address_data = UserAddress::find($user_address_id);
+
+                    if($billing_address_data->type == 'shipping'){
+                        $billing_address_data->gstin = $user_data->gstin;
+                    }
+
                     $shipping_address_data = $billing_address_data;
 
                     $billing_state_data = State::find($shipping_address_data->state_id);
                     $billing_country_data = Country::find($shipping_address_data->country_id);
                     $shipping_state_data = State::find($shipping_address_data->state_id);
                     $shipping_country_data = Country::find($shipping_address_data->country_id);
-                    // print_r($shipping_country_data->phone_code);exit;
-                } else {
+                    
+                } elseif($request->same_address_checkbox == 'no') {
+                    if(!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)){
+                        errorMessage(__('user_address.user_billing_address_is_required'), $msg_data);
+                    }
+                    if(!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)){
+                        errorMessage(__('user_address.user_shipping_address_is_required'), $msg_data);
+                    }
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
+
                     $shipping_address_data = UserAddress::find($request->user_shipping_address_id);
                     $billing_state_data = State::find($billing_address_data->state_id);
                     $billing_country_data = Country::find($billing_address_data->country_id);
@@ -699,7 +722,6 @@ class OrderApiController extends Controller
                     "packaging_material_id" => $request->packaging_material_id,
                 );
                 //store shipping details in json array
-                // print_r($shipping_country_data->phone_code);exit;
                 $shipping_detail = array(
                     "user_address_id" => $shipping_address_data->id,
                     "user_name" => $user_data->name,
@@ -737,7 +759,7 @@ class OrderApiController extends Controller
                 $order_request_data['product_details'] = json_encode($product_detail);
                 $order_request_data['shipping_details'] = json_encode($shipping_detail);
                 $order_request_data['billing_details'] = json_encode($billing_detail);
-                // return $order_request_data;
+                
                 $newOrderData = Order::create($order_request_data);
                 CustomerEnquiry::where('id', $request->customer_enquiry_id)->update(['quote_type' => 'order']);
                 $newOrderData->odr_id = getFormatid($newOrderData->id, 'orders');
@@ -768,28 +790,28 @@ class OrderApiController extends Controller
     private function validateNewOrder(Request $request)
     {
         return \Validator::make($request->all(), [
-            'vendor_quotation_id' => 'required|numeric',
-            'vendor_id' => 'required|numeric',
-            'vendor_warehouse_id' => 'required|numeric',
-            'customer_enquiry_id' => 'required|numeric',
-            'category_id' => 'required|numeric',
-            'sub_category_id' => 'required|numeric',
-            'product_id' => 'required|numeric',
+            'vendor_quotation_id' => 'required|integer',
+            'vendor_id' => 'required|integer',
+            'vendor_warehouse_id' => 'required|integer',
+            'customer_enquiry_id' => 'required|integer',
+            'category_id' => 'required|integer',
+            'sub_category_id' => 'required|integer',
+            'product_id' => 'required|integer',
             // 'shelf_life' => 'required|int|digits_between:1,3',
             // 'shelf_life_unit' => 'required',
             'product_weight' => 'required|numeric',
-            'measurement_unit_id' => 'required|numeric',
+            'measurement_unit_id' => 'required|integer',
             'product_quantity' => 'required|numeric',
-            'storage_condition_id' => 'required|numeric',
-            'packaging_machine_id' => 'required|numeric',
-            'product_form_id' => 'required|numeric',
-            'packing_type_id' => 'required|numeric',
-            'packaging_treatment_id' => 'required|numeric',
-            'recommendation_engine_id' => 'required|numeric',
-            'packaging_material_id' => 'required|numeric',
+            'storage_condition_id' => 'required|integer',
+            'packaging_machine_id' => 'required|integer',
+            'product_form_id' => 'required|integer',
+            'packing_type_id' => 'required|integer',
+            'packaging_treatment_id' => 'required|integer',
+            'recommendation_engine_id' => 'required|integer',
+            'packaging_material_id' => 'required|integer',
             'same_address_checkbox' => 'required|in:yes,no',
-            'user_billing_address_id' => 'required|numeric',
-            'user_shipping_address_id' => 'required_if:same_address_checkbox,==,no',
+            'user_billing_address_id' => 'nullable|integer',
+            'user_shipping_address_id' => 'required_if:same_address_checkbox,==,no|integer',
         ])->errors();
     }
 
