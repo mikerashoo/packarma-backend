@@ -1,4 +1,3 @@
-<?php #print_r($mapped_vendor); exit; ?>
 <section class="users-list-wrapper">
     <div class="users-list-table">
         <div class="row">
@@ -44,13 +43,13 @@
                                     </div>                                       
                                 </div>   
                                 
-                                <div class="col-md-12 row">
+                                {{-- <div class="col-md-12 row">
                                     <div class="col-md-12">
                                         <dl class="row">                                                                        
                                             <dt class="col-sm-5 text-left">Map Vendors:</dt>
                                         </dl>
                                     </div>                                       
-                                </div>
+                                </div> --}}
                                 <div class="col-md-12 row">
                                 <!-- Outline variants section start -->
                                     <div class="col-md-3 col-12">

@@ -30,7 +30,7 @@
                                             <tr>
                                                 <td><strong>Subscription Start Date</strong></td>
                                                 @if (empty($data->user->subscription_start))
-                                                    <td></td>  
+                                                    <td>-</td>  
                                                 @else
                                                     <td>{{date('d-m-Y', strtotime($data->user->subscription_start)) }}</td>
                                                 @endif
@@ -38,7 +38,7 @@
                                             <tr>
                                                 <td><strong>Subscription End Date</strong></td>
                                                 @if (empty($data->user->subscription_end))
-                                                    <td></td>  
+                                                    <td>-</td>  
                                                 @else
                                                     <td>{{date('d-m-Y', strtotime($data->user->subscription_end)) }}</td>
                                                 @endif
@@ -49,9 +49,8 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Payment Status</strong></td>
-                                                @if ($data->payment_status == 'pending'){
+                                                @if ($data->payment_status == 'pending')
                                                     <td>Failed</td>
-                                                }
                                                 @else
                                                     <td>{{subscriptionPaymentStatus($data->payment_status);}}</td>
                                                 @endif
@@ -62,9 +61,8 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Payment Gateway Key</strong></td>
-                                                @if ($data->gateway_key){
+                                                @if ($data->gateway_key)
                                                     <td>{{$data->gateway_key}}</td>
-                                                }
                                                 @else
                                                     <td>-</td>
                                                 @endif
