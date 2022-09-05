@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\GeneralSetting;
+use App\Models\MessageNotification;
 use Illuminate\Http\Request;
 use App\Models\PackagingMaterial;
 use App\Models\Vendor;
@@ -11,6 +13,7 @@ use App\Models\Product;
 use App\Models\VendorMaterialMapping;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class VendorMaterialController extends Controller
 {
@@ -183,6 +186,8 @@ class VendorMaterialController extends Controller
 
     public function saveFormData(Request $request)
     {
+
+
         $msg_data = array();
         $msg = "";
         $validationErrors = $this->validateRequest($request);
@@ -219,6 +224,12 @@ class VendorMaterialController extends Controller
             $tblObj->created_by = session('data')['id'];
         }
         $tblObj->save();
+
+        $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_vendor_fcm_notification')->value('value');
+        if ($can_send_fcm_notification == 1) {
+            $this->callVendorFcmNotification($request->vendor);
+        }
+
         successMessage($msg, $msg_data);
     }
 
@@ -274,5 +285,40 @@ class VendorMaterialController extends Controller
         } else {
             successMessage('Unpublished', $msg_data);
         }
+    }
+
+    private function callVendorFcmNotification($vendor_id)
+    {
+
+        $notificationData = MessageNotification::where('user_type', 'vendor')->first();
+
+        if (empty($notificationData)) {
+            $notificationData['title'] = 'Pckult';
+            $notificationData['body'] = 'test';
+            $notificationData['image_path'] = getFile('packarma_logo.svg', 'notification');
+        } else {
+            if (!empty($notificationData['image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['image'])) {
+                $notificationData['image_path'] = getFile($notificationData['image'], 'notification/vendor');
+            } else {
+                $notificationData['image_path'] = getFile('packarma_logo.svg', 'notification');
+            }
+        }
+
+
+        $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
+            ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted']])
+            ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
+            ->get();
+
+
+        if (!empty($userFcmData)) {
+            $device_ids = array();
+            foreach ($userFcmData as $key => $val) {
+                array_push($device_ids, $val->fcm_id);
+            }
+            sendFcmNotification($device_ids, $notificationData);
+        }
+        // print_r($device_ids);
+        // die;
     }
 }

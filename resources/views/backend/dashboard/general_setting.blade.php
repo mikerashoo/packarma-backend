@@ -71,7 +71,7 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="customer_gst_details-tab" data-toggle="tab" href="#customer_gst_details" role="tab" aria-controls="customer_gst_details" aria-selected="false">
                                                         <i class="ft-file mr-1 align-middle"></i>
-                                                        <span class="align-middle">Gst Details</span>
+                                                        <span class="align-middle">Invoice Details</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -266,9 +266,15 @@
 
                                                             <!-- Gst details Tab -->
                                                             <div class="tab-pane" id="customer_gst_details" role="tabpanel" aria-labelledby="customer_gst_details-tab">
-                                                                <form id="customerGstDetailsForm" method="post" action="updateSettingInfo?param=customerGstDetails">
+                                                                <form id="customerInvoiceDetailsForm" method="post" action="updateSettingInfo?param=customerInvoiceDetails">
                                                                 @csrf
                                                                     <div class="row">
+                                                                        <div class="col-12 form-group">
+                                                                            <hr style="border: none; border-bottom: 1px solid black;">
+                                                                            <h4>GST Details</h4>
+                                                                            <hr style="border: none; border-bottom: 1px solid black;">
+
+                                                                        </div>
                                                                         <div class="col-12 form-group">
                                                                             <label for="customer_gst_name">Name</label>
                                                                             <div class="controls">
@@ -287,11 +293,42 @@
                                                                                 <input type="text" id="customer_gst_address" name="customer_gst_address"  class="form-control" placeholder="" aria-invalid="false" value="{{$data['customer_gst_address']}}">
                                                                             </div>
                                                                         </div>
+                                                                        <div class="col-12 form-group">
+                                                                            <hr style="border: none; border-bottom: 1px solid black;">
+                                                                            <h4>Bank Details</h4>
+                                                                            <hr style="border: none; border-bottom: 1px solid black;">
+
+                                                                        </div>
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="admin_bank_name">Bank Name</label>
+                                                                            <div class="controls">
+                                                                                <input type="text" id="admin_bank_name" name="admin_bank_name" class="form-control" placeholder="" value="{{$data['admin_bank_name']}}" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="admin_account_no">Account No.</label>
+                                                                            <div class="controls">
+                                                                                <input type="text" id="admin_account_no" name="admin_account_no" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="form-control" placeholder="" value="{{$data['admin_account_no']}}" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="admin_ifsc">Bank IFSC</label>
+                                                                            <div class="controls">
+                                                                                <input type="text" id="admin_ifsc" name="admin_ifsc" class="form-control" placeholder="" value="{{$data['admin_ifsc']}}" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="admin_benificiary_name">Benificiary Name</label>
+                                                                            <div class="controls">
+                                                                                <input type="text" id="admin_benificiary_name" name="admin_benificiary_name" class="form-control" placeholder="" value="{{$data['admin_benificiary_name']}}" required>
+                                                                            </div>
+                                                                        </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('customerGstDetailsForm','post')">Save Changes</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('customerInvoiceDetailsForm','post')">Save Changes</button>
                                                                             {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
+                                                                    
                                                                 </form>
                                                             </div>
 

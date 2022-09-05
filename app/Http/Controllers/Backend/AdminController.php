@@ -290,7 +290,7 @@ class AdminController extends Controller
      *   Created On : 16-july-2022
      *   Uses :  Validate gst details for customer
      */
-    private function validateCustomerGstDetails(Request $request)
+    private function validateCustomerInvoiceDetails(Request $request)
     {
         return \Validator::make($request->all(), [
             'customer_gst_no' => 'sometimes|required|regex:' . config('global.GST_NO_VALIDATION'),
@@ -373,8 +373,8 @@ class AdminController extends Controller
                         GeneralSetting::where("type", 'customer_ios_version')->update(["value" => $request->customer_ios_version]);
                         break;
 
-                    case 'customerGstDetails':
-                        $validationErrors = $this->validateCustomerGstDetails($request);
+                    case 'customerInvoiceDetails':
+                        $validationErrors = $this->validateCustomerInvoiceDetails($request);
                         if (count($validationErrors)) {
                             \Log::error("Customer Gst details Validation Exception: " . implode(", ", $validationErrors->all()));
                             errorMessage(implode("\n", $validationErrors->all()), $msg_data);
@@ -382,6 +382,10 @@ class AdminController extends Controller
                         GeneralSetting::where("type", 'customer_gst_name')->update(["value" => $request->customer_gst_name]);
                         GeneralSetting::where("type", 'customer_gst_no')->update(["value" => $request->customer_gst_no]);
                         GeneralSetting::where("type", 'customer_gst_address')->update(["value" => $request->customer_gst_address]);
+                        GeneralSetting::where("type", 'admin_bank_name')->update(["value" => ucwords(strtolower($request->admin_bank_name))]);
+                        GeneralSetting::where("type", 'admin_account_no')->update(["value" => $request->admin_account_no]);
+                        GeneralSetting::where("type", 'admin_ifsc')->update(["value" => strtoupper($request->admin_ifsc)]);
+                        GeneralSetting::where("type", 'admin_benificiary_name')->update(["value" => ucwords(strtolower($request->admin_benificiary_name))]);
                         break;
 
                     default:
