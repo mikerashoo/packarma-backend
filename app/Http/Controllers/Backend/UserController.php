@@ -292,7 +292,7 @@ class UserController extends Controller
      */
     public function viewUserList($id)
     {
-        $data['data'] = User::find($id);
+        $data['data'] = User::withTrashed()->find($id);
         $data['userAddress'] = UserAddress::with('city', 'state', 'country', 'user')->where('user_id', '=', $id)->get();
         return view('backend/customer_section/user_list/user_list_view', $data);
     }

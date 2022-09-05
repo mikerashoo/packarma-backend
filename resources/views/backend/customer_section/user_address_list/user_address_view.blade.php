@@ -47,6 +47,14 @@
                                                     <td>-</td>
                                                 @endif
                                             </tr>
+                                            @if ($data->type == 'billing')
+                                                <td><strong>GST Number</strong></td>
+                                                @if ($data->gstin)
+                                                    <td>{{ $data->gstin }}</td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                            @endif
                                             <tr>
                                                 <td><strong>Mobile Number</strong></td>
                                                 @if (!empty($data->mobile_no))

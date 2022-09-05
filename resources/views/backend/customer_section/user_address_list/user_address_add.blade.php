@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="col-sm-6">
                         				<label>Address Type<span style="color:#ff0000">*</span></label>
-                        				<select class="select2 required" id="type" name="type" style="width: 100% !important;">
+                        				<select class="select2 required" id="address_type" name="address_type" style="width: 100% !important;">
                                             <option value="">Select</option>
                                             @foreach($addressType as $key => $val)
                                                 <option value="{{$key}}">{{$val}}</option>
@@ -92,12 +92,16 @@
                                         <label>Landmark<span style="color:#ff0000">*</span></label>
                                         <input class="form-control required" type="text" id="landmark" name="landmark"><br />
                                     </div>
+                                    <div class="col-sm-6" id="gst_no_input">
+                                        <label>GST Number<span style="color:#ff0000">*</span></label>
+                                        <input class="form-control" type="text" id="gst_no" name="gst_no"><br/>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="pull-right">
                                             <button type="button" class="btn btn-success" onclick="submitForm('addUserAddressForm','post')">Submit</button>
-                                            <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <a href="{{URL::previous()}}" class="btn btn-danger px-3 py-1"></i>Cancel</a>
                                         </div>
                                     </div>
                                 </div>

@@ -40,9 +40,9 @@
                         				<label>Sub Category<span style="color:#ff0000">*</span></label>
                         				<select class="select2 required" id="sub_category" name="sub_category" style="width: 100% !important;">
                                             <option value="">Select</option>
-                                            @foreach($sub_category as $value)
+                                            {{-- @foreach($sub_category as $value)
                                                 <option value="{{$value->id}}">{{$value->sub_category_name}}</option>
-                                            @endforeach
+                                            @endforeach --}}
                                         </select><br/><br/>
                         			</div>
                                     <div class="col-sm-6">
@@ -66,7 +66,7 @@
                                     <div class="col-sm-6">
                                         <label>Product Image<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PRODUCT'); ?></p>
-                                        <input type="file" id="product_image" name="product_image" class="form-control required" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)">
+                                        <input type="file" id="product_image" name="product_image" class="form-control required" accept="image/png, image/jpg, image/jpeg">
                                     </div>
                         		</div>
                         		<hr>
@@ -74,7 +74,7 @@
                         			<div class="col-sm-12">
                         				<div class="pull-right">
                         					<button type="button" class="btn btn-success" onclick="submitForm('addProductForm','post')">Submit</button>
-                                            <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <a href="{{URL::previous()}}" class="btn btn-danger px-3 py-1"></i>Cancel</a>
                         				</div>
                         			</div>
                         		</div>

@@ -65,7 +65,7 @@
                                     <div class="col-sm-12">
                         				<div class="pull-right">
                         					<button type="button" class="btn btn-success" onclick="submitForm('addCompanyForm','post')">Submit</button>
-                                            <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
+                                            <a href="{{URL::previous()}}" class="btn btn-danger px-3 py-1"></i>Cancel</a>
                         				</div>
                         			</div>
                             </div>

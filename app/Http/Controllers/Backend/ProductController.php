@@ -110,6 +110,17 @@ class ProductController extends Controller
 
     /**
      *   created by : Pradyumn Dwivedi
+     *   Created On : 29-Aug-2022
+     *   Uses : To load get sub category based on category
+     */
+    public function getSubCategory(Request $request)
+    {
+        $data['sub_category'] = SubCategory::where('category_id', $request->category_id)->get();
+        successMessage('Data fetched successfully', $data);
+    }
+
+    /**
+     *   created by : Pradyumn Dwivedi
      *   Created On : 30-Mar-2022
      *   Uses : To load Add sub product page
      */
@@ -132,13 +143,14 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $data['sub_category'] = SubCategory::all();
+        
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['data'] = Product::find($id);
         if ($data['data']) {
             $data['data']->image_path = getFile($data['data']->product_image, 'product', true);
+            $data['sub_category'] = SubCategory::where('category_id',$data['data']['category_id'])->get();
         }
         return view('backend/product/product_edit', $data);
     }

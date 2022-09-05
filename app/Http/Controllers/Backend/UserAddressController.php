@@ -23,7 +23,6 @@ class UserAddressController extends Controller
     public function index()
     {
         try {
-            $data['user'] = UserAddress::all();
             $data['user'] = User::withTrashed()->where('approval_status', '=', 'accepted')->orderBy('name', 'asc')->get();
             $data['user_address_add'] = checkPermission('user_address_add');
             $data['user_address_view'] = checkPermission('user_address_view');
@@ -70,6 +69,15 @@ class UserAddressController extends Controller
                         }
                         // return $event->user->name;
                     })
+                    ->editColumn('address_name', function ($event) {
+                        $isUserAddressDeleted = isRecordDeleted($event->deleted_at);
+                        if (!$isUserAddressDeleted) {
+                            return $event->address_name;
+                        } else {
+                            return '<span class="text-danger text-center">' . $event->address_name . '</span>';
+                        }
+                        // return $event->user->name;
+                    })
                     ->editColumn('state', function ($event) {
                         return $event->state->state_name;
                     })
@@ -81,6 +89,7 @@ class UserAddressController extends Controller
                     })
                     ->editColumn('action', function ($event) {
                         $isUserDeleted = isRecordDeleted($event->user->deleted_at);
+                        $isUserAddressDeleted = isRecordDeleted($event->deleted_at);
                         $user_address_view = checkPermission('user_address_view');
                         $user_address_edit = checkPermission('user_address_edit');
                         $user_address_status = checkPermission('user_address_status');
@@ -88,7 +97,7 @@ class UserAddressController extends Controller
                         if ($user_address_view) {
                             $actions .= '<a href="user_address_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
-                        if (!$isUserDeleted) {
+                        if (!$isUserDeleted && !$isUserAddressDeleted) {
                             if ($user_address_edit) {
                                 $actions .= ' <a href="user_address_edit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
                             }
@@ -106,7 +115,7 @@ class UserAddressController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['name', 'state', 'city', 'pincode', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['name', 'address_name', 'state', 'city', 'pincode', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -175,18 +184,33 @@ class UserAddressController extends Controller
     {
         $msg_data = array();
         $msg = "";
-        $validationErrors = $this->validateRequest($request);
+        if(isset($_GET['id'])) {
+    		$validationErrors = $this->validateRequest($request, $_GET['id']);
+    	} else {
+    		$validationErrors = $this->validateNewRequest($request);
+    	}
         if (count($validationErrors)) {
-            \Log::error("User Address Validation Exception: " . implode(", ", $validationErrors->all()));
+            \Log::error("Category Validation Exception: " . implode(", ", $validationErrors->all()));
             errorMessage(implode("\n", $validationErrors->all()), $msg_data);
+        }
+        //to check gst number unique for different user, and gst can be same for same user 
+        if($request->address_type == 'billing'){
+            if(isset($request->gst_no) && !empty(isset($request->gst_no))){
+                $response = UserAddress::where([['gstin', $request->gst_no], ['user_id', '<>', $request->user]])->get()->toArray();
+                if (isset($response[0])) {
+                    errorMessage('GST number already exist', $msg_data);
+                }
+            }else{
+                errorMessage(__('user_address.if_user_type_billing_gst_number_required'), $msg_data);
+            }
         }
         $isUpdateFlow = false;
         if (isset($_GET['id'])) {
             $isUpdateFlow = true;
             $getKeys = true;
             $addressType = addressType('', $getKeys);
-            if (isset($request->type)) {
-                if (in_array($request->type, $addressType)) {
+            if (isset($request->address_type)) {
+                if (in_array($request->address_type, $addressType)) {
                     $msg = "Data Updated Successfully";
                 } else {
                     errorMessage('Address Type Does not Exists.', $msg_data);
@@ -198,8 +222,8 @@ class UserAddressController extends Controller
             $tableObject = new UserAddress;
             $getKeys = true;
             $addressType = addressType('', $getKeys);
-            if (isset($request->type)) {
-                if (in_array($request->type, $addressType)) {
+            if (isset($request->address_type)) {
+                if (in_array($request->address_type, $addressType)) {
                     $msg = "Data Updated Successfully";
                 } else {
                     errorMessage('Address Type Does not Exists.', $msg_data);
@@ -211,11 +235,11 @@ class UserAddressController extends Controller
         if (isset($request->address_name)) {
             $tableObject->address_name = $request->address_name;
         }
-        if (isset($request->type)) {
+        if (isset($request->address_type)) {
             $getKeys = true;
             $addressType = addressType('', $getKeys);
-            if (in_array($request->type, $addressType)) {
-                $tableObject->type = $request->type;
+            if (in_array($request->address_type, $addressType)) {
+                $tableObject->type = $request->address_type;
             } else {
                 errorMessage('Address Type Does Not Exists.', $msg_data);
             }
@@ -236,6 +260,12 @@ class UserAddressController extends Controller
         } else {
             $tableObject->created_by = session('data')['id'];
         }
+        if($request->address_type == 'billing' && isset($request->gst_no)){
+            $tableObject->gstin = $request->gst_no;
+        }
+        else{
+            $tableObject->gstin = null;
+        }
         $tableObject->save();
         successMessage($msg, $msg_data);
     }
@@ -249,7 +279,7 @@ class UserAddressController extends Controller
      */
     public function view($id)
     {
-        $data['data'] = UserAddress::with('user', 'city', 'state', 'country')->find($id);
+        $data['data'] = UserAddress::withTrashed()->with('user', 'city', 'state', 'country')->find($id);
         $data['addressType'] = addressType();
         return view('backend/customer_section//user_address_list/user_address_view', $data);
     }
@@ -281,12 +311,12 @@ class UserAddressController extends Controller
      *   @param Request request
      *   @return Response
      */
-    private function validateRequest(Request $request)
+    private function validateRequest(Request $request, $id)
     {
         return \Validator::make($request->all(), [
             'user' => 'required|integer',
             'address_name' => 'required|string',
-            'type' => 'required|string',
+            'address_type' => 'required|string',
             'mobile_no' => 'required|digits:10',
             'country' => 'required|integer',
             'state' => 'required|integer',
@@ -294,7 +324,37 @@ class UserAddressController extends Controller
             'pincode' => 'required|digits:6',
             'flat' => 'required|string',
             'area' => 'required|string',
-            'landmark' => 'required|string'
+            'landmark' => 'required|string',
+            'gst_no'=>'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION'),
+            // 'gst_no'=> ($request->address_type == 'billing') ? 'string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION').'|unique:user_addresses,gstin,' . $id . ',user_id,deleted_at,NULL': '' ,
+        ])->errors();
+    }
+
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 24-Mar-2022
+     *   Uses :  User Address Form Validation part will be handle by below function
+     *   @param Request request
+     *   @return Response
+     */
+    private function validateNewRequest(Request $request)
+    { 
+        return \Validator::make($request->all(), [
+
+           
+            'user' => 'required|integer',
+            'address_name' => 'required|string',
+            'address_type' => 'required|string',
+            'mobile_no' => 'required|digits:10',
+            'country' => 'required|integer',
+            'state' => 'required|integer',
+            'city_name' => 'required|string',
+            'pincode' => 'required|digits:6',
+            'flat' => 'required|string',
+            'area' => 'required|string',
+            'landmark' => 'required|string',
+            'gst_no'=>'nullable|string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION'),
+            // 'gst_no'=> ($request->address_type == 'billing') ? 'string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION').'|unique:user_addresses,gstin,'.$request->user.',user_id,deleted_at' : '' ,
         ])->errors();
     }
 }

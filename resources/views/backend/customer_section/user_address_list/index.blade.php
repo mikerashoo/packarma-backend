@@ -61,7 +61,8 @@
                                                 <thead>
                                                     <tr>
                                                         <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
-                                                        <th id="name" data-orderable="false" data-searchable="false">User</th>
+                                                        <th id="name" data-orderable="false" data-searchable="false">User Name</th>
+                                                        <th id="address_name" data-orderable="false" data-searchable="false">Address Name</th>
                                                         <th id="state" data-orderable="false" data-searchable="false">State</th>
                                                         <th id="city" data-orderable="false" data-searchable="false">City</th>
                                                         <th id="pincode" data-orderable="false" data-searchable="false">Pincode</th>

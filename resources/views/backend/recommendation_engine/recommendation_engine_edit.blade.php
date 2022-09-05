@@ -65,7 +65,7 @@
                                                 <input class="form-control required" type="text" id="max_shelf_life" name="max_shelf_life" value="{{ $data->max_shelf_life }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div> --}}
                                             <div class="col-sm-6">
-                                                <label>Display Shelf Life<span style="color:#ff0000">*</span></label>
+                                                <label>Display Shelf Life (Days)<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="display_shelf_life" name="display_shelf_life" value="{{ $data->display_shelf_life }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                             <div class="col-sm-6">
@@ -189,7 +189,7 @@
                                         <div class="col-sm-12">
                                             <div class="pull-right">
                                                 <button type="button" class="btn btn-success" onclick="submitForm('editPackagingSolution','post')">Update</button>
-                                                <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
+                                                <a href="{{URL::previous()}}" class="btn btn-danger px-3 py-1"></i>Cancel</a>
                                             </div>
                                         </div>
                                     </div>

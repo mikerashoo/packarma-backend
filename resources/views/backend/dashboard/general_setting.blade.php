@@ -112,8 +112,8 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitForm('generalForm','post')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('generalForm','post')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -130,8 +130,8 @@
                                                                             <textarea class="ckeditor form-control" id="about_us_editor" name="about_us"> {{$data['about_us']}}</textarea>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitEditor('aboutusForm')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitEditor('aboutusForm')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -146,8 +146,8 @@
                                                                             <textarea class="ckeditor form-control" id="terms_condition_editor" name="terms_condition">{{$data['terms_condition']}}</textarea>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitEditor('tncForm')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitEditor('tncForm')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -162,8 +162,8 @@
                                                                             <textarea class="ckeditor form-control" id="privacy_policy_editor" name="privacy_policy">{{$data['privacy_policy']}}</textarea>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitEditor('privacyForm')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitEditor('privacyForm')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -187,8 +187,8 @@
                                                                             <input id="twitter" type="text" name="twitter_link" class="form-control" placeholder="Add link" value="{{$data['twitter_link']}}">
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitForm('socialLinkForm','post')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('socialLinkForm','post')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -201,10 +201,10 @@
                                                                             <input id="switchery1" type="checkbox" data-url="publishEmailNotification"  data-id="trigger_email_notification" class="js-switch switchery" <?php echo ($data['trigger_email_notification'] == 1) ? 'checked' : ''; ?> >
                                                                             <label for="switchery1">Trigger Email Notification</label>
                                                                     </div>
-                                                                    <div class="col-12 mb-2">
+                                                                    {{-- <div class="col-12 mb-2">
                                                                             <input id="switchery2" type="checkbox" data-url="publishWhatsappNotification"  data-id="trigger_whatsapp_notification" class="js-switch switchery" <?php echo ($data['trigger_whatsapp_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="switchery2">Trigger Whatsapp Notification</label>
-                                                                    </div>
+                                                                    </div> --}}
                                                                     <div class="col-12 mb-2">
                                                                             <input id="switchery3" type="checkbox" data-url="publishSMSNotification"  data-id="trigger_sms_notification" class="js-switch switchery" <?php echo ($data['trigger_sms_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="switchery3">Trigger SMS Notification</label>
@@ -230,8 +230,8 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitForm('customerAppLinkForm','post')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('customerAppLinkForm','post')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -255,8 +255,8 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitForm('customerAppVersionForm','post')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('customerAppVersionForm','post')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -324,8 +324,8 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitForm('customerInvoiceDetailsForm','post')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('customerInvoiceDetailsForm','post')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                     

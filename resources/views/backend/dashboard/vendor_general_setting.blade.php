@@ -100,8 +100,8 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitForm('vendorGeneralForm','post')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('vendorGeneralForm','post')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -118,8 +118,8 @@
                                                                             <textarea class="ckeditor form-control" id="vendor_about_us_editor" name="vendor_about_us"> {{$data['vendor_about_us'] ?? ''}}</textarea>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitEditor('vendorAboutusForm')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitEditor('vendorAboutusForm')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -134,8 +134,8 @@
                                                                             <textarea class="ckeditor form-control" id="vendor_terms_condition_editor" name="vendor_terms_condition">{{$data['vendor_terms_condition'] ?? ''}}</textarea>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitEditor('vendorTncForm')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitEditor('vendorTncForm')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -150,8 +150,8 @@
                                                                             <textarea class="ckeditor form-control" id="vendor_privacy_policy_editor" name="vendor_privacy_policy">{{$data['vendor_privacy_policy'] ?? ''}}</textarea>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitEditor('vendorPrivacyForm')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitEditor('vendorPrivacyForm')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -166,10 +166,10 @@
                                                                             <input id="vendor_switchery1" type="checkbox" data-url="publishVendorEmailNotification"  data-id="trigger_vendor_email_notification" class="js-switch switchery" <?php echo ( isset($data['trigger_vendor_email_notification']) && $data['trigger_vendor_email_notification'] == 1) ? 'checked' : ''; ?> >
                                                                             <label for="vendor_switchery1">Trigger Email Notification</label>
                                                                     </div>
-                                                                    <div class="col-12 mb-2">
+                                                                    {{-- <div class="col-12 mb-2">
                                                                             <input id="vendor_switchery2" type="checkbox" data-url="publishVendorWhatsappNotification"  data-id="trigger_vendor_whatsapp_notification" class="js-switch switchery" <?php echo (isset($data['trigger_vendor_whatsapp_notification']) && $data['trigger_vendor_whatsapp_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="vendor_switchery2">Trigger Whatsapp Notification</label>
-                                                                    </div>
+                                                                    </div> --}}
                                                                     <div class="col-12 mb-2">
                                                                             <input id="vendor_switchery3" type="checkbox" data-url="publishVendorSMSNotification"  data-id="trigger_vendor_sms_notification" class="js-switch switchery" <?php echo (isset($data['trigger_vendor_sms_notification']) && $data['trigger_vendor_sms_notification'] == 1) ? 'checked' : ''; ?>>
                                                                             <label for="vendor_switchery3">Trigger SMS Notification</label>
@@ -194,8 +194,8 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitForm('vendorAppLinkForm','post')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('vendorAppLinkForm','post')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
@@ -219,8 +219,8 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
-                                                                            <button type="button" class="btn btn-primary mr-sm-2 mb-1" onclick="submitForm('vendorAppVersionForm','post')">Save Changes</button>
-                                                                            <button type="reset" class="btn btn-secondary mb-1">Cancel</button>
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('vendorAppVersionForm','post')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
                                                                 </form>
