@@ -891,16 +891,19 @@ if (!function_exists('sendEmail')) {
 
 
 if (!function_exists('sendFcmNotification')) {
-    function sendFcmNotification($fcm_ids = array(), $notification_data = array(), $landingPage = "homepage")
+    function sendFcmNotification($fcm_ids = array(), $notification_data = array(), $for = 'vendor')
     {
 
+        $auth_key = config('global.TEST_VENDOR_FCM_SERVER_KEY');
+        if ($for == 'customer') {
+            $auth_key = config('global.TEST_CUSTOMER_FCM_SERVER_KEY');
+        }
         if (is_array($fcm_ids) && !empty($fcm_ids[0])) {
             $auth_token = array(
-                'Authorization: key=' . config('global.TEST_FCM_SERVER_KEY'),
+                'Authorization: key=' . $auth_key,
                 'Content-Type: application/json'
             );
-            // print_r($auth_token);
-            // die;
+
             if (is_array($fcm_ids)) {
                 $auth_token = $auth_token;
 
@@ -908,18 +911,15 @@ if (!function_exists('sendFcmNotification')) {
                 $data_array['title']        = $notification_data['title'];
                 $data_array['body']         = $notification_data['body'];
                 $data_array['image']        = $notification_data['image_path'];
-                $data_array['type']         = $landingPage;
+                $data_array['type']         = $notification_data['page_name'];
+                $data_array['type_id']         = $notification_data['type_id'];
                 $data_array['sound']        = "default";
-                //$data_array['click_action'] ="FCM_PLUGIN_ACTIVITY";
-                //FCM ID 
+
                 $device_array = $fcm_ids;
 
                 $array_chunk_length = 500;
                 $deviceArrayChunk = array_chunk($device_array, $array_chunk_length, true);
                 $is_post = true;
-                // print_r($deviceArrayChunk);
-                // die;
-
                 foreach ($deviceArrayChunk as $deviceArray) {
                     $fields = array(
                         'registration_ids' => $deviceArray,
@@ -957,7 +957,7 @@ if (!function_exists('fcmCallingToCurl')) {
         $err_no_curl = curl_errno($ch);
         curl_close($ch);
 
-        if ($err) {
+        if ($err || $err_no_curl) {
             \Log::error("Fcm Curl Call has Error number " . $err_no_curl . " and Error is ::" . $err);
         } else {
             \Log::error("Fcm Curl Call Success has :: " . $result);

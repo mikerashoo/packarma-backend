@@ -227,7 +227,7 @@ class VendorMaterialController extends Controller
 
         $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_vendor_fcm_notification')->value('value');
         if ($can_send_fcm_notification == 1) {
-            $this->callVendorFcmNotification($request->vendor);
+            $this->callVendorFcmNotification($request->vendor, $request->material);
         }
 
         successMessage($msg, $msg_data);
@@ -287,38 +287,42 @@ class VendorMaterialController extends Controller
         }
     }
 
-    private function callVendorFcmNotification($vendor_id)
+    private function callVendorFcmNotification($vendor_id, $material_id)
     {
+        $landingPage = 'Materials';
+        if ((!empty($vendor_id) && $vendor_id > 0) && (!empty($material_id) && $material_id > 0)) {
+            $material_name =  DB::table('packaging_materials')->where('id', $material_id)->value('packaging_material_name');
 
-        $notificationData = MessageNotification::where('user_type', 'vendor')->first();
+            $notificationData = MessageNotification::where([['user_type', 'vendor'], ['notification_name', 'material_mapping'], ['status', 1]])->first();
 
-        if (empty($notificationData)) {
-            $notificationData['title'] = 'Pckult';
-            $notificationData['body'] = 'test';
-            $notificationData['image_path'] = getFile('packarma_logo.svg', 'notification');
-        } else {
-            if (!empty($notificationData['image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['image'])) {
-                $notificationData['image_path'] = getFile($notificationData['image'], 'notification/vendor');
-            } else {
-                $notificationData['image_path'] = getFile('packarma_logo.svg', 'notification');
+            if (!empty($notificationData)) {
+                $notificationData['type_id'] = $material_id;
+
+                if (!empty($notificationData['image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['image'], 'notification/vendor');
+                } else {
+                    $notificationData['image_path'] = getFile('packarma_logo.svg', 'notification');
+                }
+
+                if (empty($notificationData['page_name'])) {
+                    $notificationData['page_name'] = $landingPage;
+                }
+
+                $notificationData['body'] = str_replace('$$material_name$$', $material_name, $notificationData['body']);
+                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
+                    ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted'], ['vendors.deleted_at', NULL]])
+                    ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
+                    ->get();
+
+
+                if (!empty($userFcmData)) {
+                    $device_ids = array();
+                    foreach ($userFcmData as $key => $val) {
+                        array_push($device_ids, $val->fcm_id);
+                    }
+                    sendFcmNotification($device_ids, $notificationData);
+                }
             }
         }
-
-
-        $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
-            ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted']])
-            ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
-            ->get();
-
-
-        if (!empty($userFcmData)) {
-            $device_ids = array();
-            foreach ($userFcmData as $key => $val) {
-                array_push($device_ids, $val->fcm_id);
-            }
-            sendFcmNotification($device_ids, $notificationData);
-        }
-        // print_r($device_ids);
-        // die;
     }
 }
