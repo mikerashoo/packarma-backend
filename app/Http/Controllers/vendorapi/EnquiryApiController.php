@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
+use App\Models\MessageNotification;
 use Illuminate\Http\Request;
 use App\Models\VendorQuotation;
 use Illuminate\Support\Carbon;
@@ -268,6 +269,19 @@ class EnquiryApiController extends Controller
 
                 \Log::info("Quotation sent successfully!");
 
+                // trigger notification to customer
+
+
+
+                $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_customer_fcm_notification')->value('value');
+                if ($can_send_fcm_notification == 1) {
+                    $enquiry_id = $checkQuotation->customer_enquiry_id;
+                    $user_id =  DB::table('customer_enquiries')->where('id', $enquiry_id)->value('user_id');
+
+                    $this->callQuotationSentFcmNotification($user_id, $enquiry_id);
+                }
+
+
                 successMessage(__('quotation.sent'), $quotation);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
@@ -300,5 +314,53 @@ class EnquiryApiController extends Controller
             ]
 
         )->errors();
+    }
+
+
+
+    private function callQuotationSentFcmNotification($user_id, $enquiry_id)
+    {
+        $landingPage = 'Enquiries';
+        if ((!empty($user_id) && $user_id > 0) && (!empty($enquiry_id) && $enquiry_id > 0)) {
+
+
+            $notificationData = MessageNotification::where([['user_type', 'customer'], ['notification_name', 'vendor_quoted'], ['status', 1]])->first();
+
+            if (!empty($notificationData)) {
+                $enqFormattedId = getFormatid($enquiry_id);
+                $notificationData['type_id'] = $enquiry_id;
+
+                $materialData = DB::table('customer_enquiries')
+                    ->select('packaging_materials.packaging_material_name')
+                    ->where([['customer_enquiries.id', $enquiry_id], ['customer_enquiries.deleted_at', NULL]])
+                    ->leftjoin('packaging_materials', 'customer_enquiries.packaging_material_id', '=', 'packaging_materials.id')->first();
+
+                if (!empty($notificationData['image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['image'], 'notification/customer');
+                } else {
+                    $notificationData['image_path'] = getFile('packarma_logo.svg', 'notification');
+                }
+
+                if (empty($notificationData['page_name'])) {
+                    $notificationData['page_name'] = $landingPage;
+                }
+
+                $notificationData['title'] = str_replace('$$enquiry_id$$', $enqFormattedId, $notificationData['title']);
+                $notificationData['body'] = str_replace('$$material_name$$', $materialData->packaging_material_name, $notificationData['body']);
+                $userFcmData = DB::table('users')->select('users.id', 'customer_devices.fcm_id')
+                    ->where([['users.id', $user_id], ['users.status', 1], ['users.fcm_notification', 1], ['users.approval_status', 'accepted'], ['users.deleted_at', NULL]])
+                    ->leftjoin('customer_devices', 'customer_devices.user_id', '=', 'users.id')
+                    ->get();
+
+
+                if (!empty($userFcmData)) {
+                    $device_ids = array();
+                    foreach ($userFcmData as $key => $val) {
+                        array_push($device_ids, $val->fcm_id);
+                    }
+                    sendFcmNotification($device_ids, $notificationData, 'customer');
+                }
+            }
+        }
     }
 }
