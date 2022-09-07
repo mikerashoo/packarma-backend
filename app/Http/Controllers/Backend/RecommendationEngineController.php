@@ -265,23 +265,30 @@ class RecommendationEngineController extends Controller
      */
     private function validateRequest(Request $request)
     {
-        return \Validator::make($request->all(), [
-            'packaging_solution' => 'required|string|unique:recommendation_engines,engine_name,' . $request->id . ',id',
-            'structure_type' => 'required|string',
-            'product' => 'required|integer',
-            // 'min_shelf_life' => 'required|integer',
-            // 'max_shelf_life' => 'required|integer',
-            'display_shelf_life' => 'required|integer',
-            'measurement_unit' => 'required|integer',
-            'min_weight' => 'required|numeric',
-            'max_weight' => 'required|numeric',
-            'product_category' => 'required|integer',
-            'product_form' => 'required|integer',
-            'packing_type' => 'required|integer',
-            'packaging_machine' => 'required|integer',
-            'packaging_treatment' => 'required|integer',
-            'packaging_material' => 'required|integer',
-            'storage_condition' => 'required|integer'
-        ])->errors();
+        return \Validator::make(
+            $request->all(),
+            [
+                'packaging_solution' => 'required|string|unique:recommendation_engines,engine_name,' . $request->id . ',id',
+                'structure_type' => 'required|string',
+                'product' => 'required|integer',
+                // 'min_shelf_life' => 'required|integer',
+                // 'max_shelf_life' => 'required|integer',
+                'display_shelf_life' => 'required|integer',
+                'measurement_unit' => 'required|integer',
+                'min_weight' => 'required|numeric',
+                'max_weight' => 'required|numeric',
+                'product_category' => 'required|integer',
+                'product_form' => 'required|integer',
+                'packing_type' => 'required|integer',
+                'packaging_machine' => 'required|integer',
+                'packaging_treatment' => 'required|integer',
+                'packaging_material' => 'required|integer',
+                'storage_condition' => 'required|integer'
+            ],
+            [
+                'packaging_solution.unique' => 'Packaging solution name already exist'
+
+            ]
+        )->errors();
     }
 }
