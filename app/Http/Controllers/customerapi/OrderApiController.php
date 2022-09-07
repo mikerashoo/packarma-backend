@@ -619,12 +619,12 @@ class OrderApiController extends Controller
                 }
 
 
-
-                if ($shelf_life_unit == 'months') {
-                    $request['shelf_life'] = $shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
-                } else {
-                    $request['shelf_life'] =  $shelf_life;
-                }
+                $request['shelf_life'] =  $shelf_life;
+                // if ($shelf_life_unit == 'months') {
+                //     $request['shelf_life'] = $shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
+                // } else {
+                //     $request['shelf_life'] =  $shelf_life;
+                // }
 
 
                 //adding additional data in request order
@@ -649,18 +649,16 @@ class OrderApiController extends Controller
                 if ($request->same_address_checkbox == 'yes') {
                     //checking address_id required
                     $user_address_id = 0;
-                    if(isset($request->user_billing_address_id) && !empty($request->user_billing_address_id)){
+                    if (isset($request->user_billing_address_id) && !empty($request->user_billing_address_id)) {
                         $user_address_id = $request->user_billing_address_id;
-                    }
-                    elseif(isset($request->user_shipping_address_id) && !empty($request->user_shipping_address_id)){
+                    } elseif (isset($request->user_shipping_address_id) && !empty($request->user_shipping_address_id)) {
                         $user_address_id = $request->user_shipping_address_id;
-                    }
-                    else{
+                    } else {
                         errorMessage(__('user_address.user_billing_or_shipping_address_is_required'), $msg_data);
                     }
                     $billing_address_data = UserAddress::find($user_address_id);
 
-                    if($billing_address_data->type == 'shipping'){
+                    if ($billing_address_data->type == 'shipping') {
                         $billing_address_data->gstin = $user_data->gstin;
                     }
 
@@ -670,12 +668,11 @@ class OrderApiController extends Controller
                     $billing_country_data = Country::find($shipping_address_data->country_id);
                     $shipping_state_data = State::find($shipping_address_data->state_id);
                     $shipping_country_data = Country::find($shipping_address_data->country_id);
-                    
-                } elseif($request->same_address_checkbox == 'no') {
-                    if(!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)){
+                } elseif ($request->same_address_checkbox == 'no') {
+                    if (!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)) {
                         errorMessage(__('user_address.user_billing_address_is_required'), $msg_data);
                     }
-                    if(!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)){
+                    if (!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)) {
                         errorMessage(__('user_address.user_shipping_address_is_required'), $msg_data);
                     }
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
@@ -759,7 +756,7 @@ class OrderApiController extends Controller
                 $order_request_data['product_details'] = json_encode($product_detail);
                 $order_request_data['shipping_details'] = json_encode($shipping_detail);
                 $order_request_data['billing_details'] = json_encode($billing_detail);
-                
+
                 $newOrderData = Order::create($order_request_data);
                 CustomerEnquiry::where('id', $request->customer_enquiry_id)->update(['quote_type' => 'order']);
                 $newOrderData->odr_id = getFormatid($newOrderData->id, 'orders');
