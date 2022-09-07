@@ -405,6 +405,7 @@ class OrderController extends Controller
             \Log::info("Order Invoice Generation Starts " . Carbon::now()->format('H:i:s:u'));
             $main_table = 'orders';
             $id = Crypt::decrypt($enc_id);
+            $orderFormatedId = getFormatid($id, 'orders');
             $data = DB::table('orders')->select(
                 'orders.id',
                 'orders.product_weight',
@@ -515,12 +516,14 @@ class OrderController extends Controller
 
 
             $adminBankName = GeneralSetting::where("type", 'admin_bank_name')->first();
+            $adminAccountName = GeneralSetting::where("type", 'admin_benificiary_name')->first();
             $adminBankAccountNo = GeneralSetting::where("type", 'admin_account_no')->first();
             $adminBankIfsc = GeneralSetting::where("type", 'admin_ifsc')->first();
 
 
             $result = [
                 'data' => $data,
+                'orderFormatedId' => $orderFormatedId,
                 'invoice_date' => $invoice_date,
                 'order_date' => $order_date,
                 'delivery_date' => $delivery_date,
@@ -543,9 +546,11 @@ class OrderController extends Controller
                 'in_words' => $in_words,
                 'financialYear' => $financialYear,
                 'admin_bank_name' => $adminBankName->value ?? '',
+                'admin_benificiary_name' => $adminAccountName->value ?? '',
                 'admin_account_no' => $adminBankAccountNo->value ?? '',
                 'admin_ifsc' => $adminBankIfsc->value ?? '',
-                'no_image' => getFile('packarma_logo.svg', 'notification'),
+                // 'no_image' => getFile('packarma_logo.png', 'notification'),
+                'no_image' => URL::to('/') . '/public/backend/img/Packarma_logo.png',
             ];
             // $result['data'] = $data;
             // echo '<pre>';
