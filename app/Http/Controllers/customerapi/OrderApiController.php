@@ -620,12 +620,16 @@ class OrderApiController extends Controller
 
 
                 $request['shelf_life'] =  $shelf_life;
-                // if ($shelf_life_unit == 'months') {
-                //     $request['shelf_life'] = $shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
-                // } else {
-                //     $request['shelf_life'] =  $shelf_life;
-                // }
+                if ($shelf_life_unit == 'months') {
+                    $entered_shelf_life = $shelf_life / config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
+                } else {
+                    $entered_shelf_life =  $shelf_life;
+                }
 
+                $display_shelf_life =  DB::table('customer_enquiries')
+                    ->where('customer_enquiries.id', $customer_enquiry_id)
+                    ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->value('display_shelf_life');
 
                 //adding additional data in request order
                 $order_request_data = $request->all();
@@ -704,8 +708,9 @@ class OrderApiController extends Controller
                     "category_id" => $request->category_id,
                     "sub_category_id" => $request->sub_category_id,
                     "product_id" => $request->product_id,
+                    "display_shelf_life" => $display_shelf_life,
                     "shelf_life" => $request->shelf_life,
-                    "entered_shelf_life" => $shelf_life,
+                    "entered_shelf_life" => $entered_shelf_life,
                     "entered_shelf_life_unit" => $shelf_life_unit,
                     "product_weight" => $request->product_weight,
                     "measurement_unit_id" => $request->measurement_unit_id,

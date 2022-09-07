@@ -33,9 +33,9 @@ return [
     'phone_already_registered' => 'Phone number ia already registered please use another number',
     'not_found' => 'User Not Found',
     'status_fetched' => 'Your Status Fetched Successfully',
-    'load_page_require' => 'Load page is require',
-    'contact_us_stored' => 'Your Contact Details Recorded Will get back to you soon',
+    'load_page_require' => 'Some error occured please try again',
+    'contact_us_stored' => 'Your contact details are recorded will get back to you soon',
     'email_already_exit' => 'Email already registered',
-    'no_active_subscription' => 'You need to have an active subscription to place the enquiry. Would you like to buy subscription ?'
-
+    'no_active_subscription' => 'You need to have an active subscription to place the enquiry. Would you like to buy subscription ?',
+    'imei_not_found' => 'Please try again later',
 ];
