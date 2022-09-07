@@ -280,6 +280,7 @@ class OrderApiController extends Controller
                     'orders.recommendation_engine_id',
                     'recommendation_engines.engine_name',
                     'recommendation_engines.structure_type',
+                    'recommendation_engines.display_shelf_life',
                     'orders.customer_payment_status',
                     'orders.order_delivery_status',
                     'orders.created_at',

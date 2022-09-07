@@ -326,16 +326,15 @@ class EnquiryApiController extends Controller
             if (!empty($notificationData)) {
                 $enqFormattedId = getFormatid($enquiry_id);
                 $notificationData['type_id'] = $enquiry_id;
+                $notificationData['image_path'] = '';
 
                 $materialData = DB::table('customer_enquiries')
                     ->select('packaging_materials.packaging_material_name')
                     ->where([['customer_enquiries.id', $enquiry_id], ['customer_enquiries.deleted_at', NULL]])
                     ->leftjoin('packaging_materials', 'customer_enquiries.packaging_material_id', '=', 'packaging_materials.id')->first();
 
-                if (!empty($notificationData['image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['image'])) {
-                    $notificationData['image_path'] = getFile($notificationData['image'], 'notification/customer');
-                } else {
-                    $notificationData['image_path'] = getFile('packarma_logo.svg', 'notification');
+                if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['notification_image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/customer');
                 }
 
                 if (empty($notificationData['page_name'])) {

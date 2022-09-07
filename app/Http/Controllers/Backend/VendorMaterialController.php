@@ -298,11 +298,9 @@ class VendorMaterialController extends Controller
 
             if (!empty($notificationData)) {
                 $notificationData['type_id'] = $material_id;
-
-                if (!empty($notificationData['image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['image'])) {
-                    $notificationData['image_path'] = getFile($notificationData['image'], 'notification/vendor');
-                } else {
-                    $notificationData['image_path'] = getFile('packarma_logo.png', 'notification');
+                $notificationData['image_path'] = '';
+                if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['notification_image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
                 }
 
                 if (empty($notificationData['page_name'])) {
