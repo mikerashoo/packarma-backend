@@ -270,9 +270,6 @@ class EnquiryApiController extends Controller
                 \Log::info("Quotation sent successfully!");
 
                 // trigger notification to customer
-
-
-
                 $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_customer_fcm_notification')->value('value');
                 if ($can_send_fcm_notification == 1) {
                     $enquiry_id = $checkQuotation->customer_enquiry_id;

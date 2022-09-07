@@ -31,6 +31,7 @@ return [
     'phone_cant_update' => 'You can not change your phone no',
     'not_found' => 'No details Found',
     'status_fetched' => 'Your Status Fetched Successfully',
-    'load_page_require' => 'Load page is require',
-    'contact_us_stored' => 'Your Contact Details Recorded Will get back to you soon',
+    'load_page_require' => 'Some error occured please try again',
+    'contact_us_stored' => 'Your contact details are recorded will get back to you soon',
+    'imei_not_found' => 'Please try again later',
 ];

@@ -77,6 +77,7 @@ class OrderApiController extends Controller
                     'packaging_treatments.packaging_treatment_name',
                     'recommendation_engines.engine_name',
                     'recommendation_engines.structure_type',
+                    'recommendation_engines.display_shelf_life',
                     'recommendation_engines.min_shelf_life',
                     'recommendation_engines.max_shelf_life',
                     'packaging_materials.packaging_material_name',
