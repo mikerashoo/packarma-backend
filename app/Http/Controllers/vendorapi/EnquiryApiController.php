@@ -4,6 +4,7 @@ namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
 use App\Models\MessageNotification;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 use App\Models\VendorQuotation;
 use Illuminate\Support\Carbon;
