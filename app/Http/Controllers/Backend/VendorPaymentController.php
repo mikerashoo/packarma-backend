@@ -9,6 +9,10 @@ use App\Models\VendorPayment;
 use App\Models\Order;
 use App\Models\Vendor;
 use Yajra\DataTables\DataTables;
+use App\Models\MessageNotification;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\DB;
+
 
 class VendorPaymentController extends Controller
 {
@@ -180,9 +184,6 @@ class VendorPaymentController extends Controller
             }
         }
 
-
-
-
         $tableObject  = new VendorPayment;
         $tableObject->vendor_id = $request->vendor;
         $tableObject->order_id = $request->order_id;
@@ -195,6 +196,7 @@ class VendorPaymentController extends Controller
         } else {
             $tableObject->remark = '';
         }
+        // print_r($request->vendor);exit;
         $tableObject->created_at = date('Y-m-d H:i:s');
         $tableObject->created_by =  session('data')['id'];
         $tableObject->save();
@@ -205,11 +207,61 @@ class VendorPaymentController extends Controller
         Order::where('id',  $request->order_id)->decrement('vendor_pending_payment', $request->amount);
         if (($request->payment_status == 'fully_paid') && ($request_number == $vendor_pending_payment)) {
             Order::where('id', $request->order_id)->update(['vendor_payment_status' => 'fully_paid']);
+            
+            // send fcm notification to vendor of after payment updated
+            $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_vendor_fcm_notification')->value('value');
+            if ($can_send_fcm_notification == 1) {
+                $this->callPaymentUpdatedFcmNotification($request->vendor, $request->order_id);
+            }
             successMessage($msg, $msg_data);
+        }
+
+        // send fcm notification to vendor of after payment updated
+        $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_vendor_fcm_notification')->value('value');
+        if ($can_send_fcm_notification == 1) {
+            $this->callPaymentUpdatedFcmNotification($request->vendor, $request->order_id);
         }
         successMessage($msg, $msg_data);
     }
 
+    /*
+    *Created By: Pradyumn, 
+    *Created At : 8-sept-2022, 
+    *uses: Payment update fcm notification send to vendor
+    */
+    private function callPaymentUpdatedFcmNotification($vendor_id, $order_id)
+    {
+        $landingPage = 'VendorPayments';
+        if ((!empty($vendor_id) && $vendor_id > 0) && (!empty($order_id) && $order_id > 0)) {
+            $notificationData = MessageNotification::where([['user_type', 'vendor'], ['notification_name', 'vendor_payment_update'], ['status', 1]])->first();
+            
+            if (!empty($notificationData)) {
+                $notificationData['type_id'] = $order_id;
+                
+                if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['notification_image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
+                }
+
+                if (empty($notificationData['page_name'])) {
+                    $notificationData['page_name'] = $landingPage;
+                }
+
+                $formatted_id = getFormatid($order_id, 'orders');
+                $notificationData['body'] = str_replace('$$order_id$$', $formatted_id, $notificationData['body']);
+                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
+                    ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted'], ['vendors.deleted_at', NULL]])
+                    ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
+                    ->get();
+                if (!empty($userFcmData)) {
+                    $device_ids = array();
+                    foreach ($userFcmData as $key => $val) {
+                        array_push($device_ids, $val->fcm_id);
+                    }
+                    sendFcmNotification($device_ids, $notificationData);
+                }
+            }
+        }
+    }
 
     /**
      *   created by : Pradyumn Dwivedi

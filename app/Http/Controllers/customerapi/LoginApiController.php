@@ -65,6 +65,7 @@ class LoginApiController extends Controller
             if (empty($userData->gst_certificate)) {
                 $userData->gst_certificate =  getFile('default_user_gst_file.png', 'gst_certificate');
             }
+            
             $fcm_id = NULL;
             if ($request->fcm_id && !empty($request->fcm_id)) {
                 $fcm_id = $request->fcm_id;
