@@ -364,7 +364,7 @@ class OrderApiController extends Controller
             $product_name =  DB::table('products')->where('id', $orderData['product_id'])->value('product_name');
 
             $notificationData = MessageNotification::where([['user_type', 'customer'], ['notification_name', 'vendor_update_delivery_status'], ['status', 1]])->first();
-
+            
             if (!empty($notificationData)) {
                 $notificationData['type_id'] = $order_id;
 
@@ -377,13 +377,15 @@ class OrderApiController extends Controller
                 }
 
                 $formatted_id = getFormatid($order_id, 'order');
+                $delivery_status = deliveryStatus($orderData['order_delivery_status']);
                 $notificationData['title'] = str_replace('$$order_id$$', $formatted_id, $notificationData['title']);
                 $notificationData['body'] = str_replace('$$product_name$$', $product_name, $notificationData['body']);
+                $notificationData['body'] = str_replace('$$delivery_status$$', $delivery_status, $notificationData['body']);
                 $userFcmData = DB::table('users')->select('users.id', 'customer_devices.fcm_id')
                     ->where([['users.id', $user_id], ['users.status', 1], ['users.fcm_notification', 1], ['users.approval_status', 'accepted'], ['users.deleted_at', NULL]])
                     ->leftjoin('customer_devices', 'customer_devices.user_id', '=', 'users.id')
                     ->get();
-
+                
                 if (!empty($userFcmData)) {
                     $device_ids = array();
                     foreach ($userFcmData as $key => $val) {
