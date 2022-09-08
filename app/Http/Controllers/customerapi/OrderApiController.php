@@ -280,6 +280,7 @@ class OrderApiController extends Controller
                     'orders.recommendation_engine_id',
                     'recommendation_engines.engine_name',
                     'recommendation_engines.structure_type',
+                    'recommendation_engines.display_shelf_life',
                     'orders.customer_payment_status',
                     'orders.order_delivery_status',
                     'orders.created_at',
@@ -619,13 +620,17 @@ class OrderApiController extends Controller
                 }
 
 
-
+                $request['shelf_life'] =  $shelf_life;
                 if ($shelf_life_unit == 'months') {
-                    $request['shelf_life'] = $shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
+                    $entered_shelf_life = $shelf_life / config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
                 } else {
-                    $request['shelf_life'] =  $shelf_life;
+                    $entered_shelf_life =  $shelf_life;
                 }
 
+                $display_shelf_life =  DB::table('customer_enquiries')
+                    ->where('customer_enquiries.id', $customer_enquiry_id)
+                    ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->value('display_shelf_life');
 
                 //adding additional data in request order
                 $order_request_data = $request->all();
@@ -649,21 +654,19 @@ class OrderApiController extends Controller
                 if ($request->same_address_checkbox == 'yes') {
                     //checking address_id required
                     $user_address_id = 0;
-                    if(isset($request->user_billing_address_id) && !empty($request->user_billing_address_id)){
+                    if (isset($request->user_billing_address_id) && !empty($request->user_billing_address_id)) {
                         $user_address_id = $request->user_billing_address_id;
-                    }
-                    elseif(isset($request->user_shipping_address_id) && !empty($request->user_shipping_address_id)){
+                    } elseif (isset($request->user_shipping_address_id) && !empty($request->user_shipping_address_id)) {
                         $user_address_id = $request->user_shipping_address_id;
-                    }
-                    else{
+                    } else {
                         errorMessage(__('user_address.user_billing_or_shipping_address_is_required'), $msg_data);
                     }
                     $billing_address_data = UserAddress::find($user_address_id);
-                    if(empty($billing_address_data)){
+                    if (empty($billing_address_data)) {
                         errorMessage(__('user_address.address_not_found'), $msg_data);
                     }
 
-                    if($billing_address_data->type == 'shipping'){
+                    if ($billing_address_data->type == 'shipping') {
                         $billing_address_data->gstin = $user_data->gstin;
                     }
 
@@ -673,24 +676,21 @@ class OrderApiController extends Controller
                     $billing_country_data = Country::find($shipping_address_data->country_id);
                     $shipping_state_data = State::find($shipping_address_data->state_id);
                     $shipping_country_data = Country::find($shipping_address_data->country_id);
-                    
-                } elseif($request->same_address_checkbox == 'no') {
-                    if(!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)){
+                } elseif ($request->same_address_checkbox == 'no') {
+                    if (!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)) {
                         errorMessage(__('user_address.user_billing_address_is_required'), $msg_data);
                     }
-                    if(!isset($request->user_shipping_address_id) && empty($request->user_shipping_address_id)){
+                    if (!isset($request->user_shipping_address_id) && empty($request->user_shipping_address_id)) {
                         errorMessage(__('user_address.user_shipping_address_is_required'), $msg_data);
                     }
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
-                    if(empty($billing_address_data)){
+                    if (empty($billing_address_data)) {
                         errorMessage(__('user_address.billing_address_not_found'), $msg_data);
                     }
-
                     $shipping_address_data = UserAddress::find($request->user_shipping_address_id);
-                    if(empty($shipping_address_data)){
+                    if (empty($shipping_address_data)) {
                         errorMessage(__('user_address.shipping_address_not_found'), $msg_data);
                     }
-
                     $billing_state_data = State::find($billing_address_data->state_id);
                     $billing_country_data = Country::find($billing_address_data->country_id);
                     $shipping_state_data = State::find($shipping_address_data->state_id);
@@ -717,8 +717,9 @@ class OrderApiController extends Controller
                     "category_id" => $request->category_id,
                     "sub_category_id" => $request->sub_category_id,
                     "product_id" => $request->product_id,
+                    "display_shelf_life" => $display_shelf_life,
                     "shelf_life" => $request->shelf_life,
-                    "entered_shelf_life" => $shelf_life,
+                    "entered_shelf_life" => $entered_shelf_life,
                     "entered_shelf_life_unit" => $shelf_life_unit,
                     "product_weight" => $request->product_weight,
                     "measurement_unit_id" => $request->measurement_unit_id,
@@ -769,7 +770,7 @@ class OrderApiController extends Controller
                 $order_request_data['product_details'] = json_encode($product_detail);
                 $order_request_data['shipping_details'] = json_encode($shipping_detail);
                 $order_request_data['billing_details'] = json_encode($billing_detail);
-                
+
                 $newOrderData = Order::create($order_request_data);
                 CustomerEnquiry::where('id', $request->customer_enquiry_id)->update(['quote_type' => 'order']);
                 $newOrderData->odr_id = getFormatid($newOrderData->id, 'orders');

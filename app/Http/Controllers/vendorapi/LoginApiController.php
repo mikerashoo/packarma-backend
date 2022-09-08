@@ -103,6 +103,8 @@ class LoginApiController extends Controller
                 $fcm_id = $request->fcm_id;
             }
 
+            // return $fcm_id;
+
             $imei_no = $request->header('imei-no');
             $vendor_token = JWTAuth::fromUser($vendorData);
             $vendors = Vendor::find($vendorData->id);

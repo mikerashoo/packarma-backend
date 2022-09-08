@@ -274,12 +274,15 @@ class MyProfileController extends Controller
                     $fcm_id = $request->fcm_id;
                 }
                 $imei_no = $request->header('imei-no');
-
-                VendorDevice::updateOrCreate(
-                    ['vendor_id' => $vendor_id, 'imei_no' => $imei_no],
-                    ['fcm_id' => $fcm_id]
-                );
-                successMessage(__('vendor.update_successfully'), $msg_data);
+                if (!empty($imei_no)) {
+                    VendorDevice::updateOrCreate(
+                        ['vendor_id' => $vendor_id, 'imei_no' => $imei_no],
+                        ['fcm_id' => $fcm_id]
+                    );
+                    successMessage(__('vendor.update_successfully'), $msg_data);
+                } else {
+                    successMessage(__('vendor.imei_not_found'), $msg_data);
+                }
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }

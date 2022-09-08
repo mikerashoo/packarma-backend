@@ -77,6 +77,7 @@ class OrderApiController extends Controller
                     'packaging_treatments.packaging_treatment_name',
                     'recommendation_engines.engine_name',
                     'recommendation_engines.structure_type',
+                    'recommendation_engines.display_shelf_life',
                     'recommendation_engines.min_shelf_life',
                     'recommendation_engines.max_shelf_life',
                     'packaging_materials.packaging_material_name',
@@ -365,7 +366,7 @@ class OrderApiController extends Controller
             if (!empty($notificationData)) {
                 $notificationData['type_id'] = $order_id;
 
-                if (!empty($notificationData['notification_name']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['notification_image'])) {
+                if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/customer');
                 }
 

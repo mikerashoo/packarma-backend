@@ -20,7 +20,7 @@ return [
     'id_required' => 'Address Id Required',
     'my_address_updated_successfully' => 'Address Updated Successfully',
     'my_address_created_successfully' => 'Address Created Successfully',
-    'address_entry_limit_reached' => 'You can not add more than '.config('global.MAX_USER_ADDRESS_COUNT').' addresses',
+    'address_entry_limit_reached' => 'You can not add more than ' . config('global.MAX_USER_ADDRESS_COUNT') . ' addresses',
     'gst_number_already_exist' => 'Entered GST Number is already registered with us',
     'if_user_type_billing_gst_number_required' => 'GST number is required for address type billing',
     'user_billing_or_shipping_address_is_required' => 'Please Select Billing or Shipping Address',

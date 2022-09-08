@@ -17,7 +17,6 @@ return [
     'update_successfully' => 'Your details updated successfully!',
     'otp_sent' => 'OTP sent successfully.',
     'vendor_already_exist' => 'You are already registered with this phone no or email',
-    'email_already_exist' => 'Email id Already exist',
     'login_failed' => 'Invalid login credentials',
     'logged_in_successfully' => 'Logged in successfully!',
     'same_phone_exist' => 'Same phone no exist with another account!',
@@ -32,7 +31,8 @@ return [
     'phone_cant_update' => 'You can not change your phone no',
     'not_found' => 'No details Found',
     'status_fetched' => 'Your Status Fetched Successfully',
-    'load_page_require' => 'Load page is require',
-    'contact_us_stored' => 'Your Contact Details Recorded Will get back to you soon',
+    'load_page_require' => 'Some error occured please try again',
+    'contact_us_stored' => 'Your contact details are recorded will get back to you soon',
+    'imei_not_found' => 'Please try again later',
 
 ];

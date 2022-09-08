@@ -64,7 +64,7 @@
                                         </div>
                                         <hr style="margin-top: 0;">
                                         <div class="col-sm-12">
-                                            <p class="text-center text-dark">Powered by <a class="text-dark" href="https://www.mypcot.com/" target="_blank">Mypcot Infotech</a></p>
+                                            <p class="text-center text-dark">Crafted by <a class="text-dark" href="https://www.mypcot.com/" target="_blank">Mypcot Infotech</a></p>
                                         </div>
                                     </div>
                                 </div>
