@@ -15,6 +15,7 @@ use App\Models\State;
 use App\Models\Review;
 use App\Models\Country;
 use App\Models\Currency;
+use App\Models\MessageNotification;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\URL;
 use Response;

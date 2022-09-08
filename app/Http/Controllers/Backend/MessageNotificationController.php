@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MessageNotification;
+use Illuminate\Support\Facades\URL;
 use App\Models\Language;
 use Yajra\DataTables\DataTables;
 class MessageNotificationController extends Controller
