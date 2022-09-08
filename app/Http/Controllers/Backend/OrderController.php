@@ -29,6 +29,7 @@ use Yajra\DataTables\DataTables;
 use PDF;
 use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Support\Facades\URL;
+use App\Models\MessageNotification;
 
 class OrderController extends Controller
 {
@@ -220,8 +221,62 @@ class OrderController extends Controller
         $tableObject->updated_at = date('Y-m-d H:i:s');
         $tableObject->updated_by =  session('data')['id'];
         $tableObject->save();
+
+        //fcm notification
+        $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_customer_fcm_notification')->value('value');
+        if ($can_send_fcm_notification == 1) {
+            $this->callOrderDeliveryFcmNotification($deliveryData['user_id'], $deliveryData['id']);
+        }
+
         successMessage($msg, $msg_data);
     }
+
+    /*
+    *Created By: Pradyumn, 
+    *Created At : 9-sept-2022, 
+    *uses: call order delivery fcm notification for admin 
+    */
+    private function callOrderDeliveryFcmNotification($user_id, $order_id)
+    {
+        $landingPage = 'Order';
+        if ((!empty($user_id) && $user_id > 0) && (!empty($order_id) && $order_id > 0)) {
+            $orderData = Order::find($order_id);
+            $product_name =  DB::table('products')->where('id', $orderData['product_id'])->value('product_name');
+
+            $notificationData = MessageNotification::where([['user_type', 'customer'], ['notification_name', 'admin_update_delivery_status'], ['status', 1]])->first();
+
+            if (!empty($notificationData)) {
+                $notificationData['type_id'] = $order_id;
+
+                if (!empty($notificationData['notification_name']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['notification_image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/customer');
+                }
+
+                if (empty($notificationData['page_name'])) {
+                    $notificationData['page_name'] = $landingPage;
+                }
+
+                $formatted_id = getFormatid($order_id, 'order');
+                $delivery_status = deliveryStatus($orderData['order_delivery_status']);
+                $notificationData['title'] = str_replace('$$order_id$$', $formatted_id, $notificationData['title']);
+                $notificationData['body'] = str_replace('$$product_name$$', $product_name, $notificationData['body']);
+                $notificationData['body'] = str_replace('$$delivery_status$$', $delivery_status, $notificationData['body']);
+                $userFcmData = DB::table('users')->select('users.id', 'customer_devices.fcm_id')
+                    ->where([['users.id', $user_id], ['users.status', 1], ['users.fcm_notification', 1], ['users.approval_status', 'accepted'], ['users.deleted_at', NULL]])
+                    ->leftjoin('customer_devices', 'customer_devices.user_id', '=', 'users.id')
+                    ->get();
+                    
+                if (!empty($userFcmData)) {
+                    $device_ids = array();
+                    foreach ($userFcmData as $key => $val) {
+                        array_push($device_ids, $val->fcm_id);
+                    }
+                    sendFcmNotification($device_ids, $notificationData, 'customer');
+                }
+            }
+        }
+    }
+
 
     /**
      *   created by : Pradyumn Dwivedi

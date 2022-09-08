@@ -335,10 +335,8 @@ class EnquiryApiController extends Controller
                     ->where([['customer_enquiries.id', $enquiry_id], ['customer_enquiries.deleted_at', NULL]])
                     ->leftjoin('packaging_materials', 'customer_enquiries.packaging_material_id', '=', 'packaging_materials.id')->first();
 
-                if (!empty($notificationData['image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['image'])) {
+                if (!empty($notificationData['notification_name']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['notification_name'])) {
                     $notificationData['image_path'] = getFile($notificationData['image'], 'notification/customer');
-                } else {
-                    $notificationData['image_path'] = getFile('packarma_logo.svg', 'notification');
                 }
 
                 if (empty($notificationData['page_name'])) {

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\VendorQuotation;
 use App\Models\CustomerEnquiry;
+use App\Models\MessageNotification;
+use Illuminate\Support\Facades\URL;
 use Response;
 
 class CustomerQuoteApiController extends Controller
@@ -166,6 +168,7 @@ class CustomerQuoteApiController extends Controller
                         errorMessage(__('customer_quote.quotation_already_accepted'), $msg_data);
                     }
                     $quotationEnquiryStatusData = VendorQuotation::find($request->vendor_quotation_id)->update($request->all());
+                    // return "quotationEnquiryStatusData";
                     \Log::info("Customer Quotation Accepted Successfully");
                     if ($quotationEnquiryStatusData) {
                         $data = DB::table('vendor_quotations')->select(
@@ -212,6 +215,12 @@ class CustomerQuoteApiController extends Controller
                             $data[0]->igst_amount = $data[0]->gst_amount;
                         }
                         $responseData['result'] = $data;
+
+                        // send fcm notification to vendor of accepted their quote
+                        $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_vendor_fcm_notification')->value('value');
+                        if ($can_send_fcm_notification == 1) {
+                            $this->callQuoteAcceptedFcmNotification($data[0]->vendor_id, $data[0]->customer_enquiry_id);
+                        }
                         successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                     }
                 }
@@ -221,6 +230,47 @@ class CustomerQuoteApiController extends Controller
         } catch (\Exception $e) {
             \Log::error("Quotation fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    /*
+    *Created By: Pradyumn, 
+    *Created At : 7-sept-2022, 
+    *uses: customer accepted quote fcm notification send to vendor
+    */
+    private function callQuoteAcceptedFcmNotification($vendor_id, $customer_enquiry_id)
+    {
+        $landingPage = 'EnquiryDetails';
+        if ((!empty($vendor_id) && $vendor_id > 0) && (!empty($customer_enquiry_id) && $customer_enquiry_id > 0)) {
+            $notificationData = MessageNotification::where([['user_type', 'vendor'], ['notification_name', 'customer_accepted_quotation'], ['status', 1]])->first();
+
+            if (!empty($notificationData)) {
+                $notificationData['type_id'] = $customer_enquiry_id;
+
+                if (!empty($notificationData['notification_name']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['notification_image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
+                }
+
+                if (empty($notificationData['page_name'])) {
+                    $notificationData['page_name'] = $landingPage;
+                }
+
+                $formatted_id = getFormatid($customer_enquiry_id);
+                $notificationData['title'] = str_replace('$$customer_enquiry_id$$', $formatted_id, $notificationData['title']);
+                $notificationData['body'] = str_replace('$$customer_enquiry_id$$', $formatted_id, $notificationData['body']);
+                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
+                    ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted'], ['vendors.deleted_at', NULL]])
+                    ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
+                    ->get();
+                if (!empty($userFcmData)) {
+                    $device_ids = array();
+                    foreach ($userFcmData as $key => $val) {
+                        array_push($device_ids, $val->fcm_id);
+                    }
+                    // print_r($userFcmData);exit;
+                    sendFcmNotification($device_ids, $notificationData);
+                }
+            }
         }
     }
 

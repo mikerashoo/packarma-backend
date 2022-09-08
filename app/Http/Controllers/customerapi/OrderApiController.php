@@ -659,6 +659,9 @@ class OrderApiController extends Controller
                         errorMessage(__('user_address.user_billing_or_shipping_address_is_required'), $msg_data);
                     }
                     $billing_address_data = UserAddress::find($user_address_id);
+                    if(empty($billing_address_data)){
+                        errorMessage(__('user_address.address_not_found'), $msg_data);
+                    }
 
                     if($billing_address_data->type == 'shipping'){
                         $billing_address_data->gstin = $user_data->gstin;
@@ -675,12 +678,19 @@ class OrderApiController extends Controller
                     if(!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)){
                         errorMessage(__('user_address.user_billing_address_is_required'), $msg_data);
                     }
-                    if(!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)){
+                    if(!isset($request->user_shipping_address_id) && empty($request->user_shipping_address_id)){
                         errorMessage(__('user_address.user_shipping_address_is_required'), $msg_data);
                     }
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
+                    if(empty($billing_address_data)){
+                        errorMessage(__('user_address.billing_address_not_found'), $msg_data);
+                    }
 
                     $shipping_address_data = UserAddress::find($request->user_shipping_address_id);
+                    if(empty($shipping_address_data)){
+                        errorMessage(__('user_address.shipping_address_not_found'), $msg_data);
+                    }
+
                     $billing_state_data = State::find($billing_address_data->state_id);
                     $billing_country_data = Country::find($billing_address_data->country_id);
                     $shipping_state_data = State::find($shipping_address_data->state_id);
@@ -810,8 +820,8 @@ class OrderApiController extends Controller
             'recommendation_engine_id' => 'required|integer',
             'packaging_material_id' => 'required|integer',
             'same_address_checkbox' => 'required|in:yes,no',
-            'user_billing_address_id' => 'nullable|integer',
-            'user_shipping_address_id' => 'required_if:same_address_checkbox,==,no|integer',
+            // 'user_billing_address_id' => 'nullable|integer',
+            // 'user_shipping_address_id' => 'required_if:same_address_checkbox,==,no|integer',
         ])->errors();
     }
 

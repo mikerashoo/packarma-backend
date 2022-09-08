@@ -28,6 +28,8 @@ use App\Models\PackagingMaterial;
 use App\Models\RecommendationEngine;
 use App\Models\VendorMaterialMapping;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+use App\Models\MessageNotification;
 
 class CustomerEnquiryController extends Controller
 {
@@ -424,13 +426,56 @@ class CustomerEnquiryController extends Controller
         $final_val = $tblObj->toarray();
         VendorQuotation::updateOrCreate(['id' => $request->id], $final_val);
         CustomerEnquiry::where('id', $request->customer_enquiry_id)->update(['quote_type' => 'map_to_vendor']);
+
+        //send fcm notification to vendor after enquiry mapped to vendor
+        $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_vendor_fcm_notification')->value('value');
+        if ($can_send_fcm_notification == 1) {
+            $this->callEnquiryMappedFcmNotification($request->vendor, $request->customer_enquiry_id);
+        }
         successMessage($msg, $msg_data);
     }
 
+    /*
+    *Created By: Pradyumn, 
+    *Created At : 7-sept-2022, 
+    *uses: order delivery fcm notification for admin 
+    */
+    private function callEnquiryMappedFcmNotification($vendor_id, $customer_enquiry_id)
+    {
+        $landingPage = 'EnquiryDetails';
+        if ((!empty($vendor_id) && $vendor_id > 0) && (!empty($customer_enquiry_id) && $customer_enquiry_id > 0)) {
+            $notificationData = MessageNotification::where([['user_type', 'vendor'], ['notification_name', 'enquiry_mapped_to_vendor'], ['status', 1]])->first();
 
+            if (!empty($notificationData)) {
+                $notificationData['type_id'] = $customer_enquiry_id;
 
+                if (!empty($notificationData['notification_name']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['notification_image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
+                }
 
+                if (empty($notificationData['page_name'])) {
+                    $notificationData['page_name'] = $landingPage;
+                }
 
+                $formatted_id = getFormatid($customer_enquiry_id);
+                // $notificationData['title'] = str_replace('$$enquiry_id$$', $formatted_id, $notificationData['title']);
+                $notificationData['body'] = str_replace('$$customer_enquiry_id$$', $formatted_id, $notificationData['body']);
+                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
+                    ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted'], ['vendors.deleted_at', NULL]])
+                    ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
+                    ->get();
+
+                if (!empty($userFcmData)) {
+                    $device_ids = array();
+                    foreach ($userFcmData as $key => $val) {
+                        array_push($device_ids, $val->fcm_id);
+                    }
+
+                    sendFcmNotification($device_ids, $notificationData);
+                }
+            }
+        }
+    }
 
     /**
      *   created by : Pradyumn Dwivedi

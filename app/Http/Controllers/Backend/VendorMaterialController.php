@@ -14,6 +14,8 @@ use App\Models\VendorMaterialMapping;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
+
 
 class VendorMaterialController extends Controller
 {
@@ -298,10 +300,8 @@ class VendorMaterialController extends Controller
             if (!empty($notificationData)) {
                 $notificationData['type_id'] = $material_id;
 
-                if (!empty($notificationData['image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['image'])) {
-                    $notificationData['image_path'] = getFile($notificationData['image'], 'notification/vendor');
-                } else {
-                    $notificationData['image_path'] = getFile('packarma_logo.svg', 'notification');
+                if (!empty($notificationData['notification_name']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['notification_image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
                 }
 
                 if (empty($notificationData['page_name'])) {

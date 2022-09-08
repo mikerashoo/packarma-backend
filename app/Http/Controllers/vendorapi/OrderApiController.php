@@ -332,6 +332,12 @@ class OrderApiController extends Controller
 
                 \Log::info("Order delivery status Updated successfully!");
 
+                //fcm notification
+                $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_customer_fcm_notification')->value('value');
+                if ($can_send_fcm_notification == 1) {
+                    $this->callOrderDeliveryFcmNotification($checkOrder['user_id'], $checkOrder['id']);
+                }
+
                 successMessage(__('order.updated'), $order);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
@@ -339,6 +345,50 @@ class OrderApiController extends Controller
         } catch (\Exception $e) {
             \Log::error("Order delivery status Updation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    /*
+    *Created By: Pradyumn Dwivedi
+    *Created At : 9-sept-2022 
+    *uses: call order delivery fcm notification 
+    */
+    private function callOrderDeliveryFcmNotification($user_id, $order_id)
+    {
+        $landingPage = 'Order';
+        if ((!empty($user_id) && $user_id > 0) && (!empty($order_id) && $order_id > 0)) {
+            $orderData = Order::find($order_id);
+            $product_name =  DB::table('products')->where('id', $orderData['product_id'])->value('product_name');
+
+            $notificationData = MessageNotification::where([['user_type', 'customer'], ['notification_name', 'vendor_update_delivery_status'], ['status', 1]])->first();
+
+            if (!empty($notificationData)) {
+                $notificationData['type_id'] = $order_id;
+
+                if (!empty($notificationData['notification_name']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['notification_image'])) {
+                    $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/customer');
+                }
+
+                if (empty($notificationData['page_name'])) {
+                    $notificationData['page_name'] = $landingPage;
+                }
+
+                $formatted_id = getFormatid($order_id, 'order');
+                $notificationData['title'] = str_replace('$$order_id$$', $formatted_id, $notificationData['title']);
+                $notificationData['body'] = str_replace('$$product_name$$', $product_name, $notificationData['body']);
+                $userFcmData = DB::table('users')->select('users.id', 'customer_devices.fcm_id')
+                    ->where([['users.id', $user_id], ['users.status', 1], ['users.fcm_notification', 1], ['users.approval_status', 'accepted'], ['users.deleted_at', NULL]])
+                    ->leftjoin('customer_devices', 'customer_devices.user_id', '=', 'users.id')
+                    ->get();
+
+                if (!empty($userFcmData)) {
+                    $device_ids = array();
+                    foreach ($userFcmData as $key => $val) {
+                        array_push($device_ids, $val->fcm_id);
+                    }
+                    sendFcmNotification($device_ids, $notificationData, 'customer');
+                }
+            }
         }
     }
 }
