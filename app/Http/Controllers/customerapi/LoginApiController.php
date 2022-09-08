@@ -70,7 +70,7 @@ class LoginApiController extends Controller
                 $fcm_id = $request->fcm_id;
             }
 
-            $imei_no = $request->header('device-id');
+            $imei_no = $request->header('imei-no');
             $token = JWTAuth::fromUser($userData);
             $users = User::find($userData->id);
             $userData->last_login = $users->last_login = Carbon::now();

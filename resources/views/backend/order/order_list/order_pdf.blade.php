@@ -26,20 +26,15 @@
     </tr>
     <tr class="table_row">
         <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black;">Invoice No: {{$financialYear}}/{{$data->id}}</td>
-        <td width="33.33%" style="border-left-color: black;border-top-color: black;border-right-color: black;"></td>
+        <td width="33.33%" style="border-left-color: black;border-top-color: black;border-right-color: black;">Order No: {{$financialYear}}/{{$data->id}}</td>
         <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">State: Maharashtra</td>
     </tr>
     <tr class="table_row">
         <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black;">Invoice Date: {{$invoice_date}}</td>
-        <td width="33.33%" style="border-left-color: black;border-top-color: black;border-right-color: black;"></td>
+        <td width="33.33%" style="border-left-color: black;border-top-color: black;border-right-color: black;">Order Date: {{$order_date}} </td>
         <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">State Code: IN-MH</td>
     </tr>
-     <tr class="table_row">
-        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black;">Order No: {{$financialYear}}/{{$data->id}}</td>
-        {{-- <td width="25%" style="border-left-color: black;border-top-color: black;border-right-color: black;">Sub Order No: 1041813601</td> --}}
-        <td width="33.33%" style="border-top-color: black; border-left-color: black;">Order Date: {{$order_date}} </td>
-        <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-left-color: black;">DOD: {{$delivery_date}}</td>
-    </tr>
+    
     <tr >
         <td width="50%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black; border-bottom-color: black; text-align:center; background-color:#bdd8f0;"><b>Bill to Party</b></td>
         <td width="50%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; text-align:center; border-bottom-color: black; background-color:#bdd8f0;"><b>Ship to Party</b></td>
@@ -142,7 +137,7 @@
     </tr>
       <tr class="table_row">
         <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black;">Bank Details</td>
-        <td width="33.33%" style="border-left-color: black;border-top-color: black;border-right-color: black;">2611936</td>
+        <td width="33.33%" style="border-left-color: black;border-top-color: black;border-right-color: black;">Order id : {{$orderFormatedId ?? '-'}}</td>
         <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">State: Maharashtra</td>
     </tr>
      <tr class="table_row">
@@ -151,9 +146,14 @@
         <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">Ceritified that the particular given above are true and correct</td>
     </tr>
      <tr class="table_row">
-        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Bank A/C: {{$admin_account_no ?? '-'}}</td>
+        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Bank A/C No.: {{$admin_account_no ?? '-'}}</td>
         <td width="33.33%" style="border-left-color: border-right-color: black;"></td>
         <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-left-color: black; text-align:center">For Packarma</td>
+    </tr>
+    <tr class="table_row">
+        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Account Name : {{$admin_benificiary_name ?? '-'}}</td>
+        <td width="33.33%" style="border-left-color: border-right-color: black;"></td>
+        <td width="33.33%" style="border-left-color:black; border-right-color: red;"></td>
     </tr>
      <tr class="table_row">
         <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: rgb(207, 2, 2);border-right-color: black;">Bank IFSC: {{$admin_ifsc ?? '-'}}</td>
