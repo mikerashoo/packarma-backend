@@ -430,7 +430,7 @@ class CustomerEnquiryController extends Controller
         //send fcm notification to vendor after enquiry mapped to vendor
         $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_vendor_fcm_notification')->value('value');
         if ($can_send_fcm_notification == 1) {
-            $this->callEnquiryMappedFcmNotification($request->vendor, $request->customer_enquiry_id);
+            $this->callEnquiryMappedFcmNotification($request->vendor, $request->id);
         }
         successMessage($msg, $msg_data);
     }
@@ -440,14 +440,14 @@ class CustomerEnquiryController extends Controller
     *Created At : 7-sept-2022, 
     *uses: order delivery fcm notification for admin 
     */
-    private function callEnquiryMappedFcmNotification($vendor_id, $customer_enquiry_id)
+    private function callEnquiryMappedFcmNotification($vendor_id, $vendor_quotation_id)
     {
         $landingPage = 'EnquiryDetails';
-        if ((!empty($vendor_id) && $vendor_id > 0) && (!empty($customer_enquiry_id) && $customer_enquiry_id > 0)) {
+        if ((!empty($vendor_id) && $vendor_id > 0) && (!empty($vendor_quotation_id) && $vendor_quotation_id > 0)) {
             $notificationData = MessageNotification::where([['user_type', 'vendor'], ['notification_name', 'enquiry_mapped_to_vendor'], ['status', 1]])->first();
 
             if (!empty($notificationData)) {
-                $notificationData['type_id'] = $customer_enquiry_id;
+                $notificationData['type_id'] = $vendor_quotation_id;
 
                 if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
@@ -457,9 +457,9 @@ class CustomerEnquiryController extends Controller
                     $notificationData['page_name'] = $landingPage;
                 }
 
-                $formatted_id = getFormatid($customer_enquiry_id);
+                $formatted_quotation_id = getFormatid($vendor_quotation_id, 'vendor_quotations');
                 // $notificationData['title'] = str_replace('$$enquiry_id$$', $formatted_id, $notificationData['title']);
-                $notificationData['body'] = str_replace('$$customer_enquiry_id$$', $formatted_id, $notificationData['body']);
+                $notificationData['body'] = str_replace('$$vendor_quotation_id$$', $formatted_quotation_id, $notificationData['body']);
                 $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
                     ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted'], ['vendors.deleted_at', NULL]])
                     ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
