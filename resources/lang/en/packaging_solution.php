@@ -14,4 +14,5 @@ return [
     */
 
     'packaging_solution_not_found' => 'Packaging Solution Not Found',
+    'packaging_solution_already_exit_for_selected_product_and_material' => 'Packaging Solution already exist for selected product and material'
 ];

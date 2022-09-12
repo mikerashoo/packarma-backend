@@ -225,7 +225,7 @@ class OrderController extends Controller
         //fcm notification
         $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_customer_fcm_notification')->value('value');
         if ($can_send_fcm_notification == 1) {
-            $this->callOrderDeliveryFcmNotification($deliveryData['user_id'], $deliveryData['id']);
+            $this->callAdminOrderDeliveryFcmNotification($deliveryData['user_id'], $deliveryData['id']);
         }
 
         successMessage($msg, $msg_data);
@@ -236,7 +236,7 @@ class OrderController extends Controller
     *Created At : 9-sept-2022, 
     *uses: call order delivery fcm notification for admin 
     */
-    private function callOrderDeliveryFcmNotification($user_id, $order_id)
+    private function callAdminOrderDeliveryFcmNotification($user_id, $order_id)
     {
         $landingPage = 'Order';
         if ((!empty($user_id) && $user_id > 0) && (!empty($order_id) && $order_id > 0)) {

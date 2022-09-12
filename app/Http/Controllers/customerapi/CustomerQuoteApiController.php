@@ -219,7 +219,7 @@ class CustomerQuoteApiController extends Controller
                         // send fcm notification to vendor of accepted their quote
                         $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_vendor_fcm_notification')->value('value');
                         if ($can_send_fcm_notification == 1) {
-                            $this->callQuoteAcceptedFcmNotification($data[0]->vendor_id, $data[0]->customer_enquiry_id);
+                            $this->callQuoteAcceptedFcmNotification($data[0]->vendor_id, $data[0]->id);
                         }
                         successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                     }
@@ -238,14 +238,14 @@ class CustomerQuoteApiController extends Controller
     *Created At : 7-sept-2022, 
     *uses: customer accepted quote fcm notification send to vendor
     */
-    private function callQuoteAcceptedFcmNotification($vendor_id, $customer_enquiry_id)
+    private function callQuoteAcceptedFcmNotification($vendor_id, $vendor_quotation_id)
     {
         $landingPage = 'EnquiryDetails';
-        if ((!empty($vendor_id) && $vendor_id > 0) && (!empty($customer_enquiry_id) && $customer_enquiry_id > 0)) {
+        if ((!empty($vendor_id) && $vendor_id > 0) && (!empty($vendor_quotation_id) && $vendor_quotation_id > 0)) {
             $notificationData = MessageNotification::where([['user_type', 'vendor'], ['notification_name', 'customer_accepted_quotation'], ['status', 1]])->first();
 
             if (!empty($notificationData)) {
-                $notificationData['type_id'] = $customer_enquiry_id;
+                $notificationData['type_id'] = $vendor_quotation_id;
 
                 if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
@@ -255,9 +255,9 @@ class CustomerQuoteApiController extends Controller
                     $notificationData['page_name'] = $landingPage;
                 }
 
-                $formatted_id = getFormatid($customer_enquiry_id);
-                $notificationData['title'] = str_replace('$$customer_enquiry_id$$', $formatted_id, $notificationData['title']);
-                $notificationData['body'] = str_replace('$$customer_enquiry_id$$', $formatted_id, $notificationData['body']);
+                $formatted_id = getFormatid($vendor_quotation_id, 'vendor_quotations');
+                $notificationData['title'] = str_replace('$$vendor_quotation_id$$', $formatted_id, $notificationData['title']);
+                $notificationData['body'] = str_replace('$$vendor_quotation_id$$', $formatted_id, $notificationData['body']);
                 $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
                     ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted'], ['vendors.deleted_at', NULL]])
                     ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
