@@ -174,17 +174,18 @@ class RecommendationEngineController extends Controller
         $isEditFlow = false;
         if (isset($_GET['id'])) {
             $isEditFlow = true;
-            $response = RecommendationEngine::where([['engine_name', strtolower($request->engine_name)], ['id', '<>', $_GET['id']]])->get()->toArray();
+            $response = RecommendationEngine::where([['engine_name', strtolower($request->packaging_solution)],['product_id', $request->product],['packaging_material_id', $request->packaging_material], ['id', '<>', $_GET['id']]])->get()->toArray();
             if (isset($response[0])) {
-                errorMessage('Engine Name Already Exist', $msg_data);
+                errorMessage(__('packaging_solution.packaging_solution_already_exit_for_selected_product_and_material'), $msg_data);
             }
             $tableObject = RecommendationEngine::find($_GET['id']);
             $msg = "Data Updated Successfully";
         } else {
             $tableObject = new RecommendationEngine;
-            $response = RecommendationEngine::where([['engine_name', strtolower($request->engine_name)]])->get()->toArray();
+            // print_r($request->packaging_solution);exit;
+            $response = RecommendationEngine::where([['engine_name', strtolower($request->packaging_solution)],['product_id', $request->product],['packaging_material_id', $request->packaging_material]])->get()->toArray();
             if (isset($response[0])) {
-                errorMessage('Engine Name Already Exist', $msg_data);
+                errorMessage(__('packaging_solution.packaging_solution_already_exit_for_selected_product_and_material'), $msg_data);
             }
             $msg = "Data Saved Successfully";
         }
@@ -268,7 +269,7 @@ class RecommendationEngineController extends Controller
         return \Validator::make(
             $request->all(),
             [
-                'packaging_solution' => 'required|string|unique:recommendation_engines,engine_name,' . $request->id . ',id',
+                'packaging_solution' => 'required|string',
                 'structure_type' => 'required|string',
                 'product' => 'required|integer',
                 // 'min_shelf_life' => 'required|integer',
@@ -284,11 +285,6 @@ class RecommendationEngineController extends Controller
                 'packaging_treatment' => 'required|integer',
                 'packaging_material' => 'required|integer',
                 'storage_condition' => 'required|integer'
-            ],
-            [
-                'packaging_solution.unique' => 'Packaging solution name already exist'
-
-            ]
-        )->errors();
+            ])->errors();
     }
 }
