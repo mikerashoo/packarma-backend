@@ -338,7 +338,7 @@ class OrderApiController extends Controller
                 //fcm notification
                 $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_customer_fcm_notification')->value('value');
                 if ($can_send_fcm_notification == 1) {
-                    $this->callOrderDeliveryFcmNotification($checkOrder['user_id'], $checkOrder['id']);
+                    $this->callVendorOrderDeliveryFcmNotification($checkOrder['user_id'], $checkOrder['id']);
                 }
 
                 successMessage(__('order.updated'), $order);
@@ -356,7 +356,7 @@ class OrderApiController extends Controller
     *Created At : 9-sept-2022 
     *uses: call order delivery fcm notification 
     */
-    private function callOrderDeliveryFcmNotification($user_id, $order_id)
+    private function callVendorOrderDeliveryFcmNotification($user_id, $order_id)
     {
         $landingPage = 'Order';
         if ((!empty($user_id) && $user_id > 0) && (!empty($order_id) && $order_id > 0)) {
