@@ -286,6 +286,7 @@ class CustomerEnquiryController extends Controller
 
 
     /**
+     * 
      *   created by : Pradyumn Dwivedi
      *   Created On : 04-April-2022
      *   Uses :  To store customer enquiry map to vendor 
@@ -345,8 +346,6 @@ class CustomerEnquiryController extends Controller
     //     }
     //     successMessage($msg, $msg_data);
     // }
-
-
 
     /**
      *   created by : Pradyumn Dwivedi
@@ -624,8 +623,6 @@ class CustomerEnquiryController extends Controller
         echo $request->ib;
         die;
     }
-
-
 
     /**
      *   created by : Pradyumn Dwivedi
