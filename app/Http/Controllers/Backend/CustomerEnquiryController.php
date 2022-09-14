@@ -423,13 +423,14 @@ class CustomerEnquiryController extends Controller
         $tblObj->lead_time =  $request->lead_time ?? 7;
         $tblObj->created_by = session('data')['id'];
         $final_val = $tblObj->toarray();
-        VendorQuotation::updateOrCreate(['id' => $request->id], $final_val);
+        $quotationData = VendorQuotation::updateOrCreate(['id' => $request->id], $final_val);
+        
         CustomerEnquiry::where('id', $request->customer_enquiry_id)->update(['quote_type' => 'map_to_vendor']);
 
         //send fcm notification to vendor after enquiry mapped to vendor
         $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_vendor_fcm_notification')->value('value');
         if ($can_send_fcm_notification == 1) {
-            $this->callEnquiryMappedFcmNotification($request->vendor, $request->id);
+            $this->callEnquiryMappedFcmNotification($request->vendor, $quotationData->id);
         }
         successMessage($msg, $msg_data);
     }
