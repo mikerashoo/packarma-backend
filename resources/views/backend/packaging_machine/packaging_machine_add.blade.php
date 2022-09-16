@@ -30,7 +30,7 @@
                                     <div class="col-sm-6">
                                         <label>Packaging Machine Image</label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PACKAGING_MACHINE'); ?></p>
-                                        <input type="file" id="packaging_machine_image" name="packaging_machine_image" class="form-control" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)"><br/>
+                                        <input type="file" id="packaging_machine_image" name="packaging_machine_image" class="form-control" accept="image/png, image/jpg, image/jpeg"><br/>
                                     </div>
                         		</div>
                         		<hr>

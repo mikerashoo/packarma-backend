@@ -93,7 +93,7 @@
                                     <div class="col-sm-6">
                                         <label>Order Image</label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.ORDER_PAYMENT'); ?></p>
-                                        <input type="file" class="form-control required" id="order_image" name="order_image" accept="image/png, image/jpg, application/pdf" onchange="checkFiles(this.files)"><br/>
+                                        <input type="file" class="form-control required" id="order_image" name="order_image" accept="image/png, image/jpg, application/pdf"><br/>
                                     </div>
                                     <input class="form_control" type="hidden" id="user_id" name="user_id" value="{{ $data->user_id; }}">
                                     <input class="form_control" type="hidden" id="order_id" name="order_id" value="{{ $data->order_id; }}">

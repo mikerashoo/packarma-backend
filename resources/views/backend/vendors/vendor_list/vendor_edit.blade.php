@@ -85,7 +85,7 @@
                                     <div class="col-sm-6">
                                         <label>GST Certificate<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.GSTCERTIFICATE'); ?></p>
-                                        <input class="form-control" type="file" id="gst_certificate" name="gst_certificate" accept="image/png, image/jpg, image/jpeg, application/pdf" onchange="checkFiles(this.files)"><br/>
+                                        <input class="form-control" type="file" id="gst_certificate" name="gst_certificate" accept="image/png, image/jpg, image/jpeg, application/pdf"><br/>
                                         @if(str_contains($data->gst_certificate, '.pdf'))
                                         <span><i class="fa fa-edit"></i>{{$data->gst_certificate}}</span>
                                         @else

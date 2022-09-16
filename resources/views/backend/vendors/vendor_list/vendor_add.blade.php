@@ -77,7 +77,7 @@
                                     <div class="col-sm-6">
                                         <label>Gst Certificate<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.GSTCERTIFICATE'); ?></p>
-                                        <input type="file" id="gst_certificate" name="gst_certificate" class="form-control required" accept="image/png, image/jpg, image/jpeg, application/pdf" onchange="checkFiles(this.files)"><br/>
+                                        <input type="file" id="gst_certificate" name="gst_certificate" class="form-control required" accept="image/png, image/jpg, image/jpeg, application/pdf"><br/>
                                     </div>
                                     <br>
                                 </div>

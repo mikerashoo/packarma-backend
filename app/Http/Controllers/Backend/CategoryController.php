@@ -111,6 +111,7 @@ class CategoryController extends Controller
         $data = Category::find($id);
         if($data){
             $data->image_path = getFile($data->category_image,'category',true);
+            $data->unselect_image_path = getFile($data->category_unselect_image,'category_unselected',true);
         }
         return view('backend/category/category_edit', ["data"=>$data]);
     }
@@ -153,14 +154,6 @@ class CategoryController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if($request->hasFile('category_image')) {
-            $fixedSize = config('global.SIZE.CATEGORY');
-            $size = $fixedSize/1000;
-            $fileSize = $request->file('category_image')->getSize();  //check file size
-            if($fileSize >= $fixedSize){
-                errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
-            };
-        }
         if($isEditFlow){
             $tableObject->updated_by = session('data')['id'];
         }else{
@@ -176,6 +169,15 @@ class CategoryController extends Controller
             $bannerObj = Category::find($last_inserted_id);
             $bannerObj->category_image = $actualImage;
             $bannerObj->category_thumb_image = $thumbImage;
+            $bannerObj->save();
+        }
+        if($request->hasFile('category_unselect_image')) {
+            $image = $request->file('category_unselect_image');
+            $actualImage = saveSingleImage($image,'category_unselected',$last_inserted_id);
+            $thumbImage = createThumbnail($image,'category_unselected',$last_inserted_id,'category_unselected');
+            $bannerObj = Category::find($last_inserted_id);
+            $bannerObj->category_unselect_image = $actualImage;
+            $bannerObj->category_unselect_thumb_image = $thumbImage;
             $bannerObj->save();
         }
         successMessage($msg, $msg_data);
@@ -230,6 +232,7 @@ class CategoryController extends Controller
         return \Validator::make($request->all(), [
             'category_name' => 'required|string',
             'category_image' => 'mimes:jpeg,png,jpg',
+            'category_unselect_image' => 'mimes:jpeg,png,jpgmax:'.config('global.SIZE.CATEGORY'),
         ])->errors();
     }
 
@@ -245,6 +248,7 @@ class CategoryController extends Controller
         return \Validator::make($request->all(), [
             'category_name' => 'required|string',
             'category_image' => 'required|mimes:jpeg,png,jpg',
+            'category_unselect_image' => 'required|mimes:jpeg,png,jpg|max:'.config('global.SIZE.CATEGORY'),
         ])->errors();
     }
     

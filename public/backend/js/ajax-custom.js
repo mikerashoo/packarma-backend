@@ -213,6 +213,7 @@ function submitForm(form_id, form_method, errorOverlay = '') {
             here.addClass('border-danger');
             here.siblings('.select2-container').find('.selection').find('.select2-selection').addClass('border-danger');
             can++;
+            $('#'+form_id+' '+'.btn-success').prop('disabled',false);
         }
     });
     if (can == 0) {
