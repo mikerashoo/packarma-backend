@@ -199,6 +199,7 @@ function loadViewPage(page_url) {
 }
 
 function submitForm(form_id, form_method, errorOverlay = '') {
+    $('#'+form_id+' '+'.btn-success').prop('disabled',true); //disable further clicks
     var form = $('#' + form_id);
     var formdata = false;
     if (window.FormData) {
@@ -231,6 +232,7 @@ function submitForm(form_id, form_method, errorOverlay = '') {
                         setTimeout(function () {
                             $(form).find('.form-error').empty();
                         }, 3000);
+                        $('#'+form_id+' '+'.btn-success').prop('disabled',false);
                     } else {
                         $.activeitNoty({
                             type: 'danger',
@@ -239,6 +241,7 @@ function submitForm(form_id, form_method, errorOverlay = '') {
                             container: 'floating',
                             timer: 3000
                         });
+                        $('#'+form_id+' '+'.btn-success').prop('disabled',false);
                     }
                 } else {
                     if (errorOverlay) {
