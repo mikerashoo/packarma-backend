@@ -129,14 +129,6 @@ class MessageWhatsappController extends Controller
             $tblObj = MessageWhatsapp::find($_GET['id']);
             $msg = "Data Updated Successfully";
         }
-        if($request->hasFile('file_attached')) {
-            $fixedSize = config('global.SIZE.WHATSAPP_FILE');
-            $size = $fixedSize/1000;
-            $fileSize = $request->file('file_attached')->getSize();
-            if($fileSize >= $fixedSize){
-                errorMessage('File size should be less than '.$size.'KB', $msg_data);
-            };
-        }
         $tblObj->user_type = $request->user_type;
         $tblObj->trigger = $request->trigger;
         $tblObj->message = $request->message;
@@ -202,7 +194,8 @@ class MessageWhatsappController extends Controller
         return \Validator::make($request->all(), [
 	        'user_type' => 'required|string',
             'trigger' => 'required|string',
-            'message' => 'required|string'
+            'message' => 'required|string',
+            'file_attached' => 'nullable|mimes:jpeg,png,jpg|max:'.config('global.SIZE.WHATSAPP_FILE'),
         ])->errors();
     }
 }

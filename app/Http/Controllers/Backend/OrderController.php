@@ -349,14 +349,6 @@ class OrderController extends Controller
         } else {
             $tableObject->remark = '';
         }
-        if ($request->hasFile('order_image')) {
-            $fixedSize = config('global.SIZE.ORDER_PAYMENT');
-            $size = $fixedSize / 1000;
-            $fileSize = $request->file('order_image')->getSize();  //check file size
-            if ($fileSize >= $fixedSize) {
-                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
-            };
-        }
         $tableObject->created_at = date('Y-m-d H:i:s');
         $tableObject->created_by =  session('data')['id'];
         $tableObject->save();
@@ -443,7 +435,7 @@ class OrderController extends Controller
             'payment_mode' => 'required|string',
             'amount' => 'required|numeric',
             'transaction_date' => 'required|date',
-            'order_image' => 'mimes:jpeg,png,jpg'
+            'order_image' => 'nullable|mimes:jpeg,png,jpg|mimes:jpeg,png,jpg|max:'.config('global.SIZE.ORDER_PAYMENT'),
         ])->errors();
     }
 

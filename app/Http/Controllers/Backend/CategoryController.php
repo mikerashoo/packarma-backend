@@ -231,7 +231,7 @@ class CategoryController extends Controller
     {
         return \Validator::make($request->all(), [
             'category_name' => 'required|string',
-            'category_image' => 'mimes:jpeg,png,jpg',
+            'category_image' => 'mimes:jpeg,png,jpg|max:'.config('global.SIZE.CATEGORY'),
             'category_unselect_image' => 'mimes:jpeg,png,jpgmax:'.config('global.SIZE.CATEGORY'),
         ])->errors();
     }
@@ -247,7 +247,7 @@ class CategoryController extends Controller
     {
         return \Validator::make($request->all(), [
             'category_name' => 'required|string',
-            'category_image' => 'required|mimes:jpeg,png,jpg',
+            'category_image' => 'required|mimes:jpeg,png,jpg|max:'.config('global.SIZE.CATEGORY'),
             'category_unselect_image' => 'required|mimes:jpeg,png,jpg|max:'.config('global.SIZE.CATEGORY'),
         ])->errors();
     }

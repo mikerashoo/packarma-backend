@@ -144,14 +144,6 @@ class PackagingMachineController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if ($request->hasFile('packaging_machine_image')) {
-            $fixedSize = config('global.SIZE.PACKAGING_MACHINE');
-            $size = $fixedSize / 1000;
-            $fileSize = $request->file('packaging_machine_image')->getSize();
-            if ($fileSize >= $fixedSize) {
-                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
-            };
-        }
         $tableObject->packaging_machine_name = $request->packaging_machine_name;
         $tableObject->packaging_machine_description = $request->packaging_machine_description;
         if ($isEditFlow) {
@@ -221,6 +213,7 @@ class PackagingMachineController extends Controller
         return \Validator::make($request->all(), [
             'packaging_machine_name' => 'required|string',
             // 'packaging_machine_description' => 'required|string',
+            'packaging_machine_image' => 'nullable|mimes:jpeg,png,jpg|max:'.config('global.SIZE.PACKAGING_MACHINE'),
         ])->errors();
     }
 }

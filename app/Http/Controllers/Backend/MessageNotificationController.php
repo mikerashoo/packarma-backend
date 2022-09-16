@@ -155,14 +155,6 @@ class MessageNotificationController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if($request->hasFile('notification_image')) {
-            $fixedSize = config('global.SIZE.NOTIFICATION');
-            $size = $fixedSize/1000;
-            $fileSize = $request->file('notification_image')->getSize();
-            if($fileSize >= $fixedSize){
-                errorMessage('File size should be less than '.$size.'KB', $msg_data);
-            };
-        }
         $tblObj->title = $request->title;
         $tblObj->body = $request->notification_body;
         $tblObj->user_type = $request->user_type;
@@ -238,7 +230,8 @@ class MessageNotificationController extends Controller
             'title' => 'required|string',
             'notification_body' => 'required|string',
 	        'user_type' => 'required|string',
-            'trigger' => 'required|string'
+            'trigger' => 'required|string',
+            'notification_image' => 'nullable|mimes:jpeg,png,jpg|max:'.config('global.SIZE.NOTIFICATION'),
         ])->errors();
     }
 }

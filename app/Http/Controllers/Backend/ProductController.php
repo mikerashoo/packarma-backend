@@ -193,14 +193,6 @@ class ProductController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if ($request->hasFile('product_image')) {
-            $fixedSize = config('global.SIZE.PRODUCT');
-            $size = $fixedSize / 1000;
-            $fileSize = $request->file('product_image')->getSize();
-            if ($fileSize >= $fixedSize) {
-                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
-            };
-        }
         $tableObject->product_name = $request->product_name;
         $tableObject->product_description = $request->product_description;
         $tableObject->category_id = $request->category;
@@ -278,7 +270,7 @@ class ProductController extends Controller
             'category' => 'required|integer',
             'product_form' => 'required|integer',
             'packaging_treatment' => 'required|integer',
-            'product_image' => 'mimes:jpeg,png,jpg',
+            'product_image' => 'nullable|mimes:jpeg,png,jpg|mimes:jpeg,png,jpg|max:'.config('global.SIZE.PRODUCT'),
         ])->errors();
     }
 
@@ -298,7 +290,7 @@ class ProductController extends Controller
             'category' => 'required|integer',
             'product_form' => 'required|integer',
             'packaging_treatment' => 'required|integer',
-            'product_image' => 'required|mimes:jpeg,png,jpg',
+            'product_image' => 'required|mimes:jpeg,png,jpg|mimes:jpeg,png,jpg|max:'.config('global.SIZE.PRODUCT'),
         ])->errors();
     }
 }
