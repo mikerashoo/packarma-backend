@@ -36,7 +36,7 @@ class CategoryApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = Category::select('id','category_name','category_image','category_thumb_image','seo_url','meta_title','meta_description','meta_keyword')->where('status','1');
+                $data = Category::select('id','category_name','category_image','category_thumb_image','category_unselected_image','category_unselected_thumb_image','seo_url','meta_title','meta_description','meta_keyword')->where('status','1');
                 $categoryData = Category::whereRaw("1 = 1");
                 if($request->category_id)
                 {
@@ -66,6 +66,8 @@ class CategoryApiController extends Controller
                 {
                     $data[$i]['category_image'] = getFile($row['category_image'], 'category');
                     $data[$i]['category_thumb_image'] = getFile($row['category_thumb_image'], 'category',false,'thumb');
+                    $data[$i]['category_unselected_image'] = getFile($row['category_unselected_image'], 'category_unselected');
+                    $data[$i]['category_unselected_thumb_image'] = getFile($row['category_unselected_thumb_image'], 'category_unselected',false,'thumb');
                     $i++;
                 }
                 if(empty($data)) {

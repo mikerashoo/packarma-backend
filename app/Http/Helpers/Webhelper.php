@@ -322,6 +322,29 @@ if (!function_exists('subscriptionType')) {
 
 /**
  *   created by : Pradyumn Dwivedi
+ *   Created On : 16-Sept-2022
+ *   Uses :  To fetch value in packaging solution structure type
+ */
+if (!function_exists('solutionStructureType')) {
+    function solutionStructureType($displayValue = "", $allKeys = false)
+    {
+        $returnArray = array(
+            'economical_solution' => 'Economical Solution',
+            'advance_solution' => 'Advance Solution',
+            'sustainable_solution' => 'Sustainable Solution',
+        );
+        if (!empty($displayValue)) {
+            $returnArray = $returnArray[$displayValue];
+        }
+        if (empty($displayValue) && $allKeys) {
+            $returnArray = array_keys($returnArray);
+        }
+        return $returnArray;
+    }
+}
+
+/**
+ *   created by : Pradyumn Dwivedi
  *   Created On : 03-Mar-2022
  *   Uses :  To fetch value in order delivery status type       
  */
