@@ -157,14 +157,6 @@ class SubCategoryController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if($request->hasFile('sub_category_image')) {
-            $fixedSize = config('global.SIZE.SUB_CATEGORY');
-            $size = $fixedSize/1000;
-            $fileSize = $request->file('sub_category_image')->getSize();
-            if($fileSize >= $fixedSize){
-                errorMessage('Image file size should be less than '.$size.'KB', $msg_data);
-            };
-        }
         $tableObject->sub_category_name = $request->sub_category_name;
         $tableObject->category_id = $request->category;
         if($isEditFlow){
@@ -235,7 +227,7 @@ class SubCategoryController extends Controller
         return \Validator::make($request->all(), [
             'sub_category_name' => 'required|string',
             'category' => 'required|integer',
-            'sub_category_image' => 'mimes:jpeg,png,jpg',
+            'sub_category_image' => 'nullable|mimes:jpeg,png,jpg|mimes:jpeg,png,jpg|max:'.config('global.SIZE.SUB_CATEGORY'),
         ])->errors();
     }
 
@@ -251,7 +243,7 @@ class SubCategoryController extends Controller
         return \Validator::make($request->all(), [
             'sub_category_name' => 'required|string',
             'category' => 'required|integer',
-            'sub_category_image' => 'required|mimes:jpeg,png,jpg',
+            'sub_category_image' => 'required|mimes:jpeg,png,jpg|mimes:jpeg,png,jpg|max:'.config('global.SIZE.SUB_CATEGORY'),
         ])->errors();
     }
 }

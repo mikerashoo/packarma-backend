@@ -23,11 +23,19 @@
                         				<label>Category Name<span style="color:#ff0000">*</span></label>
                         				<input class="form-control required" type="text" id="category_name" name="category_name" value="{{$data->category_name}}"><br/>
                         			</div>
+                                </div>
+                                <div class="row">
                                     <div class="col-sm-6">
-                                        <label>Category Image<span style="color:#ff0000">*</span></label>
+                                        <label>Category Image (Selected)<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.CATEGORY'); ?></p>
-                                        <input class="form-control" type="file" id="category_image" name="category_image" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)"><br/>
+                                        <input class="form-control" type="file" id="category_image" name="category_image" accept="image/png, image/jpg, image/jpeg"><br/>
                                         <img src="{{ $data->image_path}}" width="200px" height="auto">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Category Image (Un-Selected)<span style="color:#ff0000">*</span></label>
+                                        <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.CATEGORY'); ?></p>
+                                        <input class="form-control" type="file" id="category_unselect_image" name="category_unselect_image" accept="image/png, image/jpg, image/jpeg"><br/>
+                                        <img src="{{ $data->unselect_image_path}}" width="200px" height="auto">
                                     </div>
                         		</div>
                         		<hr>

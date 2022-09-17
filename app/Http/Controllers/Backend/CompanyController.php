@@ -227,6 +227,7 @@ class CompanyController extends Controller
     {
         return \Validator::make($request->all(), [
             'company_name' => 'string|required',
+            'attachment' => 'nullable|mimes:jpeg,png,jpg|max:'.config('global.SIZE.COMPANY'),
         ])->errors();
     }
 }

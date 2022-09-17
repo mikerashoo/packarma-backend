@@ -52,7 +52,7 @@
                                     <div class="col-sm-6">
                                         <label>File Upload</label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.WHATSAPP_FILE'); ?></p>
-                                        <input type="file" id="file_attached" name="file_attached" class="form-controls" accept="file_attached/png, file_attached/jpg, file_attached/jpeg" onchange="checkFiles(this.files)">
+                                        <input type="file" id="file_attached" name="file_attached" class="form-controls" accept="file_attached/png, file_attached/jpg, file_attached/jpeg">
                                     </div>
                         		</div>
                                 <hr>

@@ -41,7 +41,7 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <label>Images</label>
-                                            <input class="form-control" type="file" id="attachment" name="attachment" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)" multiple><br/>
+                                            <input class="form-control" type="file" id="attachment" name="attachment" accept="image/png, image/jpg, image/jpeg" multiple><br/>
                                             <div class="main-del-section" data-url="dfg" style="position: relative; border: 1px solid #999; border-radius: 5px; padding: 5px; margin-right: 10px; display: inline-block;">
                                                 <img src="{{ asset('storage/app/public/uploads/company/'.$data['data']->company_logo) }}" width="150px" height="auto">
 

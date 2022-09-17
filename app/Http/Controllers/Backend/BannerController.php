@@ -159,14 +159,6 @@ class BannerController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if ($request->hasFile('banner_image')) {
-            $fixedSize = config('global.SIZE.BANNER');
-            $size = $fixedSize / 1000;
-            $fileSize = $request->file('banner_image')->getSize();
-            if ($fileSize >= $fixedSize) {
-                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
-            };
-        }
         $tableObject->title = $request->title;
         //FOR SEO
         $seoUrl = generateSeoURL($request->title, 60);
@@ -248,7 +240,7 @@ class BannerController extends Controller
     {
         return \Validator::make($request->all(), [
             'title' => 'required|string',
-            'banner_image' => 'mimes:jpeg,png,jpg',
+            'banner_image' => 'mimes:jpeg,png,jpg|max:'.config('global.SIZE.BANNER'),
         ])->errors();
     }
 
@@ -263,7 +255,7 @@ class BannerController extends Controller
     {
         return \Validator::make($request->all(), [
             'title' => 'required|string',
-            'banner_image' => 'required|mimes:jpeg,png,jpg',
+            'banner_image' => 'required|mimes:jpeg,png,jpg|max:'.config('global.SIZE.BANNER'),
         ])->errors();
     }
 }

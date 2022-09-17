@@ -40,7 +40,7 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <label>Images</label>
-                                            <input class="form-control" type="file" id="attachment" name="attachment" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)" multiple><br/>
+                                            <input class="form-control" type="file" id="attachment" name="attachment" accept="image/png, image/jpg, image/jpeg" multiple><br/>
                                         </div>
                                     </div>
                             </div>

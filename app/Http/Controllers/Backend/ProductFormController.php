@@ -144,14 +144,6 @@ class ProductFormController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if ($request->hasFile('product_form_image')) {
-            $fixedSize = config('global.SIZE.PRODUCT_FORM');
-            $size = $fixedSize / 1000;
-            $fileSize = $request->file('product_form_image')->getSize();
-            if ($fileSize >= $fixedSize) {
-                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
-            };
-        }
         $tableObject->product_form_name = $request->product_form_name;
         $tableObject->short_description = $request->short_description;
         if ($isEditFlow) {
@@ -221,6 +213,7 @@ class ProductFormController extends Controller
         return \Validator::make($request->all(), [
             'product_form_name' => 'required|string',
             // 'short_description' => 'required|string',
+            'product_form_image' => 'nullable|mimes:jpeg,png,jpg|max:'.config('global.SIZE.PRODUCT_FORM'),
         ])->errors();
     }
 }

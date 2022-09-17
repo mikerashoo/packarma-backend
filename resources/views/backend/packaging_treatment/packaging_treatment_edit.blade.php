@@ -30,7 +30,7 @@
                                     <div class="col-sm-6">
                                         <label>Packaging Treatment Image</label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PACKAGING_TREATMENT'); ?></p>
-                                        <input class="form-control" type="file" id="packaging_treatment_image" name="packaging_treatment_image" accept="image/png, image/jpg, image/jpeg" onchange="checkFiles(this.files)"><br/>
+                                        <input class="form-control" type="file" id="packaging_treatment_image" name="packaging_treatment_image" accept="image/png, image/jpg, image/jpeg"><br/>
                                         <img src="{{ $data->image_path}}" width="200px" height="auto">
                                     </div>
                         		</div>

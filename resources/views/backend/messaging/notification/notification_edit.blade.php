@@ -56,7 +56,7 @@
                                     <div class="col-sm-6">
                                         <label>Notification Image</label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.NOTIFICATION'); ?></p>
-                                        <input type="file" id="notification_image" name="notification_image" class="form-control" accept="notification_image/png, notification_image/jpg, notification_image/jpeg" onchange="checkFiles(this.files)"><br/>
+                                        <input type="file" id="notification_image" name="notification_image" class="form-control" accept="notification_image/png, notification_image/jpg, notification_image/jpeg"><br/>
                                     </div> 
                         		</div>
                                 <hr>

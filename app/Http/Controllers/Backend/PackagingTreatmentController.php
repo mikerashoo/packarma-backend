@@ -164,14 +164,6 @@ class PackagingTreatmentController extends Controller
             }
             $msg = "Data Saved Successfully";
         }
-        if ($request->hasFile('packaging_treatment_image')) {
-            $fixedSize = config('global.SIZE.PACKAGING_TREATMENT');
-            $size = $fixedSize / 1000;
-            $fileSize = $request->file('packaging_treatment_image')->getSize();
-            if ($fileSize >= $fixedSize) {
-                errorMessage('Image file size should be less than ' . $size . 'KB', $msg_data);
-            };
-        }
         $tableObject->packaging_treatment_name = $request->packaging_treatment_name;
         $tableObject->packaging_treatment_description = $request->packaging_treatment_description;
         if ($isEditFlow) {
@@ -261,6 +253,7 @@ class PackagingTreatmentController extends Controller
         return \Validator::make($request->all(), [
             'packaging_treatment_name' => 'required|string',
             // 'packaging_treatment_description' => 'required|string',
+            'packaging_treatment_image' => 'nullable|mimes:jpeg,png,jpg|max:'.config('global.SIZE.PACKAGING_TREATMENT'),
         ])->errors();
     }
 }
