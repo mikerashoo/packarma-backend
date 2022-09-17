@@ -21,8 +21,12 @@
                                             <td>{{date('d-m-Y h:i A', strtotime($data->updated_at)) }}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Category Image</strong></td>
+                                            <td><strong>Category Image (Selected)</strong></td>
                                             <td><img src="{{ListingImageUrl('category',$data->category_image)}}" width="150px" height="auto"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Category Image (Un-Selected)</strong></td>
+                                            <td><img src="{{ListingImageUrl('category_unselected',$data->category_unselected_image)}}" width="150px" height="auto"/></td>
                                         </tr>
                                     </table>
                                 </div>

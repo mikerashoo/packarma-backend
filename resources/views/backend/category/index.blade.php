@@ -39,7 +39,7 @@
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="category_name" data-orderable="false" data-searchable="false">Category Name</th>
-                                                    <th id="category_image_url" data-orderable="false" data-searchable="false" alt="Image">Category Image</th>
+                                                    <th id="category_image_url" data-orderable="false" data-searchable="false" alt="Image">Category Image (Selected)</th>
                                                     @if($data['category_status'] || $data['category_edit'] || $data['category_view'])
                                                         <th id="action" data-orderable="false" data-searchable="false" width="130px">Action</th>
                                                     @endif
