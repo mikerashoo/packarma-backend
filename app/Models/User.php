@@ -134,7 +134,7 @@ class User extends Authenticatable implements JWTSubject
     // mutators start
     public function setEmailAttribute($value)
     {
-        $this->attributes['email'] = strtolower($value);
+        $this->attributes['email'] = trim(strtolower($value));
     }
 
     public function setNameAttribute($value)

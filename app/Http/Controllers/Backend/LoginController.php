@@ -43,8 +43,8 @@ class LoginController extends Controller
                 \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                 return redirect()->back()->withErrors(array("msg" => implode("\n", $validationErrors->all())));
             }
-
-            $response = Admin::with('role')->where([['email', $request->email], ['password', md5($request->email . $request->password)]])->get();
+            $email = trim(strtolower($request->email));
+            $response = Admin::with('role')->where([['email', $email], ['password', md5($email . $request->password)]])->get();
             if (!count($response)) {
                 \Log::error("User not found with this email id and password.");
                 return redirect()->back()->withErrors(array("msg" => "Invalid login credentials"));
@@ -54,7 +54,7 @@ class LoginController extends Controller
                     $data = array(
                         "id" => $response[0]['id'],
                         "name" => $response[0]['admin_name'],
-                        "email" => $request->email,
+                        "email" => $email,
                         "role_id" => $response[0]['role_id'],
                         "permissions" => $response[0]['role']['permission']
                     );
@@ -113,7 +113,7 @@ class LoginController extends Controller
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
 
-        $email = strtolower($request->email);
+        $email = trim(strtolower($request->email));
         $token = Str::random(60);
         DB::table('password_resets')->updateOrInsert(
             [
@@ -184,7 +184,7 @@ class LoginController extends Controller
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the
         // database. Otherwise we will parse the error and return the response.
-        $email = strtolower($request->email);
+        $email = trim(strtolower($request->email));
         $token = $request->token;
         $check_token = DB::table('password_resets')->where(['email' => $email, 'token' => $token])->first();
         if (!$check_token) {
