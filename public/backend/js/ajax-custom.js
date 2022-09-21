@@ -193,6 +193,13 @@ function loadViewPage(page_url) {
                     var type = document.getElementById("address_type").value;
                     (type == 'billing') ? $("#gst_no_input").show() : $("#gst_no_input").hide();
                 }
+                if (document.getElementById("measurement_unit")) {
+                    var unit = $('#measurement_unit option:selected').text();
+                    if(unit){
+                        $("#min_weight_unit_span").text('('+unit+')');
+                        $("#max_weight_unit_span").text('('+unit+')');
+                    }
+                }
             }
         }
     });
@@ -563,9 +570,8 @@ $(document).on('change', '#category', function () {
         },
     });
 });
-//added by :Pradyumn, added on: 29/08/2022, uses fetch subcategory based on category in product add/edit form :- END:-
 
-//added by :Pradyumn, added on: 03/09/2022, uses : To show/hide gst input based on address type : START
+//added by :Pradyumn, added on: 03/09/2022, uses : To show/hide gst input based on address type
 $(document).on('change', '#address_type', function () {
     var type = document.getElementById("address_type").value;
     if (type == 'billing') {
@@ -575,4 +581,39 @@ $(document).on('change', '#address_type', function () {
         $("#gst_no_input").hide();
     }
 });
-//added by :Pradyumn, added on: 03/09/2022, uses : To show/hide gst input based on address type : END
+
+//added by :Pradyumn, added on: 17/09/2022, uses : To set value to empty sequence for selected structure type
+$(document).on('change', '#structure_type', function () {
+    const solutionStructureType = ['Economical Solution','Advance Solution','Sustainable Solution'];
+    var type = document.getElementById("structure_type").value;
+    var sequence = document.getElementById("sequence").value;
+    if(sequence == '') {
+        if(jQuery.inArray(type, solutionStructureType) !== -1){
+            var index = (solutionStructureType.indexOf(type)) + 1;
+            document.getElementById("sequence").value = index;
+        }
+    }
+});
+
+//added by :Pradyumn, added on: 17/09/2022, uses : To set product measurement unit in min/max order qyuantity label
+$(document).on('change', '#measurement_unit', function () {
+    var unit = document.getElementById("measurement_unit").value;
+    $("#min_weight_unit_span").text('');
+    $("#max_weight_unit_span").text('');
+    if(unit){
+        $.ajax({
+            url: "fetch_measurement_unit",
+            type: "POST",
+            data: {
+                id : unit,
+                '_token': $('meta[name="csrf-token"]').attr('content')
+            },
+            dataType: 'json',
+            success: function (result) {
+                unit = result['data'][0]['unit_symbol'];
+                $("#min_weight_unit_span").text('('+unit+')');
+                $("#max_weight_unit_span").text('('+unit+')');
+            }
+        });
+    }
+});

@@ -9,6 +9,7 @@ use App\Models\CustomerEnquiry;
 use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\VendorQuotation;
+use App\Models\RecommendationEngine;
 use Carbon\Carbon;
 use Response;
 
@@ -73,6 +74,8 @@ class CustomerEnquiryApiController extends Controller
                     'recommendation_engines.engine_name',
                     'recommendation_engines.structure_type',
                     'recommendation_engines.display_shelf_life',
+                    'recommendation_engines.min_order_quantity',
+                    'recommendation_engines.min_order_quantity_unit',
                     'customer_enquiries.packaging_material_id',
                     'customer_enquiries.quote_type',
                     'customer_enquiries.created_at'
@@ -172,6 +175,11 @@ class CustomerEnquiryApiController extends Controller
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
 
+                $minOrderQuantityDataDB = RecommendationEngine::where('id',$request->recommendation_engine_id)->pluck('min_order_quantity')->first();
+                if (isset($request->product_quantity) && ($request->product_quantity < $minOrderQuantityDataDB)){
+                    errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                }
+
                 $shelf_life = config('global.DEFAULT_SHELF_LIFE');
                 $shelf_life_unit = config('global.DEFAULT_SHELF_LIFE_UNIT');
                 if ($request->shelf_life) {
@@ -242,6 +250,8 @@ class CustomerEnquiryApiController extends Controller
             'packing_type_id' => 'required|numeric',
             'packaging_treatment_id' => 'required|numeric',
             'recommendation_engine_id' => 'required|numeric',
+            // 'product_quantity' => 'required|numeric',
+            'product_quantity' => 'nullable|numeric',
             'packaging_material_id' => 'required|numeric',
             'user_address_id' => 'required|numeric'
         ])->errors();

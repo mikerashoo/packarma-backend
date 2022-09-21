@@ -114,6 +114,7 @@ class RecommendationEngineController extends Controller
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['packaging_material'] = PackagingMaterial::all();
+        $data['solutionStructureType'] = solutionStructureType();
         $data['vendor'] = Vendor::all();
         return view('backend/recommendation_engine/recommendation_engine_add', $data);
     }
@@ -130,6 +131,17 @@ class RecommendationEngineController extends Controller
         $data['product_form'] = $productData->product_form;
         $data['packaging_treatment'] = $productData->packaging_treatment;
         successMessage('Data fetched successfully', $data);
+    }
+
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 17-Sept-2022
+     *   Uses :To get measurement unit to show in label of min/max product weight  
+     */
+    public function fetchMeasurementUnit(Request $request)
+    {
+        $data['data'] = MeasurementUnit::where('id',$request->id)->get();
+        return response()->json($data);
     }
 
     /**
@@ -152,6 +164,8 @@ class RecommendationEngineController extends Controller
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['packaging_material'] = PackagingMaterial::all();
+        $data['solutionStructureType'] = solutionStructureType();
+        // print_r($data);exit;
         return view('backend/recommendation_engine/recommendation_engine_edit', $data);
     }
 
@@ -174,23 +188,38 @@ class RecommendationEngineController extends Controller
         $isEditFlow = false;
         if (isset($_GET['id'])) {
             $isEditFlow = true;
+            // $displayValue = true;
             $response = RecommendationEngine::where([['engine_name', strtolower($request->packaging_solution)],['product_id', $request->product],['packaging_material_id', $request->packaging_material], ['id', '<>', $_GET['id']]])->get()->toArray();
             if (isset($response[0])) {
                 errorMessage(__('packaging_solution.packaging_solution_already_exit_for_selected_product_and_material'), $msg_data);
             }
-            $tableObject = RecommendationEngine::find($_GET['id']);
-            $msg = "Data Updated Successfully";
-        } else {
-            $tableObject = new RecommendationEngine;
-            // print_r($request->packaging_solution);exit;
+
+            $solutionStructureType = solutionStructureType();
+            if (in_array($request->structure_type, $solutionStructureType)) {
+                $tableObject = RecommendationEngine::find($_GET['id']);
+                $msg = "Data Updated Successfully";
+            } else {
+                errorMessage('Structure type does not exist.', $msg_data);
+            }
+            
+        } 
+        else {
             $response = RecommendationEngine::where([['engine_name', strtolower($request->packaging_solution)],['product_id', $request->product],['packaging_material_id', $request->packaging_material]])->get()->toArray();
             if (isset($response[0])) {
                 errorMessage(__('packaging_solution.packaging_solution_already_exit_for_selected_product_and_material'), $msg_data);
             }
-            $msg = "Data Saved Successfully";
+
+            $solutionStructureType = solutionStructureType();
+            if (in_array($request->structure_type, $solutionStructureType)) {
+                $tableObject = new RecommendationEngine;
+                $msg = "Data Updated Successfully";
+            } else {
+                errorMessage('Structure type does not exist.', $msg_data);
+            }
         }
         $tableObject->engine_name = $request->packaging_solution;
         $tableObject->structure_type = $request->structure_type;
+        $tableObject->sequence = $request->sequence;
         $tableObject->product_id = $request->product;
         $tableObject->min_shelf_life = $request->min_shelf_life ?? 1;
         $tableObject->max_shelf_life = $request->max_shelf_life ?? 100;
@@ -205,6 +234,8 @@ class RecommendationEngineController extends Controller
         $tableObject->packaging_material_id = $request->packaging_material;
         $tableObject->storage_condition_id = $request->storage_condition;
         $tableObject->display_shelf_life = $request->display_shelf_life;
+        $tableObject->min_order_quantity = $request->min_order_quantity;
+        $tableObject->min_order_quantity_unit = $request->min_order_quantity_unit;
         if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];
         } else {
@@ -271,6 +302,7 @@ class RecommendationEngineController extends Controller
             [
                 'packaging_solution' => 'required|string',
                 'structure_type' => 'required|string',
+                'sequence' => 'required|integer',
                 'product' => 'required|integer',
                 // 'min_shelf_life' => 'required|integer',
                 // 'max_shelf_life' => 'required|integer',
@@ -284,7 +316,9 @@ class RecommendationEngineController extends Controller
                 'packaging_machine' => 'required|integer',
                 'packaging_treatment' => 'required|integer',
                 'packaging_material' => 'required|integer',
-                'storage_condition' => 'required|integer'
+                'storage_condition' => 'required|integer',
+                'min_order_quantity' => 'required|numeric',
+                'min_order_quantity_unit' => 'required|string'
             ])->errors();
     }
 }

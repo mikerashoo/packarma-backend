@@ -29,19 +29,36 @@
                                             <span class="">Product Details</span>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="#moq_details" role="tab" id="moq_details-tab" class="nav-link d-flex align-items-center" data-toggle="tab" aria-controls="moq_details" aria-selected="false">
+                                            <i class="ft-info mr-1"></i>
+                                            <span class="">MOQ Details</span>
+                                        </a>
+                                    </li>
                                 </ul>
                                 {{-- <h4 class="form-section"><i class="ft-info"></i> Details</h4> --}}
                     			@csrf
                         		<div class="tab-content">
                                     <div class="tab-pane fade mt-2 show active" id="engine_details" role="tabpanel" aria-labelledby="engine_details-tab">
                                         <div class="row">
-                                            <div class="col-sm-6">
-                                                <label>Packaging Solution Name<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="packaging_solution" name="packaging_solution"><br/>
+                                            <div class="col-sm-12 row">
+                                                <div class="col-sm-6">
+                                                    <label>Packaging Solution Name<span style="color:#ff0000">*</span></label>
+                                                    <input class="form-control required" type="text" id="packaging_solution" name="packaging_solution"><br/>
+                                                </div><br>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Structure Type<span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="structure_type" name="structure_type"><br/>
+                                                <select class="select2 required" id="structure_type" name="structure_type" style="width: 100% !important;">
+                                                    <option value="">Select</option>
+                                                    @foreach($solutionStructureType as $key => $values)
+                                                        <option value="{{$values}}">{{$values}}</option>
+                                                    @endforeach
+                                                </select><br/><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Sequence<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="sequence" name="sequence" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Storage Condition<span style="color:#ff0000">*</span></label>
@@ -64,21 +81,23 @@
                                                 <label>Display Shelf Life (Days)<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="display_shelf_life" name="display_shelf_life" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
-                                            <div class="col-sm-6">
-                                                <label>Measurement Unit<span style="color:#ff0000">*</span></label>
-                                                <select class="select2 required" id="measurement_unit" name="measurement_unit" style="width: 100% !important;">
-                                                    <option value="">Select</option>
-                                                    @foreach($measurement_unit as $units)
-                                                        <option value="{{$units->id}}">{{$units->unit_symbol}}</option>
-                                                    @endforeach
-                                                </select><br/><br/>
+                                            <div class="col-sm-12 row">
+                                                <div class="col-sm-6">
+                                                    <label>Product Measurement Unit<span style="color:#ff0000">*</span></label>
+                                                    <select class="select2 required" id="measurement_unit" name="measurement_unit" style="width: 100% !important;">
+                                                        <option value="">Select</option>
+                                                        @foreach($measurement_unit as $units)
+                                                            <option value="{{$units->id}}">{{$units->unit_symbol}}</option>
+                                                        @endforeach
+                                                    </select><br/><br/>
+                                                </div>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Minimum Weight<span style="color:#ff0000">*</span></label>
+                                                <label>Product Minimum Weight <span id="min_weight_unit_span"></span><span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="min_weight" name="min_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Maximum Weight<span style="color:#ff0000">*</span></label>
+                                                <label>Product Maximum Weight <span id="max_weight_unit_span"></span><span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="max_weight" name="max_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                         </div>
@@ -148,6 +167,18 @@
                                                     @endforeach
                                                 </select><br/><br/>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade mt-2" id="moq_details" role="tabpanel" aria-labelledby="moq_details-tab">
+                                        <div class="row"> 
+                                            <div class="col-sm-6">
+                                                <label>Minimum Order Quantity<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="min_order_quantity" name="min_order_quantity" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Minimum Order Quantity Unit<span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="min_order_quantity_unit" name="min_order_quantity_unit"><br/>
+                                            </div>  
                                         </div>
                                     </div>
                                     <hr>

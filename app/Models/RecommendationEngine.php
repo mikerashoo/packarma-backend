@@ -125,9 +125,5 @@ class RecommendationEngine extends Model
         $this->attributes['engine_name'] = strtoupper($value);
     }
 
-    public function setStructureTypeAttribute($value)
-    {
-        $this->attributes['structure_type'] = ucwords(strtolower($value));
-    }
     // mutators end
 }

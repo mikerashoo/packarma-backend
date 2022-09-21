@@ -47,6 +47,10 @@
                                             <td>{{$data->max_weight.' '.$data->measurement_unit->unit_symbol}}</td>
                                         </tr>
                                         <tr>
+                                            <td><strong>Minimum Order Quantity</strong></td>
+                                            <td>{{$data->min_order_quantity.' '.$data->min_order_quantity_unit}}</td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>Product Name</strong></td>
                                             <td>{{$data->product->product_name}}</td>
                                         </tr>
