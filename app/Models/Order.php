@@ -45,6 +45,7 @@ class Order extends Model
         'gst_type',
         'gst_percentage',
         'freight_amount',
+        'delivery_charges',
         'grand_total',
         'commission',
         'vendor_amount',

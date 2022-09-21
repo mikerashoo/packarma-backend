@@ -239,23 +239,41 @@ class EnquiryApiController extends Controller
                 $existing_vendor_price = $checkQuotation->vendor_price;
                 $new_vendor_price = number_format((float)$request->vendor_price, 2, '.', '');
 
+                //Added by : Pradyumn, added on : 21-sept-2022, uses: to set freight amount and delivery charges
+                if(isset($request->freight_amount) && !empty($request->freight_amount)){
+                    $freight_amount = $request->freight_amount;
+                }
+                else{
+                    $freight_amount = $checkQuotation->freight_amount;
+                }
+
+                if(isset($request->delivery_charges) && !empty($request->delivery_charges)){
+                    $delivery_charges = $request->delivery_charges;
+                }
+                else{
+                    $delivery_charges = $checkQuotation->delivery_charges;
+                }
+
                 if ($new_vendor_price != $existing_vendor_price) {
 
                     $commission_amt = $checkQuotation->commission_amt;
                     $product_quantity = $checkQuotation->product_quantity;
                     $gst_percentage = $checkQuotation->gst_percentage;
-                    $freight_amount = $checkQuotation->freight_amount;
+
+                    
 
                     $mrp = $new_vendor_price + $commission_amt;
                     $sub_total_amount = $product_quantity * $mrp;
                     $gst_amount = $mrp * $gst_percentage / 100;
-                    $total_amount = $sub_total_amount + $gst_amount + $freight_amount;
+                    $total_amount = $sub_total_amount + $gst_amount + $freight_amount + $delivery_charges;
                     $quotation_data['mrp'] = $mrp;
                     $quotation_data['sub_total'] = $sub_total_amount;
                     $quotation_data['gst_amount'] = $gst_amount;
                     $quotation_data['total_amount'] = $total_amount;
                 }
 
+                $quotation_data['freight_amount'] = $freight_amount;
+                $quotation_data['delivery_charges'] = $delivery_charges;
                 $quotation_data['vendor_price'] = $new_vendor_price;
                 $quotation_data['vendor_id'] = $vendor_id;
                 $quotation_data['enquiry_status'] = 'quoted';
@@ -303,6 +321,8 @@ class EnquiryApiController extends Controller
             [
                 'vendor_price' => 'required|numeric|between:1,99999.999',
                 'vendor_warehouse_id' => 'required|integer|gt:0',
+                'freight_amount' => 'nullable|numeric',
+                'delivery_charges' => 'nullable|numeric'
 
             ],
             [

@@ -30,6 +30,7 @@ class VendorQuotation extends Model
         'mrp',
         'gst_amount',
         'freight_amount',
+        'delivery_charges',
         'total_amount',
         'quotation_expiry_datetime',
         'vendor_warehouse_id',

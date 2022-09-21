@@ -485,15 +485,24 @@ class OrderApiController extends Controller
                 //storing values in variable from request
                 $customer_enquiry_id = $request->customer_enquiry_id;
                 $vendor_quotation_id = $request->vendor_quotation_id;
-                $product_quantity = $request->product_quantity;
+                
 
                 //fetching data of vendor quotation by vendor quotation id
                 // $vendor_quotation_data = VendorQuotation::where([['id', $vendor_quotation_id], ['customer_enquiry_id', $customer_enquiry_id], ['user_id', $user_id]])->first();
                 $vendor_quotation_data = VendorQuotation::where([['id', $vendor_quotation_id]])->first();
 
+                //store product quantity
+                if(isset($request->product_quantity)){
+                    $product_quantity = $request->product_quantity;
+                }
+                else{
+                    $product_quantity = $vendor_quotation_data->product_quantity;
+                }
+
                 //storing values in variable from vendor quotation table
                 $mrp_rate_price = $vendor_quotation_data->mrp;
                 $freight_amount_price = $vendor_quotation_data->freight_amount;
+                $delivery_charges_price = $vendor_quotation_data->delivery_charges;
                 $gst_percentage = $vendor_quotation_data->gst_percentage;
 
                 //calculate sub total amount and store in variable
@@ -510,7 +519,7 @@ class OrderApiController extends Controller
 
 
                 //calculate total amount
-                $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price;
+                $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price + $delivery_charges_price;
 
 
                 //create an array and store all value
@@ -575,16 +584,25 @@ class OrderApiController extends Controller
                 //storing customer_enquiry_id and vendor_quotation_id in variable from request
                 $customer_enquiry_id = $request->customer_enquiry_id;
                 $vendor_quotation_id = $request->vendor_quotation_id;
-                $product_quantity = $request->product_quantity;
+                // $product_quantity = $request->product_quantity;
 
                 //fetching data of vendor quotation by vendor quotation id
                 $vendor_quotation_data = VendorQuotation::where('id', $vendor_quotation_id)->first();
+
+                //store product quantity
+                if(isset($request->product_quantity)){
+                    $product_quantity = $request->product_quantity;
+                }
+                else{
+                    $product_quantity = $vendor_quotation_data->product_quantity;
+                }
 
                 //storing values in variable from vendor quotation table
                 $sub_total_price = $vendor_quotation_data->sub_total;
                 $mrp_rate_price = $vendor_quotation_data->mrp;
                 $gst_amount_price = $vendor_quotation_data->gst_amount;
                 $freight_amount_price = $vendor_quotation_data->freight_amount;
+                $delivery_charges_price = $vendor_quotation_data->delivery_charges;
 
                 $commission_price = $vendor_quotation_data->commission_amt;
                 $vendor_amount_price = $vendor_quotation_data->vendor_price;
@@ -603,7 +621,7 @@ class OrderApiController extends Controller
                 }
 
                 //calculate total amount
-                $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price;
+                $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price + $delivery_charges_price;
 
                 //calculate commision and vendor price
                 $commission = $commission_price * $product_quantity;
@@ -643,6 +661,7 @@ class OrderApiController extends Controller
                 $order_request_data['gst_type'] = $gst_type;
                 $order_request_data['gst_percentage'] = $gst_percentage;
                 $order_request_data['freight_amount'] = $freight_amount_price;
+                $order_request_data['delivery_charges'] = $delivery_charges_price;
                 $order_request_data['grand_total'] = $total_amount_price;
                 $order_request_data['commission'] = $commission;
                 $order_request_data['vendor_amount'] = $vendor_amount;
@@ -707,6 +726,7 @@ class OrderApiController extends Controller
                     'gst_type' => $gst_type,
                     'gst_percentage' => $gst_percentage,
                     'freight_amount' => $freight_amount_price,
+                    'delivery_charges' => $delivery_charges_price,
                     'grand_total' => $total_amount_price,
                     'commission' => $commission,
                     'vendor_amount' => $vendor_amount,
