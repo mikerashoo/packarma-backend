@@ -15,6 +15,7 @@ use App\Models\State;
 use App\Models\Review;
 use App\Models\Country;
 use App\Models\Currency;
+use App\Models\RecommendationEngine;
 use App\Models\MessageNotification;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\URL;
@@ -491,6 +492,12 @@ class OrderApiController extends Controller
                 // $vendor_quotation_data = VendorQuotation::where([['id', $vendor_quotation_id], ['customer_enquiry_id', $customer_enquiry_id], ['user_id', $user_id]])->first();
                 $vendor_quotation_data = VendorQuotation::where([['id', $vendor_quotation_id]])->first();
 
+                $recommendationEngineId = CustomerEnquiry::where('id', $vendor_quotation_data->customer_enquiry_id)->pluck('recommendation_engine_id')->first();
+                $minOrderQuantityDataDB = RecommendationEngine::where('id',$recommendationEngineId)->pluck('min_order_quantity')->first();
+                if (isset($request->product_quantity) && ($request->product_quantity < $minOrderQuantityDataDB)){
+                    errorMessage(__('order.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                }
+
                 //store product quantity
                 if(isset($request->product_quantity)){
                     $product_quantity = $request->product_quantity;
@@ -543,6 +550,8 @@ class OrderApiController extends Controller
                 $quantity_calculation_data['gst_amount'] = $gst_amount_price;
                 $quantity_calculation_data['gst_percentage'] = $gst_percentage;
                 $quantity_calculation_data['sub_total'] = $sub_total_price;
+                $quantity_calculation_data['freight_amount'] = $freight_amount_price;
+                $quantity_calculation_data['delivery_charges'] = $delivery_charges_price;
                 $quantity_calculation_data['total_amount'] = $total_amount_price;
                 $quantity_calculation_data['currency_symbol'] = $currency_symbol;
 
