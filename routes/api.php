@@ -73,6 +73,8 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //Packaging Solution
         Route::post('/packaging_solution/get_packaging_solution', 'PackagingSolutionApiController@index');
+        Route::post('/packaging_solution/alternative_packaging_solution', 'PackagingSolutionApiController@alternativeSolutions');
+
 
         //Customer enquiry
         Route::post('/customer_enquiry/my_place_enquiry', 'CustomerEnquiryApiController@store');

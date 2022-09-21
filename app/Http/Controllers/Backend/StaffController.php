@@ -169,7 +169,8 @@ class StaffController extends Controller
         $isEditFlow = false;
         if(isset($_GET['id'])) {
             $isEditFlow = true;
-            $response = Admin::where([['email', $request->email],['id', '<>', $_GET['id']]])->get()->toArray();
+            $email = trim(strtolower($request->email));
+            $response = Admin::where([['email', $email],['id', '<>', $_GET['id']]])->get()->toArray();
             if(isset($response[0])){
                 errorMessage('Email Already Exist', $msg_data);
             }
@@ -180,17 +181,22 @@ class StaffController extends Controller
             $admins = Admin::find($_GET['id']);
         } else {
             $admins = new Admin;
+            $email = trim(strtolower($request->email));
             $response = Admin::where([['phone', $request->phone]])->get()->toArray();
             if (isset($response[0])) {
                 errorMessage('Phone Number Already Exist', $msg_data);
             }
-            $admins->password = md5($request->email.$request->password);
-            $response = Admin::where([['email', $request->email]])->get();
+            $response = Admin::where([['email', $email]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Email Already Exist', $msg_data);
+            }
+            $admins->password = md5($email.$request->password);
+            $response = Admin::where([['email', $email]])->get();
         }
 
         $admins->role_id = $request->role_id;
         $admins->admin_name = $request->name;
-        $admins->email = $request->email;
+        $admins->email = $email;
         $maxPhoneCodeLength = Country::where('id', $request->phone_country_code)->get()->toArray();
         $allowedPhoneLength = $maxPhoneCodeLength[0]['phone_length'];
         if(strlen($request->phone) != $allowedPhoneLength){

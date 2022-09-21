@@ -111,7 +111,7 @@ class Vendor extends Model implements JWTSubject
     // mutators start
     public function setVendorEmailAttribute($value)
     {
-        $this->attributes['vendor_email'] = strtolower($value);
+        $this->attributes['vendor_email'] = trim(strtolower($value));
     }
 
     public function setGstinAttribute($value)

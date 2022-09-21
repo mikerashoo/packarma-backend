@@ -40,6 +40,10 @@
                                             <dt class="col-sm-5 text-left">Recommendation Engine:</dt>
                                             <dd class="col-sm-7">{{$data['recommendation_engine']->engine_name}}</dd>
                                         </dl>
+                                        <dl class="row">
+                                            <dt class="col-sm-5 text-left">Entered Product Quantity:</dt>
+                                            <dd class="col-sm-7">{{$data->product_quantity}}</dd>
+                                        </dl>
                                     </div>                                       
                                 </div>   
                                 

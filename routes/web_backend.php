@@ -333,6 +333,7 @@ Route::group(['middleware' => ['customAuth']], function () {
 	Route::post('/publishPackagingSolution', 'RecommendationEngineController@updateStatus');
 	Route::get('/packaging_solution_view/{id}', 'RecommendationEngineController@view');
 	Route::post('/getProductDetailsDropdown', 'RecommendationEngineController@getProductDetails');
+	Route::post('/fetch_measurement_unit', 'RecommendationEngineController@fetchMeasurementUnit');
 
 	//Order list
 	Route::get('/order_list', 'OrderController@index');

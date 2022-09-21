@@ -328,17 +328,13 @@ if (!function_exists('subscriptionType')) {
 if (!function_exists('solutionStructureType')) {
     function solutionStructureType($displayValue = "", $allKeys = false)
     {
-        $returnArray = array(
-            'economical_solution' => 'Economical Solution',
-            'advance_solution' => 'Advance Solution',
-            'sustainable_solution' => 'Sustainable Solution',
-        );
+        $returnArray = array('Economical Solution','Advance Solution','Sustainable Solution');
         if (!empty($displayValue)) {
             $returnArray = $returnArray[$displayValue];
         }
-        if (empty($displayValue) && $allKeys) {
-            $returnArray = array_keys($returnArray);
-        }
+        // if (empty($displayValue) && $allKeys) {
+        //     $returnArray = array_keys($returnArray);
+        // }
         return $returnArray;
     }
 }
