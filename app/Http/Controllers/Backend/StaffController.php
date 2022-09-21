@@ -181,11 +181,15 @@ class StaffController extends Controller
             $admins = Admin::find($_GET['id']);
         } else {
             $admins = new Admin;
+            $email = trim(strtolower($request->email));
             $response = Admin::where([['phone', $request->phone]])->get()->toArray();
             if (isset($response[0])) {
                 errorMessage('Phone Number Already Exist', $msg_data);
             }
-            $email = trim(strtolower($request->email));
+            $response = Admin::where([['email', $email]])->get()->toArray();
+            if (isset($response[0])) {
+                errorMessage('Email Already Exist', $msg_data);
+            }
             $admins->password = md5($email.$request->password);
             $response = Admin::where([['email', $email]])->get();
         }
