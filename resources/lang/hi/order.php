@@ -26,4 +26,5 @@ return [
     'billing_details_calculated_successfully' => 'Billing Details Calculated Successfully',
     'order_placed' => 'Order placed successfully',
     'cant_revese_delivery_status' => 'Delivery Status can not be reversed',
+    'product_quantity_should_be_greater_than_minimum_order_quantity' => 'Product quantity should be greater than minimum order quantity for selected packaging solution',
 ];
