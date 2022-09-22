@@ -53,6 +53,7 @@ class CustomerEnquiryApiController extends Controller
                     'products.product_name',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.measurement_unit_id',
+                    'customer_enquiries.product_quantity',
                     'measurement_units.unit_symbol',
                     'customer_enquiries.shelf_life',
                     'customer_enquiries.entered_shelf_life',
