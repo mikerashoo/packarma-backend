@@ -54,6 +54,8 @@ class EnquiryApiController extends Controller
                     'customer_enquiries.enquiry_type',
                     'customer_enquiries.product_weight',
                     'customer_enquiries.product_quantity',
+                    'recommendation_engines.min_order_quantity',
+                    'recommendation_engines.min_order_quantity_unit',
                     'customer_enquiries.shelf_life',
                     'customer_enquiries.entered_shelf_life',
                     'customer_enquiries.entered_shelf_life_unit',
