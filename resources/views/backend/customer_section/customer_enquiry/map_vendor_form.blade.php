@@ -47,16 +47,37 @@ $readonly = '';
              </select>
         </dd>
     </dl>
-     <dl class="row">
-        <dt class="col-sm-5 text-left">Vendor Price/Kg <span style="color:#ff0000">*</span></dt>
+    <dl class="row">
+        <dt class="col-sm-5 text-left">Total Vendor Price<span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
-            <input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->vendor_price ?? '' ;}}" id="vendor_price" name="vendor_price" {{$readonly}}>
+            <input class="form-control required" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->vendor_price ?? '' ;}}" id="vendor_price_bulk" name="vendor_price_bulk" {{$readonly}}>
+        </dd>
+        {{-- <dd id="mapping_price_per_kg" class="form-control col-sm-7" readonly></dd> --}}
+    </dl>
+    <dl class="row" id="vendor_price_per_kg_div" style="display: none;">
+        <dt class="col-sm-5 text-left">Vendor Price/Kg</dt>
+        <dd class="col-sm-7" id="vendor_price" readonly></dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-5 text-left">Add Admin Commission Price <span style="color:#ff0000">*</span></dt>
+        <dd class="col-sm-7">
+           <input class="form-control required" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->commission_amt ?? '' ;}}" id="commission_rate_bulk" name="commission_rate_bulk" {{$readonly}}>
         </dd>
     </dl>
-     <dl class="row">
-        <dt class="col-sm-5 text-left">Commission Price/Kg <span style="color:#ff0000">*</span></dt>
+    <dl class="row" id="commission_price_per_kg_div" style="display: none;">
+        <dt class="col-sm-5 text-left">Commission/Kg</dt>
+        <dd class="col-sm-7" id="commission_rate" readonly></dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-5 text-left">Delivery in Days <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
-           <input class="form-control" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->commission_amt ?? '' ;}}" id="commission_rate" name="commission_rate" {{$readonly}}>
+           <input class="form-control required" type="text" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->delivery_in_days ?? '7' ;}}" id="delivery_in_days" name="delivery_in_days" {{$readonly}}>
+        </dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-5 text-left">Delivery Charges <span style="color:#ff0000">*</span></dt>
+        <dd class="col-sm-7">
+           <input class="form-control required" type="text" step=".01" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->delivery_charges ?? '' ;}}" id="delivery_charges" name="delivery_charges" {{$readonly}}>
         </dd>
     </dl>
      {{-- <dl class="row">
@@ -87,7 +108,7 @@ $readonly = '';
      <dl class="row" id="gst_percentage_div">
         <dt class="col-sm-5 text-left">Gst Pecentage <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
-            <input class="form-control" type="text" inputmode="numeric" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->gst_percentage ?? '' ;}}" id="gst_percentage" name="gst_percentage" min=0 max=100>
+            <input class="form-control" type="text" inputmode="numeric" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->gst_percentage ?? '18' ;}}" id="gst_percentage" name="gst_percentage" min=0 max=100>
         </dd>
     </dl>
     <div class="row">
@@ -146,17 +167,20 @@ function getVendorWarehouseForEdit(vendor)
         });  
     }
 
-
-
-
     function taxValueToggle(gst_type){
         if(gst_type == 'not_applicable'){
         $('#gst_percentage_div').hide('slow');
         }else{
             $('#gst_percentage_div').show('slow');
-
-        }
-       
-        
+        } 
     }
+
+    //added by : Pradyumn, at : 27-Sept-2022, calling js function for price per kg in custome ajax
+    $(document).ready(function () {
+        var vendor_price = <?php   echo $vender_quotation_details->vendor_price ?? 0 ; ?>;
+        var commission_amt = <?php echo $vender_quotation_details->commission_amt ?? 0 ; ?>;
+        var product_quantity = <?php echo $vender_quotation_details->product_quantity ?? 0 ; ?>;
+        vendorPriceKg(vendor_price, product_quantity);
+        commissionPerKg(commission_amt, product_quantity);
+    });
 </script>
