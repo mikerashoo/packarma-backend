@@ -45,7 +45,7 @@ class RecommendationEngineController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = RecommendationEngine::with('product')->orderBy('updated_at', 'desc');
+                $query = RecommendationEngine::with('product')->orderBy('sequence', 'asc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_recommendation_engine']) && !is_null($request['search']['search_recommendation_engine'])) {
