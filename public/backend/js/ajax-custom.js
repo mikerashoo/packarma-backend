@@ -200,6 +200,14 @@ function loadViewPage(page_url) {
                         $("#max_weight_unit_span").text('('+unit+')');
                     }
                 }
+                if (document.getElementById("vendor_price")) {
+                    var vendor_price = document.getElementById("vendor_price").value;
+                    (vendor_price) ? $("#vendor_price_per_kg_div").show() : $("#vendor_price_per_kg_div").hide();
+                }
+                if (document.getElementById("commission_rate")) {
+                    var commission_rate = document.getElementById("commission_rate").value;
+                    (commission_rate) ? $("#commission_price_per_kg_div").show() : $("#commission_price_per_kg_div").hide();
+                }
             }
         }
     });
@@ -617,3 +625,71 @@ $(document).on('change', '#measurement_unit', function () {
         });
     }
 });
+
+//added by :Pradyumn, added on: 26/09/2022, uses : To set vendor price per kg
+$(document).on('change', '#vendor_price_bulk', function () {
+    var vendor_price_bulk = document.getElementById("vendor_price_bulk").value;
+    if (vendor_price_bulk) {
+        $("#vendor_price_per_kg_div").show();
+    }
+    else {
+        $("#vendor_price_per_kg_div").hide();
+    }
+    var product_quantity = document.getElementById("product_quantity").value;
+    var vendor_price_calc = vendor_price_bulk / product_quantity;
+    var vendor_price_per_kg = (vendor_price_calc).toFixed(2).replace(/\.00$/,'');
+    $("#vendor_price").text(vendor_price_per_kg);
+});
+
+//added by :Pradyumn, added on: 26/09/2022, uses : To set commission price per kg
+$(document).on('change', '#commission_rate_bulk', function () {
+    var commission_rate_bulk = document.getElementById("commission_rate_bulk").value;
+    if (commission_rate_bulk) {
+        $("#commission_price_per_kg_div").show();
+    }
+    else {
+        $("#commission_price_per_kg_div").hide();
+    }
+    var product_quantity = document.getElementById("product_quantity").value;
+    var commsission_rate_calc = commission_rate_bulk / product_quantity;
+    var commission_rate_per_kg = (commsission_rate_calc).toFixed(2).replace(/\.00$/,'');
+    $("#commission_rate").text(commission_rate_per_kg);
+});
+
+//added by :Pradyumn, added on: 26/09/2022, uses : to show hide gst percentage div
+$(document).on('change', '#not_applicable', function () {
+    var gst_type = document.getElementById("not_applicable").value;
+    if (gst_type == 'not_applicable') {
+        $("#gst_percentage_div").hide();
+    }
+    if(gst_type == 'applicable'){
+        $("#gst_percentage_div").show();
+    }
+});
+
+//added by :Pradyumn, added on: 26/09/2022, uses : to set vendor price per kg on edit 
+function vendorPriceKg(vendor_price, product_quantity){
+    if (vendor_price) {
+        $("#vendor_price_per_kg_div").show();
+        var vendor_price_kg = vendor_price / product_quantity;
+        var vendor_price_per_kg = (vendor_price_kg).toFixed(2).replace(/\.00$/,'');
+        $("#vendor_price").text(vendor_price_per_kg);
+
+    }
+    else {
+        $("#vendor_price_per_kg_div").hide();
+    }
+};
+
+//added by :Pradyumn, added on: 26/09/2022, uses : to set commission rate per kg on edit 
+function commissionPerKg(commission_amt, product_quantity){
+    if (commission_amt) {
+        $("#commission_price_per_kg_div").show();
+        var commission_kg = commission_amt / product_quantity;
+        var commission_per_kg = (commission_kg).toFixed(2).replace(/\.00$/,'');
+        $("#commission_rate").text(commission_per_kg);
+    }
+    else {
+        $("#commission_price_per_kg_div").hide();
+    }
+};

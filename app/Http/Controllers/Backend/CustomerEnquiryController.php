@@ -58,7 +58,7 @@ class CustomerEnquiryController extends Controller
     {
         if ($request->ajax()) {
             try {
-                $query = CustomerEnquiry::with('product', 'state', 'city', 'user', 'country', 'vendor_quotation')->orderBy('id', 'desc')->withTrashed();
+                $query = CustomerEnquiry::with('product', 'state', 'city', 'user', 'country', 'vendor_quotation')->orderBy('updated_at', 'desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user_name']) && !is_null($request['search']['search_user_name'])) {
@@ -270,6 +270,7 @@ class CustomerEnquiryController extends Controller
             ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
             ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
             ->leftjoin('measurement_units', 'customer_enquiries.measurement_unit_id', '=', 'measurement_units.id')
+            ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
 
             ->where([['vendor_quotations.customer_enquiry_id', $data['data']->id]])->get();
 
@@ -379,13 +380,42 @@ class CustomerEnquiryController extends Controller
         $warehouse_state_id = (int)($warehouse_with_state[1]);
         $warehouse = $warehouse_with_state[0];
         // $tblObj->vendor_warehouse_id= $request->warehouse;
+
         //amount calculation section started
-        $tblObj->vendor_price =  $request->vendor_price;
-        $tblObj->commission_amt =  $request->commission_rate;
+        //Modified by : Pradyumn, Created at: 27-Sept-2022, Uses: calculating vendor price and commission rate per kg :START
+        $vendor_price_calc = $request->vendor_price_bulk / $request->product_quantity;
+        $vendor_price_per_kg = $vendor_price_calc; //number_format($vendor_price_calc, 2);
+        $tblObj->vendor_amount = $request->vendor_price_bulk;
+        
+        $commission_price_calc = $request->commission_rate_bulk / $request->product_quantity;
+        $commission_per_kg = $commission_price_calc; //number_format($commission_price_calc, 2);
+        $tblObj->commission = $request->commission_rate_bulk;
+        
+        $tblObj->vendor_price = $vendor_price_per_kg;
+        $tblObj->commission_amt = $commission_per_kg;
+        $tblObj->delivery_in_days = $request->delivery_in_days;
+        if(isset($request->delivery_charges) && !empty($request->delivery_charges)){
+            $delivery_charges = $request->delivery_charges;
+            $tblObj->delivery_charges = $delivery_charges;
+        }else{
+            $delivery_charges = 0.00;
+        }
+        //Modified by : Pradyumn, Created at: 27-Sept-2022, Uses: calculating vendor price and commission rate per kg :END
+
         $tblObj->product_quantity = $request->product_quantity;
         $gst = $request->gst_type ?? 'not_applicable';
-        $tblObj->gst_percentage = $request->gst_percentage ?? 0.00;
-        $mrp_rate =  $request->commission_rate + $request->vendor_price;
+        
+        //Created by : Pradyumn, Created at: 27-Sept-2022, Uses: storing gst percentage when gst type is selected :START
+        if(!empty($request->gst_type) && $request->gst_type != 'not_applicable'){
+            $tblObj->gst_percentage = $request->gst_percentage; // ?? 0.00;
+        }
+        else{
+            $tblObj->gst_percentage = 0.00;
+        }
+        
+        //Created by : Pradyumn, Created at: 27-Sept-2022, Uses: storing gst percentage when gst type is selected :END
+        // print_r($commission_per_kg);exit;
+        $mrp_rate =   $vendor_price_per_kg + $commission_per_kg; //$request->commission_rate + $request->vendor_price;
         $tblObj->mrp = $mrp_rate;
         $sub_total_amount = $request->product_quantity * $mrp_rate;
         $tblObj->sub_total = $sub_total_amount;
@@ -399,7 +429,9 @@ class CustomerEnquiryController extends Controller
                 $gst_type = 'igst';
             }
             $tblObj->gst_percentage = $request->gst_percentage ?? 0.00;
-            $gst_amount = $mrp_rate * ($request->gst_percentage / 100.00);
+        
+            // modified by : pradyumn, at: 27-Sept-2022, Desc: calculating gst on sub_total amount
+            $gst_amount = $sub_total_amount * ($request->gst_percentage / 100.00); //$mrp_rate * ($request->gst_percentage / 100.00);
         } else {
 
             $gst_type = $gst;
@@ -413,7 +445,8 @@ class CustomerEnquiryController extends Controller
         }
         $tblObj->gst_type = $gst_type;
         $tblObj->gst_amount = $gst_amount;
-        $tblObj->total_amount = $sub_total_amount + $gst_amount + $freight_amount;
+        // modified by : pradyumn, at: 27-Sept-2022, added delivery charge to grand total
+        $tblObj->total_amount = $sub_total_amount + $gst_amount + $freight_amount + $delivery_charges;
         // print_r($balance);exit;
         //storing quotation validity in variable for increasing current time with validity hours
         $validity_hours =  $request->quotation_validity;
@@ -578,6 +611,8 @@ class CustomerEnquiryController extends Controller
         if ($id != -1) {
             $data['vender_quotation_details'] = DB::table('vendor_quotations')->select(
                 'vendor_quotations.id',
+                'vendor_quotations.product_quantity',
+                'vendor_quotations.customer_enquiry_id',
                 'vendor_quotations.vendor_price',
                 'vendor_quotations.mrp',
                 'vendor_quotations.commission_amt',
@@ -586,12 +621,23 @@ class CustomerEnquiryController extends Controller
                 'vendor_quotations.gst_type',
                 'vendor_quotations.vendor_warehouse_id',
                 'vendor_quotations.gst_percentage',
+                'vendor_quotations.delivery_in_days',
+                'vendor_quotations.delivery_charges',
                 'vendors.vendor_name',
                 'vendors.gstin',
             )
                 ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                 ->where([['vendor_quotations.id', $id]])->first();
+
+            if ($data['vender_quotation_details']){
+                $recommendation_id_db = CustomerEnquiry::select('recommendation_engine_id')->where('id',$data['vender_quotation_details']->customer_enquiry_id)->first();
+                $order_quantity_unit = RecommendationEngine::select('min_order_quantity_unit')->where('id',$recommendation_id_db->recommendation_engine_id)->first();
+                $data['vender_quotation_details']->min_order_quantity_unit = $order_quantity_unit->min_order_quantity_unit;
+                $data['vender_quotation_details']->vendor_price = $data['vender_quotation_details']->vendor_price * $data['vender_quotation_details']->product_quantity;
+                $data['vender_quotation_details']->commission_amt = $data['vender_quotation_details']->commission_amt * $data['vender_quotation_details']->product_quantity;
+            }
         }
+
         // echo '<pre>';
         // print_r($data['customer_enquiry_data']);
         // die;
@@ -638,8 +684,10 @@ class CustomerEnquiryController extends Controller
             return \Validator::make($request->all(), [
                 'vendor' => 'required|numeric|unique:vendor_quotations,vendor_id,' . $request->id . ',id,customer_enquiry_id,' . $request->customer_enquiry_id,
                 // 'warehouse' => 'required',
-                'vendor_price' => 'required|numeric|min:0|not_in:0',
-                'commission_rate' => 'required|numeric|min:0|not_in:0',
+                'vendor_price_bulk' => 'required|numeric|min:0|not_in:0',
+                'commission_rate_bulk' => 'required|numeric|min:0|not_in:0',
+                'delivery_in_days' => 'required|integer',
+                'delivery_charges' => 'required|numeric',
                 // 'quotation_validity.*' => 'required|numeric',
                 // 'lead_time' => 'required|numeric|min:0|not_in:0',
                 // 'gst_type.*' => 'required',

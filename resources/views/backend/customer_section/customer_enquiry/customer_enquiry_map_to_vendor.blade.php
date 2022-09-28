@@ -42,7 +42,7 @@
                                         </dl>
                                         <dl class="row">
                                             <dt class="col-sm-5 text-left">Entered Product Quantity:</dt>
-                                            <dd class="col-sm-7">{{$data->product_quantity}}</dd>
+                                            <dd class="col-sm-7">{{$data->product_quantity}} {{ $data['recommendation_engine']->min_order_quantity_unit }}</dd>
                                         </dl>
                                     </div>                                       
                                 </div>   
