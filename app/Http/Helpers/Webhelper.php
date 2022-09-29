@@ -987,3 +987,61 @@ if (!function_exists('fcmCallingToCurl')) {
         // return $result;
     }
 }
+
+/**
+ * Created by : Pradyumn Dwivedi
+ * Created at : 29-sept-2022
+ * Uses: To show only first 2 and last 4 character
+ */
+if (!function_exists('maskPhoneNumber')) {
+    function maskPhoneNumber($phoneNumber = ''){
+        $phoneNumberLength = strlen($phoneNumber);
+        $returnP1 = substr($phoneNumber, 0,1);
+        $returnP2 = substr($phoneNumber, -4);
+
+        $paddingLength = $phoneNumberLength - 4;
+        $finalP1 = str_pad($returnP1, $paddingLength, 'X');
+        $result = $finalP1.$returnP2;
+        return $result;
+    }
+}
+
+/**
+ * Created by : Pradyumn Dwivedi
+ * Created at : 29-sept-2022
+ * Uses: To show only first 6 and last 4 character
+ */
+if (!function_exists('maskCardNumber')) {
+    function maskCardNumber($cardNumber = '',$isWallet=false) {
+        $cardNumberLength = strlen($cardNumber);
+        $returnP1 = substr($cardNumber, 0, 6);
+        $returnP2 = substr($cardNumber, -4);
+        $paddingLength = $cardNumberLength - 6;
+        if($isWallet){ 
+        $returnP1 = substr($cardNumber, 0,0);
+        $paddingLength = $cardNumberLength - 4;
+        }
+        $finalP1 = str_pad($returnP1, $paddingLength, 'X');
+        $result = $finalP1 . $returnP2;
+        return $result;
+    }
+}
+
+/**
+ * Created by : Pradyumn Dwivedi
+ * Created at : 29-sept-2022
+ * Uses: To show only first 6 and last 4 character
+ */
+if (!function_exists('maskVendorName')) {
+    function maskVendorName($vendorName = '') {
+        $vendorNameLength = strlen($vendorName);
+        $returnP1 = substr($vendorName, 0,2);
+
+        $returnP2 = substr($vendorName, -2);
+        $paddingLength = $vendorNameLength - 2;
+
+        $finalP1 = str_pad($returnP1, $paddingLength, '*');
+        $result = $finalP1 . $returnP2;
+        return $result;
+    }
+}

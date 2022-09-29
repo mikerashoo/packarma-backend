@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\VendorQuotation;
 use App\Models\CustomerEnquiry;
 use App\Models\MessageNotification;
+use App\Models\RecommendationEngine;
 use Illuminate\Support\Facades\URL;
 use Response;
 
@@ -50,6 +51,7 @@ class CustomerQuoteApiController extends Controller
 
                 $data = DB::table('vendor_quotations')->select(
                     'vendor_quotations.id',
+                    'vendor_quotations.customer_enquiry_id',
                     'vendor_quotations.vendor_id',
                     'vendors.vendor_name',
                     'vendor_quotations.vendor_warehouse_id',
@@ -57,11 +59,13 @@ class CustomerQuoteApiController extends Controller
                     'vendor_warehouses.city_name',
                     'states.state_name',
                     'vendor_quotations.mrp',
+                    'vendor_quotations.product_quantity',
                     'vendor_quotations.freight_amount',
                     'vendor_quotations.delivery_in_days',
                     'vendor_quotations.gst_type',
                     'vendor_quotations.gst_amount',
-                    'vendor_quotations.gst_percentage'
+                    'vendor_quotations.gst_percentage',
+                    'vendor_quotations.total_amount',
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
@@ -105,7 +109,14 @@ class CustomerQuoteApiController extends Controller
                     errorMessage(__('customer_quote.quotation_not_found'), $msg_data);
                 }
                 $i = 0;
+                // $data[0]->vendor_name = array_shift(explode('*', $data[0]->vendor_name));;
+
                 foreach ($data as $row) {
+                    $recommendEngineId = CustomerEnquiry::select('recommendation_engine_id')->where('id', $row->customer_enquiry_id)->first();
+                    $order_quantity_unit_db = RecommendationEngine::select('min_order_quantity_unit')->where('id', $recommendEngineId->recommendation_engine_id)->first();
+                    $data[$i]->min_order_quantity_unit = $order_quantity_unit_db->min_order_quantity_unit;
+                    
+                    $data[$i]->vendor_name = maskVendorName($row->vendor_name);
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
@@ -180,6 +191,7 @@ class CustomerQuoteApiController extends Controller
                             'vendor_quotations.vendor_warehouse_id',
                             'vendor_quotations.freight_amount',
                             'vendor_quotations.delivery_in_days',
+                            'vendor_quotations.product_quantity',
                             'vendor_warehouses.warehouse_name',
                             'vendor_warehouses.city_name',
                             'states.state_name',
@@ -208,6 +220,12 @@ class CustomerQuoteApiController extends Controller
                         } else {
                             $data[0]->proceed_button = false;
                         }
+                        //added by pradyumn, added on :29-sept-2022, hide vendor name
+                        $data[0]->vendor_name = maskVendorName($data[0]->vendor_name);
+
+                        $recommendEngineId = CustomerEnquiry::select('recommendation_engine_id')->where('id', $data[0]->customer_enquiry_id)->first();
+                        $order_quantity_unit_db = RecommendationEngine::select('min_order_quantity_unit')->where('id', $recommendEngineId->recommendation_engine_id)->first();
+                        $data[0]->min_order_quantity_unit = $order_quantity_unit_db->min_order_quantity_unit;
 
                         $data[0]->cgst_amount = "0.00";
                         $data[0]->sgst_amount = "0.00";
@@ -400,6 +418,7 @@ class CustomerQuoteApiController extends Controller
                     } else {
                         $data[$i]->proceed_button = false;
                     }
+                    $data[$i]->vendor_name = maskVendorName($row->vendor_name);
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
