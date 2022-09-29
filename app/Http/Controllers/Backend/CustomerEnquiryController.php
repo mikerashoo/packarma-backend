@@ -394,11 +394,12 @@ class CustomerEnquiryController extends Controller
         $tblObj->vendor_price = $vendor_price_per_kg;
         $tblObj->commission_amt = $commission_per_kg;
         $tblObj->delivery_in_days = $request->delivery_in_days;
+        // modified by Pradyumn, 29-sept-2022, storing delivery charge to freight amount
         if(isset($request->delivery_charges) && !empty($request->delivery_charges)){
-            $delivery_charges = $request->delivery_charges;
-            $tblObj->delivery_charges = $delivery_charges;
+            $freight_amount = $request->delivery_charges;
+            $tblObj->freight_amount = $freight_amount;
         }else{
-            $delivery_charges = 0.00;
+            $freight_amount = 0;
         }
         //Modified by : Pradyumn, Created at: 27-Sept-2022, Uses: calculating vendor price and commission rate per kg :END
 
@@ -420,8 +421,7 @@ class CustomerEnquiryController extends Controller
         $sub_total_amount = $request->product_quantity * $mrp_rate;
         $tblObj->sub_total = $sub_total_amount;
         $tblObj->vendor_warehouse_id = $warehouse;
-        // print_r($warehouse_state_id);
-        // die;
+        
         if ($gst == 'applicable') {
             if ($enquiry_state_id == $warehouse_state_id) {
                 $gst_type = 'cgst+sgst';
@@ -438,15 +438,10 @@ class CustomerEnquiryController extends Controller
             $tblObj->gst_percentage = 0.00;
             $gst_amount = 0.00;
         }
-        if (isset($request->freight_amount)) {
-            $tblObj->freight_amount = $request->freight_amount;
-        } else {
-            $freight_amount = 0;
-        }
         $tblObj->gst_type = $gst_type;
         $tblObj->gst_amount = $gst_amount;
         // modified by : pradyumn, at: 27-Sept-2022, added delivery charge to grand total
-        $tblObj->total_amount = $sub_total_amount + $gst_amount + $freight_amount + $delivery_charges;
+        $tblObj->total_amount = $sub_total_amount + $gst_amount + $freight_amount;
         // print_r($balance);exit;
         //storing quotation validity in variable for increasing current time with validity hours
         $validity_hours =  $request->quotation_validity;
@@ -456,6 +451,7 @@ class CustomerEnquiryController extends Controller
         $tblObj->lead_time =  $request->lead_time ?? 7;
         $tblObj->created_by = session('data')['id'];
         $final_val = $tblObj->toarray();
+
         $quotationData = VendorQuotation::updateOrCreate(['id' => $request->id], $final_val);
         
         CustomerEnquiry::where('id', $request->customer_enquiry_id)->update(['quote_type' => 'map_to_vendor']);
@@ -622,7 +618,7 @@ class CustomerEnquiryController extends Controller
                 'vendor_quotations.vendor_warehouse_id',
                 'vendor_quotations.gst_percentage',
                 'vendor_quotations.delivery_in_days',
-                'vendor_quotations.delivery_charges',
+                'vendor_quotations.freight_amount',
                 'vendors.vendor_name',
                 'vendors.gstin',
             )

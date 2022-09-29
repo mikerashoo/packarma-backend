@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\CustomerEnquiry;
 use App\Models\User;
+use App\Models\Product;
 use App\Models\UserAddress;
 use App\Models\VendorQuotation;
 use App\Models\RecommendationEngine;
@@ -255,6 +256,135 @@ class CustomerEnquiryApiController extends Controller
             'product_quantity' => 'nullable|numeric',
             'packaging_material_id' => 'required|numeric',
             'user_address_id' => 'required|numeric'
+        ])->errors();
+    }
+
+    /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 29-sept-2022
+     * Uses : Store newly created customer enquiry by product packaging solution data in table.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function productEnquiryStore(Request $request)
+    {
+        $msg_data = array();
+        $isSubscribed = true;
+
+        \Log::info("Initiating Product Customer Enquiry process, starting at: " . Carbon::now()->format('H:i:s:u'));
+        try {
+            $token = readHeaderToken();
+            if ($token) {
+                $user_id = $token['sub'];
+                // Request Validation
+
+                $userSubscriptionCheck = User::find($user_id);
+                $subscriptionEndDate = $userSubscriptionCheck->subscription_end;
+                $todaysDate = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now());
+
+                // check user is subscribed or not
+                if (($userSubscriptionCheck->subscription_id == 0) || ($subscriptionEndDate < $todaysDate)) {
+                    $isSubscribed = false;
+                    $msg_data['is_subscribed'] = $isSubscribed;
+                    errorMessage(__('user.no_active_subscription'), $msg_data);
+                }
+
+
+                $validationErrors = $this->validateProductEnquiry($request);
+                if (count($validationErrors)) {
+                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    errorMessage($validationErrors->all(), $validationErrors->all());
+                }
+
+                //get recommendation engine(packaging solution) data from table
+                $packagingSolutionData = RecommendationEngine::where('id',$request->packaging_solution_id)->first();
+                
+                //checking min order quantity 
+                if (isset($request->product_quantity) && ($request->product_quantity < $packagingSolutionData->min_order_quantity)){
+                    errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                }
+                
+                //getting shelf life and shelf life unit from config
+                $shelf_life = config('global.DEFAULT_SHELF_LIFE');
+                $shelf_life_unit = config('global.DEFAULT_SHELF_LIFE_UNIT');
+                if ($packagingSolutionData->display_shelf_life) {
+                    $shelf_life = $packagingSolutionData->display_shelf_life;
+                }
+                
+                //get product data
+                $productData = Product::select('sub_category_id')->where('id',$packagingSolutionData->product_id)->first();
+
+                //getting data from recommendation engine table 
+                $request['user_id'] = $user_id;
+                $request['category_id'] = $packagingSolutionData->category_id;
+                $request['sub_category_id'] = $productData->sub_category_id;
+                $request['product_id'] = $packagingSolutionData->product_id;
+                $request['shelf_life'] = $shelf_life;
+                $request['entered_shelf_life'] = $shelf_life;
+                $request['entered_shelf_life_unit'] = $shelf_life_unit;
+                $request['measurement_unit_id'] = $packagingSolutionData->measurement_unit_id;
+                $request['storage_condition_id'] = $packagingSolutionData->storage_condition_id;
+                $request['packaging_machine_id'] = $packagingSolutionData->packaging_machine_id;
+                $request['product_form_id'] = $packagingSolutionData->product_form_id;
+                $request['packing_type_id'] = $packagingSolutionData->packing_type_id;
+                $request['packaging_treatment_id'] = $packagingSolutionData->packaging_treatment_id;
+                $request['recommendation_engine_id'] = $request->packaging_solution_id;
+                $request['packaging_material_id'] = $packagingSolutionData->packaging_material_id;
+                $request['status'] = '1';
+
+                //getting user address details from userAddress and putting value to request to store in cumstomer enquiry table
+                $userAddress = UserAddress::find($request->user_address_id);
+                $request['country_id'] = $userAddress->country_id;
+                $request['state_id'] = $userAddress->state_id;
+                $request['city_name'] = $userAddress->city_name;
+                
+                // $request['address'] = $userAddress->address;
+                $request['flat'] = $userAddress->flat;
+                $request['area'] = $userAddress->area;
+                $request['land_mark'] = $userAddress->land_mark;
+                $request['pincode'] = $userAddress->pincode;
+
+                if ($shelf_life_unit == 'months') {
+                    $request['shelf_life'] = $shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
+                } else {
+                    $request['shelf_life'] =  $shelf_life;
+                }
+                
+                // Store a new enquiry
+                $enquiryData = CustomerEnquiry::create($request->all());
+                $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
+                $enquiryData->is_subscribed = $isSubscribed;
+                \Log::info("Product Customer Enquiry Created successfully");
+                successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Customer enquiry creation failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    
+
+    /**
+     * Created By Pradyumn Dwivedi
+     * Created at : 29-Sept-2022
+     * Uses : Validate product customer enquiry request
+     * 
+     * Validate request for Customer Enquiry.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    private function validateProductEnquiry(Request $request)
+    {
+        return \Validator::make($request->all(), [
+            'packaging_solution_id' => 'required|integer',
+            'product_quantity' => 'required|numeric',
+            'product_weight' => 'required|numeric',
+            'user_address_id' => 'required|integer'
         ])->errors();
     }
 }

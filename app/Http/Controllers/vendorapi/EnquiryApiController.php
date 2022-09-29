@@ -47,6 +47,8 @@ class EnquiryApiController extends Controller
                 $data = DB::table($main_table)->select(
                     'vendor_quotations.id',
                     'vendor_quotations.vendor_price',
+                    'vendor_quotations.freight_amount',
+                    'vendor_quotations.delivery_in_days',
                     'vendor_quotations.enquiry_status',
                     'vendor_quotations.vendor_warehouse_id',
                     'vendor_quotations.created_at',
@@ -249,11 +251,11 @@ class EnquiryApiController extends Controller
                     $freight_amount = $checkQuotation->freight_amount;
                 }
 
-                if(isset($request->delivery_charges) && !empty($request->delivery_charges)){
-                    $delivery_charges = $request->delivery_charges;
+                if(isset($request->delivery_in_days) && !empty($request->delivery_in_days)){
+                    $delivery_in_days = $request->delivery_in_days;
                 }
                 else{
-                    $delivery_charges = $checkQuotation->delivery_charges;
+                    $delivery_in_days = $checkQuotation->delivery_in_days;
                 }
 
                 if ($new_vendor_price != $existing_vendor_price) {
@@ -267,7 +269,7 @@ class EnquiryApiController extends Controller
                     $mrp = $new_vendor_price + $commission_amt;
                     $sub_total_amount = $product_quantity * $mrp;
                     $gst_amount = $mrp * $gst_percentage / 100;
-                    $total_amount = $sub_total_amount + $gst_amount + $freight_amount + $delivery_charges;
+                    $total_amount = $sub_total_amount + $gst_amount + $freight_amount;
                     $quotation_data['mrp'] = $mrp;
                     $quotation_data['sub_total'] = $sub_total_amount;
                     $quotation_data['gst_amount'] = $gst_amount;
@@ -275,7 +277,7 @@ class EnquiryApiController extends Controller
                 }
 
                 $quotation_data['freight_amount'] = $freight_amount;
-                $quotation_data['delivery_charges'] = $delivery_charges;
+                $quotation_data['delivery_in_days'] = $delivery_in_days;
                 $quotation_data['vendor_price'] = $new_vendor_price;
                 $quotation_data['vendor_id'] = $vendor_id;
                 $quotation_data['enquiry_status'] = 'quoted';
@@ -324,13 +326,14 @@ class EnquiryApiController extends Controller
                 'vendor_price' => 'required|numeric|between:1,99999.999',
                 'vendor_warehouse_id' => 'required|integer|gt:0',
                 'freight_amount' => 'nullable|numeric',
-                'delivery_charges' => 'nullable|numeric'
+                'delivery_in_days' => 'nullable|integer'
 
             ],
             [
                 'vendor_price.between' => 'The vendor price must not be greater than 99999.99',
                 'vendor_warehouse_id.required' => 'Warehouse is require',
                 'vendor_warehouse_id.gt' => 'Warehouse not found',
+                'delivery_in_days.integer' => 'Please enter delivery days in integer format'
             ]
 
         )->errors();
