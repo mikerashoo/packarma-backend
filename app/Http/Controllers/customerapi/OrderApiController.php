@@ -313,8 +313,9 @@ class OrderApiController extends Controller
                     'orders.gst_type',
                     'orders.gst_amount',
                     'orders.gst_percentage',
-                    'orders.delivery_charges',
+                    'orders.freight_amount',
                     'orders.delivery_in_days',
+                    'orders.delivery_type',
                     'orders.sub_total',
                     'orders.grand_total',
                     'currencies.currency_symbol',
@@ -513,7 +514,7 @@ class OrderApiController extends Controller
                 //storing values in variable from vendor quotation table
                 $mrp_rate_price = $vendor_quotation_data->mrp;
                 $freight_amount_price = $vendor_quotation_data->freight_amount;
-                $delivery_charges_price = $vendor_quotation_data->delivery_charges;
+                $delivery_in_days = $vendor_quotation_data->delivery_in_days;
                 $gst_percentage = $vendor_quotation_data->gst_percentage;
 
                 //calculate sub total amount and store in variable
@@ -530,7 +531,7 @@ class OrderApiController extends Controller
 
 
                 //calculate total amount
-                $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price + $delivery_charges_price;
+                $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price;
 
 
                 //create an array and store all value
@@ -555,7 +556,7 @@ class OrderApiController extends Controller
                 $quantity_calculation_data['gst_percentage'] = $gst_percentage;
                 $quantity_calculation_data['sub_total'] = $sub_total_price;
                 $quantity_calculation_data['freight_amount'] = $freight_amount_price;
-                $quantity_calculation_data['delivery_charges'] = $delivery_charges_price;
+                $quantity_calculation_data['delivery_in_days'] = $delivery_in_days;
                 $quantity_calculation_data['total_amount'] = $total_amount_price;
                 $quantity_calculation_data['currency_symbol'] = $currency_symbol;
 
@@ -615,7 +616,7 @@ class OrderApiController extends Controller
                 $mrp_rate_price = $vendor_quotation_data->mrp;
                 $gst_amount_price = $vendor_quotation_data->gst_amount;
                 $freight_amount_price = $vendor_quotation_data->freight_amount;
-                $delivery_charges_price = $vendor_quotation_data->delivery_charges;
+                $delivery_in_days = $vendor_quotation_data->delivery_in_days;
 
                 $commission_price = $vendor_quotation_data->commission_amt;
                 $vendor_amount_price = $vendor_quotation_data->vendor_price;
@@ -634,7 +635,7 @@ class OrderApiController extends Controller
                 }
 
                 //calculate total amount
-                $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price + $delivery_charges_price;
+                $total_amount_price = $sub_total_price + $gst_amount_price + $freight_amount_price;
 
                 //calculate commision and vendor price
                 $commission = $commission_price * $product_quantity;
@@ -674,7 +675,7 @@ class OrderApiController extends Controller
                 $order_request_data['gst_type'] = $gst_type;
                 $order_request_data['gst_percentage'] = $gst_percentage;
                 $order_request_data['freight_amount'] = $freight_amount_price;
-                $order_request_data['delivery_charges'] = $delivery_charges_price;
+                $order_request_data['delivery_in_days'] = $delivery_in_days;
                 $order_request_data['grand_total'] = $total_amount_price;
                 $order_request_data['commission'] = $commission;
                 $order_request_data['vendor_amount'] = $vendor_amount;
@@ -739,7 +740,7 @@ class OrderApiController extends Controller
                     'gst_type' => $gst_type,
                     'gst_percentage' => $gst_percentage,
                     'freight_amount' => $freight_amount_price,
-                    'delivery_charges' => $delivery_charges_price,
+                    'delivery_in_days' => $delivery_in_days,
                     'grand_total' => $total_amount_price,
                     'commission' => $commission,
                     'vendor_amount' => $vendor_amount,

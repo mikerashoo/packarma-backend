@@ -77,7 +77,7 @@ $readonly = '';
     <dl class="row">
         <dt class="col-sm-5 text-left">Delivery Charges <span style="color:#ff0000">*</span></dt>
         <dd class="col-sm-7">
-           <input class="form-control required" type="text" step=".01" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->delivery_charges ?? '' ;}}" id="delivery_charges" name="delivery_charges" {{$readonly}}>
+           <input class="form-control required" type="text" step=".01" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->freight_amount ?? '' ;}}" id="delivery_charges" name="delivery_charges" {{$readonly}}>
         </dd>
     </dl>
      {{-- <dl class="row">

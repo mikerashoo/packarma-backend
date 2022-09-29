@@ -78,6 +78,7 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //Customer enquiry
         Route::post('/customer_enquiry/my_place_enquiry', 'CustomerEnquiryApiController@store');
+        Route::post('/customer_enquiry/customer_enquiry_store_product', 'CustomerEnquiryApiController@productEnquiryStore');
         Route::post('/customer_enquiry/my_enquiry_listing', 'CustomerEnquiryApiController@index');
 
         //Packaging Material
