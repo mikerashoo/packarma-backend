@@ -851,7 +851,11 @@ if (!function_exists('calcCustomerSubscription')) {
     }
 }
 
-
+/**
+ * Created by : Pradyumn Dwivedi
+ * Created at : 30-Sept-2022
+ * Uses : To send otp setting message content body
+ */
 if (!function_exists('sendOTPSms')) {
     function sendOTPSms($randomNumber = '', $mobile_number = '', $lang = 'en')
     {
@@ -869,7 +873,11 @@ if (!function_exists('sendOTPSms')) {
 }
 
 
-
+/**
+ * Created by : Pradyumn Dwivedi
+ * Created at : 29-Sept-2022
+ * Uses : To send sms call clickatell url
+ */
 if (!function_exists('smsGetCall')) {
     function
     smsGetCall($sms_body = '', $mobile_number = '')
@@ -887,9 +895,15 @@ if (!function_exists('smsGetCall')) {
             CURLOPT_URL => 'https://platform.clickatell.com/messages/http/send?apiKey=' . $apiKey . '&to=' . $mobile_number . '&content=' . $sms_body,
         ]);
         $resp = curl_exec($curl);
-        // print_r($resp);
-        // die;
+        $err = curl_error($curl);
+        $err_no_curl = curl_errno($curl);
         curl_close($curl);
+        if ($err || $err_no_curl) {
+            \Log::error("smsGetCall Curl Call has Error number " . $err_no_curl . " and Error is ::" . $err);
+        } else {
+            \Log::error("smsGetCall Curl Call Success has :: " . $resp);
+            return $resp;
+        }
     }
 }
 

@@ -59,7 +59,7 @@
                                     <div class="col-md-3 col-12">
                                         <div class="card card-outline-secondary box-shadow-0 text-center" style="height: 90%;">
                                             <div class="card-content">
-                                                <div class="card-body modal_src_data" data-size="medium" data-title="Map Vendor To Enquiry" href="map_vendor_form/-1/{{ $data->id }}">
+                                                <div class="card-body modal_src_data" data-size="extra-large" data-title="Map Vendor To Enquiry" href="map_vendor_form/-1/{{ $data->id }}">
                                                     <h1><i class="fa fa-user fa-2x text-secondary" style="color: grey;"></i></h1>
                                                     <h4 class="card-title text-secondary">Map Vendors</h4>
                                                 </div>
@@ -80,7 +80,7 @@
                                                     <p class="text-secondary small">Commission Rate, {{ $vendors->commission_amt ??''; }}/{{ $vendors->unit_symbol ??''; }}</p>
                                                 </div>
                                                 <div class="card-footer">
-                                                <a href="map_vendor_form/{{$vendors->id}}/{{ $data->id }}" class="modal_src_data" data-size="medium" data-title="Edit Mapped Vendor" style="color: #975AFF;">Edit</a> @if($vendors->enquiry_status != 'quoted' && $vendors->enquiry_status != 'accept') | <a style="color: red;" class="delete_map_vendor" data-id="{{$vendors->id}}" data-url="delete_map_vendor" id="delete{{$i}}" >Remove</a> @endif
+                                                <a href="map_vendor_form/{{$vendors->id}}/{{ $data->id }}" class="modal_src_data" data-size="extra-large" data-title="Edit Mapped Vendor" style="color: #975AFF;">Edit</a> @if($vendors->enquiry_status != 'quoted' && $vendors->enquiry_status != 'accept') | <a style="color: red;" class="delete_map_vendor" data-id="{{$vendors->id}}" data-url="delete_map_vendor" id="delete{{$i}}" >Remove</a> @endif
                                             </div>
                                             </div>
                                         </div>

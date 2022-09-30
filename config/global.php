@@ -41,7 +41,7 @@ return [
     'GST_NO_VALIDATION' => '^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$^',
     'MAX_VENDOR_ADDRESS_COUNT' => '10',
     'MAX_USER_ADDRESS_COUNT' => '10',
-    'TEST_SMS_API' => '',
+    'TEST_SMS_API' => 'LzqUPBE3QfK_PmZXgf4DCA==',
     'TEMP_URL_EXP_HOUR' => '48',
     'TEMP_URL_EXP_DAYS_FOR_INVOICE' => '365',
     'MONTH_TO_MULTIPLY_SHELF_LIFE' => '30',

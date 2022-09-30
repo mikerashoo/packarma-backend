@@ -603,6 +603,9 @@ class CustomerEnquiryController extends Controller
             }
         }
 
+        //get min_order_quantity_unit from from recommendation engine 
+        $order_quantity_unit = RecommendationEngine::select('min_order_quantity_unit')->where('id',$data['customer_enquiry_data']->recommendation_engine_id)->first();
+        $data['min_order_quantity_unit'] = $order_quantity_unit->min_order_quantity_unit;
 
         if ($id != -1) {
             $data['vender_quotation_details'] = DB::table('vendor_quotations')->select(
@@ -626,9 +629,6 @@ class CustomerEnquiryController extends Controller
                 ->where([['vendor_quotations.id', $id]])->first();
 
             if ($data['vender_quotation_details']){
-                $recommendation_id_db = CustomerEnquiry::select('recommendation_engine_id')->where('id',$data['vender_quotation_details']->customer_enquiry_id)->first();
-                $order_quantity_unit = RecommendationEngine::select('min_order_quantity_unit')->where('id',$recommendation_id_db->recommendation_engine_id)->first();
-                $data['vender_quotation_details']->min_order_quantity_unit = $order_quantity_unit->min_order_quantity_unit;
                 $data['vender_quotation_details']->vendor_price = $data['vender_quotation_details']->vendor_price * $data['vender_quotation_details']->product_quantity;
                 $data['vender_quotation_details']->commission_amt = $data['vender_quotation_details']->commission_amt * $data['vender_quotation_details']->product_quantity;
             }
