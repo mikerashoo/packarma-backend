@@ -88,6 +88,14 @@
                                                         <td>{{$data[0]['currency']['currency_symbol'].' '.$data[0]['sub_total'];}}</td>
                                                     </tr>
                                                     <tr>
+                                                        {{-- <td><strong>Delivery in Days</strong></td>
+                                                        <td>{{$data[0]['vendor_quotations']['delivery_in_days']}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><strong>Delivery Charges</strong></td>
+                                                        <td>{{$data[0]['currency']['currency_symbol'].' '.$data[0]['vendor_quotation']->freight_amount;}}</td>
+                                                    </tr>
+                                                    <tr> --}}
                                                         <td><strong>GST Type</strong></td>
                                                         <td>{{gstType($data[0]['gst_type']);}}</td>
                                                     </tr>
