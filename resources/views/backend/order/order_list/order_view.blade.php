@@ -88,14 +88,18 @@
                                                         <td>{{$data[0]['currency']['currency_symbol'].' '.$data[0]['sub_total'];}}</td>
                                                     </tr>
                                                     <tr>
-                                                        {{-- <td><strong>Delivery in Days</strong></td>
-                                                        <td>{{$data[0]['vendor_quotations']['delivery_in_days']}}</td>
+                                                        <td><strong>Delivery in Days</strong></td>
+                                                        @if ($data[0]['vendor_quotation']['delivery_in_days'])
+                                                            <td>{{$data[0]['vendor_quotation']['delivery_in_days']}} (Days)</td>
+                                                        @else
+                                                            <td>-</td>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Delivery Charges</strong></td>
                                                         <td>{{$data[0]['currency']['currency_symbol'].' '.$data[0]['vendor_quotation']->freight_amount;}}</td>
                                                     </tr>
-                                                    <tr> --}}
+                                                    <tr>
                                                         <td><strong>GST Type</strong></td>
                                                         <td>{{gstType($data[0]['gst_type']);}}</td>
                                                     </tr>
@@ -167,7 +171,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Product Quantity</strong></td>
-                                                        <td>{{$data[0]['product_quantity']}}</td>
+                                                        <td>{{$data[0]['product_quantity']}} {{ $data[0]['recommendation_engine']->min_order_quantity_unit }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Storage Condition</strong></td>
@@ -213,7 +217,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Address Type</strong></td>
-                                                        <td>{{$data[0]['shipping_details']['type']}}</td>
+                                                        <td>{{addressType($data[0]['shipping_details']['type'])}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Mobile No</strong></td>
@@ -259,7 +263,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Address Type</strong></td>
-                                                        <td>{{$data[0]['billing_details']['type']}}</td>
+                                                        <td>{{addressType($data[0]['billing_details']['type'])}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>GST Number</strong></td>

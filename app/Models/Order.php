@@ -253,6 +253,6 @@ class Order extends Model
      */
     public function vendor_quotation()
     {
-        return $this->belongsTo('App\Models\Review');
+        return $this->belongsTo('App\Models\VendorQuotation');
     }
 }

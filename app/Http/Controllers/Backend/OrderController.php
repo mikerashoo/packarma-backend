@@ -382,24 +382,8 @@ class OrderController extends Controller
     // 'storage_condition', table pending
     public function viewOrder($id)
     {
-        $data['data'] = Order::where('id', $id)->get();
-        $data['user'] = User::all();
-        $data['vendor'] = Vendor::all();
-        $data['product'] = Product::all();
-        $data['country'] = Country::all();
-        $data['currency'] = Currency::all();
-        $data['category'] = Category::all();
-        $data['sub_category'] = SubCategory::all();
-        $data['product_form'] = ProductForm::all();
-        $data['packing_type'] = PackingType::all();
-        // $data['vendor_quotation'] = VendorQuotation::all();
-        $data['measurement_unit'] = MeasurementUnit::all();
-        $data['packaging_machine'] = PackagingMachine::all();
-        $data['packaging_material'] = PackagingMaterial::all();
-        $data['packaging_treatment'] = PackagingTreatment::all();
-        $data['recommendation_engine'] = RecommendationEngine::all();
-        // echo '<pre>';
-        // print_r($data);exit;
+        $data['data'] = Order::with('user','vendor','product','country','currency','category','sub_category','product_form','packing_type',
+                                'vendor_quotation','measurement_unit','packaging_machine','packaging_material','packaging_treatment','recommendation_engine')->where('id', $id)->get();
         $i = 0;
         foreach ($data['data'] as $row) {
             $data['data'][$i]->order_id = getFormatid($row->id, 'orders');

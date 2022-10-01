@@ -639,7 +639,8 @@ class OrderApiController extends Controller
 
                 //calculate gst amount
                 if ($gst_percentage != 0) {
-                    $gst_amount_price = $sub_total_price * $gst_percentage / 100;
+                    $gst_amount_price_calc = $sub_total_price * $gst_percentage / 100;
+                    $gst_amount_price = number_format((float)$gst_amount_price_calc, 2, '.', '');
                 } else {
                     $gst_amount_price = 0;
                 }
