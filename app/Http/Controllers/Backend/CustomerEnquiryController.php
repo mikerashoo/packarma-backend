@@ -257,6 +257,9 @@ class CustomerEnquiryController extends Controller
             'vendor_quotations.commission_amt',
             'vendor_quotations.lead_time',
             'vendor_quotations.enquiry_status',
+            'vendor_quotations.customer_enquiry_id',
+            'customer_enquiries.recommendation_engine_id',
+            'recommendation_engines.min_order_quantity_unit',
             'vendors.vendor_name',
             'customer_enquiries.description',
             'customer_enquiries.enquiry_type',
@@ -264,8 +267,8 @@ class CustomerEnquiryController extends Controller
             'customer_enquiries.product_quantity',
             'customer_enquiries.shelf_life',
             'customer_enquiries.address',
-            'measurement_units.unit_name',
-            'measurement_units.unit_symbol',
+            // 'measurement_units.unit_name',
+            // 'measurement_units.unit_symbol',
         )
             ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
             ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
