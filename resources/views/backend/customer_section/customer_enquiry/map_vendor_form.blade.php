@@ -113,30 +113,18 @@ $readonly = '';
             </dd>
         </dl>
         <dl class="row col-sm-6" id="gst_percentage_div">
-                <dt class="col-sm-5 text-left">Gst Pecentage <span style="color:#ff0000">*</span> :</dt>
-                <dd class="col-sm-7">
-                    <input class="form-control" type="text" inputmode="numeric" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->gst_percentage ?? '18' ;}}" id="gst_percentage" name="gst_percentage" min=0 max=100 {{$readonly}}>
-                </dd>
+            <dt class="col-sm-5 text-left">Gst Pecentage <span style="color:#ff0000">*</span> :</dt>
+            <dd class="col-sm-7">
+                <input class="form-control" type="text" inputmode="numeric" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->gst_percentage ?? '18' ;}}" id="gst_percentage" name="gst_percentage" min=0 max=100 {{$readonly}}>
+            </dd>
         </dl>
-        {{-- <dl class="col-sm-6">
-            <dl class="col-sm-6 row">
-                <dt class="col-sm-5 text-left">Total Vendor Price <span style="color:#ff0000">*</span> :</dt>
-                <dd class="col-sm-7">
-                    <input class="form-control required" type="text" step=".001" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->vendor_price ?? '' ;}}" id="vendor_price_bulk" name="vendor_price_bulk" {{$readonly}}>
-                </dd>
-            </dl>
-            {{-- <dl class="row">
-                <dl id="gst_percentage_div">
-                    <dt class="col-sm-5 text-left">Gst Pecentage <span style="color:#ff0000">*</span> :</dt>
-                    <dd class="col-sm-7">
-                        <input class="form-control" type="text" inputmode="numeric" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->gst_percentage ?? '18' ;}}" id="gst_percentage" name="gst_percentage" min=0 max=100 {{$readonly}}>
-                    </dd>
-                </dl>
-            </dl> --}}
-        {{-- </dl> --}}
     </dl>
     <div class="row">
         <div class="col-sm-12">
+            {{-- <div class="pull-left col-sm-6">
+                <dt class="col-sm-5 text-left">Grand Total</dt>
+                <dd class="col-sm-7" id="enquiry_grand_total_amount" readonly></dd>
+            </div> --}}
             <div class="pull-right">
                 @if(!$view_only)
                 <button type="button" class="btn btn-sm btn-success px-3 py-1" onclick="submitModalForm('customerEnquiryMapToVendorForm','post')">Add</button>

@@ -76,7 +76,7 @@
                                                 <div class="card-body pb-0">
                                                     <h6>{{ $vendors->vendor_name ?? ''; }} @if($vendors->enquiry_status == 'accept')<i class="fa fa-check-circle success pull-right"></i>@endif</h6>
                                                     <p class="text-secondary small">Rate, {{ $vendors->vendor_price ??''; }}/{{ $vendors->min_order_quantity_unit ??''; }}</p>
-                                                    <p class="text-secondary small">Delivery in {{ $vendors->lead_time ??''; }} Days</p>
+                                                    <p class="text-secondary small">Delivery in {{ $vendors->delivery_in_days ??''; }} Days</p>
                                                     <p class="text-secondary small">Commission Rate, {{ $vendors->commission_amt ??''; }}/{{ $vendors->min_order_quantity_unit ??''; }}</p>
                                                 </div>
                                                 <div class="card-footer">

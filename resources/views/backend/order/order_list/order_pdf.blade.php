@@ -98,16 +98,16 @@
         <td width="8%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;"> {{$data->grand_total ?? ''}}</td>
     </tr>
 
-     {{-- <tr>
+     <tr>
         <td width="5%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; border-right-color: black; font-size: 7px; text-align:center;">2</td>
         <td width="9%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">Delivery Charge</td>
-        <td width="6%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->hsn_code ?? '996819'}}</td>
-        <td width="5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->unit_symbol ?? ''}}</td>
-        <td width="5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->product_quantity ?? ''}}</td>
-        <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->freight_amount ?? 0}}</td>
+        <td width="6%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->hsn_code ?? ''}}</td>
+        <td width="5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;"></td>
+        <td width="5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;"></td>
+        <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;"></td>
         <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->freight_amount ?? 0}}</td>
         <td width="8%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->discount ?? 0}}</td>
-        <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_tax_val}}</td>
+        <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->freight_amount ?? 0}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_cgst}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_cgst_amount}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_sgst}}</td>
@@ -115,7 +115,7 @@
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_igst}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_igst_amount}}</td>
         <td width="8%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$dc_amount??0}}</td>
-    </tr> --}}
+    </tr>
 
        <tr>
         <td width="25%" style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; border-right-color: black; font-size: 9px; text-align:center;"><b>Grand Total</b></td>
