@@ -44,6 +44,7 @@ class QuotationApiController extends Controller
                 $data = DB::table('vendor_quotations')->select(
                     'vendor_quotations.id',
                     'vendor_quotations.vendor_price',
+                    'vendor_quotations.vendor_amount',
                     'vendor_quotations.enquiry_status',
                     'vendor_quotations.vendor_warehouse_id',
                     'vendor_quotations.freight_amount',

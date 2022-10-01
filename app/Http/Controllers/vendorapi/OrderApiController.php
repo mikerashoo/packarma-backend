@@ -45,7 +45,7 @@ class OrderApiController extends Controller
                 $data = DB::table('orders')->select(
                     'orders.id',
                     'orders.product_weight',
-                    'orders.vendor_amount',
+                    // 'orders.vendor_amount',
                     'orders.vendor_pending_payment',
                     'orders.customer_payment_status',
                     'orders.vendor_payment_status',
