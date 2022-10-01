@@ -28,6 +28,7 @@ class OrderApiController extends Controller
                 $vendor_id = $vendor_token['sub'];
                 $page_no = 1;
                 $limit = 10;
+                $delivery_in_days_unit = 'Days';
                 $orderByArray = ['orders.updated_at' => 'DESC',];
                 $defaultSortById = false;
 
@@ -52,6 +53,8 @@ class OrderApiController extends Controller
                     'orders.product_quantity',
                     'orders.mrp',
                     'vendor_quotations.vendor_price',
+                    'vendor_quotations.freight_amount',
+                    'vendor_quotations.delivery_in_days',
                     'orders.gst_type',
                     'orders.gst_amount',
                     'orders.gst_percentage',
@@ -82,6 +85,8 @@ class OrderApiController extends Controller
                     'recommendation_engines.display_shelf_life',
                     'recommendation_engines.min_shelf_life',
                     'recommendation_engines.max_shelf_life',
+                    'recommendation_engines.min_order_quantity',
+                    'recommendation_engines.min_order_quantity_unit',
                     'packaging_materials.packaging_material_name',
                     'packaging_materials.material_description',
                     'customer_enquiries.address',
@@ -200,6 +205,7 @@ class OrderApiController extends Controller
 
                 $i = 0;
                 foreach ($data as $row) {
+                    $data[$i]->delivery_in_days_unit = $delivery_in_days_unit;
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";

@@ -124,7 +124,7 @@ class CustomerQuoteApiController extends Controller
                     $recommendEngineId = CustomerEnquiry::select('recommendation_engine_id')->where('id', $row->customer_enquiry_id)->first();
                     $order_quantity_unit_db = RecommendationEngine::select('min_order_quantity_unit')->where('id', $recommendEngineId->recommendation_engine_id)->first();
                     $data[$i]->min_order_quantity_unit = $order_quantity_unit_db->min_order_quantity_unit;
-                    $data[$i]->delivery_in_days = $delivery_in_days_unit;
+                    $data[$i]->delivery_in_days_unit = $delivery_in_days_unit;
                     
                     $data[$i]->vendor_name = maskVendorName($row->vendor_name);
                     $data[$i]->cgst_amount = "0.00";

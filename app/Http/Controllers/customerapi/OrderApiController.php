@@ -348,7 +348,9 @@ class OrderApiController extends Controller
                 $data = $data->get()->toArray();
                 $reviewData = Review::where('order_id', $request->order_id)->get()->count();
                 $i = 0;
+                $delivery_in_days_unit = 'Days';
                 foreach ($data as $row) {
+                    $data[$i]->delivery_in_days_unit = $delivery_in_days_unit;
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
