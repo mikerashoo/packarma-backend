@@ -52,7 +52,7 @@ class OrderApiController extends Controller
                     'orders.order_delivery_status',
                     'orders.product_quantity',
                     'orders.mrp',
-                    'vendor_quotations.vendor_price',
+                    'vendor_quotations.vendor_amount',
                     'vendor_quotations.freight_amount',
                     'vendor_quotations.delivery_in_days',
                     'orders.gst_type',

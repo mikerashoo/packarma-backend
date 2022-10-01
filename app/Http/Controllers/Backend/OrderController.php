@@ -21,6 +21,7 @@ use App\Models\OrderPayment;
 use App\Models\MeasurementUnit;
 use App\Models\StorageCondition;
 use App\Models\PackagingMachine;
+use App\Models\VendorQuotation;
 use App\Models\RecommendationEngine;
 use App\Models\PackagingTreatment;
 use App\Models\PackagingMaterial;
@@ -391,12 +392,14 @@ class OrderController extends Controller
         $data['sub_category'] = SubCategory::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
+        // $data['vendor_quotation'] = VendorQuotation::all();
         $data['measurement_unit'] = MeasurementUnit::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_material'] = PackagingMaterial::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['recommendation_engine'] = RecommendationEngine::all();
-
+        // echo '<pre>';
+        // print_r($data);exit;
         $i = 0;
         foreach ($data['data'] as $row) {
             $data['data'][$i]->order_id = getFormatid($row->id, 'orders');

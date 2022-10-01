@@ -245,4 +245,14 @@ class Order extends Model
     {
         return $this->belongsTo('App\Models\Review');
     }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 12-july-2022
+     * uses : To get vendor quotation data 
+     */
+    public function vendor_quotation()
+    {
+        return $this->belongsTo('App\Models\Review');
+    }
 }
