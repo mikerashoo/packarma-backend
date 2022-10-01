@@ -219,6 +219,7 @@ class RecommendationEngineController extends Controller
         }
         $tableObject->engine_name = $request->packaging_solution;
         $tableObject->structure_type = $request->structure_type;
+        // print_r($request->sequence);exit;
         $tableObject->sequence = $request->sequence;
         $tableObject->product_id = $request->product;
         $tableObject->min_shelf_life = $request->min_shelf_life ?? 1;
