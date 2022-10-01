@@ -453,6 +453,7 @@ class OrderController extends Controller
                 'orders.gst_percentage',
                 'orders.freight_amount',
                 'orders.gst_amount',
+                'orders.sub_total',
                 'orders.grand_total',
                 'orders.shipping_details',
                 'orders.billing_details',

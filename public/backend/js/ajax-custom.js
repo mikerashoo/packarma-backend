@@ -707,3 +707,18 @@ function setRatePerUnit(unit){
     $("#vendor_price_unit").text(unit);
     $("#commission_price_unit").text(unit);
 };
+
+//added by :Pradyumn, added on: 01/10/2022, uses : To set grand total amount in customer enquiry map modal form
+// $(document).on('change', '#commission_rate_bulk', function () {
+//     var commission_rate_bulk = document.getElementById("commission_rate_bulk").value;
+//     if (commission_rate_bulk) {
+//         $("#commission_price_per_kg_div").show();
+//     }
+//     else {
+//         $("#commission_price_per_kg_div").hide();
+//     }
+//     var product_quantity = document.getElementById("product_quantity").value;
+//     var commsission_rate_calc = commission_rate_bulk / product_quantity;
+//     var commission_rate_per_kg = (commsission_rate_calc).toFixed(2).replace(/\.00$/,'');
+//     $("#commission_rate").text(commission_rate_per_kg);
+// });
