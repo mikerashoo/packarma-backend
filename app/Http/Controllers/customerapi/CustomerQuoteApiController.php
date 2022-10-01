@@ -38,6 +38,7 @@ class CustomerQuoteApiController extends Controller
                 $user_id = $token['sub'];
                 $page_no = 1;
                 $limit = 10;
+                $delivery_in_days_unit = 'Days';
                 $orderByArray = ['vendor_quotations.updated_at' => 'DESC',];
                 $defaultSortByName = false;
 
@@ -52,6 +53,8 @@ class CustomerQuoteApiController extends Controller
                 $data = DB::table('vendor_quotations')->select(
                     'vendor_quotations.id',
                     'vendor_quotations.customer_enquiry_id',
+                    'customer_enquiries.recommendation_engine_id',
+                    'recommendation_engines.min_order_quantity_unit',
                     'vendor_quotations.vendor_id',
                     'vendors.vendor_name',
                     'vendor_quotations.vendor_warehouse_id',
@@ -65,14 +68,20 @@ class CustomerQuoteApiController extends Controller
                     'vendor_quotations.gst_type',
                     'vendor_quotations.gst_amount',
                     'vendor_quotations.gst_percentage',
+                    'vendor_quotations.sub_total',
                     'vendor_quotations.total_amount',
+                    'currencies.currency_symbol',
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
                     ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
+                    ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
+                    ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->leftjoin('currencies', 'currencies.id', '=', 'vendor_quotations.currency_id')
                     ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id]])->whereIn('vendor_quotations.enquiry_status', ['quoted', 'viewed']);
 
                 $quotationData = VendorQuotation::whereRaw("1 = 1");
+
                 if ($request->customer_enquiry_id) {
                     $quotationData = $quotationData->where('vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id);
                     $data = $data->where('vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id);
@@ -115,6 +124,7 @@ class CustomerQuoteApiController extends Controller
                     $recommendEngineId = CustomerEnquiry::select('recommendation_engine_id')->where('id', $row->customer_enquiry_id)->first();
                     $order_quantity_unit_db = RecommendationEngine::select('min_order_quantity_unit')->where('id', $recommendEngineId->recommendation_engine_id)->first();
                     $data[$i]->min_order_quantity_unit = $order_quantity_unit_db->min_order_quantity_unit;
+                    $data[$i]->delivery_in_days = $delivery_in_days_unit;
                     
                     $data[$i]->vendor_name = maskVendorName($row->vendor_name);
                     $data[$i]->cgst_amount = "0.00";
@@ -184,6 +194,7 @@ class CustomerQuoteApiController extends Controller
                     // return "quotationEnquiryStatusData";
                     \Log::info("Customer Quotation Accepted Successfully");
                     if ($quotationEnquiryStatusData) {
+                        $delivery_in_days_unit = 'Days';
                         $data = DB::table('vendor_quotations')->select(
                             'vendor_quotations.id',
                             'vendor_quotations.vendor_id',
@@ -198,11 +209,19 @@ class CustomerQuoteApiController extends Controller
                             'vendor_warehouses.pincode',
                             'vendor_quotations.gst_type',
                             'vendor_quotations.gst_amount',
-                            'vendor_quotations.customer_enquiry_id'
+                            'vendor_quotations.sub_total',
+                            'vendor_quotations.total_amount',
+                            'vendor_quotations.customer_enquiry_id',
+                            'customer_enquiries.recommendation_engine_id',
+                            'recommendation_engines.min_order_quantity_unit',
+                            'currencies.currency_symbol',
                         )
                             ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                             ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
                             ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
+                            ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
+                            ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                            ->leftjoin('currencies', 'currencies.id', '=', 'vendor_quotations.currency_id')
                             ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.id', $request->vendor_quotation_id]]);
 
                         $autoRejectQuotations = DB::table('vendor_quotations')->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id]])
@@ -226,6 +245,7 @@ class CustomerQuoteApiController extends Controller
                         $recommendEngineId = CustomerEnquiry::select('recommendation_engine_id')->where('id', $data[0]->customer_enquiry_id)->first();
                         $order_quantity_unit_db = RecommendationEngine::select('min_order_quantity_unit')->where('id', $recommendEngineId->recommendation_engine_id)->first();
                         $data[0]->min_order_quantity_unit = $order_quantity_unit_db->min_order_quantity_unit;
+                        $data[0]->delivery_in_days_unit = $delivery_in_days_unit;
 
                         $data[0]->cgst_amount = "0.00";
                         $data[0]->sgst_amount = "0.00";
@@ -353,6 +373,7 @@ class CustomerQuoteApiController extends Controller
                 $user_id = $token['sub'];
                 $page_no = 1;
                 $limit = 10;
+                $delivery_in_days_unit = 'Days';
 
                 if (isset($request->page_no) && !empty($request->page_no)) {
                     $page_no = $request->page_no;
@@ -376,11 +397,19 @@ class CustomerQuoteApiController extends Controller
                     'vendor_quotations.gst_type',
                     'vendor_quotations.gst_amount',
                     'vendor_quotations.gst_percentage',
-                    'vendor_quotations.customer_enquiry_id'
+                    'vendor_quotations.sub_total',
+                    'vendor_quotations.total_amount',
+                    'vendor_quotations.customer_enquiry_id',
+                    'customer_enquiries.recommendation_engine_id',
+                    'recommendation_engines.min_order_quantity_unit',
+                    'currencies.currency_symbol',
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
                     ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
+                    ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
+                    ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->leftjoin('currencies', 'currencies.id', '=', 'orders.currency_id')
                     ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.enquiry_status', 'accept']]);
 
                 $acceptedQuotationData = VendorQuotation::whereRaw("1 = 1");
@@ -413,24 +442,27 @@ class CustomerQuoteApiController extends Controller
                 foreach ($data as $row) {
                     $proceed_button = false;
                     $customer_enq_data = CustomerEnquiry::where([['id', $row->customer_enquiry_id], ['quote_type', 'accept_cust']])->first();
-                    if ($customer_enq_data->quote_type == 'accept_cust') {
+                    if ($customer_enq_data) {
                         $data[$i]->proceed_button = true;
                     } else {
                         $data[$i]->proceed_button = false;
                     }
+                    $data[$i]->delivery_in_days_unit = $delivery_in_days_unit;
                     $data[$i]->vendor_name = maskVendorName($row->vendor_name);
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
                     if ($row->gst_type == 'cgst+sgst') {
-                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($data[$i]->gst_amount / 2), 2, '.', '');
+                        $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                         $data[$i]->gst_percentage = number_format(($row->gst_percentage / 2), 2, '.', '');
                     }
                     if ($row->gst_type == 'igst') {
-                        $data[$i]->igst_amount = $data[$i]->gst_amount;
+                        $data[$i]->igst_amount = $row->gst_amount;
                     }
                     $i++;
                 }
+                print_r('igst');
+
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);

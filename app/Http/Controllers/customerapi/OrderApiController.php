@@ -55,6 +55,7 @@ class OrderApiController extends Controller
                     'orders.grand_total',
                     'packaging_materials.packaging_material_name',
                     'packaging_materials.material_description',
+                    'recommendation_engines.min_order_quantity_unit',
                     'orders.customer_payment_status',
                     'orders.order_delivery_status',
                     'orders.product_quantity',
@@ -62,10 +63,13 @@ class OrderApiController extends Controller
                     'orders.created_at',
                     'orders.gst_type',
                     'orders.gst_amount',
-                    'orders.gst_percentage'
+                    'orders.gst_percentage',
+                    'currencies.currency_symbol',
                 )
                     ->leftjoin('packaging_materials', 'packaging_materials.id', '=', 'orders.packaging_material_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
+                    ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'orders.recommendation_engine_id')
+                    ->leftjoin('currencies', 'currencies.id', '=', 'orders.currency_id')
                     ->where('orders.user_id', $user_id)->whereIn('orders.order_delivery_status', ['pending', 'processing', 'out_for_delivery']);
 
                 $orderData = Order::whereRaw("1 = 1");
@@ -178,6 +182,7 @@ class OrderApiController extends Controller
                     'orders.grand_total',
                     'packaging_materials.packaging_material_name',
                     'packaging_materials.material_description',
+                    'recommendation_engines.min_order_quantity_unit',
                     'orders.customer_payment_status',
                     'orders.order_delivery_status',
                     'orders.product_quantity',
@@ -185,10 +190,13 @@ class OrderApiController extends Controller
                     'orders.created_at',
                     'orders.gst_type',
                     'orders.gst_amount',
-                    'orders.gst_percentage'
+                    'orders.gst_percentage',
+                    'currencies.currency_symbol',
                 )
                     ->leftjoin('packaging_materials', 'packaging_materials.id', '=', 'orders.packaging_material_id')
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
+                    ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'orders.recommendation_engine_id')
+                    ->leftjoin('currencies', 'currencies.id', '=', 'orders.currency_id')
                     ->where('orders.user_id', $user_id)->whereIn('orders.order_delivery_status', ['delivered', 'cancelled']);
 
                 $orderData = Order::whereRaw("1 = 1");

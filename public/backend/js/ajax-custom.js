@@ -668,12 +668,18 @@ $(document).on('change', '#not_applicable', function () {
 });
 
 //added by :Pradyumn, added on: 26/09/2022, uses : to set vendor price per kg on edit 
-function vendorPriceKg(vendor_price, product_quantity){
+function vendorPriceKg(vendor_price, product_quantity, unit){
+    console.log(unit);
+
     if (vendor_price) {
+        console.log(unit);
+
         $("#vendor_price_per_kg_div").show();
         var vendor_price_kg = vendor_price / product_quantity;
         var vendor_price_per_kg = (vendor_price_kg).toFixed(2).replace(/\.00$/,'');
         $("#vendor_price").text(vendor_price_per_kg);
+        $("#vendor_price_unit").text(unit);
+
 
     }
     else {
@@ -682,14 +688,22 @@ function vendorPriceKg(vendor_price, product_quantity){
 };
 
 //added by :Pradyumn, added on: 26/09/2022, uses : to set commission rate per kg on edit 
-function commissionPerKg(commission_amt, product_quantity){
+function commissionPerKg(commission_amt, product_quantity, unit){
     if (commission_amt) {
         $("#commission_price_per_kg_div").show();
         var commission_kg = commission_amt / product_quantity;
         var commission_per_kg = (commission_kg).toFixed(2).replace(/\.00$/,'');
         $("#commission_rate").text(commission_per_kg);
+        $("#commission_price_unit").text(unit);
+
     }
     else {
         $("#commission_price_per_kg_div").hide();
     }
+};
+
+//added by :Pradyumn, added on: 30/09/2022, uses : to set commission rate and vendor price unit per kg on add 
+function setRatePerUnit(unit){
+    $("#vendor_price_unit").text(unit);
+    $("#commission_price_unit").text(unit);
 };

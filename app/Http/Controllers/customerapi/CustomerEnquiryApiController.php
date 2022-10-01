@@ -304,6 +304,12 @@ class CustomerEnquiryApiController extends Controller
                 if (isset($request->product_quantity) && ($request->product_quantity < $packagingSolutionData->min_order_quantity)){
                     errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
                 }
+
+                //checking min order quantity 
+                if (isset($request->product_weight)){
+                    if ($request->product_weight < $packagingSolutionData->min_weight || $request->product_weight > $packagingSolutionData->max_weight)
+                    errorMessage(__('customer_enquiry.product_weight_should_be_in_between_min_and_max_weight'), $msg_data);
+                }
                 
                 //getting shelf life and shelf life unit from config
                 $shelf_life = config('global.DEFAULT_SHELF_LIFE');
