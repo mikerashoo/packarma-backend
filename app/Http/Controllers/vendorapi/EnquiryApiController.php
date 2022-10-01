@@ -47,6 +47,7 @@ class EnquiryApiController extends Controller
                 $data = DB::table($main_table)->select(
                     'vendor_quotations.id',
                     'vendor_quotations.vendor_price',
+                    'vendor_quotations.vendor_amount',
                     'vendor_quotations.freight_amount',
                     'vendor_quotations.delivery_in_days',
                     'vendor_quotations.enquiry_status',
@@ -216,6 +217,7 @@ class EnquiryApiController extends Controller
                     errorMessage(__('quotation.id_require'), $msg_data);
                 }
 
+                //getting vendor whole amount for vendor_amount column from request as vendor_price
                 if (!$request->vendor_price) {
                     errorMessage(__('quotation.vendor_price_require'), $msg_data);
                 }
@@ -239,8 +241,8 @@ class EnquiryApiController extends Controller
                     errorMessage(__('quotation.enquiry_not_found_to_quote'), $msg_data);
                 }
 
-
-                $existing_vendor_price = $checkQuotation->vendor_price;
+                //modified by Pradyumn, modified on 1-Sept-2022, changed vendor price to vendor amount for bult amount
+                $existing_vendor_price = $checkQuotation->vendor_amount;
                 $new_vendor_price = number_format((float)$request->vendor_price, 2, '.', '');
 
                 //Added by : Pradyumn, added on : 21-sept-2022, uses: to set freight amount and delivery charges
@@ -264,13 +266,18 @@ class EnquiryApiController extends Controller
                     $product_quantity = $checkQuotation->product_quantity;
                     $gst_percentage = $checkQuotation->gst_percentage;
 
-                    
+                    //added by: Pradyumn, added on: 1-sept-2022, Uses: calculate vendor amount for per unit
+                    $vendor_price_calc = $new_vendor_price / $product_quantity;
+                    $vendor_price_per_unit = number_format((float)$vendor_price_calc, 2, '.', '');
 
-                    $mrp = $new_vendor_price + $commission_amt;
+                    $mrp = $vendor_price_per_unit + $commission_amt;
                     $sub_total_amount = $product_quantity * $mrp;
-                    $gst_amount = $mrp * $gst_percentage / 100;
+                    $gst_amount_calc = $sub_total_amount * $gst_percentage / 100;
+                    $gst_amount = number_format((float)$gst_amount_calc, 2, '.', '');
                     $total_amount = $sub_total_amount + $gst_amount + $freight_amount;
                     $quotation_data['mrp'] = $mrp;
+                    $quotation_data['vendor_price'] = $vendor_price_per_unit;
+                    $quotation_data['vendor_amount'] = $new_vendor_price;
                     $quotation_data['sub_total'] = $sub_total_amount;
                     $quotation_data['gst_amount'] = $gst_amount;
                     $quotation_data['total_amount'] = $total_amount;
@@ -278,7 +285,6 @@ class EnquiryApiController extends Controller
 
                 $quotation_data['freight_amount'] = $freight_amount;
                 $quotation_data['delivery_in_days'] = $delivery_in_days;
-                $quotation_data['vendor_price'] = $new_vendor_price;
                 $quotation_data['vendor_id'] = $vendor_id;
                 $quotation_data['enquiry_status'] = 'quoted';
                 $quotation_data['quotation_expiry_datetime'] = Carbon::now()->addDays(30)->format('Y-m-d H:i:s');

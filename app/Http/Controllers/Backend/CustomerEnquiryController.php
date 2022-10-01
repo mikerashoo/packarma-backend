@@ -384,11 +384,11 @@ class CustomerEnquiryController extends Controller
         //amount calculation section started
         //Modified by : Pradyumn, Created at: 27-Sept-2022, Uses: calculating vendor price and commission rate per kg :START
         $vendor_price_calc = $request->vendor_price_bulk / $request->product_quantity;
-        $vendor_price_per_kg = $vendor_price_calc; //number_format($vendor_price_calc, 2);
+        $vendor_price_per_kg = number_format((float)$vendor_price_calc, 2, '.', '');
         $tblObj->vendor_amount = $request->vendor_price_bulk;
         
         $commission_price_calc = $request->commission_rate_bulk / $request->product_quantity;
-        $commission_per_kg = $commission_price_calc; //number_format($commission_price_calc, 2);
+        $commission_per_kg = number_format((float)$commission_price_calc, 2, '.', '');
         $tblObj->commission = $request->commission_rate_bulk;
         
         $tblObj->vendor_price = $vendor_price_per_kg;
@@ -431,7 +431,8 @@ class CustomerEnquiryController extends Controller
             $tblObj->gst_percentage = $request->gst_percentage ?? 0.00;
         
             // modified by : pradyumn, at: 27-Sept-2022, Desc: calculating gst on sub_total amount
-            $gst_amount = $sub_total_amount * ($request->gst_percentage / 100.00); //$mrp_rate * ($request->gst_percentage / 100.00);
+            $gst_amount_calc = $sub_total_amount * ($request->gst_percentage / 100.00); //$mrp_rate * ($request->gst_percentage / 100.00);
+            $gst_amount = number_format((float)$gst_amount_calc, 2, '.', '');
         } else {
 
             $gst_type = $gst;

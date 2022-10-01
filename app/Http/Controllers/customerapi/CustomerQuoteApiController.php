@@ -70,12 +70,14 @@ class CustomerQuoteApiController extends Controller
                     'vendor_quotations.gst_percentage',
                     'vendor_quotations.sub_total',
                     'vendor_quotations.total_amount',
+                    'currencies.currency_symbol',
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
                     ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
                     ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->leftjoin('currencies', 'currencies.id', '=', 'vendor_quotations.currency_id')
                     ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id]])->whereIn('vendor_quotations.enquiry_status', ['quoted', 'viewed']);
 
                 $quotationData = VendorQuotation::whereRaw("1 = 1");
@@ -212,12 +214,14 @@ class CustomerQuoteApiController extends Controller
                             'vendor_quotations.customer_enquiry_id',
                             'customer_enquiries.recommendation_engine_id',
                             'recommendation_engines.min_order_quantity_unit',
+                            'currencies.currency_symbol',
                         )
                             ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                             ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
                             ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
                             ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
                             ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                            ->leftjoin('currencies', 'currencies.id', '=', 'vendor_quotations.currency_id')
                             ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.id', $request->vendor_quotation_id]]);
 
                         $autoRejectQuotations = DB::table('vendor_quotations')->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.customer_enquiry_id', $request->customer_enquiry_id]])
@@ -398,12 +402,14 @@ class CustomerQuoteApiController extends Controller
                     'vendor_quotations.customer_enquiry_id',
                     'customer_enquiries.recommendation_engine_id',
                     'recommendation_engines.min_order_quantity_unit',
+                    'currencies.currency_symbol',
                 )
                     ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                     ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
                     ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
                     ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
+                    ->leftjoin('currencies', 'currencies.id', '=', 'orders.currency_id')
                     ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.enquiry_status', 'accept']]);
 
                 $acceptedQuotationData = VendorQuotation::whereRaw("1 = 1");

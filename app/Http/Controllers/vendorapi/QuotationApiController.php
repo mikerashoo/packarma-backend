@@ -27,6 +27,7 @@ class QuotationApiController extends Controller
                 $vendor_id = $vendor_token['sub'];
                 $page_no = 1;
                 $limit = 10;
+                $delivery_in_days_unit = 'Days';
                 $orderByArray = ['vendor_quotations.updated_at' => 'DESC',];
                 $defaultSortByName = false;
 
@@ -45,6 +46,8 @@ class QuotationApiController extends Controller
                     'vendor_quotations.vendor_price',
                     'vendor_quotations.enquiry_status',
                     'vendor_quotations.vendor_warehouse_id',
+                    'vendor_quotations.freight_amount',
+                    'vendor_quotations.delivery_in_days',
                     'vendor_quotations.created_at',
                     'customer_enquiries.description',
                     'customer_enquiries.enquiry_type',
@@ -190,6 +193,7 @@ class QuotationApiController extends Controller
                 foreach ($data as $row) {
                     $data[$i]->quote_id = getFormatid($row->id, $main_table);
                     $data[$i]->material_unit_symbol = 'kg';
+                    $data[$i]->delivery_in_days_unit = $delivery_in_days_unit;
                     $i++;
                 }
 
