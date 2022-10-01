@@ -329,14 +329,14 @@ class EnquiryApiController extends Controller
         return \Validator::make(
             $request->all(),
             [
-                'vendor_price' => 'required|numeric|between:1,99999.999',
+                'vendor_price' => 'required|numeric|gt:0',
                 'vendor_warehouse_id' => 'required|integer|gt:0',
                 'freight_amount' => 'nullable|numeric',
                 'delivery_in_days' => 'nullable|integer'
 
             ],
             [
-                'vendor_price.between' => 'The vendor price must not be greater than 99999.99',
+                'vendor_price.gt' => 'The vendor price must be greater than 0',
                 'vendor_warehouse_id.required' => 'Warehouse is require',
                 'vendor_warehouse_id.gt' => 'Warehouse not found',
                 'delivery_in_days.integer' => 'Please enter delivery days in integer format'
