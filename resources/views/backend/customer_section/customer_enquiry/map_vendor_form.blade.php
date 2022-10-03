@@ -53,7 +53,7 @@ $readonly = '';
         <dl class="row col-sm-6">
             <dt class="col-sm-5 text-left">Total Vendor Price <span style="color:#ff0000">*</span> :</dt>
             <dd class="col-sm-7">
-                <input class="form-control required" type="text" step=".001" onkeyup="calcGrandTotal()" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->vendor_price ?? '' ;}}" id="vendor_price_bulk" name="vendor_price_bulk" {{$readonly}}>
+                <input class="form-control required" type="text" step=".001" onkeyup="calcGrandTotal()" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->vendor_amount ?? '' ;}}" id="vendor_price_bulk" name="vendor_price_bulk" {{$readonly}}>
             </dd>
         </dl>
         <dl class="col-sm-6">
@@ -66,7 +66,7 @@ $readonly = '';
         <dl class="row col-sm-6">
             <dt class="col-sm-5 text-left">Add Admin Commission Price <span style="color:#ff0000">*</span> :</dt>
             <dd class="col-sm-7">
-                <input class="form-control required" type="text" step=".001" onkeyup="calcGrandTotal()" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->commission_amt ?? '' ;}}" id="commission_rate_bulk" name="commission_rate_bulk" {{$readonly}}>
+                <input class="form-control required" type="text" step=".001" onkeyup="calcGrandTotal()" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->commission ?? '' ;}}" id="commission_rate_bulk" name="commission_rate_bulk" {{$readonly}}>
             </dd>
         </dl>
         <dl class="col-sm-6">
@@ -184,8 +184,8 @@ function taxValueToggle(gst_type){
 
 //added by : Pradyumn, at : 27-Sept-2022, calling js function for price per kg in custome ajax
 $(document).ready(function () {
-    var vendor_price = <?php   echo $vender_quotation_details->vendor_price ?? 0 ; ?>;
-    var commission_amt = <?php echo $vender_quotation_details->commission_amt ?? 0 ; ?>;
+    var vendor_price = <?php   echo $vender_quotation_details->vendor_amount ?? 0 ; ?>;
+    var commission_amt = <?php echo $vender_quotation_details->commission ?? 0 ; ?>;
     var product_quantity = <?php echo $vender_quotation_details->product_quantity ?? 0 ; ?>;
     var unit = <?php echo '"'.$min_order_quantity_unit.'"' ?? '""' ; ?>;
     vendorPriceKg(vendor_price, product_quantity, unit);
