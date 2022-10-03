@@ -536,9 +536,8 @@ class CustomerEnquiryController extends Controller
      */
     public function view($id)
     {
-        $data['data'] = CustomerEnquiry::find($id);
+        $data['data'] = CustomerEnquiry::with('user_address','recommendation_engine')->find($id);
         $data['addressType'] = addressType();
-        $data['user_address'] = UserAddress::all();
         $data['customer_enquiry_id'] = getFormatid($data['data']->id, 'customer_enquiries');
         // $data['vendors'] = VendorQuotation::with('vendor', 'vendor_warehouse')->where('customer_enquiry_id', '=', $data['data']->id)->get(); //->pluck('vendor_id')->toArray();
 

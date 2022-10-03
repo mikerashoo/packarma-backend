@@ -669,18 +669,12 @@ $(document).on('change', '#not_applicable', function () {
 
 //added by :Pradyumn, added on: 26/09/2022, uses : to set vendor price per kg on edit 
 function vendorPriceKg(vendor_price, product_quantity, unit){
-    console.log(unit);
-
     if (vendor_price) {
-        console.log(unit);
-
         $("#vendor_price_per_kg_div").show();
         var vendor_price_kg = vendor_price / product_quantity;
         var vendor_price_per_kg = (vendor_price_kg).toFixed(2).replace(/\.00$/,'');
         $("#vendor_price").text(vendor_price_per_kg);
         $("#vendor_price_unit").text(unit);
-
-
     }
     else {
         $("#vendor_price_per_kg_div").hide();
@@ -695,7 +689,6 @@ function commissionPerKg(commission_amt, product_quantity, unit){
         var commission_per_kg = (commission_kg).toFixed(2).replace(/\.00$/,'');
         $("#commission_rate").text(commission_per_kg);
         $("#commission_price_unit").text(unit);
-
     }
     else {
         $("#commission_price_per_kg_div").hide();
@@ -708,17 +701,21 @@ function setRatePerUnit(unit){
     $("#commission_price_unit").text(unit);
 };
 
-//added by :Pradyumn, added on: 01/10/2022, uses : To set grand total amount in customer enquiry map modal form
-// $(document).on('change', '#commission_rate_bulk', function () {
-//     var commission_rate_bulk = document.getElementById("commission_rate_bulk").value;
-//     if (commission_rate_bulk) {
-//         $("#commission_price_per_kg_div").show();
-//     }
-//     else {
-//         $("#commission_price_per_kg_div").hide();
-//     }
-//     var product_quantity = document.getElementById("product_quantity").value;
-//     var commsission_rate_calc = commission_rate_bulk / product_quantity;
-//     var commission_rate_per_kg = (commsission_rate_calc).toFixed(2).replace(/\.00$/,'');
-//     $("#commission_rate").text(commission_rate_per_kg);
-// });
+//Created by : Pradyumn Dwivedi, Created at : 3-oct-2022, Use : To calculate grand total and return to map vendor form
+function calcGrandTotal(){
+    var vendor_price_bulk = Number($('#vendor_price_bulk').val());
+    var commission_rate_bulk = Number($('#commission_rate_bulk').val());
+    var delivery_charges = Number($('#delivery_charges').val());
+    var gst_type = $('[name="gst_type"]').val();
+    var gst_percentage = Number($('#gst_percentage').val());
+    var gst_amt = 0;
+
+    // if gst is yes then length is 0 and for no length is 1 coming
+    if ($('#not_applicable:checked').length == 0) {
+        var sub_total = vendor_price_bulk + commission_rate_bulk;
+        var gst_amt = (sub_total * gst_percentage / 100).toFixed(2);
+    }
+    // calculate grand total
+    var grand_total_calc = (vendor_price_bulk + commission_rate_bulk + delivery_charges + Number(gst_amt)).toFixed(2);
+    $("#enquiry_grand_total_amount").text(grand_total_calc);
+}
