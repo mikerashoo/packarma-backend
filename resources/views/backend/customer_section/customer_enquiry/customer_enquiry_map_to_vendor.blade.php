@@ -22,10 +22,30 @@
                                             <dt class="col-sm-4 text-left">Product Name:</dt>
                                             <dd class="col-sm-8">{{ $data['product']->product_name }}</dd>
                                         </dl>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <dl class="row">
+                                            <dt class="col-sm-5 text-left">Packaging Material:</dt>
+                                            <dd class="col-sm-7">{{$data['packaging_material']->packaging_material_name}}</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 row">
+                                    <div class="col-md-6">
                                         <dl class="row">
                                             <dt class="col-sm-4 text-left">User Name:</dt>
                                             <dd class="col-sm-8">{{ $data['user']->name }}</dd>
                                         </dl>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <dl class="row">
+                                            <dt class="col-sm-5 text-left">Recommendation Engine:</dt>
+                                            <dd class="col-sm-7">{{$data['recommendation_engine']->engine_name}}</dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 row">
+                                    <div class="col-md-6">
                                         <dl class="row">                                                                        
                                             <dt class="col-sm-4 text-left">User Address:</dt>
                                             <dd class="col-sm-8">{{$data->flat}}, {{$data->land_mark}}, {{$data->area}}, {{$data->city_name}}, {{$data->state->state_name}}</dd>
@@ -33,27 +53,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <dl class="row">
-                                            <dt class="col-sm-5 text-left">Packaging Material:</dt>
-                                            <dd class="col-sm-7">{{$data['packaging_material']->packaging_material_name}}</dd>
-                                        </dl>
-                                        <dl class="row">
-                                            <dt class="col-sm-5 text-left">Recommendation Engine:</dt>
-                                            <dd class="col-sm-7">{{$data['recommendation_engine']->engine_name}}</dd>
-                                        </dl>
-                                        <dl class="row">
                                             <dt class="col-sm-5 text-left">Entered Product Quantity:</dt>
                                             <dd class="col-sm-7">{{$data->product_quantity}} {{ $data['recommendation_engine']->min_order_quantity_unit }}</dd>
                                         </dl>
-                                    </div>                                       
+                                    </div>
                                 </div>   
-                                
-                                {{-- <div class="col-md-12 row">
-                                    <div class="col-md-12">
-                                        <dl class="row">                                                                        
-                                            <dt class="col-sm-5 text-left">Map Vendors:</dt>
-                                        </dl>
-                                    </div>                                       
-                                </div> --}}
                                 <div class="col-md-12 row">
                                 <!-- Outline variants section start -->
                                     <div class="col-md-3 col-12">
@@ -104,55 +108,49 @@
 //getVendorWarehouse function with Ajax to get warehouse drop down of selected vendor in customer enquiry map to vendor
 function getVendorWarehouse(vendor,i)
 {
-        var product_id ='<?php echo $data->product_id; ?>';
-        $("#vendor_price").val('');
-        $("#commission_rate").val('');
-        $.ajax({
-            url:"getVendorWarehouseDropdown",
-            type: "POST",
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            data: {
-                vendor_id: vendor, product_id: product_id,
-            },
-            success:function(result)
+    var product_id ='<?php echo $data->product_id; ?>';
+    $("#vendor_price").val('');
+    $("#commission_rate").val('');
+    $.ajax({
+        url:"getVendorWarehouseDropdown",
+        type: "POST",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            vendor_id: vendor, product_id: product_id,
+        },
+        success:function(result)
+        {
+            response = JSON.parse(result);
+            if(response['data']['vendorMaterialMapData'].length !== 0){
+                var vendor_price = response['data']['vendorMaterialMapData'][0]['vendor_price']; 
+                var commission_rate = response['data']['vendorMaterialMapData'][0]['min_amt_profit'];
+            }
+            if(vendor_price){
+                $("#vendor_price").val(vendor_price);
+                $("#commission_rate").val(commission_rate);
+            }else{
+                $("#vendor_price").val('');
+                $("#commission_rate").val('');
+            }
+            $("#warehouse").empty();
+            $("#warehouse").append('<option value="">Select</option>');
+            for(var j=0; j<response['data']['vendor_warehouse'].length; j++)
             {
-                response = JSON.parse(result);
-                if(response['data']['vendorMaterialMapData'].length !== 0){
-                    var vendor_price = response['data']['vendorMaterialMapData'][0]['vendor_price']; 
-                    var commission_rate = response['data']['vendorMaterialMapData'][0]['min_amt_profit'];
-                }
+                var warehouse_id = response['data']['vendor_warehouse'][j]['id'];
+                var warehouse_name = response['data']['vendor_warehouse'][j]['warehouse_name'];
+                var warehouse_state_id = response['data']['vendor_warehouse'][j]['state_id'];
+                $("#warehouse").append('<option value="'+warehouse_id+"|"+warehouse_state_id+'" warehouse_state_id ="'+warehouse_state_id+'">'+warehouse_name+'</option>');
+            }
+        },
+    });  
+}
 
-               
+function taxValueToggle(gst_type,i){
+    if(gst_type == 'not_applicable'){
+    $('#gst_percentage'+i).hide('slow');
+    }else{
+        $('#gst_percentage'+i).show('slow');
 
-                if(vendor_price){
-                    $("#vendor_price").val(vendor_price);
-                    $("#commission_rate").val(commission_rate);
-                }else{
-                    $("#vendor_price").val('');
-                    $("#commission_rate").val('');
-                }
-                $("#warehouse").empty();
-                $("#warehouse").append('<option value="">Select</option>');
-                for(var j=0; j<response['data']['vendor_warehouse'].length; j++)
-                {
-                    var warehouse_id = response['data']['vendor_warehouse'][j]['id'];
-                    var warehouse_name = response['data']['vendor_warehouse'][j]['warehouse_name'];
-                    var warehouse_state_id = response['data']['vendor_warehouse'][j]['state_id'];
-                    $("#warehouse").append('<option value="'+warehouse_id+"|"+warehouse_state_id+'" warehouse_state_id ="'+warehouse_state_id+'">'+warehouse_name+'</option>');
-                }
-            },
-        });  
-    }
-
-
-    function taxValueToggle(gst_type,i){
-        if(gst_type == 'not_applicable'){
-        $('#gst_percentage'+i).hide('slow');
-        }else{
-            $('#gst_percentage'+i).show('slow');
-
-        }
-       
-        
-    }
+    }  
+}
 </script>

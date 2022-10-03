@@ -87,12 +87,6 @@ $readonly = '';
                 <input class="form-control required" type="text" step=".01" onkeyup="calcGrandTotal()" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->freight_amount ?? '' ;}}" id="delivery_charges" name="delivery_charges" {{$readonly}}>
             </dd>
         </dl>
-        {{-- <dl class="row col-sm-6">
-            <dt class="col-sm-5 text-left">Delivery In : <span style="color:#ff0000">*</span></dt>
-            <dd class="col-sm-7">
-                <input class="form-control" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->lead_time ?? '' ;}}" id="lead_time" name="lead_time">
-            </dd>
-        </dl> --}}
         <dl class="row col-sm-6">
             <dt class="col-sm-5 text-left">GST <span style="color:#ff0000">*</span> :</dt>
             <dd class="col-sm-7">
@@ -149,58 +143,56 @@ if(vendor != ''){
 
 function getVendorWarehouseForEdit(vendor)
 {
-        var product_id ='<?php echo $customer_enquiry_data->product_id; ?>';
-        var vendor_warehouse_id ='<?php echo $vender_quotation_details->vendor_warehouse_id ?? 0; ?>';
-      
-        $.ajax({
-            url:"getVendorWarehouseDropdown",
-            type: "POST",
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            data: {
-                vendor_id: vendor, product_id: product_id,
-            },
-            success:function(result)
-            {
-                response = JSON.parse(result);
-                $("#warehouse").empty();
-                $("#warehouse").append('<option value="">Select</option>');
-                for(var j=0; j<response['data']['vendor_warehouse'].length; j++)
-                {
-                    var warehouse_id = response['data']['vendor_warehouse'][j]['id'];
-                    var warehouse_name = response['data']['vendor_warehouse'][j]['warehouse_name'];
-                    var warehouse_state_id = response['data']['vendor_warehouse'][j]['state_id'];
-                    if(vendor_warehouse_id == warehouse_id){
-                    $("#warehouse").append('<option value="'+warehouse_id+"|"+warehouse_state_id+'" selected warehouse_state_id ="'+warehouse_state_id+'" >'+warehouse_name+'</option>');
-                    }else{
-                    $("#warehouse").append('<option value="'+warehouse_id+"|"+warehouse_state_id+'" warehouse_state_id = "'+warehouse_state_id+'">'+warehouse_name+'</option>');
-                    }
-                }
-            },
-        });  
-    }
-
-    function taxValueToggle(gst_type){
-        calcGrandTotal();
-        if(gst_type == 'not_applicable'){
-        $('#gst_percentage_div').hide('slow');
-        }else{
-            $('#gst_percentage_div').show('slow');
-        } 
-    }
-
-    //added by : Pradyumn, at : 27-Sept-2022, calling js function for price per kg in custome ajax
-    $(document).ready(function () {
-        var vendor_price = <?php   echo $vender_quotation_details->vendor_price ?? 0 ; ?>;
-        var commission_amt = <?php echo $vender_quotation_details->commission_amt ?? 0 ; ?>;
-        var product_quantity = <?php echo $vender_quotation_details->product_quantity ?? 0 ; ?>;
-        var unit = <?php echo '"'.$min_order_quantity_unit.'"' ?? '""' ; ?>;
-        vendorPriceKg(vendor_price, product_quantity, unit);
-        commissionPerKg(commission_amt, product_quantity, unit);
-        setRatePerUnit(unit);
-        
-        //call grand total calculate function on ready
-        calcGrandTotal();
-    });
-
+    var product_id ='<?php echo $customer_enquiry_data->product_id; ?>';
+    var vendor_warehouse_id ='<?php echo $vender_quotation_details->vendor_warehouse_id ?? 0; ?>';
     
+    $.ajax({
+        url:"getVendorWarehouseDropdown",
+        type: "POST",
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        data: {
+            vendor_id: vendor, product_id: product_id,
+        },
+        success:function(result)
+        {
+            response = JSON.parse(result);
+            $("#warehouse").empty();
+            $("#warehouse").append('<option value="">Select</option>');
+            for(var j=0; j<response['data']['vendor_warehouse'].length; j++)
+            {
+                var warehouse_id = response['data']['vendor_warehouse'][j]['id'];
+                var warehouse_name = response['data']['vendor_warehouse'][j]['warehouse_name'];
+                var warehouse_state_id = response['data']['vendor_warehouse'][j]['state_id'];
+                if(vendor_warehouse_id == warehouse_id){
+                $("#warehouse").append('<option value="'+warehouse_id+"|"+warehouse_state_id+'" selected warehouse_state_id ="'+warehouse_state_id+'" >'+warehouse_name+'</option>');
+                }else{
+                $("#warehouse").append('<option value="'+warehouse_id+"|"+warehouse_state_id+'" warehouse_state_id = "'+warehouse_state_id+'">'+warehouse_name+'</option>');
+                }
+            }
+        },
+    });  
+}
+
+function taxValueToggle(gst_type){
+    calcGrandTotal();
+    if(gst_type == 'not_applicable'){
+    $('#gst_percentage_div').hide('slow');
+    }else{
+        $('#gst_percentage_div').show('slow');
+    } 
+}
+
+//added by : Pradyumn, at : 27-Sept-2022, calling js function for price per kg in custome ajax
+$(document).ready(function () {
+    var vendor_price = <?php   echo $vender_quotation_details->vendor_price ?? 0 ; ?>;
+    var commission_amt = <?php echo $vender_quotation_details->commission_amt ?? 0 ; ?>;
+    var product_quantity = <?php echo $vender_quotation_details->product_quantity ?? 0 ; ?>;
+    var unit = <?php echo '"'.$min_order_quantity_unit.'"' ?? '""' ; ?>;
+    vendorPriceKg(vendor_price, product_quantity, unit);
+    commissionPerKg(commission_amt, product_quantity, unit);
+    setRatePerUnit(unit);
+    
+    //call grand total calculate function on ready
+    calcGrandTotal();
+});
 </script>

@@ -717,6 +717,5 @@ function calcGrandTotal(){
     }
     // calculate grand total
     var grand_total_calc = (vendor_price_bulk + commission_rate_bulk + delivery_charges + Number(gst_amt)).toFixed(2);
-
     $("#enquiry_grand_total_amount").text(grand_total_calc);
 }
