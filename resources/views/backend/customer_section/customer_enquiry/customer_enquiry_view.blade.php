@@ -129,7 +129,7 @@
                                                     </tr> 
                                                     <tr>
                                                         <td><strong>Product Quantity</strong></td>
-                                                        <td>{{$data->product_quantity;}}</td>
+                                                        <td>{{$data->product_quantity;}} {{ $data['recommendation_engine']->min_order_quantity_unit; }}</td>
                                                     </tr> 
                                                     <tr>
                                                         <td><strong>Storage Condition</strong></td>
