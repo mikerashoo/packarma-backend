@@ -409,7 +409,7 @@ class CustomerQuoteApiController extends Controller
                     ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
                     ->leftjoin('customer_enquiries', 'vendor_quotations.customer_enquiry_id', '=', 'customer_enquiries.id')
                     ->leftjoin('recommendation_engines', 'customer_enquiries.recommendation_engine_id', '=', 'recommendation_engines.id')
-                    ->leftjoin('currencies', 'currencies.id', '=', 'orders.currency_id')
+                    ->leftjoin('currencies', 'currencies.id', '=', 'vendor_quotations.currency_id')
                     ->where([['vendor_quotations.user_id', $user_id], ['vendor_quotations.enquiry_status', 'accept']]);
 
                 $acceptedQuotationData = VendorQuotation::whereRaw("1 = 1");
