@@ -619,6 +619,8 @@ class CustomerEnquiryController extends Controller
                 'vendor_quotations.vendor_price',
                 'vendor_quotations.mrp',
                 'vendor_quotations.commission_amt',
+                'vendor_quotations.vendor_amount',
+                'vendor_quotations.commission',
                 'vendor_quotations.lead_time',
                 'vendor_quotations.vendor_id',
                 'vendor_quotations.gst_type',
@@ -632,10 +634,10 @@ class CustomerEnquiryController extends Controller
                 ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
                 ->where([['vendor_quotations.id', $id]])->first();
 
-            if ($data['vender_quotation_details']){
-                $data['vender_quotation_details']->vendor_price = $data['vender_quotation_details']->vendor_price * $data['vender_quotation_details']->product_quantity;
-                $data['vender_quotation_details']->commission_amt = $data['vender_quotation_details']->commission_amt * $data['vender_quotation_details']->product_quantity;
-            }
+            // if ($data['vender_quotation_details']){
+            //     $data['vender_quotation_details']->vendor_price = $data['vender_quotation_details']->vendor_price * $data['vender_quotation_details']->product_quantity;
+            //     $data['vender_quotation_details']->commission_amt = $data['vender_quotation_details']->commission_amt * $data['vender_quotation_details']->product_quantity;
+            // }
         }
 
         // echo '<pre>';

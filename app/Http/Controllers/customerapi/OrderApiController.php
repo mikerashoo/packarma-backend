@@ -350,6 +350,7 @@ class OrderApiController extends Controller
                 $i = 0;
                 $delivery_in_days_unit = 'Days';
                 foreach ($data as $row) {
+                    $data[$i]->vendor_name = maskVendorName($row->vendor_name);
                     $data[$i]->delivery_in_days_unit = $delivery_in_days_unit;
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";

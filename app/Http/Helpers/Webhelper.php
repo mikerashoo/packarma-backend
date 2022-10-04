@@ -1051,11 +1051,15 @@ if (!function_exists('maskVendorName')) {
         $vendorNameLength = strlen($vendorName);
         $returnP1 = substr($vendorName, 0,2);
 
-        $returnP2 = substr($vendorName, -2);
-        $paddingLength = $vendorNameLength - 2;
+        // $returnP2 = substr($vendorName, -2);
+        // $paddingLength = $vendorNameLength - 2;
+        $paddingLength = $vendorNameLength + 2;
+
 
         $finalP1 = str_pad($returnP1, $paddingLength, '*');
-        $result = $finalP1 . $returnP2;
+        // $result = $finalP1 . $returnP2;
+        $result = $finalP1;
+
         return $result;
     }
 }

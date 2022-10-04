@@ -627,7 +627,7 @@ $(document).on('change', '#measurement_unit', function () {
 });
 
 //added by :Pradyumn, added on: 26/09/2022, uses : To set vendor price per kg
-$(document).on('change', '#vendor_price_bulk', function () {
+$(document).on('keyup', '#vendor_price_bulk', function () {
     var vendor_price_bulk = document.getElementById("vendor_price_bulk").value;
     if (vendor_price_bulk) {
         $("#vendor_price_per_kg_div").show();
@@ -642,7 +642,7 @@ $(document).on('change', '#vendor_price_bulk', function () {
 });
 
 //added by :Pradyumn, added on: 26/09/2022, uses : To set commission price per kg
-$(document).on('change', '#commission_rate_bulk', function () {
+$(document).on('keyup', '#commission_rate_bulk', function () {
     var commission_rate_bulk = document.getElementById("commission_rate_bulk").value;
     if (commission_rate_bulk) {
         $("#commission_price_per_kg_div").show();
