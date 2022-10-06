@@ -107,7 +107,7 @@ $readonly = '';
             </dd>
         </dl>
         <dl class="row col-sm-6" id="gst_percentage_div">
-            <dt class="col-sm-5 text-left">Gst Pecentage <span style="color:#ff0000">*</span> :</dt>
+            <dt class="col-sm-5 text-left">GST Percentage <span style="color:#ff0000">*</span> :</dt>
             <dd class="col-sm-7">
                 <input class="form-control" type="text" inputmode="numeric" onkeyup="calcGrandTotal()" onkeypress="return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46" value="{{$vender_quotation_details->gst_percentage ?? '18' ;}}" id="gst_percentage" name="gst_percentage" min=0 max=100 {{$readonly}}>
             </dd>

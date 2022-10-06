@@ -25,27 +25,51 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Enquiry ID</strong></td>
-                                                <td>{{$data->customer_enquiry_id}}</td>
+                                                <td>{{getFormatid($data->customer_enquiry_id);}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Quotation ID</strong></td>
+                                                <td>{{getFormatid($data->id, 'vendor_quotations');}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Vendor Name</strong></td>
                                                 <td>{{$data->vendor->vendor_name}}</td>
                                             </tr>
                                             <tr>
+                                                <td><strong>Warehouse Name</strong></td>
+                                                @if ($data->vendor_warehouse->warehouse_name)
+                                                    <td>{{$data->vendor_warehouse->warehouse_name}}</td>
+                                                @else
+                                                    <td>-</td>
+                                                @endif
+                                            </tr>
+                                            <tr>
                                                 <td><strong>Product Name</strong></td>
                                                 <td>{{$data->product->product_name}}</td>
                                             </tr>
-                                            {{-- <tr>
-                                                <td><strong>Warehouse Name</strong></td>
-                                                <td>{{$data->vendor_warehouse->warehouse_name}}</td>
-                                            </tr> --}}
                                             <tr>
-                                                <td><strong>Vendor Price</strong></td>
-                                                <td>{{$data->vendor_price}}</td>
+                                                <td><strong>Product Quantity</strong></td>
+                                                <td>{{$data->product_quantity}} {{ $recommedation_data->min_order_quantity_unit }}</td>
                                             </tr>
                                             <tr>
-                                                <td><strong>Commission Rate Per Kg</strong></td>
-                                                <td>{{$data->commission_amt}}</td>
+                                                <td><strong>Vendor Price</strong></td>
+                                                <td>{{ $currency->currency_symbol }} {{$data->vendor_amount}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Vendor Price Per {{ $recommedation_data->min_order_quantity_unit }}</strong></td>
+                                                <td>{{ $currency->currency_symbol }} {{$data->vendor_price}}</td>
+                                            </tr>
+                                            {{-- <tr>
+                                                <td><strong>Commission Rate Per {{ $recommedation_data->min_order_quantity_unit }}</strong></td>
+                                                <td>{{ $currency->currency_symbol }} {{$data->commission_amt}}</td>
+                                            </tr> --}}
+                                            <tr>
+                                                <td><strong>Delivery in Days</strong></td>
+                                                <td>{{$data->delivery_in_days}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Delivery Charges</strong></td>
+                                                <td>{{ $currency->currency_symbol }} {{$data->freight_amount}}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Enquiry Status</strong></td>

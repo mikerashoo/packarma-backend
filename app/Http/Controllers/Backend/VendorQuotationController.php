@@ -8,9 +8,11 @@ use App\Models\Vendor;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Currency;
 use App\Models\VendorQuotation;
 use App\Models\VendorWarehouse;
 use Yajra\DataTables\DataTables;
+use App\Models\RecommendationEngine;
 
 class VendorQuotationController extends Controller
 {
@@ -117,7 +119,9 @@ class VendorQuotationController extends Controller
     public function view($id)
     {
         $data['vendorEnquiryStatus'] = vendorEnquiryStatus();
-        $data['data'] = VendorQuotation::with('user', 'vendor', 'product', 'vendor_warehouse')->find($id);
+        $data['data'] = VendorQuotation::with('user', 'vendor', 'product', 'vendor_warehouse','customer_enquiry')->find($id);
+        $data['recommedation_data'] = RecommendationEngine::select('min_order_quantity_unit')->where('id', $data['data']['customer_enquiry']['recommendation_engine_id'])->first();
+        $data['currency'] = Currency::select('currency_symbol')->where('id', $data['data']['currency_id'])->first();
         return view('backend/vendors/vendor_quotation/vendor_quotation_view', $data);
     }
 }

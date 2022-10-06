@@ -89,4 +89,14 @@ class VendorQuotation extends Model
     {
         return $this->belongsTo('App\Models\CustomerEnquiry');
     }
+
+    /**
+     * Developed By : Pradyumn Dwivedi
+     * Created On : 6-oct-2022
+     * uses : To get data of customer enquiry in vendor quotation view
+     */
+    public function customer_enquiry()
+    {
+        return $this->belongsTo('App\Models\CustomerEnquiry');
+    }
 }
