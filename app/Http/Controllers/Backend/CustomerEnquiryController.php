@@ -645,7 +645,7 @@ class CustomerEnquiryController extends Controller
         // die;
         // $data = VendorQuotation::find($id);
 
-        return view('backend/customer_section//customer_enquiry/map_vendor_form', $data);
+        return view('backend/customer_section/customer_enquiry/map_vendor_form', $data);
     }
 
     /**
