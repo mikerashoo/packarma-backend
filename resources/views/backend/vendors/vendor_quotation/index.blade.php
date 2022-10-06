@@ -52,7 +52,7 @@
                                             </select><br>
                                         </div>
                                         <div class="col-md-4">
-                                            <label>&nbsp;</label><br>
+                                            <label>&nbsp;</label>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
                                     </div>
