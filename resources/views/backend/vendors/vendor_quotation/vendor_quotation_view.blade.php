@@ -37,7 +37,7 @@
                                             </tr>
                                             <tr>
                                                 <td><strong>Warehouse Name</strong></td>
-                                                @if ($data->vendor_warehouse->warehouse_name)
+                                                @if ($data->vendor_warehouse_id)
                                                     <td>{{$data->vendor_warehouse->warehouse_name}}</td>
                                                 @else
                                                     <td>-</td>
