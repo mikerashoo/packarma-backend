@@ -309,7 +309,6 @@ class CustomerQuoteApiController extends Controller
                     foreach ($userFcmData as $key => $val) {
                         array_push($device_ids, $val->fcm_id);
                     }
-                    // print_r($userFcmData);exit;
                     sendFcmNotification($device_ids, $notificationData);
                 }
             }
@@ -461,8 +460,6 @@ class CustomerQuoteApiController extends Controller
                     }
                     $i++;
                 }
-                print_r('igst');
-
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);

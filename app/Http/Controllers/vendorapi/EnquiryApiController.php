@@ -32,7 +32,7 @@ class EnquiryApiController extends Controller
                 $vendor_id = $vendor_token['sub'];
                 $page_no = 1;
                 $limit = 10;
-                $orderByArray = ['vendor_quotations.updated_at' => 'DESC',];
+                $orderByArray = ['vendor_quotations.id' => 'DESC',];
                 $defaultSortByName = false;
 
                 if (isset($request->page_no) && !empty($request->page_no)) {
