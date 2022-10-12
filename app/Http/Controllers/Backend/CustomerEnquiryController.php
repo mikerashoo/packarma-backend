@@ -553,7 +553,7 @@ class CustomerEnquiryController extends Controller
             ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
             ->leftjoin('vendor_warehouses', 'vendor_quotations.vendor_warehouse_id', '=', 'vendor_warehouses.id')
             ->leftjoin('states', 'vendor_warehouses.state_id', '=', 'states.id')
-            ->where('vendor_quotations.customer_enquiry_id', '=', $data['data']->id)->get();
+            ->where('vendor_quotations.customer_enquiry_id', '=', $data['data']->id)->get()->toArray();
 
         // $data['vendor'] = Vendor::where('id', $data['vendor_id'][0]->vendor_id)->get();
         // $data['vendor_warehouse'] = VendorWarehouse::where('id', $data['vendor_id'][0]->vendor_warehouse_id)->get();
