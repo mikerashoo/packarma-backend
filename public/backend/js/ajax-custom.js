@@ -195,7 +195,7 @@ function loadViewPage(page_url) {
                 }
                 if (document.getElementById("measurement_unit")) {
                     var unit = $('#measurement_unit option:selected').text();
-                    if(unit){
+                    if(unit != 'Select' && unit !=''){
                         $("#min_weight_unit_span").text('('+unit+')');
                         $("#max_weight_unit_span").text('('+unit+')');
                     }
@@ -626,8 +626,20 @@ $(document).on('change', '#measurement_unit', function () {
     }
 });
 
-//added by :Pradyumn, added on: 26/09/2022, uses : To set vendor price per kg
+//added by :Pradyumn, added on: 26/09/2022, uses : Calling vendor price per unit function on keyup
 $(document).on('keyup', '#vendor_price_bulk', function () {
+    var vendor_price_bulk = document.getElementById("vendor_price_bulk").value;
+    showVendorPricePerUnit(vendor_price_bulk);
+});
+
+//added by :Pradyumn, added on: 26/09/2022, uses : Call commission show function To set commission price per kg on keyup
+$(document).on('keyup', '#commission_rate_bulk', function () {
+    var commission_rate_bulk = document.getElementById("commission_rate_bulk").value;
+    showCommissionPerUnit(commission_rate_bulk);
+});
+
+//added by :Pradyumn, added on: 26/09/2022, uses : To set vendor price per kg
+function showVendorPricePerUnit(vendor_price_bulk) {
     var vendor_price_bulk = document.getElementById("vendor_price_bulk").value;
     if (vendor_price_bulk) {
         $("#vendor_price_per_kg_div").show();
@@ -639,11 +651,10 @@ $(document).on('keyup', '#vendor_price_bulk', function () {
     var vendor_price_calc = vendor_price_bulk / product_quantity;
     var vendor_price_per_kg = (vendor_price_calc).toFixed(2).replace(/\.00$/,'');
     $("#vendor_price").text(vendor_price_per_kg);
-});
+};
 
-//added by :Pradyumn, added on: 26/09/2022, uses : To set commission price per kg
-$(document).on('keyup', '#commission_rate_bulk', function () {
-    var commission_rate_bulk = document.getElementById("commission_rate_bulk").value;
+//added by :Pradyumn, added on: 26/09/2022, uses : To set commission price per kg function
+function showCommissionPerUnit(commission_rate_bulk){
     if (commission_rate_bulk) {
         $("#commission_price_per_kg_div").show();
     }
@@ -654,7 +665,7 @@ $(document).on('keyup', '#commission_rate_bulk', function () {
     var commsission_rate_calc = commission_rate_bulk / product_quantity;
     var commission_rate_per_kg = (commsission_rate_calc).toFixed(2).replace(/\.00$/,'');
     $("#commission_rate").text(commission_rate_per_kg);
-});
+}
 
 //added by :Pradyumn, added on: 26/09/2022, uses : to show hide gst percentage div
 $(document).on('change', '#not_applicable', function () {
