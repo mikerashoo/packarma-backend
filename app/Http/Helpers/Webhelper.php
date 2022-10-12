@@ -56,8 +56,8 @@ if (!function_exists('successMessage')) {
 if (!function_exists('generateRandomOTP')) {
     function generateRandomOTP()
     {
-        // return (rand(1000,9999));
-        return (1234);
+        return (rand(1000,9999));
+        // return (1234);
     }
 }
 

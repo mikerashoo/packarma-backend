@@ -72,13 +72,18 @@ class MyProfileApiController extends Controller
                 // {
                 $data->visiting_card_front = getFile($data->visiting_card_front, 'visiting_card/front', false, 'front');
                 $data->visiting_card_back = getFile($data->visiting_card_back, 'visiting_card/back', false, 'back');
+                
+                //getting extension of images
+                $data->visiting_card_front_extension = pathinfo(parse_url($data->visiting_card_front, PHP_URL_PATH),PATHINFO_EXTENSION);
+                $data->visiting_card_back_extension = pathinfo(parse_url($data->visiting_card_back, PHP_URL_PATH),PATHINFO_EXTENSION);
 
                 if ($data->visiting_card_front == 'file_not_found') {
                     $data->visiting_card_front = null;
+                    $data->visiting_card_front_extension = null;
                 }
-
                 if ($data->visiting_card_back == 'file_not_found') {
                     $data->visiting_card_back = null;
+                    $data->visiting_card_back_extension = null;
                 }
                 // $i++;
                 // }

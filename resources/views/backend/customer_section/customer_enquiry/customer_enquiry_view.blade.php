@@ -179,19 +179,21 @@
                                                                 $state_name = $warehouses->state->state_name;
                                                             @endphp
                                                         @endforeach --}}
-                                                        @foreach ($vendors as $vendor)
-                                                        <tr>
-                                                            <td>{{ $vendor->vendor_name; }}</td>
-                                                            <td>{{ $vendor->vendor_email; }}</td>
-                                                            <td>{{ $vendor->phone; }}</td>
-                                                            @if ( $vendor->warehouse_name)
-                                                                <td>{{ $vendor->warehouse_name ?? '' }}, {{ $vendor->state_name ?? '' }}, {{ $vendor->pincode ?? ''}}</td>                                                     </tr>
-                                                            @else
-                                                                <td>-</td>
-                                                            @endif
-                                                        @endforeach
-                                                        @if (empty($vendors)) 
-                                                         <tr><td colspan="4" class="text-center col">No vendor map found</td></tr>  
+                                                        @if ($vendors)
+                                                            @foreach ($vendors as $vendor)
+                                                                <tr>
+                                                                    <td>{{ $vendor->vendor_name; }}</td>
+                                                                    <td>{{ $vendor->vendor_email; }}</td>
+                                                                    <td>{{ $vendor->phone; }}</td>
+                                                                    @if ($vendor->warehouse_name)
+                                                                        <td>{{ $vendor->warehouse_name ?? '' }}, {{ $vendor->state_name ?? '' }}, {{ $vendor->pincode ?? ''}}</td>                                                     </tr>
+                                                                    @else
+                                                                        <td>-</td>
+                                                                    @endif
+                                                                </tr>
+                                                            @endforeach
+                                                        @else
+                                                            <tr><td colspan="4" class="text-center col">No vendor map found</td></tr>  
                                                         @endif
                                                     </tbody>
                                                 </table>
