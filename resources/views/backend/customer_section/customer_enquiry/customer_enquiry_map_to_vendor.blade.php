@@ -128,10 +128,16 @@ function getVendorWarehouse(vendor,i)
             if(vendor_price){
                 $("#vendor_price_bulk").val(vendor_price);
                 $("#commission_rate_bulk").val(commission_rate);
+                $("#vendor_price_per_kg_div").show();
+                $("#commission_price_per_kg_div").show();
+                showVendorPricePerUnit(vendor_price);
+                showCommissionPerUnit(commission_rate);
                 calcGrandTotal();
             }else{
                 $("#vendor_price_bulk").val('');
                 $("#commission_rate_bulk").val('');
+                $("#vendor_price_per_kg_div").hide();
+                $("#commission_price_per_kg_div").hide();
             }
             $("#warehouse").empty();
             $("#warehouse").append('<option value="">Select</option>');
