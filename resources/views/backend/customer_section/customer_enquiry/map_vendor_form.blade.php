@@ -195,4 +195,19 @@ $(document).ready(function () {
     //call grand total calculate function on ready
     calcGrandTotal();
 });
+
+//added by :Pradyumn, added on: 26/09/2022, uses : to show hide gst percentage div
+$(document).on('change', '#vendor', function () {
+    var vendor_price = <?php   echo $vender_quotation_details->vendor_amount ?? 0 ; ?>;
+    var commission_amt = <?php echo $vender_quotation_details->commission ?? 0 ; ?>;
+    var product_quantity = <?php echo $vender_quotation_details->product_quantity ?? 0 ; ?>;
+    var unit = <?php echo '"'.$min_order_quantity_unit.'"' ?? '""' ; ?>;
+    vendorPriceKg(vendor_price, product_quantity, unit);
+    commissionPerKg(commission_amt, product_quantity, unit);
+    setRatePerUnit(unit);
+    
+    //call grand total calculate function on ready
+    calcGrandTotal();
+});
+
 </script>

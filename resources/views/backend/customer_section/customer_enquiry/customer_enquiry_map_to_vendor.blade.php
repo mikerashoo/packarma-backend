@@ -109,8 +109,8 @@
 function getVendorWarehouse(vendor,i)
 {
     var product_id ='<?php echo $data->product_id; ?>';
-    $("#vendor_price").val('');
-    $("#commission_rate").val('');
+    $("#vendor_price_bulk").val('');
+    $("#commission_rate_bulk").val('');
     $.ajax({
         url:"getVendorWarehouseDropdown",
         type: "POST",
@@ -126,11 +126,12 @@ function getVendorWarehouse(vendor,i)
                 var commission_rate = response['data']['vendorMaterialMapData'][0]['min_amt_profit'];
             }
             if(vendor_price){
-                $("#vendor_price").val(vendor_price);
-                $("#commission_rate").val(commission_rate);
+                $("#vendor_price_bulk").val(vendor_price);
+                $("#commission_rate_bulk").val(commission_rate);
+                calcGrandTotal();
             }else{
-                $("#vendor_price").val('');
-                $("#commission_rate").val('');
+                $("#vendor_price_bulk").val('');
+                $("#commission_rate_bulk").val('');
             }
             $("#warehouse").empty();
             $("#warehouse").append('<option value="">Select</option>');

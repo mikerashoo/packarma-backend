@@ -195,7 +195,7 @@ function loadViewPage(page_url) {
                 }
                 if (document.getElementById("measurement_unit")) {
                     var unit = $('#measurement_unit option:selected').text();
-                    if(unit){
+                    if(unit != 'Select' && unit !=''){
                         $("#min_weight_unit_span").text('('+unit+')');
                         $("#max_weight_unit_span").text('('+unit+')');
                     }
