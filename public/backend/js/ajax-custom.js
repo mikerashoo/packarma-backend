@@ -714,6 +714,7 @@ function setRatePerUnit(unit){
 
 //Created by : Pradyumn Dwivedi, Created at : 3-oct-2022, Use : To calculate grand total and return to map vendor form
 function calcGrandTotal(){
+    var product_quantity = Number($('#product_quantity').val());
     var vendor_price_bulk = Number($('#vendor_price_bulk').val());
     var commission_rate_bulk = Number($('#commission_rate_bulk').val());
     var delivery_charges = Number($('#delivery_charges').val());
@@ -721,12 +722,19 @@ function calcGrandTotal(){
     var gst_percentage = Number($('#gst_percentage').val());
     var gst_amt = 0;
 
+    //conver price per unit
+    var vendor_price_per_unit = Number((vendor_price_bulk/product_quantity).toFixed(2));
+    var commission_per_unit = Number((commission_rate_bulk/product_quantity).toFixed(2));
+
+    //  mrp per quantity
+    var mrp = Number((vendor_price_per_unit + commission_per_unit).toFixed(2));
+
     // if gst is yes then length is 0 and for no length is 1 coming
     if ($('#not_applicable:checked').length == 0) {
-        var sub_total = vendor_price_bulk + commission_rate_bulk;
+        var sub_total = Number((mrp * product_quantity).toFixed(2));
         var gst_amt = (sub_total * gst_percentage / 100).toFixed(2);
     }
     // calculate grand total
-    var grand_total_calc = (vendor_price_bulk + commission_rate_bulk + delivery_charges + Number(gst_amt)).toFixed(2);
+    var grand_total_calc = Number((sub_total + delivery_charges + Number(gst_amt)).toFixed(2));
     $("#enquiry_grand_total_amount").text(grand_total_calc);
 }
