@@ -111,7 +111,7 @@ class LoginApiController extends Controller
             $vendorData->last_login = $vendors->last_login = Carbon::now();
             $vendorData->remember_token  = $vendor_token;
             $vendorData->load_page = $default_home_page;
-            $userData->notification_icon = $notification_icon_flag;
+            $vendorData->notification_icon = $notification_icon_flag;
             $vendors->save();
 
             VendorDevice::updateOrCreate(
