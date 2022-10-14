@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\customerapi;
+namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\CustomerNotificationHistory;
+use App\Models\VendorNotificationHistory;
 use Response;
 
-class NotificationHistoryApiController extends Controller
+class VendorNotificationHistoryApiController extends Controller
 {
     /**
      * Created By : Pradyumn Dwivedi
      * Created at : 14-Oct-2022
-     * Uses : Display a listing of the customer notifcations.
+     * Uses : Display a listing of the vendor notifcations.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -22,14 +22,14 @@ class NotificationHistoryApiController extends Controller
         $msg_data = array();
         try
         {
-            $token = readHeaderToken();
+            $token = readVendorHeaderToken();
             if($token)
             {
                 $imei_no = $request->header('imei-no');
-                $user_id = $token['sub'];
+                $vendor_id = $token['sub'];
                 $page_no=1;
                 $limit=10;
-                $orderByArray = ['customer_notification_histories.id' => 'DESC',];
+                $orderByArray = ['vendor_notification_histories.id' => 'DESC'];
                 $defaultSortByName = false;
                 if(isset($request->page_no) && !empty($request->page_no)) {
                     $page_no=$request->page_no;
@@ -38,8 +38,8 @@ class NotificationHistoryApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = CustomerNotificationHistory::select('id','notification_name','page_name','type_id','title','body','created_at')->where([['status','1'],['user_id', $user_id],['deleted_at', NULL]]);
-                $notificationData = CustomerNotificationHistory::whereRaw("1 = 1");
+                $data = VendorNotificationHistory::select('id','notification_name','page_name','type_id','title','body','created_at')->where([['status','1'],['vendor_id', $vendor_id],['deleted_at', NULL]]);
+                $notificationData = VendorNotificationHistory::whereRaw("1 = 1");
                 if($request->id)
                 {
                     $notificationData = $notificationData->where('id',$request->id);
@@ -52,13 +52,13 @@ class NotificationHistoryApiController extends Controller
                 }
                 if(empty($notificationData->first()))
                 {
-                    errorMessage(__('customer_notification_history.notification_not_found'), $msg_data);
+                    errorMessage(__('vendor_notification_history.notification_not_found'), $msg_data);
                 }
                 if(isset($request->search) && !empty($request->search)) {
                     $data = fullSearchQuery($data, $request->search,'title|body');
                 }
                 if ($defaultSortByName) {
-                    $orderByArray = ['customer_notification_histories.title' => 'ASC'];
+                    $orderByArray = ['vendor_notification_histories.title' => 'ASC'];
                 }
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
@@ -71,7 +71,7 @@ class NotificationHistoryApiController extends Controller
                 //     $i++;
                 // }
                 if(empty($data)) {
-                    errorMessage(__('customer_notification_history.notification_not_found'), $msg_data);
+                    errorMessage(__('vendor_notification_history.notification_not_found'), $msg_data);
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
@@ -80,7 +80,7 @@ class NotificationHistoryApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("Customer Notificcation fetching failed: " . $e->getMessage());
+            \Log::error("Vendor Notificcation fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }

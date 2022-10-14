@@ -71,12 +71,14 @@ class LoginApiController extends Controller
                 $fcm_id = $request->fcm_id;
             }
 
+            $notification_icon_flag = true;
             $imei_no = $request->header('imei-no');
             $token = JWTAuth::fromUser($userData);
             $users = User::find($userData->id);
             $userData->last_login = $users->last_login = Carbon::now();
             $userData->remember_token = $token;
             $userData->load_page = $default_home_page;
+            $userData->notification_icon = $notification_icon_flag;
             $users->save();
             CustomerDevice::updateOrCreate(
                 ['user_id' => $userData->id, 'imei_no' => $imei_no],
