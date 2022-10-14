@@ -28,6 +28,15 @@
                                             <label>Packaging Solution Name</label>
                                             <input class="form-control mb-3" type="text" id="search_recommendation_engine" name="search_recommendation_engine">
                                         </div>
+                                        {{-- <div class="col-sm-4">
+                                            <label>Structure type</label>
+                                            <select class="form-control mb-3 select2" id="search_structure_type" name="search_structure_type" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach($data['user'] as $users)
+                                                    <option value="{{$users->id}}">{{$users->name}}{{$user_deleted_status}}</option>                                                
+                                                @endforeach
+                                            </select><br/>
+                                        </div> --}}
                                         <div class="col-md-4">
                                             <label>&nbsp;</label><br>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">

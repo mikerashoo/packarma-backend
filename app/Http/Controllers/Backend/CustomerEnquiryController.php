@@ -259,6 +259,7 @@ class CustomerEnquiryController extends Controller
             'vendor_quotations.enquiry_status',
             'vendor_quotations.customer_enquiry_id',
             'vendor_quotations.delivery_in_days',
+            'vendor_quotations.created_at',
             'customer_enquiries.recommendation_engine_id',
             'recommendation_engines.min_order_quantity_unit',
             'vendors.vendor_name',

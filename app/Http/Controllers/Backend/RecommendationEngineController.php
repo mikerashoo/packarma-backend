@@ -27,6 +27,8 @@ class RecommendationEngineController extends Controller
 
     public function index()
     {
+        // $data['solutionStructureType'] = solutionStructureType();
+        
         $data['packaging_solution_add'] = checkPermission('packaging_solution_add');
         $data['packaging_solution_edit'] = checkPermission('packaging_solution_edit');
         $data['packaging_solution_view'] = checkPermission('packaging_solution_view');

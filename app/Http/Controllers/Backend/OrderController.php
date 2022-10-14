@@ -223,7 +223,7 @@ class OrderController extends Controller
         $tableObject->updated_by =  session('data')['id'];
         $tableObject->save();
 
-        //fcm notification
+        //fcm notification to customer after delivery status update
         $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_customer_fcm_notification')->value('value');
         if ($can_send_fcm_notification == 1) {
             $this->callAdminOrderDeliveryFcmNotification($deliveryData['user_id'], $deliveryData['id']);

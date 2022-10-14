@@ -950,6 +950,12 @@ if (!function_exists('sendFcmNotification')) {
 
                 $device_array = $fcm_ids;
 
+                // //store fcm notification history
+                // if ($for == 'customer') {
+                //     $cust_notification = array();
+
+                // }
+
                 $array_chunk_length = 500;
                 $deviceArrayChunk = array_chunk($device_array, $array_chunk_length, true);
                 $is_post = true;
