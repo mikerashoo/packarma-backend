@@ -92,16 +92,21 @@ class PackagingSolutionApiController extends Controller
                     $data = allOrderBy($data, $orderByArray);
                     $total_records = $data->get()->count();
                     $data = $data->limit($limit)->offset($offset)->get()->toArray();
+
+                    $product_packaging_solution = false;
                     if (empty($data)) {
                         $placeEnquiry = false;
+                        $product_packaging_solution = true;
                         $msg_data['is_subscribed'] = $isSubscribed;
                         $msg_data['place_enquiry'] = $placeEnquiry;
+                        $msg_data['product_packaging_solution'] = $product_packaging_solution;
                         errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
                     }
 
                     $responseData['result'] = $data;
                     $responseData['is_subscribed'] = $isSubscribed;
                     $responseData['place_enquiry'] = $placeEnquiry;
+                    $responseData['product_packaging_solution'] = $product_packaging_solution;
                     $responseData['total_records'] = $total_records;
                     successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                 }
@@ -215,10 +220,13 @@ class PackagingSolutionApiController extends Controller
                     $total_records = $data->get()->count();
                     $data = $data->limit($limit)->offset($offset)->get()->toArray();
 
+                    $product_packaging_solution = false;
                     if (empty($data)) {
                         $placeEnquiry = false;
+                        $product_packaging_solution = true;
                         $msg_data['is_subscribed'] = $isSubscribed;
                         $msg_data['place_enquiry'] = $placeEnquiry;
+                        $msg_data['product_packaging_solution'] = $product_packaging_solution;
                         errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
                     }
 
@@ -246,6 +254,7 @@ class PackagingSolutionApiController extends Controller
                     $responseData['result'] = $data;
                     $responseData['is_subscribed'] = $isSubscribed;
                     $responseData['place_enquiry'] = $placeEnquiry;
+                    $responseData['product_packaging_solution'] = $product_packaging_solution;
                     $responseData['total_records'] = $total_records;
                     successMessage(__('success_msg.data_fetched_successfully'), $responseData);
                 }

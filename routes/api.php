@@ -145,5 +145,8 @@ Route::middleware(['basicAuth'])->group(function () {
 
         //Contact us api
         Route::post('/store_customer_contact_us', 'CustomerContactUsController@store');
+
+        //customer notification history
+        Route::post('/customer_notification/listing', 'NotificationHistoryApiController@index');
     });
 });

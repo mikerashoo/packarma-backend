@@ -22,8 +22,12 @@
                             	<div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
                                         <div class="col-md-4">
-                                            <label>Enquiry ID</label>
+                                            <label>Customer Enquiry ID</label>
                                             <input class="form-control mb-3" type="text" id="search_enquiry_id" name="search_enquiry_id">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Vendor Quotation ID</label>
+                                            <input class="form-control mb-3" type="text" id="search_quotation_id" name="search_quotation_id">
                                         </div>
                                         <div class="col-sm-4">
                                             <label>User Name</label>
@@ -52,7 +56,7 @@
                                             </select><br>
                                         </div>
                                         <div class="col-md-4">
-                                            <label>&nbsp;</label>
+                                            <label>&nbsp;</label><br>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
                                     </div>
@@ -62,8 +66,8 @@
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="user_name" data-orderable="false" data-searchable="false">User Name</th>
-                                                    <th id="customer_enquiry_id" data-orderable="false" data-searchable="false">Enquiry ID</th> 
-                                                    <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name</th>
+                                                    <th id="customer_enquiry_id" data-orderable="false" data-searchable="false">Customer Enquiry ID</th> 
+                                                    <th id="vendor_name" data-orderable="false" data-searchable="false">Vendor Name (Quotation ID)</th>
                                                     <th id="product_name" data-orderable="false" data-searchable="false">Product Name</th>
                                                     {{-- <th id="vendor_warehouse" data-orderable="false" data-searchable="false">Vendor Warehouse</th> --}}
                                                     <th id="enquiry_status" data-orderable="false" data-searchable="false">Enquiry Status</th>

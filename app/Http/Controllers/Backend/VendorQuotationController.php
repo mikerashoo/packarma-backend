@@ -46,6 +46,9 @@ class VendorQuotationController extends Controller
                         if (isset($request['search']['search_enquiry_id']) && !is_null($request['search']['search_enquiry_id'])) {
                             $query->where('customer_enquiry_id', $request['search']['search_enquiry_id']);
                         }
+                        if (isset($request['search']['search_quotation_id']) && !is_null($request['search']['search_quotation_id'])) {
+                            $query->where('id', $request['search']['search_quotation_id']);
+                        }
                         if (isset($request['search']['search_user_name']) && !is_null($request['search']['search_user_name'])) {
                             $query->where('user_id', $request['search']['search_user_name']);
                         }
@@ -68,9 +71,9 @@ class VendorQuotationController extends Controller
                     ->editColumn('vendor_name', function ($event) {
                         $isVendorDeleted = isRecordDeleted($event->vendor->deleted_at);
                         if (!$isVendorDeleted) {
-                            return $event->vendor->vendor_name;
+                            return ($event->vendor->vendor_name.' ('.$event->id.')');
                         } else {
-                            return '<span class="text-danger text-center">' . $event->vendor->vendor_name . '</span>';
+                            return '<span class="text-danger text-center">' . $event->vendor->vendor_name .' ('.$event->id.')'. '</span>';
                         }
                     })
                     ->editColumn('product_name', function ($event) {
