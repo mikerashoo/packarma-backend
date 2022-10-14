@@ -52,5 +52,8 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
 
         //Contact us api
         Route::post('/store_vendor_contact_us', 'VendorContactUsController@store');
+
+        //customer notification history
+        Route::post('/vendor_notification/listing', 'VendorNotificationHistoryApiController@index');
     });
 });

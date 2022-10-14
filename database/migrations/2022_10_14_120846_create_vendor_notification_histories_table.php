@@ -4,21 +4,21 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCustomerNotificationHistoriesTable extends Migration
+class CreateVendorNotificationHistoriesTable extends Migration
 {
     /**
-     * Created by : Pradyumn Dwivedi
+     * Created By : Pradyumn Dwivedi
      * Created at : 14-Oct-2022
-     * Use : To store customer notification
+     * Use : To create table for vendor notification history
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('customer_notification_histories', function (Blueprint $table) {
+        Schema::create('vendor_notification_histories', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->integer('vendor_id');
             $table->string('imei_no', 255)->nullable()->comment('device_id');
             $table->integer('language_id')->default(0);
             $table->string('notification_name', 255)->nullable();
@@ -47,6 +47,6 @@ class CreateCustomerNotificationHistoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer_notification_histories');
+        Schema::dropIfExists('vendor_notification_histories');
     }
 }

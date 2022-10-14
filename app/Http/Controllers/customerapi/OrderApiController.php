@@ -120,7 +120,7 @@ class OrderApiController extends Controller
                     }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
 
-                    if ($row->customer_payment_status == 'pending') {
+                    if ($row->customer_payment_status == 'pending' && $row->order_delivery_status != 'cancelled') {
                         $payNowButton = true;
                     }
                     $data[$i]->pay_now =  $payNowButton;
@@ -233,7 +233,7 @@ class OrderApiController extends Controller
                     $data[$i]->cgst_amount = "0.00";
                     $data[$i]->sgst_amount = "0.00";
                     $data[$i]->igst_amount = "0.00";
-
+                    $payNowButton = false;
                     if ($row->gst_type == 'cgst+sgst') {
                         $data[$i]->sgst_amount = $data[$i]->cgst_amount = number_format(($row->gst_amount / 2), 2, '.', '');
                         $data[$i]->gst_percentage = number_format(($row->gst_percentage / 2), 2, '.', '');
@@ -242,10 +242,7 @@ class OrderApiController extends Controller
                         $data[$i]->igst_amount = $row->gst_amount;
                     }
                     $data[$i]->odr_id = getFormatid($row->id, 'orders');
-
-
-
-
+                    $data[$i]->pay_now =  $payNowButton;
                     $i++;
                 }
 
@@ -382,7 +379,7 @@ class OrderApiController extends Controller
                         $data[$i]->billing_details = null;
                     }
 
-                    if ($row->customer_payment_status == 'pending') {
+                    if ($row->customer_payment_status == 'pending' && $row->order_delivery_status != 'cancelled') {
                         $payNowButton = true;
                     }
 

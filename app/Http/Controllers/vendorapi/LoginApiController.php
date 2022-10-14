@@ -104,13 +104,14 @@ class LoginApiController extends Controller
             }
 
             // return $fcm_id;
-
+            $notification_icon_flag = true;
             $imei_no = $request->header('imei-no');
             $vendor_token = JWTAuth::fromUser($vendorData);
             $vendors = Vendor::find($vendorData->id);
             $vendorData->last_login = $vendors->last_login = Carbon::now();
             $vendorData->remember_token  = $vendor_token;
             $vendorData->load_page = $default_home_page;
+            $userData->notification_icon = $notification_icon_flag;
             $vendors->save();
 
             VendorDevice::updateOrCreate(
