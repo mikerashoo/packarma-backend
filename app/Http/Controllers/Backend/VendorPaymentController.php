@@ -248,16 +248,25 @@ class VendorPaymentController extends Controller
 
                 $formatted_id = getFormatid($order_id, 'orders');
                 $notificationData['body'] = str_replace('$$order_id$$', $formatted_id, $notificationData['body']);
-                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
+                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id','vendor_devices.imei_no','vendor_devices.remember_token')
                     ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted'], ['vendors.deleted_at', NULL]])
                     ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
                     ->get();
                 if (!empty($userFcmData)) {
+                    //modified by : Pradyumn Dwivedi, Modified at : 14-Oct-2022
                     $device_ids = array();
+                    $imei_nos = array();
+                    $i=0;
                     foreach ($userFcmData as $key => $val) {
-                        array_push($device_ids, $val->fcm_id);
+                        if (!empty($val->remember_token)){
+                            array_push($device_ids, $val->fcm_id);
+                            array_push($imei_nos, $val->imei_no);
+                        }
                     }
-                    sendFcmNotification($device_ids, $notificationData);
+                    //modified by : Pradyumn Dwivedi, Modified at : 14-Oct-2022
+                    //combine imei id and fcm as key value in new array
+                    $devices_data =  array_combine($imei_nos, $device_ids);
+                    sendFcmNotification($devices_data, $notificationData, 'vendor', $vendor_id);
                 }
             }
         }

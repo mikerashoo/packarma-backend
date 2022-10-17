@@ -4,6 +4,7 @@ namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\VendorNotificationHistory;
 use Response;
 
@@ -29,6 +30,7 @@ class VendorNotificationHistoryApiController extends Controller
                 $vendor_id = $token['sub'];
                 $page_no=1;
                 $limit=10;
+                $last_no_of_days = 15;
                 $orderByArray = ['vendor_notification_histories.id' => 'DESC'];
                 $defaultSortByName = false;
                 if(isset($request->page_no) && !empty($request->page_no)) {
@@ -50,6 +52,12 @@ class VendorNotificationHistoryApiController extends Controller
                     $notificationData = $notificationData->where('title',$request->title);
                     $data = $data->where('title',$request->title);
                 }
+
+                // last number of days record
+                $date_from_no_of_days = Carbon::now()->subDays($last_no_of_days);
+                $notificationData = $notificationData->whereDate('created_at', '>=', $date_from_no_of_days);
+                $data = $data->whereDate('created_at', '>=', $date_from_no_of_days);
+
                 if(empty($notificationData->first()))
                 {
                     errorMessage(__('vendor_notification_history.notification_not_found'), $msg_data);

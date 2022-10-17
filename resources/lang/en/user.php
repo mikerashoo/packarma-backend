@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Language Lines
+    | User Language Lines
     |--------------------------------------------------------------------------
     |
     | The following language lines are used during authentication for various
@@ -21,6 +21,7 @@ return [
     'update_successfully' => 'Your details updated successfully!',
     'same_phone_exist' => 'Phone number Already Exist',
     'delete_successfully' => 'Account deleted successfuly',
+    'logged_successfully' => 'Logged out successfully',
     'approval_pending' => 'Your account approval is pending please contact admin',
     'rejected' => 'Your Registration Request has been rejected. Please contact support team for further clarification.',
     'not_active' => 'Please contact admin team your account is locked',

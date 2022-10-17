@@ -55,5 +55,9 @@ Route::middleware(['vendorbasicAuth'])->group(function () {
 
         //customer notification history
         Route::post('/vendor_notification/listing', 'VendorNotificationHistoryApiController@index');
+
+        //vendor logout 
+        Route::post('/logout', 'MyProfileController@logoutVendorUpdateToken');
+
     });
 });

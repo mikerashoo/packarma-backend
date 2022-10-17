@@ -50,6 +50,7 @@ class MyProfileController extends Controller
                         "edit_vendor" => false,
                         "delete_vendor" => false,
                         "logout" => true,
+                        "notification_icon" => false,
                     );
                 } else {
                     $flags = array(
@@ -62,6 +63,7 @@ class MyProfileController extends Controller
                         "edit_vendor" => true,
                         "delete_vendor" => true,
                         "logout" => true,
+                        "notification_icon" => true,
                     );
                 }
 
@@ -313,5 +315,34 @@ class MyProfileController extends Controller
             'fcm_id' => 'required'
 
         ])->errors();
+    }
+
+    /**
+     * Created By Pradyumn Dwivedi
+     * Created at : 17/10/2022
+     * Uses : To delete vendor remember token to NULL after logout for specific device id
+     *  @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logoutVendorUpdateToken(Request $request)
+    {
+        $msg_data = array();
+        \Log::info("Loging out vendor from device, starting at: " . Carbon::now()->format('H:i:s:u'));
+        try {
+            $token = readVendorHeaderToken();
+            if ($token) {
+                $vendor_id = $token['sub'];
+                $imei_no = $request->header('imei-no');
+                \Log::info("Vendor Remember token update NULL start for  device id : ".$imei_no);
+                VendorDevice::where([['vendor_id',$vendor_id],['imei_no', $imei_no]])->update(['remember_token'=> NULL]);
+                \Log::info("Vendor remember token as NULL updated successfully for device id: ".$imei_no);
+                successMessage(__('vendor.logged_successfully'), $msg_data);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Vendor Remember token update failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
     }
 }

@@ -473,7 +473,7 @@ class CustomerEnquiryController extends Controller
     /*
     *Created By: Pradyumn, 
     *Created At : 7-sept-2022, 
-    *uses: order delivery fcm notification for admin 
+    *uses: send enquiry mapped notification to vendor
     */
     private function callEnquiryMappedFcmNotification($vendor_id, $vendor_quotation_id)
     {
@@ -495,18 +495,26 @@ class CustomerEnquiryController extends Controller
                 $formatted_quotation_id = getFormatid($vendor_quotation_id, 'vendor_quotations');
                 // $notificationData['title'] = str_replace('$$enquiry_id$$', $formatted_id, $notificationData['title']);
                 $notificationData['body'] = str_replace('$$vendor_quotation_id$$', $formatted_quotation_id, $notificationData['body']);
-                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id')
+                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id','vendor_devices.imei_no','vendor_devices.remember_token')
                     ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted'], ['vendors.deleted_at', NULL]])
                     ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
                     ->get();
 
                 if (!empty($userFcmData)) {
+                    //modified by : Pradyumn Dwivedi, Modified at : 14-Oct-2022
                     $device_ids = array();
+                    $imei_nos = array();
+                    $i=0;
                     foreach ($userFcmData as $key => $val) {
-                        array_push($device_ids, $val->fcm_id);
+                        if (!empty($val->remember_token)){
+                            array_push($device_ids, $val->fcm_id);
+                            array_push($imei_nos, $val->imei_no);
+                        }
                     }
-
-                    sendFcmNotification($device_ids, $notificationData);
+                    //modified by : Pradyumn Dwivedi, Modified at : 14-Oct-2022
+                    //combine imei id and fcm as key value in new array
+                    $devices_data =  array_combine($imei_nos, $device_ids);
+                    sendFcmNotification($devices_data, $notificationData, 'vendor', $vendor_id);
                 }
             }
         }

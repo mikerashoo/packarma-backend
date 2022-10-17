@@ -50,6 +50,7 @@ class MyProfileApiController extends Controller
                         "my_subscription" => false,
                         "my_order" => false,
                         "logout" => true,
+                        "notification_icon" => false,
                     );
                 } else {
                     $flags = array(
@@ -64,6 +65,7 @@ class MyProfileApiController extends Controller
                         "my_subscription" => true,
                         "my_order" => true,
                         "logout" => true,
+                        "notification_icon" => true,
                     );
                 }
                 // $i=0;
@@ -361,4 +363,34 @@ class MyProfileApiController extends Controller
 
         ])->errors();
     }
+
+    /**
+     * Created By Pradyumn Dwivedi
+     * Created at : 17/10/2022
+     * Uses : To delete customer remember token to NULL after logout for specific device id
+     *  @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logoutCustomerUpdateToken(Request $request)
+    {
+        $msg_data = array();
+        \Log::info("Loging out user from device, starting at: " . Carbon::now()->format('H:i:s:u'));
+        try {
+            $token = readHeaderToken();
+            if ($token) {
+                $user_id = $token['sub'];
+                $imei_no = $request->header('imei-no');
+                \Log::info("Customer Remember token update NULL start for  device id : ".$imei_no);
+                CustomerDevice::where([['user_id',$user_id],['imei_no', $imei_no]])->update(['remember_token'=> NULL]);
+                \Log::info("Customer remember token as NULL updated successfully for device id: ".$imei_no);
+                successMessage(__('user.logged_successfully'), $msg_data);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Customer Remember Token update failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
 }

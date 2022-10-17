@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Models\CustomerNotificationHistory;
+use App\Models\VendorNotificationHistory;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Storage;
 use Image as thumbimage;
@@ -350,6 +352,7 @@ if (!function_exists('deliveryStatus')) {
         $returnArray = array(
             'pending' => 'Pending',
             'processing' => 'Processing',
+            'ready_for_delivery' => 'Ready For Delivery',
             'out_for_delivery' => 'Out For Delivery',
             'delivered' => 'Delivered',
             'cancelled' => 'Cancelled'
@@ -922,16 +925,14 @@ if (!function_exists('sendEmail')) {
     }
 }
 
-
 if (!function_exists('sendFcmNotification')) {
-    function sendFcmNotification($fcm_ids = array(), $notification_data = array(), $for = 'vendor')
+    function sendFcmNotification($fcm_ids = array(), $notification_data = array(), $for = 'vendor', $id)
     {
-
         $auth_key = config('global.TEST_VENDOR_FCM_SERVER_KEY');
         if ($for == 'customer') {
             $auth_key = config('global.TEST_CUSTOMER_FCM_SERVER_KEY');
         }
-        if (is_array($fcm_ids) && !empty($fcm_ids[0])) {
+        if (is_array($fcm_ids) && !empty($fcm_ids)) {
             $auth_token = array(
                 'Authorization: key=' . $auth_key,
                 'Content-Type: application/json'
@@ -939,23 +940,22 @@ if (!function_exists('sendFcmNotification')) {
 
             if (is_array($fcm_ids)) {
                 $auth_token = $auth_token;
-
+                
                 //FCM MSG DATA
                 $data_array['title']        = $notification_data['title'];
                 $data_array['body']         = $notification_data['body'];
                 $data_array['image']        = $notification_data['image_path'];
                 $data_array['type']         = $notification_data['page_name'];
-                $data_array['type_id']         = $notification_data['type_id'];
+                $data_array['type_id']      = $notification_data['type_id'];
                 $data_array['sound']        = "default";
 
-                $device_array = $fcm_ids;
-
-                // //store fcm notification history
-                // if ($for == 'customer') {
-                //     $cust_notification = array();
-
-                // }
-
+                // $device_array = $fcm_ids;
+                //store fcm id to device array
+                $device_array = array();
+                foreach($fcm_ids as $key => $val){
+                        $device_array[] = $val;
+                }
+                
                 $array_chunk_length = 500;
                 $deviceArrayChunk = array_chunk($device_array, $array_chunk_length, true);
                 $is_post = true;
@@ -966,9 +966,11 @@ if (!function_exists('sendFcmNotification')) {
                         'data'             => $data_array,
                     );
                     $postdata = json_encode($fields);
-
                     $result =  fcmCallingToCurl($auth_token, $is_post, $postdata);
                 }
+
+                //storing fcm notifcation history for vendor and customer both by calling function
+                storeNotificationHistory($fcm_ids, $notification_data, $for, $id);
             }
         }
     }
@@ -1067,5 +1069,70 @@ if (!function_exists('maskVendorName')) {
         $result = $finalP1;
 
         return $result;
+    }
+}
+
+
+/**
+ * Created by : Pradyumn Dwivedi
+ * Created at : 17-Oct-2022
+ * Uses: Store notification history in table for customer and vendor
+ */
+if (!function_exists('storeNotificationHistory')) {
+    function storeNotificationHistory($fcm_ids = array(), $notification_data = array(), $for, $id) {
+        //store fcm notification history
+        $current_datetime = Carbon::now()->format('Y-m-d H:i:s');
+        $device_array = array();
+        $customer_notification = array();
+        $vendor_notification = array();
+        $i=0;
+        foreach($fcm_ids as $key => $val){
+            $device_array[] = $val;
+            if ($for == 'customer' && !empty($val) && !empty($key)) {
+                $customer_notification[$i]['user_id'] = $id;
+                $customer_notification[$i]['imei_no'] = $key;
+                $customer_notification[$i]['language_id'] = $notification_data['language_id'];
+                $customer_notification[$i]['notification_name'] = $notification_data['notification_name'];
+                $customer_notification[$i]['page_name'] = $notification_data['page_name'];
+                $customer_notification[$i]['type_id'] = $notification_data['type_id'];
+                $customer_notification[$i]['title'] = $notification_data['title'];
+                $customer_notification[$i]['body'] = $notification_data['body'];
+                // $customer_notification[$i]['notification_image'] = $notification_data['image_path'];
+                // $customer_notification[$i]['notification_thumb_image'] = $notification_data['image_path'];
+                $customer_notification[$i]['notification_date'] = $current_datetime;
+                $customer_notification[$i]['trigger'] = $notification_data['trigger'];
+                // $customer_notification[$i]['is_read'] = 0;
+                // $customer_notification[$i]['is_discard'] = 0;
+                $customer_notification[$i]['status'] = 1;
+                // $customer_notification[$i]['created_by'] = $id;
+                $i++;
+            }
+            if ($for == 'vendor' && !empty($val) && !empty($key)) {
+                $vendor_notification[$i]['vendor_id'] = $id;
+                $vendor_notification[$i]['imei_no'] = $key;
+                $vendor_notification[$i]['language_id'] = $notification_data['language_id'];
+                $vendor_notification[$i]['notification_name'] = $notification_data['notification_name'];
+                $vendor_notification[$i]['page_name'] = $notification_data['page_name'];
+                $vendor_notification[$i]['type_id'] = $notification_data['type_id'];
+                $vendor_notification[$i]['title'] = $notification_data['title'];
+                $vendor_notification[$i]['body'] = $notification_data['body'];
+                // $vendor_notification[$i]['notification_image'] = $notification_data['image_path'];
+                // $vendor_notification[$i]['notification_thumb_image'] = $notification_data['image_path'];
+                $vendor_notification[$i]['notification_date'] = $current_datetime;
+                $vendor_notification[$i]['trigger'] = $notification_data['trigger'];
+                // $vendor_notification[$i]['is_read'] = 0;
+                // $vendor_notification[$i]['is_discard'] = 0;
+                $vendor_notification[$i]['status'] = 1;
+                // $vendor_notification[$i]['created_by'] = $id;
+            }
+        }
+        if ($for == 'customer') {
+            $customer_notification_history = CustomerNotificationHistory::insert($customer_notification);
+            \Log::info("New record inserted to Customer Notification History");
+        }
+        if ($for == 'vendor') {
+            $vendor_notification_history = VendorNotificationHistory::insert($vendor_notification);
+            \Log::info("New record inserted to Vendor Notification History");
+        }
     }
 }
