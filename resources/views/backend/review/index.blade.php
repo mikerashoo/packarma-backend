@@ -41,9 +41,22 @@
                                                     @endif
                                                 @endforeach
                                             </select><br><br>
-                                        </div>                                                                   
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Product Name</label>
+                                            <select class="form-control select2 mb-3" id="search_product_name" name="search_product_name" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach ($data['product'] as $val)
+                                                    <option value="{{ $val->id }}">{{$val->product_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>  
+                                        <div class="col-sm-4">
+                                            <label>Rating</label>
+                                            <input type="text" class="form-control mb-3" id="search_rating" name="search_rating" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
+                                        </div>
                                         <div class="col-md-4">
-                                            <label>&nbsp;</label><br/>
+                                            <label>&nbsp;</label>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
                                     </div>                                    

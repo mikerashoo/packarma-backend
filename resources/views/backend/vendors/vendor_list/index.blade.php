@@ -29,6 +29,18 @@
                                             <input class="form-control mb-3" type="text" id="search_vendor_name" name="search_vendor_name">
                                         </div>
                                         <div class="col-md-4">
+                                            <label>Phone</label>
+                                            <input class="form-control mb-3" type="text" id="search_vendor_phone" name="search_vendor_phone">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Email</label>
+                                            <input class="form-control mb-3" type="text" id="search_vendor_email" name="search_vendor_email">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Company Name</label>
+                                            <input class="form-control mb-3" type="text" id="search_vendor_company" name="search_vendor_company">
+                                        </div>
+                                        <div class="col-md-4">
                                             <label>Vendor Type</label>
                                             <select class="form-control mb-3 select2" id="search_vendor_type" name="search_vendor_type" style="width: 100% !important;">
                                                 <option value="">Select</option>

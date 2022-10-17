@@ -18,6 +18,7 @@ class SubCategoryController extends Controller
 
     public function index()
     {
+        $data['category'] = Category::all();
         $data['sub_category_add'] = checkPermission('sub_category_add');
         $data['sub_category_edit'] = checkPermission('sub_category_edit');
         $data['sub_category_view'] = checkPermission('sub_category_edit');
@@ -41,6 +42,9 @@ class SubCategoryController extends Controller
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_sub_category_name']) && !is_null($request['search']['search_sub_category_name'])) {
                             $query->where('sub_category_name', 'like', "%" . $request['search']['search_sub_category_name'] . "%");
+                        }
+                        if (isset($request['search']['search_category_id']) && !is_null($request['search']['search_category_id'])) {
+                            $query->where('category_id', $request['search']['search_category_id']);
                         }
                         $query->get();
                     })

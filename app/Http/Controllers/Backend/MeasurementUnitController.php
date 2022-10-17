@@ -9,7 +9,7 @@ use Yajra\DataTables\DataTables;
 
 class MeasurementUnitController extends Controller
 {
-     /**
+    /**
        *   created by : Pradyumn Dwivedi
        *   Created On : 12-April-2022
        *   Uses :  To show measurement unit  listing page
@@ -38,6 +38,9 @@ class MeasurementUnitController extends Controller
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_unit_name']) && !is_null($request['search']['search_unit_name'])) {
                             $query->where('unit_name', 'like', "%" . $request['search']['search_unit_name'] . "%");
+                        }
+                        if (isset($request['search']['search_symbol_name']) && !is_null($request['search']['search_symbol_name'])) {
+                            $query->where('unit_symbol', 'like', "%" . $request['search']['search_symbol_name'] . "%");
                         }
                         $query->get();
                     })

@@ -28,10 +28,13 @@
                                                 <label>Name</label>
                                                 <input class="form-control mb-3" type="text" id="search_name" name="search_name">
                                             </div>
-
                                             <div class="col-md-4">
                                                 <label>Phone</label>
-                                                <input class="form-control mb-3" type="text" id="search_phone " name="search_phone" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
+                                                <input class="form-control mb-3" type="text" id="search_phone" name="search_phone" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>Email</label>
+                                                <input class="form-control mb-3" type="email" id="search_email" name="search_email" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
                                             </div>
                                              <div class="col-md-4">
                                             <label>User Type</label>
@@ -42,7 +45,7 @@
                                             </select><br/>
                                         </div>
                                             <div class="col-md-4">
-                                                <label>&nbsp;</label><br />
+                                                <label>&nbsp;</label><br/>
                                                 <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                             </div>
                                         </div>

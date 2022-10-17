@@ -39,7 +39,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label>Role</label>
-                                            <select class="form-control mb-3 select2" id="search_role" name="search_role">
+                                            <select class="form-control mb-3 select2" id="search_role" name="search_role" style="width: 100% !important">
                                                 <option value="">Select</option>
                                                 @foreach($data['roles'] as $roles)
                                                     <option value="{{$roles->id}}">{{$roles->role_name}}</option>

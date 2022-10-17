@@ -24,6 +24,10 @@
                                 </div>
                             	<div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
+                                        <div class="col-md-4">
+                                            <label>Customer Enquiry ID</label>
+                                            <input class="form-control mb-3" type="text" id="search_enquiry_id" name="search_enquiry_id" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
+                                        </div>
                                         <div class="col-sm-4">
                                             <label>User Name</label>
                                             <select class="form-control mb-3 select2" id="search_user_name" name="search_user_name" style="width: 100% !important;">
@@ -46,8 +50,17 @@
                                                 @endforeach
                                             </select><br/>
                                         </div>
+                                        <div class="col-sm-4">
+                                            <label>Product Name</label>
+                                            <select class="form-control mb-3 select2" id="search_product_name" name="search_product_name" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach($data['product'] as $val)
+                                                    <option value="{{$val->id}}">{{$val->product_name}}</option>                                                
+                                                @endforeach
+                                            </select><br/>
+                                        </div>
                                         <div class="col-md-4">
-                                            <label>&nbsp;</label>
+                                            <label>&nbsp;</label><br/>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
                                     </div>

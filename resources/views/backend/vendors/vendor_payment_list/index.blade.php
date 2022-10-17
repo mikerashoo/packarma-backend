@@ -56,7 +56,25 @@
                                                         <option value="{{ $vendors->id }}">{{ $vendors->vendor_name }}{{$deleted_status}}</option>
                                                     @endif
                                                 @endforeach
-                                            </select><br/>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Payment Mode</label>
+                                            <select class="form-control mb-3 select2" id="search_payment_mode" name="search_payment_mode" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach ($paymentMode as $key => $payment)
+                                                    <option value="{{ $key }}">{{ $payment }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Payment Status</label>
+                                            <select class="form-control mb-3 select2" id="search_payment_status" name="search_payment_status" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach ($paymentStatus as $k => $status)
+                                                    <option value="{{ $k }}">{{ $status }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="col-md-4">
                                             <label>&nbsp;</label><br/>
