@@ -4,6 +4,7 @@ namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\CustomerNotificationHistory;
 use Response;
 
@@ -29,6 +30,7 @@ class NotificationHistoryApiController extends Controller
                 $user_id = $token['sub'];
                 $page_no=1;
                 $limit=10;
+                $last_no_of_days = 15;
                 $orderByArray = ['customer_notification_histories.id' => 'DESC',];
                 $defaultSortByName = false;
                 if(isset($request->page_no) && !empty($request->page_no)) {
@@ -50,6 +52,15 @@ class NotificationHistoryApiController extends Controller
                     $notificationData = $notificationData->where('title',$request->title);
                     $data = $data->where('title',$request->title);
                 }
+                if ($request->last_no_of_days && is_numeric($request->last_no_of_days)) {
+                    $last_no_of_days = $request->last_no_of_days;
+                }
+
+                // last number of days record
+                $date_from_no_of_days = Carbon::now()->subDays($last_no_of_days);
+                $notificationData = $notificationData->whereDate('created_at', '>=', $date_from_no_of_days);
+                $data = $data->whereDate('created_at', '>=', $date_from_no_of_days);
+
                 if(empty($notificationData->first()))
                 {
                     errorMessage(__('customer_notification_history.notification_not_found'), $msg_data);

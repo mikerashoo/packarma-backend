@@ -375,18 +375,27 @@ class EnquiryApiController extends Controller
 
                 $notificationData['title'] = str_replace('$$enquiry_id$$', $enqFormattedId, $notificationData['title']);
                 $notificationData['body'] = str_replace('$$material_name$$', $materialData->packaging_material_name, $notificationData['body']);
-                $userFcmData = DB::table('users')->select('users.id', 'customer_devices.fcm_id')
+                $userFcmData = DB::table('users')->select('users.id', 'customer_devices.fcm_id','customer_devices.imei_no','customer_devices.remember_token')
                     ->where([['users.id', $user_id], ['users.status', 1], ['users.fcm_notification', 1], ['users.approval_status', 'accepted'], ['users.deleted_at', NULL]])
                     ->leftjoin('customer_devices', 'customer_devices.user_id', '=', 'users.id')
                     ->get();
 
 
                 if (!empty($userFcmData)) {
+                    //modified by : Pradyumn Dwivedi, Modified at : 14-Oct-2022
                     $device_ids = array();
+                    $imei_nos = array();
+                    $i=0;
                     foreach ($userFcmData as $key => $val) {
-                        array_push($device_ids, $val->fcm_id);
+                        if (!empty($val->remember_token)){
+                            array_push($device_ids, $val->fcm_id);
+                            array_push($imei_nos, $val->imei_no);
+                        }
                     }
-                    sendFcmNotification($device_ids, $notificationData, 'customer');
+                    //modified by : Pradyumn Dwivedi, Modified at : 14-Oct-2022
+                    //combine imei id and fcm as key value in new array
+                    $devices_data =  array_combine($imei_nos, $device_ids);
+                    sendFcmNotification($devices_data, $notificationData, 'customer', $user_id);
                 }
             }
         }
