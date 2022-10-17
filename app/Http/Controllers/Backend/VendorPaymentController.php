@@ -26,6 +26,7 @@ class VendorPaymentController extends Controller
         try {
             $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name', 'asc')->get();
             $data['paymentMode'] = paymentMode();
+            $data['paymentStatus'] = paymentStatus();
             $data['paymentStatusType'] = paymentStatusType();
             $data['vendor_payment_add'] = checkPermission('vendor_payment_add');
             $data['vendor_payment_view'] = checkPermission('vendor_payment_view');
@@ -61,6 +62,12 @@ class VendorPaymentController extends Controller
                         }
                         if (isset($request['search']['search_vendor_name']) && !is_null($request['search']['search_vendor_name'])) {
                             $query->where('vendor_id', $request['search']['search_vendor_name']);
+                        }
+                        if (isset($request['search']['search_payment_mode']) && !is_null($request['search']['search_payment_mode'])) {
+                            $query->where('payment_mode', $request['search']['search_payment_mode']);
+                        }
+                        if (isset($request['search']['search_payment_status']) && !is_null($request['search']['search_payment_status'])) {
+                            $query->where('payment_status', $request['search']['search_payment_status']);
                         }
                         $query->get();
                     })

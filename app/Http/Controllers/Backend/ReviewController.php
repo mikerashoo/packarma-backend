@@ -19,6 +19,7 @@ class ReviewController extends Controller
     public function index()
     {
         $data['user'] = User::withTrashed()->where('approval_status', 'accepted')->get();
+        $data['product'] = Product::orderBy('product_name', 'asc')->get();
         $data['review_edit'] = checkPermission('review_edit');
         $data['review_view'] = checkPermission('review_view');
         $data['review_status'] = checkPermission('review_status');
@@ -38,6 +39,12 @@ class ReviewController extends Controller
                     ->filter(function ($query) use ($request) {
                         if (isset($request['search']['search_user']) && !is_null($request['search']['search_user'])) {
                             $query->where('user_id', $request['search']['search_user']);
+                        }
+                        if (isset($request['search']['search_product_name']) && !is_null($request['search']['search_product_name'])) {
+                            $query->where('product_id', $request['search']['search_product_name']);
+                        }
+                        if (isset($request['search']['search_rating']) && !is_null($request['search']['search_rating'])) {
+                            $query->where('rating', $request['search']['search_rating']);
                         }
                         $query->get();
                     })

@@ -24,6 +24,7 @@ class UserAddressController extends Controller
     {
         try {
             $data['user'] = User::withTrashed()->where('approval_status', '=', 'accepted')->orderBy('name', 'asc')->get();
+            $data['state'] = State::orderBy('state_name', 'asc')->get();
             $data['user_address_add'] = checkPermission('user_address_add');
             $data['user_address_view'] = checkPermission('user_address_view');
             $data['user_address_edit'] = checkPermission('user_address_edit');
@@ -52,11 +53,17 @@ class UserAddressController extends Controller
                 $query = UserAddress::with('user', 'state')->orderBy('updated_at', 'desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
-                        if (isset($request['search']['search_user']) && !is_null($request['search']['search_user'])) {
+                        if (isset($request['search']['search_user']) && !empty($request['search']['search_user'])) {
                             $query->where('user_id', $request['search']['search_user']);
                         }
-                        if (isset($request['search']['search_city']) && !is_null($request['search']['search_city'])) {
+                        if (isset($request['search']['search_city']) && !empty($request['search']['search_city'])) {
                             $query->where('city_name', 'like', "%" . $request['search']['search_city'] . "%");
+                        }
+                        if (isset($request['search']['search_address_name']) && !empty($request['search']['search_address_name'])) {
+                            $query->where('address_name', 'like', "%" . $request['search']['search_address_name'] . "%");
+                        }
+                        if (isset($request['search']['search_pincode']) && !empty($request['search']['search_pincode'])) {
+                            $query->where('pincode', 'like', "%" . $request['search']['search_pincode'] . "%");
                         }
                         $query->get();
                     })

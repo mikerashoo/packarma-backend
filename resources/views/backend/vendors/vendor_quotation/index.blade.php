@@ -23,11 +23,11 @@
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
                                         <div class="col-md-4">
                                             <label>Customer Enquiry ID</label>
-                                            <input class="form-control mb-3" type="text" id="search_enquiry_id" name="search_enquiry_id">
+                                            <input class="form-control mb-3" type="text" id="search_enquiry_id" name="search_enquiry_id" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
                                         </div>
                                         <div class="col-md-4">
                                             <label>Vendor Quotation ID</label>
-                                            <input class="form-control mb-3" type="text" id="search_quotation_id" name="search_quotation_id">
+                                            <input class="form-control mb-3" type="text" id="search_quotation_id" name="search_quotation_id" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
                                         </div>
                                         <div class="col-sm-4">
                                             <label>User Name</label>
@@ -54,6 +54,24 @@
                                                     <option value="{{$vendors->id}}">{{$vendors->vendor_name}}{{$vendor_deleted_status}}</option>                                                
                                                 @endforeach
                                             </select><br>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Product Name</label>
+                                            <select class="form-control mb-3 select2" id="search_product_name" name="search_product_name" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach($data['product'] as $val)
+                                                    <option value="{{$val->id}}">{{$val->product_name}}</option>                                                
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Enquiry Status</label>
+                                            <select class="form-control mb-3 select2" id="search_enquiry_status" name="search_enquiry_status" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach($data['vendorEnquiryStatus'] as $key => $enquiryStatus)
+                                                    <option value="{{$key}}">{{$enquiryStatus}}</option>                                                
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="col-md-4">
                                             <label>&nbsp;</label><br>

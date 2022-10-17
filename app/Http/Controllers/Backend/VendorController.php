@@ -57,6 +57,15 @@ class VendorController extends Controller
                         if ($request['search']['search_vendor_name'] && !is_null($request['search']['search_vendor_name'])) {
                             $query->where('vendor_name', 'like', "%" . $request['search']['search_vendor_name'] . "%");
                         }
+                        if ($request['search']['search_vendor_phone'] && !is_null($request['search']['search_vendor_phone'])) {
+                            $query->where('phone', 'like', "%" . $request['search']['search_vendor_phone'] . "%");
+                        }
+                        if ($request['search']['search_vendor_email'] && !is_null($request['search']['search_vendor_email'])) {
+                            $query->where('vendor_email', 'like', "%" . $request['search']['search_vendor_email'] . "%");
+                        }
+                        if ($request['search']['search_vendor_company'] && !is_null($request['search']['search_vendor_company'])) {
+                            $query->where('vendor_company_name', 'like', "%" . $request['search']['search_vendor_company'] . "%");
+                        }
 
                         if ($request['search']['search_vendor_type'] && !is_null($request['search']['search_vendor_type'])) {
                             if ($request['search']['search_vendor_type'] == 'not-deleted') {
@@ -368,6 +377,9 @@ class VendorController extends Controller
                         }
                         if (isset($request['search']['search_phone']) && !is_null($request['search']['search_phone'])) {
                             $query->where('phone', 'like', "%" . $request['search']['search_phone'] . "%");
+                        }
+                        if (isset($request['search']['search_email']) && !is_null($request['search']['search_email'])) {
+                            $query->where('vendor_email', 'like', "%" . $request['search']['search_email'] . "%");
                         }
                         $query->get();
                     })

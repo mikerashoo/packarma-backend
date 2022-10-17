@@ -23,8 +23,10 @@ class VendorQuotationController extends Controller
      */
     public function index()
     {
+        $data['vendorEnquiryStatus'] = vendorEnquiryStatus();
         $data['user'] = User::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('name', 'asc')->get();
         $data['vendor'] = Vendor::withTrashed()->Where('approval_status', '=', 'accepted')->orderBy('vendor_name', 'asc')->get();
+        $data['product'] = Product::orderBy('product_name', 'asc')->get();
         $data['vendor_quotation_view'] = checkPermission('vendor_quotation_view');
         return view('backend/vendors/vendor_quotation/index', ['data' => $data]);
     }
@@ -54,6 +56,12 @@ class VendorQuotationController extends Controller
                         }
                         if (isset($request['search']['search_vendor_name']) && !is_null($request['search']['search_vendor_name'])) {
                             $query->where('vendor_id', $request['search']['search_vendor_name']);
+                        }
+                        if (isset($request['search']['search_product_name']) && !is_null($request['search']['search_product_name'])) {
+                            $query->where('product_id', $request['search']['search_product_name']);
+                        }
+                        if (isset($request['search']['search_enquiry_status']) && !is_null($request['search']['search_enquiry_status'])) {
+                            $query->where('enquiry_status', $request['search']['search_enquiry_status']);
                         }
                         $query->get();
                     })

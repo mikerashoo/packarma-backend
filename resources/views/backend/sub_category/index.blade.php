@@ -29,6 +29,15 @@
                                             <input class="form-control mb-3" type="text" id="search_sub_category_name" name="search_sub_category_name">
                                         </div>
                                         <div class="col-md-4">
+                                            <label>Category Name</label>
+                                            <select class="form-control mb-3 select2" id="search_category_id" name="search_category_id" style="width: 100% !important;">
+                                                <option value="" selected>Select</option>
+                                                @foreach($data['category'] as $category)
+                                                    <option value="{{$category->id}}">{{$category->category_name}}</option>
+                                            @endforeach
+                                            </select><br/>
+                                        </div>
+                                        <div class="col-md-4">
                                             <label>&nbsp;</label><br/>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>

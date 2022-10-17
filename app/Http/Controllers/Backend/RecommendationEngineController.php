@@ -27,8 +27,17 @@ class RecommendationEngineController extends Controller
 
     public function index()
     {
-        // $data['solutionStructureType'] = solutionStructureType();
-        
+        $data['solutionStructureType'] = solutionStructureType();
+        $data['storage_condition'] = StorageCondition::orderBy('storage_condition_title', 'asc')->get();
+        $data['measurement_unit'] = MeasurementUnit::orderBy('unit_symbol', 'asc')->get();
+        $data['product'] = Product::orderBy('product_name', 'asc')->get();
+        $data['category'] = Category::orderBy('category_name', 'asc')->get();
+        $data['product_form'] = ProductForm::orderBy('product_form_name', 'asc')->get();
+        $data['packaging_treatment'] = PackagingTreatment::orderBy('packaging_treatment_name', 'asc')->get();
+        $data['packing_type'] = PackingType::orderBy('packing_name', 'asc')->get();
+        $data['packaging_machine'] = PackagingMachine::orderBy('packaging_machine_name', 'asc')->get();
+        $data['packaging_material'] = PackagingMaterial::orderBy('packaging_material_name', 'asc')->get();
+
         $data['packaging_solution_add'] = checkPermission('packaging_solution_add');
         $data['packaging_solution_edit'] = checkPermission('packaging_solution_edit');
         $data['packaging_solution_view'] = checkPermission('packaging_solution_view');
@@ -50,8 +59,38 @@ class RecommendationEngineController extends Controller
                 $query = RecommendationEngine::with('product')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
-                        if (isset($request['search']['search_recommendation_engine']) && !is_null($request['search']['search_recommendation_engine'])) {
+                        if (isset($request['search']['search_recommendation_engine']) && !empty($request['search']['search_recommendation_engine'])) {
                             $query->where('engine_name', 'like', "%" . $request['search']['search_recommendation_engine'] . "%");
+                        }
+                        if (isset($request['search']['search_structure_type']) && !empty($request['search']['search_structure_type'])) {
+                            $query->where('structure_type', 'like', "%" . $request['search']['search_structure_type'] . "%");
+                        }
+                        if (isset($request['search']['search_storage_condition']) && !empty($request['search']['search_storage_condition'])) {
+                            $query->where('storage_condition_id', $request['search']['search_storage_condition']);
+                        }
+                        if (isset($request['search']['search_measurement_unit']) && !empty($request['search']['search_measurement_unit'])) {
+                            $query->where('measurement_unit_id', $request['search']['search_measurement_unit']);
+                        }
+                        if (isset($request['search']['search_product_name']) && !empty($request['search']['search_product_name'])) {
+                            $query->where('product_id', $request['search']['search_product_name']);
+                        }
+                        if (isset($request['search']['search_category_name']) && !empty($request['search']['search_category_name'])) {
+                            $query->where('category_id', $request['search']['search_category_name']);
+                        }
+                        if (isset($request['search']['search_product_form']) && !empty($request['search']['search_product_form'])) {
+                            $query->where('product_form_id', $request['search']['search_product_form']);
+                        }
+                        if (isset($request['search']['search_packaging_treatment']) && !empty($request['search']['search_packaging_treatment'])) {
+                            $query->where('packaging_treatment_id', $request['search']['search_packaging_treatment']);
+                        }
+                        if (isset($request['search']['search_packing_type']) && !empty($request['search']['search_packing_type'])) {
+                            $query->where('packing_type_id', $request['search']['search_packing_type']);
+                        }
+                        if (isset($request['search']['search_packaging_machine']) && !empty($request['search']['search_packaging_machine'])) {
+                            $query->where('packaging_machine_id', $request['search']['search_packaging_machine']);
+                        }
+                        if (isset($request['search']['search_packaging_material']) && !empty($request['search']['search_packaging_material'])) {
+                            $query->where('packaging_material_id', $request['search']['search_packaging_material']);
                         }
                         $query->get();
                     })

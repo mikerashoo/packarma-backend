@@ -41,6 +41,7 @@ class CustomerEnquiryController extends Controller
     public function index()
     {
         $data['user'] = User::withTrashed()->where('approval_status', 'accepted')->orderBy('name', 'asc')->get();
+        $data['product'] = Product::orderBy('product_name', 'asc')->get();
         $data['enquiryType'] = customerEnquiryType();
         $data['quoteType'] = customerEnquiryQuoteType();
         $data['customer_enquiry_add'] = checkPermission('customer_enquiry_add');
@@ -61,11 +62,17 @@ class CustomerEnquiryController extends Controller
                 $query = CustomerEnquiry::with('product', 'state', 'city', 'user', 'country', 'vendor_quotation')->orderBy('updated_at', 'desc')->withTrashed();
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
-                        if (isset($request['search']['search_user_name']) && !is_null($request['search']['search_user_name'])) {
+                        if (isset($request['search']['search_enquiry_id']) && !empty($request['search']['search_enquiry_id'])) {
+                            $query->where('id', $request['search']['search_enquiry_id']);
+                        }
+                        if (isset($request['search']['search_user_name']) && !empty($request['search']['search_user_name'])) {
                             $query->where('user_id', $request['search']['search_user_name']);
                         }
-                        if (isset($request['search']['search_quote_type']) && !is_null($request['search']['search_quote_type'])) {
+                        if (isset($request['search']['search_quote_type']) && !empty($request['search']['search_quote_type'])) {
                             $query->where('quote_type', 'like', "%" . $request['search']['search_quote_type'] . "%");
+                        }
+                        if (isset($request['search']['search_product_name']) && !empty($request['search']['search_product_name'])) {
+                            $query->where('product_id', $request['search']['search_product_name']);
                         }
                         $query->get();
                     })

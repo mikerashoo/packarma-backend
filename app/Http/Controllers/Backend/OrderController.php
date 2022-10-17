@@ -43,6 +43,8 @@ class OrderController extends Controller
     {
         $data['user'] = User::withTrashed()->where('approval_status', 'accepted')->get();
         $data['vendor'] = Vendor::withTrashed()->where('approval_status', 'accepted')->get();
+        $data['packaging_material'] = PackagingMaterial::orderBy('packaging_material_name', 'asc')->get();
+        $data['product'] = Product::orderBy('product_name', 'asc')->get();
         $data['paymentStatus'] = paymentStatus();
         $data['deliveryStatus'] = deliveryStatus();
         $data['order_view'] = checkPermission('order_view');
@@ -66,6 +68,9 @@ class OrderController extends Controller
                 $query = Order::with('user', 'vendor', 'currency')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
+                        if (isset($request['search']['search_order_id']) && !is_null($request['search']['search_order_id'])) {
+                            $query->where('id', $request['search']['search_order_id']);
+                        }
                         if (isset($request['search']['search_user_id']) && !is_null($request['search']['search_user_id'])) {
                             $query->where('user_id', $request['search']['search_user_id']);
                         }
@@ -74,6 +79,12 @@ class OrderController extends Controller
                         }
                         if (isset($request['search']['search_delivery_status']) && !is_null($request['search']['search_delivery_status'])) {
                             $query->where('order_delivery_status', 'like', "%" . $request['search']['search_delivery_status'] . "%");
+                        }
+                        if (isset($request['search']['search_packaging_material']) && !is_null($request['search']['search_packaging_material'])) {
+                            $query->where('packaging_material_id', $request['search']['search_packaging_material']);
+                        }
+                        if (isset($request['search']['search_product_name']) && !is_null($request['search']['search_product_name'])) {
+                            $query->where('product_id', $request['search']['search_product_name']);
                         }
                         $query->get();
                     })

@@ -27,7 +27,7 @@
                                     <div class="card-body">
                                         <div class="row mb-2" id="listing-filter-data" style="<?php echo (isset($id)) ? '' : 'display: none' ?>">
                                             <div class="col-sm-4">
-                                                <label>User</label>
+                                                <label>User Name</label>
                                                 <select class="form-control select2" id="search_user" name="search_user" style="width: 100% !important;">
                                                     @if (!isset($id))
                                                         <option value="">Select</option>
@@ -48,8 +48,25 @@
                                                 </select><br><br>
                                             </div>
                                             <div class="col-sm-4">
+                                                <label>Address Name</label>
+                                                <input class="form-control mb-3" type="text" id="search_address_name" name="search_address_name">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label>State</label>
+                                                <select class="form-control select2 mb-3" name="search_state" id="search_state" style="width: 100% !importatnt;">
+                                                    <option value="">Select</option>
+                                                    @foreach ($state as $states)
+                                                        <option value="{{ $states->id }}">{{ $states->state_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-4">
                                                 <label>City</label>
                                                 <input class="form-control mb-3" type="text" id="search_city" name="search_city">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label>Pincode</label>
+                                                <input class="form-control mb-3" type="text" id="search_pincode" name="search_pincode">
                                             </div>
                                             <div class="col-md-4">
                                                 <label>&nbsp;</label><br />

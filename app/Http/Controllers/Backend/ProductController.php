@@ -23,6 +23,8 @@ class ProductController extends Controller
     {
         $data['sub_category'] = SubCategory::orderBy('sub_category_name', 'asc')->get();
         $data['category'] = Category::orderBy('category_name', 'asc')->get();
+        $data['product_form'] = ProductForm::orderBy('product_form_name', 'asc')->get();
+        $data['packaging_treatment'] = PackagingTreatment::orderBy('packaging_treatment_name', 'asc')->get();
         $data['product_add'] = checkPermission('product_add');
         $data['product_edit'] = checkPermission('product_edit');
         $data['product_view'] = checkPermission('product_view');
@@ -52,6 +54,12 @@ class ProductController extends Controller
                         }
                         if (isset($request['search']['search_sub_category']) && !is_null($request['search']['search_sub_category'])) {
                             $query->where('sub_category_id', $request['search']['search_sub_category']);
+                        }
+                        if (isset($request['search']['product_form_name']) && !is_null($request['search']['product_form_name'])) {
+                            $query->where('product_form_id', $request['search']['product_form_name']);
+                        }
+                        if (isset($request['search']['search_packaging_treatment']) && !is_null($request['search']['search_packaging_treatment'])) {
+                            $query->where('packaging_treatment_id', $request['search']['search_packaging_treatment']);
                         }
                         $query->get();
                     })

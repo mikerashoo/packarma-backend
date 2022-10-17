@@ -60,6 +60,9 @@ class UserController extends Controller
                         if (isset($request['search']['search_phone']) && !is_null($request['search']['search_phone'])) {
                             $query->where('phone', 'like', "%" . $request['search']['search_phone'] . "%");
                         }
+                        if (isset($request['search']['search_email']) && !is_null($request['search']['search_email'])) {
+                            $query->where('email', 'like', "%" . $request['search']['search_email'] . "%");
+                        }
                         if ($request['search']['search_user_type'] && !is_null($request['search']['search_user_type'])) {
                             if ($request['search']['search_user_type'] == 'not-deleted') {
                                 $query->where('deleted_at', NULL);
@@ -349,6 +352,9 @@ class UserController extends Controller
                         }
                         if (isset($request['search']['search_phone']) && !is_null($request['search']['search_phone'])) {
                             $query->where('phone', 'like', "%" . $request['search']['search_phone'] . "%");
+                        }
+                        if (isset($request['search']['search_email']) && !is_null($request['search']['search_email'])) {
+                            $query->where('email', 'like', "%" . $request['search']['search_email'] . "%");
                         }
                         $query->get();
                     })

@@ -29,15 +29,6 @@
                                             <input class="form-control mb-3" type="text" id="search_product_name" name="search_product_name">
                                         </div>
                                         <div class="col-md-4">
-                                            <label>Category</label>
-                                            <select class="form-control mb-3 select2" id="search_category" name="search_category" style="width: 100% !important;">
-                                                <option value="">Select</option>
-                                                @foreach($data['category'] as $categories)
-                                                    <option value="{{$categories->id}}">{{$categories->category_name}}</option>
-                                                @endforeach
-                                            </select><br/><br/>
-                                        </div>
-                                        <div class="col-md-4">
                                             <label>Sub Category</label>
                                             <select class="form-control mb-3 select2" id="search_sub_category" name="search_sub_category" style="width: 100% !important;">
                                                 <option value="">Select</option>
@@ -47,7 +38,34 @@
                                             </select><br/><br/>
                                         </div>
                                         <div class="col-md-4">
-                                            <label>&nbsp;</label>
+                                            <label>Category</label>
+                                            <select class="form-control mb-3 select2" id="search_category" name="search_category" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach($data['category'] as $categories)
+                                                    <option value="{{$categories->id}}">{{$categories->category_name}}</option>
+                                                @endforeach
+                                            </select><br/><br/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Product Form Name</label>
+                                            <select class="form-control mb-3 select2" id="search_product_form" name="search_product_form" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach($data['product_form'] as $form)
+                                                    <option value="{{$form->id}}">{{$form->product_form_name}}</option>
+                                                @endforeach
+                                            </select><br/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Packaging Treatment Name</label>
+                                            <select class="form-control mb-3 select2" id="search_packaging_treatment" name="search_packaging_treatment" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach($data['packaging_treatment'] as $treatments)
+                                                    <option value="{{$treatments->id}}">{{$treatments->packaging_treatment_name}}</option>
+                                                @endforeach
+                                            </select><br/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>&nbsp;</label><br/>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
                                     </div>

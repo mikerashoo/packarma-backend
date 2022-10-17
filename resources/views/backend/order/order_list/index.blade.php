@@ -22,6 +22,10 @@
                             	 <div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
                                         <div class="col-md-4">
+                                            <label>Order ID</label>
+                                            <input class="form-control mb-3" type="text" id="search_order_id" name="search_order_id" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
+                                        </div>
+                                        <div class="col-md-4">
                                             <label>User Name</label>
                                             <select class="form-control mb-3 select2" id="search_user_id" name="search_user_id" style="width: 100% !important;">
                                                 <option value="" selected>Select</option>
@@ -32,7 +36,7 @@
                                                     @endphp
                                                     <option value="{{$users->id}}">{{$users->name}} {{ $deleted_status }}</option>
                                             @endforeach
-                                            </select><br/>
+                                            </select>
                                         </div>
                                         <div class="col-md-4">
                                             <label>Vendor Name</label>
@@ -48,6 +52,24 @@
                                             </select><br/>
                                         </div>
                                         <div class="col-md-4">
+                                            <label>Packaging Material Name</label>
+                                            <select class="form-control mb-3 select2" id="search_packaging_material" name="search_packaging_material" style="width: 100% !important;">
+                                                <option value="" selected>Select</option>
+                                                @foreach($data['packaging_material'] as $material)
+                                                    <option value="{{$material->id}}">{{$material->packaging_material_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label>Product Name</label>
+                                            <select class="form-control mb-3 select2" id="search_product_name" name="search_product_name" style="width: 100% !important;">
+                                                <option value="" selected>Select</option>
+                                                @foreach($data['product'] as $val)
+                                                    <option value="{{$val->id}}">{{$val->product_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
                                             <label>Delivery Status</label>
                                             <select class="form-control mb-3 select2" id="search_delivery_status" name="search_delivery_status" style="width: 100% !important;">
                                                 <option value="" selected>Select</option>
@@ -56,7 +78,6 @@
                                                 @endforeach
                                             </select><br/>
                                         </div>
-                                       
                                         <div class="col-md-4">
                                             <label>&nbsp;</label><br/>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
