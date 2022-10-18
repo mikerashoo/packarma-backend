@@ -560,12 +560,15 @@ class OrderController extends Controller
                 $dc_amount = $data->freight_amount ?? 0;
                 $dc_tax_val = round($dc_amount / (1 + ((2 * $dc_cgst) / 100)), 2);
                 $dc_tax_amount = $dc_amount - $dc_tax_val;
-                $dc_cgst_amount = $dc_sgst_amount  = $dc_tax_amount / 2;
+                $dc_cgst_amount = $dc_sgst_amount  = round($dc_tax_amount / 2, 2);
 
                 $igst =  $igst_amount = $dc_igst = $dc_igst_amount = 0;
             }
 
             $grand_total = ($data->grand_total ?? 0) + ($dc_amount ?? 0);
+
+            //added by : Pradyumn, added on : 18-Oct-2022, Use : To display solution sub total amount
+            $solution_sub_total = ($data->sub_total ?? 0) + ($sgst_amount ?? 0) + ($cgst_amount ?? 0) + ($igst ?? 0);
             // $in_words = convertNumberToWord($grand_total);
             $in_words = currencyConvertToWord($grand_total);
             $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
@@ -607,6 +610,7 @@ class OrderController extends Controller
                 'admin_ifsc' => $adminBankIfsc->value ?? '',
                 // 'no_image' => getFile('packarma_logo.png', 'notification'),
                 'no_image' => URL::to('/') . '/public/backend/img/Packarma_logo.png',
+                'solution_sub_total' => $solution_sub_total,
             ];
             // $result['data'] = $data;
             // echo '<pre>';
