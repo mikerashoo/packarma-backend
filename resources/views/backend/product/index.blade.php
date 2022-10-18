@@ -25,8 +25,13 @@
                             	<div class="card-body">
                                     <div class="row mb-2" id="listing-filter-data" style="display: none;">
                                         <div class="col-md-4">
-                                            <label>Product Name</label>
-                                            <input class="form-control mb-3" type="text" id="search_product_name" name="search_product_name">
+                                            <label>Category</label>
+                                            <select class="form-control mb-3 select2" id="search_category" name="search_category" style="width: 100% !important;">
+                                                <option value="">Select</option>
+                                                @foreach($data['category'] as $categories)
+                                                    <option value="{{$categories->id}}">{{$categories->category_name}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="col-md-4">
                                             <label>Sub Category</label>
@@ -38,13 +43,8 @@
                                             </select><br/><br/>
                                         </div>
                                         <div class="col-md-4">
-                                            <label>Category</label>
-                                            <select class="form-control mb-3 select2" id="search_category" name="search_category" style="width: 100% !important;">
-                                                <option value="">Select</option>
-                                                @foreach($data['category'] as $categories)
-                                                    <option value="{{$categories->id}}">{{$categories->category_name}}</option>
-                                                @endforeach
-                                            </select><br/><br/>
+                                            <label>Product Name</label>
+                                            <input class="form-control mb-3" type="text" id="search_product_name" name="search_product_name">
                                         </div>
                                         <div class="col-md-4">
                                             <label>Product Form Name</label>

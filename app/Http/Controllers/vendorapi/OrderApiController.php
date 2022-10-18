@@ -218,6 +218,8 @@ class OrderApiController extends Controller
                     $data[$i]->product_details = json_decode($row->product_details, TRUE);
                     $data[$i]->material_unit_symbol = 'kg';
                     $data[$i]->order_status = $row->order_delivery_status;
+                    //added by : Pradyumn, added on :18-oct-2022, use: sending delivery status value capital letter
+                    $data[$i]->order_status_value = deliveryStatus($row->order_delivery_status);
                     $data[$i]->show_update_button = true;
                     // $data[$i]->gst_amount = number_format(($vendor_gst_amount), 2, '.', '');
                     // $data[$i]->grand_total = number_format(($row->vendor_amount + $vendor_gst_amount), 2, '.', '');
@@ -225,9 +227,9 @@ class OrderApiController extends Controller
                         $data[$i]->order_status = 'pending';
                     }
 
-                    if ($row->order_delivery_status == 'out_for_delivery') {
-                        $data[$i]->order_status = 'ongoing';
-                    }
+                    // if ($row->order_delivery_status == 'out_for_delivery') {
+                    //     $data[$i]->order_status = 'ongoing';
+                    // }
 
                     if ($row->order_delivery_status == 'delivered' || $row->order_delivery_status == 'cancelled') {
                         $data[$i]->show_update_button = false;

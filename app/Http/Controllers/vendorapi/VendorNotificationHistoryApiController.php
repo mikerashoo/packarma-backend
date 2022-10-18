@@ -40,7 +40,7 @@ class VendorNotificationHistoryApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = VendorNotificationHistory::select('id','notification_name','page_name','type_id','title','body','created_at')->where([['status','1'],['vendor_id', $vendor_id],['deleted_at', NULL]]);
+                $data = VendorNotificationHistory::select('id','notification_name','page_name','type_id','title','body','created_at')->where([['status','1'],['vendor_id', $vendor_id],['imei_no', $imei_no],['deleted_at', NULL]]);
                 $notificationData = VendorNotificationHistory::whereRaw("1 = 1");
                 if($request->id)
                 {

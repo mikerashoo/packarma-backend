@@ -256,6 +256,7 @@ Route::group(['middleware' => ['customAuth']], function () {
 	Route::get('/vendor_payment_list', 'VendorPaymentController@index');
 	Route::post('/vendor_payment_data', 'VendorPaymentController@fetch')->name('vendor_payment_data');
 	Route::get('/vendor_payment_add', 'VendorPaymentController@add');
+	// Route::get('/vendor_payment_add_from_order', 'VendorPaymentController@addPaymentFromOrder');
 	Route::get('/vendor_payment_edit', 'VendorPaymentController@edit');
 	Route::post('/saveVendorPaymentStatus', 'VendorPaymentController@saveVendorPaymentStatusData');
 	Route::get('/vendor_payment_view/{id}', 'VendorPaymentController@view');

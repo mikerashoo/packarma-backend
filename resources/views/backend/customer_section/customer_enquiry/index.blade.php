@@ -42,7 +42,7 @@
                                             </select><br/>
                                         </div>
                                         <div class="col-sm-4">
-                                            <label>Enquiry Status</label>
+                                            <label>Customer Enquiry Status</label>
                                             <select class="form-control mb-3 select2" id="search_quote_type" name="search_quote_type" style="width: 100% !important;">
                                                 <option value="">Select</option>
                                                 @foreach($data['quoteType'] as $key => $val)

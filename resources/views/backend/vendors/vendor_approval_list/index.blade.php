@@ -31,10 +31,24 @@
                                             </div>
                                             <div class="col-md-4">
                                                 <label>Email</label>
-                                                <input class="form-control mb-3" type="text" id="search_email" name="search_email" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'>
+                                                <input class="form-control mb-3" type="text" id="search_email" name="search_email">
                                             </div>
                                             <div class="col-md-4">
-                                                <label>&nbsp;</label>
+                                                <label>Approval Status</label>
+                                                <select class="form-control mb-3 select2" name="search_approval_status" id="search_approval_status" style="width: 100% !important">
+                                                    <option value="">Select</option>
+                                                    @foreach ($data['approvalStatusArray'] as $key => $status)
+                                                        @if ($key == 'accepted')
+                                                            @php
+                                                                continue;
+                                                            @endphp
+                                                        @endif
+                                                        <option value="{{ $key }}">{{ $status }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label>&nbsp;</label><br/>
                                                 <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                             </div>
                                         </div>

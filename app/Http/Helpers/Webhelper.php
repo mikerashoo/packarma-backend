@@ -752,6 +752,81 @@ if (!function_exists('convertNumberToWord')) {
     }
 }
 
+/**
+ * Created by : Pradyumn Dwivedi.
+ * Created at : 18-Oct-2022
+ * Use : Converting Currency Numbers to words currency format
+ * 
+ */
+if (!function_exists('currencyConvertToWord')) {
+    function currencyConvertToWord($number = false)
+    {
+        $no = floor($number);
+        $point = round($number - $no, 2) * 100;
+        $hundred = null;
+        $digits_1 = strlen($no);
+        $i = 0;
+        $str = array();
+        $words = array('0' => '', '1' => 'one', '2' => 'two',
+            '3' => 'three', '4' => 'four', '5' => 'five', '6' => 'six',
+            '7' => 'seven', '8' => 'eight', '9' => 'nine',
+            '10' => 'ten', '11' => 'eleven', '12' => 'twelve',
+            '13' => 'thirteen', '14' => 'fourteen',
+            '15' => 'fifteen', '16' => 'sixteen', '17' => 'seventeen',
+            '18' => 'eighteen', '19' =>'nineteen', '20' => 'twenty',
+            '30' => 'thirty', '40' => 'forty', '50' => 'fifty',
+            '60' => 'sixty', '70' => 'seventy',
+            '80' => 'eighty', '90' => 'ninety');
+        $digits = array('', 'hundred', 'thousand', 'lakh', 'crore');
+        while ($i < $digits_1) {
+            $divider = ($i == 2) ? 10 : 100;
+            $number = floor($no % $divider);
+            $no = floor($no / $divider);
+            $i += ($divider == 10) ? 1 : 2;
+            if ($number) {
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                $hundred = ($counter == 1 && $str[0]) ? ' ' : null;
+                $str [] = ($number < 21) ? $words[$number] .
+                    " " . $digits[$counter] . $plural . " " . $hundred
+                    :
+                    $words[floor($number / 10) * 10]
+                    . " " . $words[$number % 10] . " "
+                    . $digits[$counter] . $plural . " " . $hundred;
+            } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+            " and " . $words[$point / 10] . " " . 
+                $words[$point = $point % 10] : '';
+        // echo $result . "Rupees  " . $points . " Paise";
+        // return ucwords(implode(' ', $words));
+        return ucwords($result . "Rupees  " . $points . " Paise");
+    }
+}
+
+/**
+ * Created By : Pradyumn Dwivedi
+ * Created at : 18-Oct-2022
+ * Use : function to format numbers to nearest thousands such as Kilos, Millions, Billions, and Trillions with comma
+ */
+if (!function_exists('thousandsCurrencyFormat')) {
+        function thousandsCurrencyFormat($num = false)
+        {
+        if($num > 1000) {
+            $x = round($num);
+            $x_number_format = number_format($x);
+            $x_array = explode(',', $x_number_format);
+            $x_parts = array('K', 'M', 'B', 'T');
+            $x_count_parts = count($x_array) - 1;
+            $x_display = $x;
+            $x_display = $x_array[0] . ((int) $x_array[1][0] !== 0 ? '.' . $x_array[1][0] : '');
+            $x_display .= $x_parts[$x_count_parts - 1];
+            return $x_display;
+        }
+        return $num;
+    }
+}
 
 /**
  *   created by : Maaz Ansari
@@ -1105,6 +1180,8 @@ if (!function_exists('storeNotificationHistory')) {
                 // $customer_notification[$i]['is_discard'] = 0;
                 $customer_notification[$i]['status'] = 1;
                 // $customer_notification[$i]['created_by'] = $id;
+                $customer_notification[$i]['created_at'] = $current_datetime;
+                $customer_notification[$i]['updated_at'] = $current_datetime;
                 $i++;
             }
             if ($for == 'vendor' && !empty($val) && !empty($key)) {
@@ -1124,6 +1201,9 @@ if (!function_exists('storeNotificationHistory')) {
                 // $vendor_notification[$i]['is_discard'] = 0;
                 $vendor_notification[$i]['status'] = 1;
                 // $vendor_notification[$i]['created_by'] = $id;
+                $vendor_notification[$i]['created_at'] = $current_datetime;
+                $vendor_notification[$i]['updated_at'] = $current_datetime;
+                $i++;
             }
         }
         if ($for == 'customer') {
