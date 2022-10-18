@@ -70,7 +70,7 @@ class OrderApiController extends Controller
                     ->leftjoin('measurement_units', 'measurement_units.id', '=', 'orders.measurement_unit_id')
                     ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'orders.recommendation_engine_id')
                     ->leftjoin('currencies', 'currencies.id', '=', 'orders.currency_id')
-                    ->where('orders.user_id', $user_id)->whereIn('orders.order_delivery_status', ['pending', 'processing', 'out_for_delivery']);
+                    ->where('orders.user_id', $user_id)->whereIn('orders.order_delivery_status', ['pending', 'processing', 'ready_for_delivery', 'out_for_delivery']);
 
                 $orderData = Order::whereRaw("1 = 1");
                 if ($request->order_id) {

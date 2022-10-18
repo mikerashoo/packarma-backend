@@ -352,6 +352,7 @@ class VendorController extends Controller
      */
     public function indexApprovalList()
     {
+        $data['approvalStatusArray'] = approvalStatusArray();
         $data['data'] = Vendor::all();
         $data['vendor_approval_view'] = checkPermission('vendor_approval_view');
         $data['vendor_approval_update'] = checkPermission('vendor_approval_update');
@@ -380,6 +381,9 @@ class VendorController extends Controller
                         }
                         if (isset($request['search']['search_email']) && !is_null($request['search']['search_email'])) {
                             $query->where('vendor_email', 'like', "%" . $request['search']['search_email'] . "%");
+                        }
+                        if (isset($request['search']['search_approval_status']) && !is_null($request['search']['search_approval_status'])) {
+                            $query->where('approval_status', 'like', "%" . $request['search']['search_approval_status'] . "%");
                         }
                         $query->get();
                     })

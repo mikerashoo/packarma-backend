@@ -150,6 +150,37 @@ class VendorPaymentController extends Controller
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 06-April-2022
+     *   Uses : To load Add vendor payment form from order page
+     */
+    public function addPaymentFromOrder()
+    {
+        $data['vendor'] = Vendor::Where('approval_status', '=', 'accepted')->orderBy('vendor_name', 'asc')->get();
+        $data['payment_details'] = [];
+        if (isset($_GET['id'])) {
+
+            $data['id'] = Crypt::decrypt($_GET['id']);
+            $data['order'] = Order::find($data['id']);
+            $data['vendorID'] = Order::where('id', $data['id'])->pluck('vendor_id')->toArray();
+            $vendorPayments = VendorPayment::with('vendor')->where("order_id", $data['id'])->get()->toArray();
+           
+            if (count($vendorPayments) > 0) {
+                foreach ($vendorPayments as $k => $val) {
+                    $vendorPayments[$k]['updated_datetime'] = date('d-m-Y H:i A', strtotime($val['updated_at']));
+                    $vendorPayments[$k]['transaction_datetime'] = date('d-m-Y', strtotime($val['transaction_date']));
+                    $vendorPayments[$k]['transaction_mode'] = paymentMode($val['payment_mode']);
+                }
+            }
+            $data['payment_details'] = $vendorPayments;
+        }
+        $data['vendor_payment'] = VendorPayment::all();
+        $data['paymentMode'] = paymentMode();
+        $data['paymentStatusType'] = paymentStatusType();
+        return view('backend/vendors/vendor_payment_list/vendor_payment_add_order', $data);
+    }
+
+    /**
+     *   created by : Pradyumn Dwivedi
+     *   Created On : 06-April-2022
      *   Uses :  To store vendor payment in table
      *   @param Request request
      *   @return Response

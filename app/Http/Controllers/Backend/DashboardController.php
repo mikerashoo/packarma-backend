@@ -28,6 +28,7 @@ class DashboardController extends Controller
 		// print_r($generatedPwd);
 		// exit;
 
+		// $data['thousandsCurrencyFormat'] = thousandsCurrencyFormat();
 		$data['user'] = User::where('approval_status', '=', 'accepted')->count();
 		// $data['user'] = User::all()->count(); 
 		$data['cust_reg_today'] = User::whereDate('created_at', '=', date('Y-m-d'))->count();

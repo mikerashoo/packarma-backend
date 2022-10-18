@@ -328,6 +328,7 @@ class UserController extends Controller
     public function indexApprovalList()
     {
         $data['data'] = User::all();
+        $data['approvalStatusArray'] = approvalStatusArray();
         $data['user_approval_view'] = checkPermission('user_approval_view');
         $data['user_approval_update'] = checkPermission('user_approval_update');
         return view('backend/customer_section/user_approval_list/index', ["data" => $data]);
@@ -355,6 +356,9 @@ class UserController extends Controller
                         }
                         if (isset($request['search']['search_email']) && !is_null($request['search']['search_email'])) {
                             $query->where('email', 'like', "%" . $request['search']['search_email'] . "%");
+                        }
+                        if (isset($request['search']['search_approval_status']) && !is_null($request['search']['search_approval_status'])) {
+                            $query->where('approval_status', 'like', "%" . $request['search']['search_approval_status'] . "%");
                         }
                         $query->get();
                     })

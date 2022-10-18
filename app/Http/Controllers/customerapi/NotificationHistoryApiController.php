@@ -40,7 +40,7 @@ class NotificationHistoryApiController extends Controller
                     $limit=$request->limit;
                 }
                 $offset=($page_no-1)*$limit;
-                $data = CustomerNotificationHistory::select('id','notification_name','page_name','type_id','title','body','created_at')->where([['status','1'],['user_id', $user_id],['deleted_at', NULL]]);
+                $data = CustomerNotificationHistory::select('id','notification_name','page_name','type_id','title','body','created_at')->where([['status','1'],['user_id', $user_id],['imei_no', $imei_no],['deleted_at', NULL]]);
                 $notificationData = CustomerNotificationHistory::whereRaw("1 = 1");
                 if($request->id)
                 {

@@ -141,7 +141,7 @@ class OrderController extends Controller
                             $actions .= '  <a href="' . $url . '" class="btn btn-success btn-sm" title="Pdf" target="_blank"><i class="fa fa-file-pdf-o"></i></a>';
                         }
 
-                        if ($event->order_delivery_status == 'pending' || $event->order_delivery_status == 'processing' || $event->order_delivery_status == 'out_for_delivery') {
+                        if ($event->order_delivery_status != 'cancelled' && $event->order_delivery_status != 'delivered') {
                             if ($order_delivery_update) {
                                 $actions .= '  <a href="order_delivery_update/' . $event->id . '" class="btn btn-info btn-sm src_data" title="Update Delivery"><i class="fa fa-truck"></i></a>';
                             }
@@ -566,7 +566,8 @@ class OrderController extends Controller
             }
 
             $grand_total = ($data->grand_total ?? 0) + ($dc_amount ?? 0);
-            $in_words = convertNumberToWord($grand_total);
+            // $in_words = convertNumberToWord($grand_total);
+            $in_words = currencyConvertToWord($grand_total);
             $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
 
 
