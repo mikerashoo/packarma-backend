@@ -88,14 +88,14 @@
         <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->mrp ?? ''}}</td>
         <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->sub_total ?? ''}}</td>
         <td width="8%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->discount ?? 0}}</td>
-        <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->gst_amount ?? ''}}</td>
+        <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$data->sub_total ?? ''}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$cgst ?? ''}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$cgst_amount ?? ''}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$sgst ?? ''}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$sgst_amount ?? ''}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$igst ?? ''}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{$igst_amount ?? ''}}</td>
-        <td width="8%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;"> {{$data->grand_total ?? ''}}</td>
+        <td width="8%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;"> {{$solution_sub_total ?? ''}}</td>
     </tr>
 
      <tr>
@@ -123,14 +123,14 @@
         <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;"></td>
         <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($data->sub_total ?? 0) + ($data->freight_amount ?? 0) , 2)}}</td>
         <td width="8%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($data->discount ?? 0) + ($data->discount ?? 0) , 2)}}</td>
-        <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($data->gst_amount ?? 0) + ($dc_tax_val ?? 0) , 2)}}</td>
+        <td width="7%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($data->sub_total ?? 0) + ($data->freight_amount ?? 0) , 2)}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($cgst ?? 0) + ($dc_cgst ?? 0) , 2)}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($cgst_amount ?? 0) + ($dc_cgst_amount ?? 0) , 2)}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($sgst ?? 0) + ($dc_sgst ?? 0) , 2)}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($sgst_amount ?? 0) + ($dc_sgst_amount ?? 0) , 2)}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($igst ?? 0) + ($dc_igst ?? 0) , 2)}}</td>
         <td width="5.5%" style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($igst_amount ?? 0) + ($dc_igst_amount ?? 0) , 2)}}</td>
-        <td width="8%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($data->grand_total ?? 0) + ($dc_amount ?? 0) , 2)}}</td>
+        <td width="8%" style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">{{number_format(($solution_sub_total ?? 0) + ($dc_amount ?? 0) , 2)}}</td>
     </tr>
     <tr class="table_row">
         <td width="100%" style="text-align:center; border-bottom-color:black; border-left-color: rgb(207, 2, 2);border-top-color: black;border-right-color: rgb(207, 2, 2);"><b>Total Invoice Amount (in words): {{$in_words}}</b></td>

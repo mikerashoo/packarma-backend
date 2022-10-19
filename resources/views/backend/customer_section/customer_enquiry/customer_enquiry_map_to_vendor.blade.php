@@ -78,14 +78,14 @@
                                         <div class="card card-outline-secondary box-shadow-0 h6" style="height: 90%;">
                                             <div class="card-content">
                                                 <div class="card-body pb-0">
-                                                    <h6>{{ $vendors->vendor_name ?? ''; }} @if($vendors->enquiry_status == 'accept')<i class="fa fa-check-circle success pull-right"></i>@endif</h6>
+                                                    <h6>{{ $vendors->vendor_name ?? ''; }} @if($vendors->enquiry_status == 'accept')<i class="fa fa-check-circle success pull-right"></i>@endif @if($vendors->enquiry_status == 'reject')<i class="fa fa-close danger pull-right"></i>@endif</h6>
                                                     <p class="text-secondary small">Rate: {{ $vendors->vendor_price ??''; }}/{{ $vendors->min_order_quantity_unit ??''; }}</p>
                                                     <p class="text-secondary small">Delivery in: {{ $vendors->delivery_in_days ??''; }} Days</p>
                                                     <p class="text-secondary small">Commission Rate: {{ $vendors->commission_amt ??''; }}/{{ $vendors->min_order_quantity_unit ??''; }}</p>
                                                     <p class="text-secondary small">Mapped On: {{date('d-m-Y h:i A', strtotime($vendors->created_at)) ?? ''; }}</p>
                                                 </div>
                                                 <div class="card-footer">
-                                                <a href="map_vendor_form/{{$vendors->id}}/{{ $data->id }}" class="modal_src_data" data-size="extra-large" data-title="Edit Mapped Vendor" style="color: #975AFF;">Edit</a> @if($vendors->enquiry_status != 'quoted' && $vendors->enquiry_status != 'accept') | <a style="color: red;" class="delete_map_vendor" data-id="{{$vendors->id}}" data-url="delete_map_vendor" id="delete{{$i}}" >Remove</a> @endif
+                                                <a href="map_vendor_form/{{$vendors->id}}/{{ $data->id }}" class="modal_src_data" data-size="extra-large" data-title="Edit Mapped Vendor" style="color: #975AFF;">Edit</a> @if($vendors->enquiry_status != 'quoted' && $vendors->enquiry_status != 'accept' && $vendors->enquiry_status != 'reject') | <a style="color: red;" class="delete_map_vendor" data-id="{{$vendors->id}}" data-url="delete_map_vendor" id="delete{{$i}}" >Remove</a> @endif
                                             </div>
                                             </div>
                                         </div>
@@ -110,6 +110,8 @@
 function getVendorWarehouse(vendor,i)
 {
     var product_id ='<?php echo $data->product_id; ?>';
+    var product_quantity = '<?php echo $data->product_quantity; ?>';
+
     $("#vendor_price_bulk").val('');
     $("#commission_rate_bulk").val('');
     $.ajax({
@@ -126,13 +128,22 @@ function getVendorWarehouse(vendor,i)
                 var vendor_price = response['data']['vendorMaterialMapData'][0]['vendor_price']; 
                 var commission_rate = response['data']['vendorMaterialMapData'][0]['min_amt_profit'];
             }
-            if(vendor_price){
-                $("#vendor_price_bulk").val(vendor_price);
-                $("#commission_rate_bulk").val(commission_rate);
+            if(commission_rate){
+                // $("#vendor_price_bulk").val(vendor_price);
+                // $("#commission_rate_bulk").val(commission_rate);
+                $("#vendor_price").val(vendor_price);
+                $("#commission_rate").val(commission_rate);
+                
                 $("#vendor_price_per_kg_div").show();
                 $("#commission_price_per_kg_div").show();
-                showVendorPricePerUnit(vendor_price);
-                showCommissionPerUnit(commission_rate);
+                // showVendorPricePerUnit(vendor_price);
+                // showCommissionPerUnit(commission_rate);
+                vend_price = vendor_price * product_quantity;
+                comm_rate = commission_rate * product_quantity;
+                $("#vendor_price_bulk").val(vend_price);
+                $("#commission_rate_bulk").val(comm_rate);
+                showVendorPricePerUnit(vend_price);
+                showCommissionPerUnit(comm_rate);
                 calcGrandTotal();
             }else{
                 $("#vendor_price_bulk").val('');

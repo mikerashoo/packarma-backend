@@ -842,7 +842,11 @@ if (!function_exists('displayMessage')) {
             case 'qoutation_accepted_by_customer':
                 $final_msg = 'Customer has already accepted the qoutation for vendor  ' . $value;
                 break;
-
+            
+            case 'qoutation_rejected_by_customer':
+                $final_msg = 'Customer has rejected the qoutation for vendor  ' . $value;
+                break;
+            
             case 'enquiry_order':
                 $final_msg = 'Customer already placed order';
                 break;

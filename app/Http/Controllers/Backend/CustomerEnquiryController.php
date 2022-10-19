@@ -597,7 +597,27 @@ class CustomerEnquiryController extends Controller
             ->groupBy('vendors.id')
             ->get();
 
-        if ($data['customer_enquiry_data']->quote_type == 'accept_cust') {
+        //added by : Pradyumn Dwivedi, Added on : 18-Oct-2022, Use : To show read only for rejected mapped vendor quotation
+        if ($data['customer_enquiry_data']->quote_type == 'map_to_vendor') {
+            $rejected_vendor = DB::table('vendor_quotations')->select(
+                'vendor_quotations.vendor_id',
+                'vendor_quotations.enquiry_status',
+                'vendors.vendor_name',
+            )
+                ->leftjoin('vendors', 'vendor_quotations.vendor_id', '=', 'vendors.id')
+                ->where([['vendor_quotations.customer_enquiry_id', $customer_enquiry_id]])->first();
+            $vendor_name = $rejected_vendor->vendor_name;
+            $data['view_only'] = false;
+
+            if ($rejected_vendor->enquiry_status == 'reject'){
+                $data['view_only'] = true;
+                if ($id == -1) {
+                    displayMessage('qoutation_rejected_by_customer', $vendor_name);
+                }
+            }
+            // return 'No more Vendors can be map, it is accepted for Vendor ' . $vendor_name;
+        }
+        else if ($data['customer_enquiry_data']->quote_type == 'accept_cust') {
             $accepted_vendor = DB::table('vendor_quotations')->select(
                 'vendor_quotations.vendor_id',
                 'vendors.vendor_name',
