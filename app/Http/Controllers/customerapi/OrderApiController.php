@@ -693,6 +693,14 @@ class OrderApiController extends Controller
                 $order_request_data['created_by'] = $user_id;
                 $order_request_data['currency_id'] = $vendor_quotation_data->currency_id;
 
+                //Added By : Pradyumn Dwivedi, Added on : 19-Oct-2022, Use: To get pincode selected in customer enquiry
+                $customer_enquiry_data = CustomerEnquiry::select('user_address_id')->where('id', $customer_enquiry_id)->first();
+                $enquiry_address = UserAddress::select('pincode')->where('id', $customer_enquiry_data->user_address_id)->first();
+                //set message content to pincode in array
+                $message_content = array(
+                    "pincode" => $enquiry_address->pincode
+                );
+
                 //checking address checkbox
                 if ($request->same_address_checkbox == 'yes') {
                     //checking address_id required
@@ -709,6 +717,11 @@ class OrderApiController extends Controller
                         errorMessage(__('user_address.address_not_found'), $msg_data);
                     }
 
+                    //added by Pradyumn Dwivedi, Added on : 18-Oct-2022, Use: checking picode is same or not
+                    if ($billing_address_data->pincode != $enquiry_address->pincode){
+                        errorMessage(__('order.shipping_pincode_must_be_enquiry_pincode'), $msg_data, '', $message_content);
+                    }
+
                     if ($billing_address_data->type == 'shipping') {
                         $billing_address_data->gstin = $user_data->gstin;
                     }
@@ -719,21 +732,32 @@ class OrderApiController extends Controller
                     $billing_country_data = Country::find($shipping_address_data->country_id);
                     $shipping_state_data = State::find($shipping_address_data->state_id);
                     $shipping_country_data = Country::find($shipping_address_data->country_id);
-                } elseif ($request->same_address_checkbox == 'no') {
+                } 
+                else if ($request->same_address_checkbox == 'no') {
                     if (!isset($request->user_billing_address_id) && empty($request->user_billing_address_id)) {
                         errorMessage(__('user_address.user_billing_address_is_required'), $msg_data);
                     }
                     if (!isset($request->user_shipping_address_id) && empty($request->user_shipping_address_id)) {
                         errorMessage(__('user_address.user_shipping_address_is_required'), $msg_data);
                     }
+
+                    //billing address
                     $billing_address_data = UserAddress::find($request->user_billing_address_id);
                     if (empty($billing_address_data)) {
                         errorMessage(__('user_address.billing_address_not_found'), $msg_data);
                     }
+
+                    //shipping address
                     $shipping_address_data = UserAddress::find($request->user_shipping_address_id);
                     if (empty($shipping_address_data)) {
                         errorMessage(__('user_address.shipping_address_not_found'), $msg_data);
                     }
+
+                    //added by Pradyumn Dwivedi, Added on : 18-Oct-2022, Use: checking picode is same or not
+                    if ($billing_address_data->pincode != $enquiry_address->pincode){
+                        errorMessage(__('order.shipping_pincode_must_be_enquiry_pincode'), $msg_data, '', $message_content);
+                    }
+                    
                     $billing_state_data = State::find($billing_address_data->state_id);
                     $billing_country_data = Country::find($billing_address_data->country_id);
                     $shipping_state_data = State::find($shipping_address_data->state_id);
