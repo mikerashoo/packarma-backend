@@ -697,9 +697,9 @@ class OrderApiController extends Controller
                 $customer_enquiry_data = CustomerEnquiry::select('user_address_id')->where('id', $customer_enquiry_id)->first();
                 $enquiry_address = UserAddress::select('pincode')->where('id', $customer_enquiry_data->user_address_id)->first();
                 //set message content to pincode in array
-                $message_content = array(
-                    "pincode" => $enquiry_address->pincode
-                );
+                // $message_content = array(
+                //     "pincode" => $enquiry_address->pincode
+                // );
 
                 //checking address checkbox
                 if ($request->same_address_checkbox == 'yes') {
@@ -718,9 +718,9 @@ class OrderApiController extends Controller
                     }
 
                     //added by Pradyumn Dwivedi, Added on : 18-Oct-2022, Use: checking picode is same or not
-                    if ($billing_address_data->pincode != $enquiry_address->pincode){
-                        errorMessage(__('order.shipping_pincode_must_be_enquiry_pincode'), $msg_data, '', $message_content);
-                    }
+                    // if ($billing_address_data->pincode != $enquiry_address->pincode){
+                    //     errorMessage(__('order.shipping_pincode_must_be_enquiry_pincode'), $msg_data, '', $message_content);
+                    // }
 
                     if ($billing_address_data->type == 'shipping') {
                         $billing_address_data->gstin = $user_data->gstin;
@@ -754,9 +754,9 @@ class OrderApiController extends Controller
                     }
 
                     //added by Pradyumn Dwivedi, Added on : 18-Oct-2022, Use: checking picode is same or not
-                    if ($billing_address_data->pincode != $enquiry_address->pincode){
-                        errorMessage(__('order.shipping_pincode_must_be_enquiry_pincode'), $msg_data, '', $message_content);
-                    }
+                    // if ($billing_address_data->pincode != $enquiry_address->pincode){
+                    //     errorMessage(__('order.shipping_pincode_must_be_enquiry_pincode'), $msg_data, '', $message_content);
+                    // }
                     
                     $billing_state_data = State::find($billing_address_data->state_id);
                     $billing_country_data = Country::find($billing_address_data->country_id);
