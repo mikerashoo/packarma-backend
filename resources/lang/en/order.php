@@ -27,4 +27,5 @@ return [
     'order_placed' => 'Order placed successfully',
     'cant_revese_delivery_status' => 'Delivery Status can not be reversed',
     'product_quantity_should_be_greater_than_minimum_order_quantity' => 'Product quantity should be greater than minimum order quantity for selected packaging solution',
+    'shipping_pincode_must_be_enquiry_pincode' => 'Shipping Pincode must be $$pincode$$.'
 ];
