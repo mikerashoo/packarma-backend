@@ -569,8 +569,7 @@ class OrderController extends Controller
 
             //added by : Pradyumn, added on : 18-Oct-2022, Use : To display solution sub total amount
             $solution_sub_total = ($data->sub_total ?? 0) + ($sgst_amount ?? 0) + ($cgst_amount ?? 0) + ($igst ?? 0);
-            // $in_words = convertNumberToWord($grand_total);
-            $in_words = currencyConvertToWord($grand_total);
+            $in_words = currencyConvertToWord($solution_sub_total + $dc_amount);
             $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
 
 
