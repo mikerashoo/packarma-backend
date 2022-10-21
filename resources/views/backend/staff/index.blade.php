@@ -77,6 +77,3 @@
     </div>
 </div>
 @endsection
-<script>
-    $('.select2').select2();
-</script>

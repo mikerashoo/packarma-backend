@@ -803,10 +803,8 @@ if (!function_exists('currencyConvertToWord')) {
         $result = implode('', $str);
         $points = ($point) ?
             " and " . $words[$point / 10] . " " . 
-                $words[$point = $point % 10] : '';
-        // echo $result . "Rupees  " . $points . " Paise";
-        // return ucwords(implode(' ', $words));
-        return ucwords($result . "Rupees  " . $points . " Paise");
+                $words[$point = $point % 10] . " Paise" : '';
+        return ucwords($result . "Rupees  " . $points);
     }
 }
 
