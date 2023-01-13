@@ -401,6 +401,20 @@ Route::group(['middleware' => ['customAuth']], function () {
 	Route::post('/saveEmail', 'MessageEmailController@saveFormData');
 	Route::post('/publishEmailStatus', 'MessageEmailController@updateStatus');
 	Route::get('/email_view/{id}', 'MessageEmailController@view');
+
+	//reports
+	//Customer Report
+	Route::get('/customer_report_form','ExportController@customerReportForm')->name('customer_report');
+	Route::post('/generate_customer_report','ExportController@exportCustomerReport');
+	//Enquiry Report
+	Route::get('/enquiry_report_form','ExportController@enquiryReportForm')->name('enquiry_report');
+	Route::post('/generate_enquiry_report','ExportController@exportEnquiryReport');
+	//Vendor Report
+	Route::get('/vendor_quotation_report_form','ExportController@vendorQuotationReportForm')->name('vendor_quotation_report');
+	Route::post('/generate_vendor_quotation_report','ExportController@exportVendorQuotationReport');
+	//Order Report
+	Route::get('/order_report_form','ExportController@orderReportForm')->name('order_report');
+	Route::post('/generate_order_report','ExportController@exportOrderReport');
 });
 
 // routes

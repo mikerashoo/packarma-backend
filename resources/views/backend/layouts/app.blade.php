@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="../public/backend/vendors/css/datatables/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="../public/backend/css/style.css">
     <link rel="stylesheet" type="text/css" href="../public/backend/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="../public/backend/vendors/css/daterangepicker/daterangepicker.css">
     <script src="../public/backend/js/jquery-3.2.1.min.js"></script>
     <script src="../public/backend/vendors/js/core/bootstrap.min.js" type="text/javascript"></script>
     <script src="../public/backend/vendors/js/vendors.min.js"></script>
@@ -359,7 +360,40 @@
                                 </ul>
                             </li>
                         @endif
-
+                        @if(session('data')['role_id'] == 1  ||
+                            in_array('customer_report', $permission_array) || 
+                            in_array('enquiry_report', $permission_array) || 
+                            in_array('vendor_quotation_report', $permission_array) || 
+                            in_array('order_report', $permission_array) 
+                           
+                        )
+                            <li class="has-sub nav-item {{ $lastParam ==  'report' ? 'open' : ''  }} {{ $lastParam ==  'report' ? 'open' : ''  }}">
+                                <a href="javascript:;" class="dropdown-parent"><i class="icon-user-following"></i><span data-i18n="" class="menu-title">Reports</span></a>
+                                <ul class="menu-content">
+                                    @if(in_array('customer_report', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ Request::path() ==  'webadmin/customer_report_form' ? 'active' : ''  }}">
+                                            <a href="customer_report_form" class="menu-item"><i class="fa fa-circle fs_i"></i>Customer Data Report</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('enquiry_report', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ Request::path() ==  'webadmin/enquiry_report_form' ? 'active' : ''  }}">
+                                            <a href="enquiry_report_form" class="menu-item"><i class="fa fa-circle fs_i"></i>Customer Enquiry Report</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('vendor_quotation_report', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ Request::path() ==  'webadmin/vendor_quotation_report_form' ? 'active' : ''  }}">
+                                            <a href="vendor_quotation_report_form" class="menu-item"><i class="fa fa-circle fs_i"></i>Vendor Quotation Report</a>
+                                        </li>
+                                    @endif
+                                    @if(in_array('order_report', $permission_array) || session('data')['role_id'] == 1)
+                                        <li class="{{ Request::path() ==  'webadmin/order_report_form' ? 'active' : ''  }}">
+                                            <a href="order_report_form" class="menu-item"><i class="fa fa-circle fs_i"></i>Order Data Report</a>
+                                        </li>
+                                    @endif
+                                                                      
+                                </ul>
+                            </li>
+                        @endif
                         @if(session('data')['role_id'] == 1  || 
                             in_array('role', $permission_array) || 
                             in_array('staff', $permission_array) 
@@ -477,4 +511,9 @@
 <script src="../public/backend/js/ajax-custom.js"></script>
 <script src="../public/backend/js/mypcot.min.js"></script>
 <script src="../public/backend/js/select2.min.js"></script>
+<script src="../public/backend/vendors/js/pickadate/picker.js"></script>
+<script src="../public/backend/vendors/js/pickadate/picker.date.js"></script>
+<script src="../public/backend/vendors/js/pickadate/picker.time.js"></script>
+<script src="../public/backend/vendors/js/daterangepicker/moment.min.js"></script>
+<script src="../public/backend/vendors/js/daterangepicker/daterangepicker.min.js"></script>
 </html>

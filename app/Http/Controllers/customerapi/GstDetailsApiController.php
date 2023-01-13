@@ -43,7 +43,7 @@ class GstDetailsApiController extends Controller
                     $gst_certificate = $request->file('gst_certificate');
                     $extension = $gst_certificate->extension();
                     $certificate_imgname = $user_id . '_certificate_' . Carbon::now()->format('dmYHis') . '.' . $extension;
-                    $gst_certificate->storeAs('uploads/gst_certificate', $certificate_imgname, 'public');
+                   \Storage::disk("s3")->putFileAs('gst_certificate',$gst_certificate, $certificate_imgname);
                     $user_gst_details['gst_certificate'] = $certificate_imgname;
                 }
                 if (!empty($UserGstDetails->gst_certificate)) {
