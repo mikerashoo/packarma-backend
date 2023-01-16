@@ -165,8 +165,7 @@ class MyProfileApiController extends Controller
                     $visiting_card_front = $request->file('visiting_card_front');
                     $extension = $visiting_card_front->extension();
                     $imgname_front = $user['id'] . '_front_' . Carbon::now()->format('dmYHis') . '.' . $extension;
-                    $visiting_card_front->storeAs('uploads/visiting_card/front', $imgname_front, 'public');
-                    $user['visiting_card_front'] = $input['visiting_card_front'] = $imgname_front;
+                    $user['visiting_card_front'] = $input['visiting_card_front'] = saveImageGstVisitingCard($visiting_card_front,'visiting_card/front', $imgname_front);
                 } else {
 
                     $file_to_unlink =  getFile($checkUser->visiting_card_front, 'visiting_card/front', FALSE, 'unlink');
@@ -182,8 +181,7 @@ class MyProfileApiController extends Controller
                     $visiting_card_back = $request->file('visiting_card_back');
                     $extension = $visiting_card_back->extension();
                     $imgname_back = $user['id'] . '_back_' . Carbon::now()->format('dmYHis') . '.' . $extension;
-                    $visiting_card_back->storeAs('uploads/visiting_card/back', $imgname_back, 'public');
-                    $user['visiting_card_back'] = $input['visiting_card_back'] = $imgname_back;
+                    $user['visiting_card_back'] = $input['visiting_card_back'] =  saveImageGstVisitingCard($visiting_card_back,'visiting_card/back', $imgname_back);;
                 } else {
                     $file_to_unlink =  getFile($checkUser->visiting_card_back, 'visiting_card/back', FALSE, 'unlink');
                     if ($file_to_unlink != 'file_not_found') {

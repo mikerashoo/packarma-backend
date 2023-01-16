@@ -64,18 +64,14 @@ class RegisterApiController extends Controller
                 $visiting_card_front = $request->file('visiting_card_front');
                 $extension = $visiting_card_front->extension();
                 $imgname_front = $user['id'] . '_front_' . Carbon::now()->format('dmYHis') . '.' . $extension;
-                //$visiting_card_front->storeAs('uploads/visiting_card/front', $imgname_front, 'public');
-                \Storage::disk("s3")->putFileAs('visiting_card/front',$visiting_card_front, $imgname_front);
-                $user['visiting_card_front'] = $input['visiting_card_front'] = $imgname_front;
+                $user['visiting_card_front'] = $input['visiting_card_front'] = saveImageGstVisitingCard($visiting_card_front,'visiting_card/front', $imgname_front);
             }
             if ($request->hasFile('visiting_card_back')) {
                 \Log::info("Storing visiting card back image.");
                 $visiting_card_back = $request->file('visiting_card_back');
                 $extension = $visiting_card_back->extension();
                 $imgname_back = $user['id'] . '_back_' . Carbon::now()->format('dmYHis') . '.' . $extension;
-                $visiting_card_back->storeAs('uploads/visiting_card/back', $imgname_back, 'public');
-                \Storage::disk("s3")->putFileAs('visiting_card/back',$visiting_card_back, $imgname_back);
-                $user['visiting_card_back'] = $input['visiting_card_back'] = $imgname_back;
+                $user['visiting_card_back'] = $input['visiting_card_back'] = saveImageGstVisitingCard($visiting_card_back,'visiting_card/back', $imgname_back);
             }
             if (!empty($input)) {
                 User::find($user['id'])->update($input);

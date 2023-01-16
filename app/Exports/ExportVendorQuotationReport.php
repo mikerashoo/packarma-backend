@@ -161,26 +161,28 @@ class ExportVendorQuotationReport implements FromCollection, WithHeadings, WithC
                                            'vendor_warehouse',
                                            'product',
                                            'customer_enquiry')
-                                  ->select('id',
-                                           'customer_enquiry_id',
-                                           'vendor_id',
-                                           'vendor_price',
-                                           'product_id',
-                                           'product_quantity',
-                                           'mrp',
-                                           'sub_total',
-                                           'gst_amount',
-                                           'gst_type',
-                                           'gst_percentage',
-                                           'freight_amount',
-                                           'delivery_in_days',
-                                           'total_amount',
-                                           'vendor_amount',
-                                           'commission',
-                                           'enquiry_status',
-                                           'quotation_expiry_datetime',
-                                           'lead_time',
-                                           'vendor_warehouse_id');
+                                  ->select('vendor_quotations.id',
+                                           'vendor_quotations.customer_enquiry_id',
+                                           'vendor_quotations.vendor_price',
+                                           'vendor_quotations.vendor_id',
+                                           'vendor_quotations.product_id',
+                                           'vendor_quotations.product_quantity',
+                                           'vendor_quotations.mrp',
+                                           'vendor_quotations.sub_total',
+                                           'vendor_quotations.gst_amount',
+                                           'vendor_quotations.gst_type',
+                                           'vendor_quotations.gst_percentage',
+                                           'vendor_quotations.freight_amount',
+                                           'vendor_quotations.delivery_in_days',
+                                           'vendor_quotations.total_amount',
+                                           'vendor_quotations.vendor_amount',
+                                           'vendor_quotations.commission',
+                                           'vendor_quotations.enquiry_status',
+                                           'vendor_quotations.quotation_expiry_datetime',
+                                           'vendor_quotations.lead_time',
+                                           'vendor_warehouse_id')
+                                    ->leftjoin('customer_enquiries','vendor_quotations.customer_enquiry_id','=','customer_enquiries.id');                               ;
+                                    
         if($this->request->vendor_quotation_vendor){
             if($this->request->vendor_quotation_vendor[0]!='All'){
                 $vendor_ids = $this->request->vendor_quotation_vendor;
@@ -191,11 +193,10 @@ class ExportVendorQuotationReport implements FromCollection, WithHeadings, WithC
         if($this->request->vendor_quotation_packaging_material){
             if($this->request->vendor_quotation_packaging_material[0]!='All'){
                 $packaging_material_ids = $this->request->vendor_quotation_packaging_material;
-                $vendor_quotation->whereIn('customer_enquiry.packaging_material_id',$packaging_material_ids);
+                $vendor_quotation->whereIn('customer_enquiries.packaging_material_id',$packaging_material_ids);
             }
         }
-        $vendor_quotation = $vendor_quotation->whereBetween('created_at',[$start_date,$end_date])
-                                             ->orWhereBetween('updated_at',[$start_date,$end_date])
+        $vendor_quotation = $vendor_quotation->whereBetween('vendor_quotations.created_at',[$start_date,$end_date])
                                              ->get();
         foreach($vendor_quotation as $enquiry){
             $enquiry->vendor_id =$enquiry->vendor->vendor_name;

@@ -54,8 +54,7 @@ class GstDetailsController extends Controller
                     $gst_certificate = $request->file('gst_certificate');
                     $extension = $gst_certificate->extension();
                     $certificate_imgname = $vendor_id . '_certificate_' . Carbon::now()->format('dmYHis') . '.' . $extension;
-                    $gst_certificate->storeAs('uploads/vendor_gst_certificate', $certificate_imgname, 'public');
-                    $vendor_gst_details['gst_certificate'] = $certificate_imgname;
+                    $vendor_gst_details['gst_certificate'] =  saveImageGstVisitingCard($gst_certificate,'vendor_gst_certificate', $certificate_imgname);
                 }
                 if (!empty($vendorGstDetails->gst_certificate)) {
 

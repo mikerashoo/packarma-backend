@@ -40,11 +40,11 @@
 													</select><br/>
 												</div>
 												<div class="col-sm-6">
-													<label>Product</label>
-													<select class="select2" id="vendor_quotation_product" name="vendor_quotation_product[]" style="width: 100% !important;" multiple>
+													<label>Packaging Mterial</label>
+													<select class="select2" id="vendor_quotation_packaging_material" name="vendor_quotation_packaging_material[]" style="width: 100% !important;" multiple>
 														<option value='All'>All</option>	
-														@foreach($products as $product)
-															<option value='{{$product->id}}'>{{$product->product_name}} - {{$product->sub_category->sub_category_name}} - {{$product->category->category_name}}</option>	
+														@foreach($packaging_materials as $packaging_material)
+															<option value='{{$packaging_material->id}}'>{{$packaging_material->packaging_material_name}}</option>	
 														@endforeach
 													</select><br/>
 												</div>
