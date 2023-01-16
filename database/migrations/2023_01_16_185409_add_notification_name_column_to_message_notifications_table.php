@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddNotificationNameToMessageNotificationsTable extends Migration
+class AddNotificationNameColumnToMessageNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddNotificationNameToMessageNotificationsTable extends Migration
     public function up()
     {
         Schema::table('message_notifications', function (Blueprint $table) {
-            //
+            $table->string('notification_name', 255)->after('user_type')->unique();
         });
     }
 
@@ -26,7 +26,7 @@ class AddNotificationNameToMessageNotificationsTable extends Migration
     public function down()
     {
         Schema::table('message_notifications', function (Blueprint $table) {
-            $table->string('notification_name', 255)->after('user_type')->unique();
+            $table->dropColumn('notification_name');
         });
     }
 }
