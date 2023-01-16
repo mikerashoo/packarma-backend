@@ -19,9 +19,7 @@ class AddColumnsToVendorsTable extends Migration
             $table->enum('fpwd_flag', ['Y', 'N'])->default('N')->after('is_verified');
             $table->datetime('last_login')->nullable()->after('fpwd_flag');
             $table->longText('remember_token')->nullable()->after('last_login');
-            $table->string('vendor_company_name', 100)->after('vendor_name');
-            $table->string('vendor_password')->after('vendor_email');
-        });
+           });
     }
 
     /**
@@ -36,7 +34,6 @@ class AddColumnsToVendorsTable extends Migration
             $table->dropColumn('fpwd_flag');
             $table->dropColumn('last_login');
             $table->dropColumn('remember_token');
-            $table->dropColumn('vendor_company_name');
         });
     }
 }
