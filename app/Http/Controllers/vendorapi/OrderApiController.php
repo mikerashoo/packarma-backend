@@ -380,7 +380,7 @@ class OrderApiController extends Controller
             if (!empty($notificationData)) {
                 $notificationData['type_id'] = $order_id;
 
-                if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['notification_image'])) {
+                if (!empty($notificationData['notification_image']) && \Storage::disk('s3')->exists('/notification/customer'. '/' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/customer');
                 }
 

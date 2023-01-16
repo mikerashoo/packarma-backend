@@ -289,7 +289,7 @@ class CustomerQuoteApiController extends Controller
             if (!empty($notificationData)) {
                 $notificationData['type_id'] = $vendor_quotation_id;
 
-                if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['notification_image'])) {
+                if (!empty($notificationData['notification_image']) && \Storage::disk('s3')->exists('/notification/vendor'. '/' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
                 }
 
