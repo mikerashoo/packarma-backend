@@ -10,7 +10,7 @@
         "elibyy/tcpdf-laravel": "^9.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
-        "guzzlehttp/guzzle": "^7.0.1",
+        "guzzlehttp/guzzle": "5.3.1",
         "intervention/image": "^2.7",
         "kwn/number-to-words": "^2.4",
         "laravel/framework": "^8.40",
@@ -66,6 +66,9 @@
         }
     },
     "config": {
+	     "platform": {
+            "php": "7.4.3"
+         },
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
