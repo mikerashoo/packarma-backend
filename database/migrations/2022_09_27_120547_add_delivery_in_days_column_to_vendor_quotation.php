@@ -17,7 +17,7 @@ class AddDeliveryInDaysColumnToVendorQuotation extends Migration
     public function up()
     {
         Schema::table('vendor_quotations', function (Blueprint $table) {
-            $table->integer('delivery_in_days')->default(7)->after('delivery_charges');
+            $table->integer('delivery_in_days')->default(7);
         });
     }
 

@@ -31,8 +31,7 @@ class ExportController extends Controller
     }
     public function vendorQuotationReportForm(){
         $data['vendors'] = Vendor::where('status',1)->where('approval_status','accepted')->get();
-        $data['products'] = Product::with('category','sub_category')->where('status',1)->get();
-        $data['packaging_material'] = PackagingMaterial::where('status',1)->get();
+        $data['packaging_materials'] = PackagingMaterial::where('status',1)->get();
         return view('backend/report/vendor_quotation_report_form',$data);
     }
     public function orderReportForm(){

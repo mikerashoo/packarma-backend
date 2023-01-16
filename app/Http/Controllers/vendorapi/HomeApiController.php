@@ -68,8 +68,27 @@ class HomeApiController extends Controller
                     ->leftjoin('currencies', 'orders.currency_id', '=', 'currencies.id')
                     ->groupBy('month', 'month_name')
                     ->get()->toArray();
+                $res = array();
+                $key = 0;
+                do{
+                    $current_month_name = date('M', strtotime('-'.$key.'month'));
+                    $current_month = date('n', strtotime('-'.$key.'month'));
+        
+                    $res[$current_month]['amount'] = '0';
+                    $res[$current_month]['month'] = $current_month;
+                    $res[$current_month]['month_name'] = $current_month_name;
+                    $res[$current_month]['currency_symbol'] = "₹";
+                    $key++;
+                }while($key<6);
+                foreach ($last_six_month_payment as $result) {
+                    $overwrite_key = $result['month'];
 
-
+                    if(isset($res[$overwrite_key])) {
+                        $res[$overwrite_key]['amount'] = $result['amount'];
+                        $res[$overwrite_key]['currency_symbol'] = $result['currency_symbol'];
+                    }
+                }
+                $final_result = array_values($res);
 
                 $last_three_enquiries = DB::table('vendor_quotations')->select(
                     // 'vendor_quotations.id',
@@ -152,7 +171,7 @@ class HomeApiController extends Controller
                 $responseData['completed_orders'] = $completed_orders;
                 $responseData['pending_orders'] = $pending_orders;
                 $responseData['ongoing_orders'] = $ongoing_orders;
-                $responseData['last_six_month_payment'] = $last_six_month_payment;
+                $responseData['last_six_month_payment'] = $final_result;
                 $responseData['last_three_enquiries'] = $last_three_enquiries;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
