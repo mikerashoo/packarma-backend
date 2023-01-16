@@ -151,6 +151,13 @@ if (!function_exists('saveSingleImage')) {
         return $originalImageName;
     }
 }
+if (!function_exists('saveImageGstVisitingCard')) {
+    function saveImageGstVisitingCard($file, $type = "", $originalImageName = "")
+    {
+        \Storage::disk("s3")->putFileAs($type, $file, $originalImageName);
+        return $originalImageName;
+    }
+}
 
 if (!function_exists('createThumbnail')) {
     function createThumbnail($file, $type = "", $id = "", $for = "image")

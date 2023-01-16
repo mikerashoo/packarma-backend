@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['basicAuth'])->group(function () {
-    Route::post('/customer_app_version', 'CustomerVersionControlApiController@index');
     Route::post('/register_api', 'RegisterApiController@index');
     Route::post('/request_otp', 'OtpApiController@requestOtp');
     Route::post('/verify_otp', 'OtpApiController@verifyOtp');
@@ -151,3 +150,5 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/customer_notification/listing', 'NotificationHistoryApiController@index');
     });
 });
+Route::post('/customer_app_version', 'CustomerVersionControlApiController@index');
+
