@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\File;
 if (!function_exists('getFile')) {
     function getFile($name, $type, $isBanner = "false", $for = "image")
     {
-
         $expiryDate = now()->addDay(); //The link will be expire after 1 day
         $defaultImagePath = "";
         if ($isBanner) {
@@ -40,7 +39,7 @@ if (!function_exists('getFile')) {
             }
         } elseif ($for == 'front' || $for == 'back') {
             if (!empty($name) && \Storage::disk('s3')->exists($type . '/' . $name)) {
-                $src = $type . '/' . $name . '?d=' . time();
+                $src = $type . '/' . $name;
                 return \Storage::disk('s3')->temporaryUrl($src, $expiryDate);
             } else {
                 return  'file_not_found';
@@ -50,7 +49,7 @@ if (!function_exists('getFile')) {
                 $src = $type . '/' . $name;
                 return \Storage::disk('s3')->temporaryUrl($src, $expiryDate);
             } else {
-                $src = 'default_user_gst_file.png';
+                $src = $type . '/' .'default_user_gst_file.png';
                 return \Storage::disk('s3')->temporaryUrl($src, $expiryDate);
             }
         } elseif ($for == 'vendor_gst_certificate') {
@@ -58,7 +57,7 @@ if (!function_exists('getFile')) {
                 $src = $type . '/' . $name;
                 return \Storage::disk('s3')->temporaryUrl($src, $expiryDate);
             } else {
-                $src = 'default_vendor_gst_file.png';
+                $src = $type . '/' .'default_vendor_gst_file.png';
                 return \Storage::disk('s3')->temporaryUrl($src, $expiryDate);
             }
         } else {
@@ -153,8 +152,16 @@ if (!function_exists('saveSingleImage')) {
 }
 if (!function_exists('saveImageGstVisitingCard')) {
     function saveImageGstVisitingCard($file, $type = "", $originalImageName = "")
-    {
+    {   
+        \Log::info("file");
+       \Log::info($file);
+      \Log::info('type');
+       \Log::info($type);
+       \Log::info('originalImageName');
+        \Log::info($originalImageName);
         \Storage::disk("s3")->putFileAs($type, $file, $originalImageName);
+        
+        \Log::info(\Storage::disk("s3")->putFileAs($type, $file, $originalImageName));
         return $originalImageName;
     }
 }
