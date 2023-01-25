@@ -62,6 +62,12 @@
                                                         <span class="align-middle">App Version</span>
                                                     </a>
                                                 </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" id="vendor-social-links-tab" data-toggle="tab" href="#vendor-social-links" role="tab" aria-controls="vendor-social-links" aria-selected="false">
+                                                        <i class="ft-twitter mr-1 align-middle"></i>
+                                                        <span class="align-middle">Social Links</span>
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="col-md-9">
@@ -220,6 +226,21 @@
                                                                         </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
                                                                             <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('vendorAppVersionForm','post')">Save Changes</button>
+                                                                            {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="tab-pane" id="vendor-social-links" role="tabpanel" aria-labelledby="vendor-social-links-tab">
+                                                                <form id="vendorSocialLinkForm" method="post" action="updateSettingInfo?param=vendorSocial">
+                                                                @csrf
+                                                                    <div class="row">
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="vendor_youtube">Youtube Video</label>
+                                                                            <input id="vendor_youtube" type="text" name="vendor_youtube_link" class="form-control" placeholder="Add link" value="{{$data['vendor_youtube_link']}}">
+                                                                        </div>
+                                                                        <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
+                                                                            <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('vendorSocialLinkForm','post')">Save Changes</button>
                                                                             {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>

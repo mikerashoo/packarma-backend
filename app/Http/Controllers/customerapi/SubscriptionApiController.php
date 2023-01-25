@@ -135,6 +135,13 @@ class SubscriptionApiController extends Controller
                     $newDateTime = Carbon::now()->addDays(360)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
+                if ($subscription->subscription_type == 'free') {
+                    $currentDateTime = Carbon::now()->toArray();
+                    $subscription_start_date = $currentDateTime['formatted'];
+
+                    $newDateTime = Carbon::now()->addDays($subscription->duration)->toArray();
+                    $subscription_end_date =  $newDateTime['formatted'];
+                }
                 if ($user->subscription_end != null && $user->subscription_end > $subscription_start_date) {
                     $diff_days = strtotime($user->subscription_end) - strtotime($subscription_start_date);
                     // 1 day = 24 hours

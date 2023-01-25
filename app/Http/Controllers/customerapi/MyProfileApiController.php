@@ -170,7 +170,7 @@ class MyProfileApiController extends Controller
 
                     $file_to_unlink =  getFile($checkUser->visiting_card_front, 'visiting_card/front', FALSE, 'unlink');
                     if ($file_to_unlink != 'file_not_found') {
-                        unlink($file_to_unlink);
+                        //unlink($file_to_unlink);
                     }
                     $user['visiting_card_front'] = $input['visiting_card_front'] = NULL;
                 }
@@ -185,7 +185,7 @@ class MyProfileApiController extends Controller
                 } else {
                     $file_to_unlink =  getFile($checkUser->visiting_card_back, 'visiting_card/back', FALSE, 'unlink');
                     if ($file_to_unlink != 'file_not_found') {
-                        unlink($file_to_unlink);
+                        //unlink($file_to_unlink);
                     }
                     $user['visiting_card_back'] = $input['visiting_card_back'] = NULL;
                 }
