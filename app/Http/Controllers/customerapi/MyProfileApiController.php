@@ -91,7 +91,6 @@ class MyProfileApiController extends Controller
                 // }
                 $msg_data['result'] = $data;
                 $msg_data['flags'] = $flags;
-
                 $fcm_id = NULL;
                 if ($request->fcm_id && !empty($request->fcm_id)) {
                     $fcm_id = $request->fcm_id;

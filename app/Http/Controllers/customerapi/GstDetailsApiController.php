@@ -50,7 +50,8 @@ class GstDetailsApiController extends Controller
 
                     $file_to_unlink =  getFile($UserGstDetails->gst_certificate, 'gst_certificate', FALSE, 'unlink');
                     if ($file_to_unlink != 'file_not_found') {
-                        //unlink($file_to_unlink);
+                       // Commented by Swayama because unlink was not working on http links for S3 
+                        // unlink($file_to_unlink);
                     }
                 }
 

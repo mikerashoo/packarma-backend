@@ -365,7 +365,7 @@ class EnquiryApiController extends Controller
                     ->where([['customer_enquiries.id', $enquiry_id], ['customer_enquiries.deleted_at', NULL]])
                     ->leftjoin('packaging_materials', 'customer_enquiries.packaging_material_id', '=', 'packaging_materials.id')->first();
 
-                if (!empty($notificationData['notification_image']) && \Storage::disk('s3')->exists('/notification/customer'. '/' . $notificationData['notification_image'])) {
+                if (!empty($notificationData['notification_image']) && \Storage::disk('s3')->exists('notification/customer'. '/' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/customer');
                 }
 
