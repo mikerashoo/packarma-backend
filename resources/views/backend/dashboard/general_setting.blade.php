@@ -186,6 +186,10 @@
                                                                             <label for="twitter">Twitter</label>
                                                                             <input id="twitter" type="text" name="twitter_link" class="form-control" placeholder="Add link" value="{{$data['twitter_link']}}">
                                                                         </div>
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="youtube">Youtube Video</label>
+                                                                            <input id="youtube" type="text" name="youtube_link" class="form-control" placeholder="Add link" value="{{$data['youtube_link']}}">
+                                                                        </div>
                                                                         <div class="col-12 d-flex flex-sm-row flex-column justify-content-end">
                                                                             <button type="button" class="btn btn-success mr-sm-2 mb-1" onclick="submitForm('socialLinkForm','post')">Save Changes</button>
                                                                             {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}

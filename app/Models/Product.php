@@ -41,6 +41,10 @@ class Product extends Model
     {
         return $this->belongsTo('App\Models\ProductForm');
     }
+    public function units()
+    {
+        return $this->hasOne('App\Models\MeasurementUnit');
+    }
 
     /**
      * Developed By : Pradyumn Dwivedi

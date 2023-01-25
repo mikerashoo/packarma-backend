@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
+use App\Models\GeneralSetting;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
@@ -104,7 +105,8 @@ class GstDetailsApiController extends Controller
                     $userGstData[$i]['gst_certificate'] = getFile($row['gst_certificate'], 'gst_certificate', false, 'gst_certificate');
                     $i++;
                 }
-
+                $userGstData['social_links'] = GeneralSetting::where('type','youtube_link')->pluck('value')[0]??'Youtube Link Will Soon Be Available';
+                
                 successMessage(__('user.gst_details_fetched'), $userGstData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);

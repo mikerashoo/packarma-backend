@@ -57,7 +57,10 @@ class UserSubscriptionPaymentApiController extends Controller
                         );
                         $razorpay_order_id = $razorpay_order['id'];
                     }
-
+                    $already_availed = UserSubscriptionPayment::where('user_id',$user_id)->where('subscription_type','free')->first();
+                    if($already_availed){
+                        errorMessage(__('subscription.already_availed'), $msg_data, 400);
+                    }
                     $userSubscriptionPayment = new UserSubscriptionPayment();
                     $userSubscriptionPayment->user_id = $user_id;
                     $userSubscriptionPayment->subscription_id = $Subscription->id;
@@ -76,14 +79,16 @@ class UserSubscriptionPaymentApiController extends Controller
                         $data['currency'] = '';
                         $data['amount'] = $Subscription->amount;
                         $data['gateway_call'] = 'no';
-                        $data['msg'] = 'Thank you, you have successfully completed your Payment';
+                        $data['message'] = __('subscription.you_have_successfully_subscribed');
+                        $updateUser = calcCustomerSubscription($user_id, $Subscription->id);
+
                     } else {
                         $data['gateway_id'] = $razorpay_order_id;
                         $data['razorpay_api_key'] = config('app.testRazerpayKeyId');
                         $data['currency'] = 'INR';
                         $data['amount'] = $Subscription->amount;
                         $data['gateway_call'] = 'yes';
-                        $data['msg'] = 'Please continue to pay the order amount';
+                        $data['message'] = 'Please continue to pay the order amount';
                     }
                     return response()->json($data)->setStatusCode(200);
                 } else {
@@ -124,7 +129,7 @@ class UserSubscriptionPaymentApiController extends Controller
                 \Log::info("Checking Payment success status!");
 
                 // $user = User::find(auth('api')->user()->id);
-
+                
                 $api = new Api(config('app.testRazerpayKeyId'), config('app.testRazerpayKeySecrete'));
                 try {
                     $payment = $api->payment->fetch($request->gateway_key);
@@ -194,8 +199,8 @@ class UserSubscriptionPaymentApiController extends Controller
     private function validatePaymentSuccess(Request $request)
     {
         return \Validator::make($request->all(), [
-            'gateway_id' => 'required',
-            'gateway_key' => 'required'
+            'gateway_id' => 'sometimes',
+            'gateway_key' => 'sometimes'
         ])->errors();
     }
 }

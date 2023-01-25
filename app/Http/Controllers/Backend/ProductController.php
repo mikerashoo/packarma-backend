@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\MeasurementUnit;
 use App\Models\SubCategory;
 use App\Models\ProductForm;
 use App\Models\PackagingTreatment;
@@ -139,6 +140,8 @@ class ProductController extends Controller
         $data['product_form'] = ProductForm::all();
         $data['sub_category'] = SubCategory::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
+        $data['measurement_units'] = MeasurementUnit::all();
+
         return view('backend/product/product_add', $data);
     }
 
@@ -155,6 +158,7 @@ class ProductController extends Controller
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
+        $data['measurement_units'] = MeasurementUnit::all();
         $data['data'] = Product::find($id);
         if ($data['data']) {
             $data['data']->image_path = getFile($data['data']->product_image, 'product', true);
@@ -206,6 +210,7 @@ class ProductController extends Controller
         $tableObject->category_id = $request->category;
         $tableObject->sub_category_id = $request->sub_category;
         $tableObject->product_form_id = $request->product_form;
+        $tableObject->unit_id = $request->unit;
         $tableObject->packaging_treatment_id = $request->packaging_treatment;
         if ($isEditFlow) {
             $tableObject->updated_by = session('data')['id'];

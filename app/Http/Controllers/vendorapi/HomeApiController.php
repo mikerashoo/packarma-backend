@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
+use App\Models\GeneralSetting;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\VendorPayment;
@@ -173,6 +174,7 @@ class HomeApiController extends Controller
                 $responseData['ongoing_orders'] = $ongoing_orders;
                 $responseData['last_six_month_payment'] = $final_result;
                 $responseData['last_three_enquiries'] = $last_three_enquiries;
+                $responseData['social_links'] = GeneralSetting::where('type','vendor_youtube_link')->pluck('value')[0]??'Youtube Link Will Soon Be Available';
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
