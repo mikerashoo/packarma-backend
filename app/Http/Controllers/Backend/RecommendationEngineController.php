@@ -164,11 +164,18 @@ class RecommendationEngineController extends Controller
      */
     public function getProductDetails(Request $request)
     {
-        $productData = Product::with('category', 'product_form', 'packaging_treatment','recommendation_engine')->find($request->product_id);
+        $productData = Product::with('category', 'product_form', 'packaging_treatment','recommendation_engine')
+        ->with(['units' => function($query){
+            $query->select('id', 'unit_name', 'unit_symbol');
+        }])
+        ->find($request->product_id);
+
         $data['category'] = $productData->category;
         $data['product_form'] = $productData->product_form;
         $data['packaging_treatment'] = $productData->packaging_treatment;
         $data['recommendation_engine'] = $productData['recommendation_engine'];
+        $data['units'] = $productData['units'];
+
         successMessage('Data fetched successfully', $data);
     }
 

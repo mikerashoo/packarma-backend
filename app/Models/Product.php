@@ -43,7 +43,7 @@ class Product extends Model
     }
     public function units()
     {
-        return $this->hasOne('App\Models\MeasurementUnit');
+        return $this->hasOne('App\Models\MeasurementUnit', 'id', 'unit_id');
     }
 
     /**
