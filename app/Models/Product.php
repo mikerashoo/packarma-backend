@@ -43,7 +43,7 @@ class Product extends Model
     }
     public function units()
     {
-        return $this->hasOne('App\Models\MeasurementUnit');
+        return $this->hasOne('App\Models\MeasurementUnit', 'id', 'unit_id');
     }
 
     /**
@@ -56,6 +56,10 @@ class Product extends Model
         return $this->belongsTo('App\Models\PackagingTreatment');
     }
 
+    public function recommendation_engine()
+    {
+        return $this->belongsTo('App\Models\RecommendationEngine', 'id', 'product_id');
+    }
 
     /**
      * Developed By : Maaz Ansari

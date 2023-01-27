@@ -359,6 +359,11 @@ class AdminController extends Controller
                         GeneralSetting::where("type", 'fb_link')->update(["value" => $request->fb_link]);
                         GeneralSetting::where("type", 'insta_link')->update(["value" => $request->insta_link]);
                         GeneralSetting::where("type", 'twitter_link')->update(["value" => $request->twitter_link]);
+                        GeneralSetting::where("type", 'youtube_link')->update(["value" => $request->youtube_link]);
+                        break;
+
+                    case 'vendorSocial':
+                        GeneralSetting::where("type", 'vendor_youtube_link')->update(["value" => $request->vendor_youtube_link]);
                         break;
 
 
