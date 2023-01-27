@@ -110,9 +110,13 @@ class SubscriptionController extends Controller
             $tableObject = Subscription::find($_GET['id']);
             $msg = "Subscription Amount Updated Successfully";
         }
-        $tableObject->amount = $request->amount;
+        $tableObject->amount = !empty($request->amount) ? $request->amount : 0.00;
         $tableObject->updated_at = date('Y-m-d H:i:s');
         $tableObject->updated_by =  session('data')['id'];
+
+        if ($request->duration) {
+            $tableObject->duration = $request->duration;
+        }
         $tableObject->save();
         successMessage($msg, $msg_data);
     }
@@ -127,7 +131,7 @@ class SubscriptionController extends Controller
     private function validateRequest(Request $request)
     {
         return \Validator::make($request->all(), [
-            'amount' => 'required|numeric|gt:.99',
+            'amount' => 'sometimes|required|numeric|gt:.99',
         ])->errors();
     }
 }

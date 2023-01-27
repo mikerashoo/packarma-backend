@@ -107,6 +107,16 @@ class SubscriptionApiController extends Controller
                 $user_id = $token['sub'];
                 $user = User::find($user_id);
                 $subscription = Subscription::find($request->subscription_id);
+
+                if (!empty($subscription)) {
+                if ($subscription->subscription_type == 'free') {
+                    $free_subs = UserSubscriptionPayment::where('user_id', $user_id)->whereIn('subscription_id', Subscription::where('subscription_type', 'free')->pluck('id')->toArray())->first();
+
+                    if (!empty($free_subs)) {
+                        successMessage(__('subscription.already_availed'), $msg_data);
+                    }
+                }
+
                 if ($subscription->subscription_type == 'monthly') {
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
@@ -185,6 +195,8 @@ class SubscriptionApiController extends Controller
 
                 // successMessage(__('subscription.subscription_payment_entry_created_successfully'), $subscriptionPaymentData);
                 successMessage(__('subscription.you_have_successfully_subscribed'), $subscribed);
+                }
+                errorMessage(__('subscription.subscription_not_found'), $msg_data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
