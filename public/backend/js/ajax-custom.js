@@ -562,8 +562,8 @@ function getProductDetails(product) {
             $("#max_weight").val(max_weight);
 
             if (unit_symbol) {
-                $("#min_weight_unit_span").html('(In \'' + unit_symbol + '\')');
-                $("#max_weight_unit_span").html('(In \'' + unit_symbol + '\')');
+                $("#min_weight_unit_span").html('(In ' + unit_symbol + ')');
+                $("#max_weight_unit_span").html('(In ' + unit_symbol + ')');
             }
         },
     });
