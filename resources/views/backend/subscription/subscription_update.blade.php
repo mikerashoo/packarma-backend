@@ -38,14 +38,14 @@
                         		<div class="row">
                                     <div class="col-sm-6">
                         				<label>Subscription Amount<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" step=".001" id="amount" name="amount" value="{{ $data->amount }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
+                        				<input class="form-control" type="text" step=".001" id="amount" name="amount" value="{{ $data->amount }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46' <?php echo ($data->subscription_type == 'free' ? 'disabled' : '')?>><br/>
                         			</div>                        		
                         		</div>
                                 <?php if($data->subscription_type =='free'){ ?>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <label>Duration(in days)<span style="color:#ff0000">*</span></label>
-                                            <input class="form-control required" type="number" id="description" name="description">
+                                            <input class="form-control required" type="number" id="duration" name="duration">
                                             <br/>
                                         </div>
                                     </div>
