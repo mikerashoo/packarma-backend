@@ -56,6 +56,10 @@ class Product extends Model
         return $this->belongsTo('App\Models\PackagingTreatment');
     }
 
+    public function recommendation_engine()
+    {
+        return $this->belongsTo('App\Models\RecommendationEngine', 'id', 'product_id');
+    }
 
     /**
      * Developed By : Maaz Ansari

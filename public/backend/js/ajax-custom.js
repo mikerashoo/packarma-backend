@@ -549,11 +549,15 @@ function getProductDetails(product) {
             var product_form_id = response['data']['product_form']['id'];
             var product_form_name = response['data']['product_form']['product_form_name'];
             var packaging_treatment_id = response['data']['packaging_treatment']['id'];
-            var packaging_treatment_name = response['data']['packaging_treatment']['packaging_treatment_name'];
+            // var packaging_treatment_name = response['data']['packaging_treatment']['packaging_treatment_name'];
+            var min_weight = response['data']['recommendation_engine']['min_weight'];
+            var max_weight = response['data']['recommendation_engine']['max_weight'];
 
             $("#product_category").html('<option value="' + category_id + '"">' + category_name + '</option>');
             $("#product_form").html('<option value="' + product_form_id + '"">' + product_form_name + '</option>');
-            $("#packaging_treatment").html('<option value="' + packaging_treatment_id + '"">' + packaging_treatment_name + '</option>');
+            // $("#packaging_treatment").html('<option value="' + packaging_treatment_id + '"">' + packaging_treatment_name + '</option>');
+            $("#min_weight").val(min_weight);
+            $("#max_weight").val(max_weight);
         },
     });
 }
