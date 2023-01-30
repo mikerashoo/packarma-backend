@@ -45,7 +45,7 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <label>Duration(in days)<span style="color:#ff0000">*</span></label>
-                                            <input class="form-control required" type="number" id="duration" name="duration">
+                                            <input class="form-control required" type="number" id="duration" name="duration" value="{{ $data->duration }}">
                                             <br/>
                                         </div>
                                     </div>

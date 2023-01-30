@@ -132,6 +132,7 @@ class SubscriptionController extends Controller
     {
         return \Validator::make($request->all(), [
             'amount' => 'sometimes|required|numeric|gt:.99',
+            'duration' => 'sometimes|required|integer|gt:0',
         ])->errors();
     }
 }
