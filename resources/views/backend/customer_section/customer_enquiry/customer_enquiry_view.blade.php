@@ -125,7 +125,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Product Weight</strong></td>
-                                                        <td>{{$data->product_weight.' '.$data->measurement_unit->unit_symbol;}}</td>
+                                                        <td>{{$data->product_weight.' '}}{{$data->measurement_unit_id!=0?$data->measurement_unit->unit_symbol:'NA';}}</td>
                                                     </tr> 
                                                     <tr>
                                                         <td><strong>Product Quantity</strong></td>
@@ -133,23 +133,23 @@
                                                     </tr> 
                                                     <tr>
                                                         <td><strong>Storage Condition</strong></td>
-                                                        <td>{{$data['storage_condition']->storage_condition_title;}}</td>
+                                                        <td>{{$data->storage_condition_id!=0?$data['storage_condition']->storage_condition_title:'NA';}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Packaging Machine</strong></td>
-                                                        <td>{{$data['packaging_machine']->packaging_machine_name;}}</td>
+                                                        <td>{{$data->packaging_machine_id!=0?$data['packaging_machine']->packaging_machine_name:'NA';}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Product Form</strong></td>
-                                                        <td>{{$data['product_form']->product_form_name;}}</td>
+                                                        <td>{{$data->product_form_id!=0?$data['product_form']->product_form_name:'NA';}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Packing Type</strong></td>
-                                                        <td>{{$data['packing_type']->packing_name;}}</td>
+                                                        <td>{{$data->packing_type_id!=0?$data['packing_type']->packing_name:'NA';}}</td>
                                                     </tr>  
                                                     <tr>
                                                         <td><strong>Packaging Treatment</strong></td>
-                                                        <td>{{$data['packaging_treatment']->packaging_treatment_name;}}</td>
+                                                        <td>{{$data->packaging_treatment_id!=0?$data['packaging_treatment']->packaging_treatment_name:'NA';}}</td>
                                                     </tr>                                                                                     
                                                     <tr>
                                                         <td><strong>Enquiry Date Time</strong></td>

@@ -242,6 +242,27 @@ class CustomerEnquiryApiController extends Controller
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
+            'recommendation_engine_id' => 'required|numeric',
+            'user_address_id' => 'required|numeric',
+            'packaging_material_id' => 'required|numeric',
+            'product_quantity' => 'required|numeric',
+            'packing_type_id' => 'required|numeric',
+
+
+            // 'shelf_life' => 'required|integer|between:1,10000',
+            // 'shelf_life_unit' => 'required',
+            'product_weight' => 'nullable|numeric',
+            'measurement_unit_id' => 'nullable|numeric',
+            'storage_condition_id' => 'nullable|numeric',
+            'packaging_machine_id' => 'nullable|numeric',
+            'product_form_id' => 'nullable|numeric',
+            'packaging_treatment_id' => 'nullable|numeric',
+            // 'product_quantity' => 'required|numeric',
+            ])->errors();
+        return \Validator::make($request->all(), [
+            'category_id' => 'required|numeric',
+            'sub_category_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
             // 'shelf_life' => 'required|integer|between:1,10000',
             // 'shelf_life_unit' => 'required',
             'product_weight' => 'required|numeric',
@@ -389,7 +410,7 @@ class CustomerEnquiryApiController extends Controller
         return \Validator::make($request->all(), [
             'packaging_solution_id' => 'required|integer',
             'product_quantity' => 'required|numeric',
-            'product_weight' => 'required|numeric',
+            'product_weight' => 'sometimes|numeric',
             'user_address_id' => 'required|integer'
         ])->errors();
     }

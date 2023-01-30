@@ -58,7 +58,7 @@ class UserSubscriptionPaymentApiController extends Controller
                         $razorpay_order_id = $razorpay_order['id'];
                     }
                     $already_availed = UserSubscriptionPayment::where('user_id',$user_id)->where('subscription_type','free')->first();
-                    if($already_availed){
+                    if($already_availed&&$Subscription->subscription_type=='free'){
                         errorMessage(__('subscription.already_availed'), $msg_data, 400);
                     }
                     $userSubscriptionPayment = new UserSubscriptionPayment();
@@ -79,6 +79,7 @@ class UserSubscriptionPaymentApiController extends Controller
                         $data['currency'] = '';
                         $data['amount'] = $Subscription->amount;
                         $data['gateway_call'] = 'no';
+                        $data['success'] = 200;
                         $data['message'] = __('subscription.you_have_successfully_subscribed');
                         $updateUser = calcCustomerSubscription($user_id, $Subscription->id);
 

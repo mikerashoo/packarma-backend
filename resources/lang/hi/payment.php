@@ -15,5 +15,6 @@ return [
 
     'payment_not_found' => 'Payment Not Found',
     'payment_failed' => 'Your Order Payment is failed',
-    'wrong_gateway_key' => 'Gateway Key given not correct, Payment failed'
+    'wrong_gateway_key' => 'Gateway Key given not correct, Payment failed',
+    'payment_exception' => 'Payment failed at the gateway, please connect with admin'
 ];
