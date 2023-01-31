@@ -123,6 +123,14 @@ class CustomerEnquiryApiController extends Controller
                     $quotationCount = VendorQuotation::where([['user_id', $user_id], ['customer_enquiry_id', $row->id]])
                         ->whereIn('enquiry_status', ['quoted', 'viewed'])->get()->count();
                     $data[$i]->quotation_count = $quotationCount;
+                    if($row->product_weight == 0){
+                        $data[$i]->product_weight = null;
+                        $data[$i]->measurement_unit_id = null;
+                    }
+                    if($row->entered_shelf_life == 0){
+                        $data[$i]->entered_shelf_life = null;
+                        $data[$i]->entered_shelf_life_unit = null;
+                    }
                     $i++;
                 }
                 if (empty($data)) {
