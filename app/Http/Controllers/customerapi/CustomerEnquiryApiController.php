@@ -123,6 +123,14 @@ class CustomerEnquiryApiController extends Controller
                     $quotationCount = VendorQuotation::where([['user_id', $user_id], ['customer_enquiry_id', $row->id]])
                         ->whereIn('enquiry_status', ['quoted', 'viewed'])->get()->count();
                     $data[$i]->quotation_count = $quotationCount;
+                    if($row->product_weight == 0){
+                        $data[$i]->product_weight = null;
+                        $data[$i]->measurement_unit_id = null;
+                    }
+                    if($row->entered_shelf_life == 0){
+                        $data[$i]->entered_shelf_life = null;
+                        $data[$i]->entered_shelf_life_unit = null;
+                    }
                     $i++;
                 }
                 if (empty($data)) {
@@ -242,6 +250,27 @@ class CustomerEnquiryApiController extends Controller
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
+            'recommendation_engine_id' => 'required|numeric',
+            'user_address_id' => 'required|numeric',
+            'packaging_material_id' => 'required|numeric',
+            'product_quantity' => 'required|numeric',
+            'packing_type_id' => 'required|numeric',
+
+
+            // 'shelf_life' => 'required|integer|between:1,10000',
+            // 'shelf_life_unit' => 'required',
+            'product_weight' => 'nullable|numeric',
+            'measurement_unit_id' => 'nullable|numeric',
+            'storage_condition_id' => 'nullable|numeric',
+            'packaging_machine_id' => 'nullable|numeric',
+            'product_form_id' => 'nullable|numeric',
+            'packaging_treatment_id' => 'nullable|numeric',
+            // 'product_quantity' => 'required|numeric',
+            ])->errors();
+        return \Validator::make($request->all(), [
+            'category_id' => 'required|numeric',
+            'sub_category_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
             // 'shelf_life' => 'required|integer|between:1,10000',
             // 'shelf_life_unit' => 'required',
             'product_weight' => 'required|numeric',
@@ -317,10 +346,9 @@ class CustomerEnquiryApiController extends Controller
                 if ($packagingSolutionData->display_shelf_life) {
                     $shelf_life = $packagingSolutionData->display_shelf_life;
                 }
-                
-                //get product data
-                $productData = Product::select('sub_category_id')->where('id',$packagingSolutionData->product_id)->first();
-
+               //get product data
+                $productData = Product::select('sub_category_id','unit_id')->where('id',$packagingSolutionData->product_id)->first();
+              
                 //getting data from recommendation engine table 
                 $request['user_id'] = $user_id;
                 $request['category_id'] = $packagingSolutionData->category_id;
@@ -329,7 +357,7 @@ class CustomerEnquiryApiController extends Controller
                 $request['shelf_life'] = $shelf_life;
                 $request['entered_shelf_life'] = $shelf_life;
                 $request['entered_shelf_life_unit'] = $shelf_life_unit;
-                $request['measurement_unit_id'] = $packagingSolutionData->measurement_unit_id;
+                $request['measurement_unit_id'] = $productData->unit_id;
                 $request['storage_condition_id'] = $packagingSolutionData->storage_condition_id;
                 $request['packaging_machine_id'] = $packagingSolutionData->packaging_machine_id;
                 $request['product_form_id'] = $packagingSolutionData->product_form_id;
@@ -389,7 +417,7 @@ class CustomerEnquiryApiController extends Controller
         return \Validator::make($request->all(), [
             'packaging_solution_id' => 'required|integer',
             'product_quantity' => 'required|numeric',
-            'product_weight' => 'required|numeric',
+            'product_weight' => 'sometimes|numeric',
             'user_address_id' => 'required|integer'
         ])->errors();
     }

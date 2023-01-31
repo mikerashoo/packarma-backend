@@ -29,7 +29,6 @@ class RecommendationEngineController extends Controller
     {
         $data['solutionStructureType'] = solutionStructureType();
         $data['storage_condition'] = StorageCondition::orderBy('storage_condition_title', 'asc')->get();
-        $data['measurement_unit'] = MeasurementUnit::orderBy('unit_symbol', 'asc')->get();
         $data['product'] = Product::orderBy('product_name', 'asc')->get();
         $data['category'] = Category::orderBy('category_name', 'asc')->get();
         $data['product_form'] = ProductForm::orderBy('product_form_name', 'asc')->get();
@@ -67,9 +66,6 @@ class RecommendationEngineController extends Controller
                         }
                         if (isset($request['search']['search_storage_condition']) && !empty($request['search']['search_storage_condition'])) {
                             $query->where('storage_condition_id', $request['search']['search_storage_condition']);
-                        }
-                        if (isset($request['search']['search_measurement_unit']) && !empty($request['search']['search_measurement_unit'])) {
-                            $query->where('measurement_unit_id', $request['search']['search_measurement_unit']);
                         }
                         if (isset($request['search']['search_product_name']) && !empty($request['search']['search_product_name'])) {
                             $query->where('product_id', $request['search']['search_product_name']);
@@ -150,13 +146,14 @@ class RecommendationEngineController extends Controller
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
-        $data['measurement_unit'] = MeasurementUnit::all();
         $data['storage_condition'] = StorageCondition::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['packaging_material'] = PackagingMaterial::all();
         $data['solutionStructureType'] = solutionStructureType();
         $data['vendor'] = Vendor::all();
+        $data['data'] = RecommendationEngine::all();
+
         return view('backend/recommendation_engine/recommendation_engine_add', $data);
     }
 
@@ -167,10 +164,18 @@ class RecommendationEngineController extends Controller
      */
     public function getProductDetails(Request $request)
     {
-        $productData = Product::with('category', 'product_form', 'packaging_treatment')->find($request->product_id);
+        $productData = Product::with('category', 'product_form', 'packaging_treatment','recommendation_engine')
+        ->with(['units' => function($query){
+            $query->select('id', 'unit_name', 'unit_symbol');
+        }])
+        ->find($request->product_id);
+
         $data['category'] = $productData->category;
         $data['product_form'] = $productData->product_form;
         $data['packaging_treatment'] = $productData->packaging_treatment;
+        $data['recommendation_engine'] = $productData['recommendation_engine'];
+        $data['units'] = $productData['units'];
+
         successMessage('Data fetched successfully', $data);
     }
 
@@ -200,7 +205,6 @@ class RecommendationEngineController extends Controller
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
-        $data['measurement_unit'] = MeasurementUnit::all();
         $data['storage_condition'] = StorageCondition::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
@@ -267,7 +271,6 @@ class RecommendationEngineController extends Controller
         $tableObject->max_shelf_life = $request->max_shelf_life ?? 100;
         $tableObject->min_weight = $request->min_weight;
         $tableObject->max_weight = $request->max_weight;
-        $tableObject->measurement_unit_id = $request->measurement_unit;
         $tableObject->category_id = $request->product_category;
         $tableObject->product_form_id = $request->product_form;
         $tableObject->packing_type_id = $request->packing_type;
@@ -301,7 +304,6 @@ class RecommendationEngineController extends Controller
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
-        $data['measurement_unit'] = MeasurementUnit::all();
         $data['storage_condition'] = StorageCondition::all();
         $data['packaging_machine'] = PackagingMachine::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
@@ -349,7 +351,6 @@ class RecommendationEngineController extends Controller
                 // 'min_shelf_life' => 'required|integer',
                 // 'max_shelf_life' => 'required|integer',
                 'display_shelf_life' => 'required|integer',
-                'measurement_unit' => 'required|integer',
                 'min_weight' => 'required|numeric',
                 'max_weight' => 'required|numeric',
                 'product_category' => 'required|integer',

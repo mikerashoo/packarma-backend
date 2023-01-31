@@ -64,6 +64,15 @@
                                         </select><br/><br>
                         			</div>
                                     <div class="col-sm-6">
+                        				<label>Measurement Unit<span style="color:#ff0000">*</span></label>
+                        				<select class="select2 required" id="unit" name="unit" style="width: 100% !important;">
+                                            <option value="">Select</option>
+                                            @foreach($measurement_units as $unit)
+                                                <option value="{{$unit->id}}">{{$unit->unit_symbol}}</option>
+                                            @endforeach
+                                        </select><br/><br/>
+                        			</div>
+                                    <div class="col-sm-6">
                                         <label>Product Image<span style="color:#ff0000">*</span></label>
                                         <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.PRODUCT'); ?></p>
                                         <input type="file" id="product_image" name="product_image" class="form-control required" accept="image/png, image/jpg, image/jpeg">

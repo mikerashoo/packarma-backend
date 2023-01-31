@@ -14,5 +14,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
+        $this->call([
+            SubscriptionSeeder::class,
+            SubscriptionDurationSeeder::class,
+            GeneralSettingSeeder::class,
+            RecommendationEngineMeasurementUnitRemoveSeeder::class,
+            RecommendationEngineAddMeasurementUnitSeeder::class
+        ]);
     }
 }

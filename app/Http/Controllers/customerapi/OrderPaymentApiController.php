@@ -96,7 +96,7 @@ class OrderPaymentApiController extends Controller
             }
         } catch (\Exception $e) {
             \Log::error("My new Order payment failed: " . $e->getMessage());
-            errorMessage(__('auth.something_went_wrong'), $msg_data);
+            errorMessage(__('payment.payment_exception'), $msg_data);
         }
     }
 
