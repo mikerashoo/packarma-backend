@@ -107,6 +107,16 @@ class SubscriptionApiController extends Controller
                 $user_id = $token['sub'];
                 $user = User::find($user_id);
                 $subscription = Subscription::find($request->subscription_id);
+
+                if (!empty($subscription)) {
+                if ($subscription->subscription_type == 'free') {
+                    $free_subs = UserSubscriptionPayment::where('user_id', $user_id)->whereIn('subscription_id', Subscription::where('subscription_type', 'free')->pluck('id')->toArray())->first();
+
+                    if (!empty($free_subs)) {
+                        successMessage(__('subscription.already_availed'), $msg_data);
+                    }
+                }
+
                 if ($subscription->subscription_type == 'monthly') {
                     $currentDateTime = Carbon::now()->toArray();
                     $subscription_start_date = $currentDateTime['formatted'];
@@ -133,6 +143,13 @@ class SubscriptionApiController extends Controller
                     $subscription_start_date = $currentDateTime['formatted'];
 
                     $newDateTime = Carbon::now()->addDays(360)->toArray();
+                    $subscription_end_date =  $newDateTime['formatted'];
+                }
+                if ($subscription->subscription_type == 'free') {
+                    $currentDateTime = Carbon::now()->toArray();
+                    $subscription_start_date = $currentDateTime['formatted'];
+
+                    $newDateTime = Carbon::now()->addDays($subscription->duration)->toArray();
                     $subscription_end_date =  $newDateTime['formatted'];
                 }
                 if ($user->subscription_end != null && $user->subscription_end > $subscription_start_date) {
@@ -178,6 +195,8 @@ class SubscriptionApiController extends Controller
 
                 // successMessage(__('subscription.subscription_payment_entry_created_successfully'), $subscriptionPaymentData);
                 successMessage(__('subscription.you_have_successfully_subscribed'), $subscribed);
+                }
+                errorMessage(__('subscription.subscription_not_found'), $msg_data);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
@@ -246,19 +265,28 @@ class SubscriptionApiController extends Controller
                 $subscription_list = $subscription_list->get()->toArray();
                 //subscription button flag start
                 $i = 0;
+                $free_id = Subscription::where('subscription_type','free')->pluck('id')[0];
                 foreach ($subscription_list as $subs_listing) {
                     $renew_button = false;
                     $subscribe_button = false;
                     if (!empty($data->subscription_id)) {
-                        if ($data->subscription_end < Carbon::now()->addDays($show_renewal)->format('Y-m-d H:i:s')) {
-                            if ($data->subscription_id == $subs_listing['id']) {
+                       if ($data->subscription_end < Carbon::now()->addDays($show_renewal)->format('Y-m-d H:i:s')) {
+                            if ($data->subscription_id == $subs_listing['id'] && $data->subscription_id != $free_id) {
                                 $renew_button = true;
                             } else {
-                                $subscribe_button = true;
+                                if($subs_listing['id'] != $free_id){
+                                    $subscribe_button = true;
+                                }
                             }
                         }
+                        if($data->subscription_end < Carbon::now()->format('Y-m-d H:i:s')){
+                            $data->subscription_type = null;
+                            $data->subscription_start = null;
+                            $data->subscription_end = null;
+                    }
                     } else {
-                        $subscribe_button = true;
+                        if($data->subscription_id != $free_id)
+                            $subscribe_button = true;
                     }
                     $subscription_list[$i]['renew_button'] = $renew_button;
                     $subscription_list[$i]['subscribe_button'] = $subscribe_button;

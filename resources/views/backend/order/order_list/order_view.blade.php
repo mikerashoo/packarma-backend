@@ -167,39 +167,39 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Product Weight</strong></td>
-                                                        <td>{{$data[0]['product_weight'].' '.$data[0]['measurement_unit']['unit_symbol']}}</td>
+                                                        <td>{{$data[0]['product_weight'].' '}}{{$data[0]['measurement_unit_id']!=0?$data[0]['measurement_unit']['unit_symbol']:'NA'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Product Quantity</strong></td>
-                                                        <td>{{$data[0]['product_quantity']}} {{ $data[0]['recommendation_engine']->min_order_quantity_unit }}</td>
+                                                        <td>{{$data[0]['product_quantity']}} {{ $data[0]['recommendation_engine_id']!=0?$data[0]['recommendation_engine']->min_order_quantity_unit:'NA' }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Storage Condition</strong></td>
-                                                        <td>{{$data[0]['storage_condition']['storage_condition_title']}}</td>
+                                                        <td>{{$data[0]['storage_condition_id']!=0?$data[0]['storage_condition']['storage_condition_title']:'NA'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Packaging Machine Name</strong></td>
-                                                        <td>{{$data[0]['packaging_machine']['packaging_machine_name']}}</td>
+                                                        <td>{{$data[0]['packaging_machine_id']!=0?$data[0]['packaging_machine']['packaging_machine_name']:'NA'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Product Form Name</strong></td>
-                                                        <td>{{$data[0]['product_form']['product_form_name']}}</td>
+                                                        <td>{{$data[0]['product_form_id']!=0?$data[0]['product_form']['product_form_name']:'NA'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Packing Type</strong></td>
-                                                        <td>{{$data[0]['packing_type']['packing_name']}}</td>
+                                                        <td>{{$data[0]['packing_type_id']!=0?$data[0]['packing_type']['packing_name']:'NA'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Packaging Treatment</strong></td>
-                                                        <td>{{$data[0]['packaging_treatment']['packaging_treatment_name']}}</td>
+                                                        <td>{{$data[0]['packaging_treatment_id']!=0?$data[0]['packaging_treatment']['packaging_treatment_name']:'NA'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Packaging Solutuon</strong></td>
-                                                        <td>{{$data[0]['recommendation_engine']['engine_name']}}</td>
+                                                        <td>{{$data[0]['recommendation_engine_id']!=0?$data[0]['recommendation_engine']['engine_name']:'NA'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Packaging Material</strong></td>
-                                                        <td>{{$data[0]['packaging_material']['packaging_material_name']}}</td>
+                                                        <td>{{$data[0]['packaging_material_id']!=0?$data[0]['packaging_material']['packaging_material_name']:'NA'}}</td>
                                                     </tr>
                                                 </table>
                                             </div>

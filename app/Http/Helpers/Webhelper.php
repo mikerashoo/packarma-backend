@@ -315,7 +315,8 @@ if (!function_exists('subscriptionType')) {
             'monthly' => 'Monthly',
             'quarterly' => 'Quarterly',
             'semi_yearly' => 'Semi Yearly',
-            'yearly' => 'Yearly'
+            'yearly' => 'Yearly',
+            'free' => 'Free'
         );
         if (!empty($displayValue)) {
             $returnArray = $returnArray[$displayValue];
@@ -908,6 +909,15 @@ if (!function_exists('calcCustomerSubscription')) {
 
             $newDateTime = Carbon::now()->addDays(360)->toArray();
             $subscription_end_date =  $newDateTime['formatted'];
+        }
+        if ($subscription->subscription_type == 'free') {
+            $currentDateTime = Carbon::now()->toArray();
+            $subscription_start_date = $currentDateTime['formatted'];
+            \Log::info($subscription->duration);
+            $newDateTime = Carbon::now()->addDays($subscription->duration)->toArray();
+            $subscription_end_date =  $newDateTime['formatted'];
+            \Log::info($subscription_end_date);
+
         }
         if ($user->subscription_end != null && $user->subscription_end > $subscription_start_date) {
             $diff_days = strtotime($user->subscription_end) - strtotime($subscription_start_date);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
+use App\Models\GeneralSetting;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\VendorPayment;
@@ -163,9 +164,18 @@ class HomeApiController extends Controller
                 foreach ($last_three_enquiries as $row) {
                     $last_three_enquiries[$i]->enq_id = getFormatid($row->id, 'vendor_quotations');
                     $last_three_enquiries[$i]->material_unit_symbol = 'kg';
+                    if($row->product_weight == 0){
+                         $last_three_enquiries[$i]->product_weight = null;
+                        $last_three_enquiries[$i]->unit_name = null;
+                        $last_three_enquiries[$i]->unit_symbol = null;
+                    }
+                    if($row->entered_shelf_life == 0){
+                        $last_three_enquiries[$i]->entered_shelf_life = null;
+                        $last_three_enquiries[$i]->entered_shelf_life_unit = null;
+                    }
+                
                     $i++;
                 }
-
                 $responseData['pending_payments'] = $pending_payments;
                 $responseData['received_today'] = $received_today;
                 $responseData['completed_orders'] = $completed_orders;
@@ -173,6 +183,7 @@ class HomeApiController extends Controller
                 $responseData['ongoing_orders'] = $ongoing_orders;
                 $responseData['last_six_month_payment'] = $final_result;
                 $responseData['last_three_enquiries'] = $last_three_enquiries;
+                $responseData['social_links'] = GeneralSetting::where('type','vendor_youtube_link')->pluck('value')[0] ?? null;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);

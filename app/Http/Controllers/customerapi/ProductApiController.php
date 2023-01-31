@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProductForm;
 use App\Models\Category;
+use App\Models\MeasurementUnit;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -46,6 +47,7 @@ class ProductApiController extends Controller
 
                 $data = DB::table('products')->select(
                     'products.id',
+                    'products.unit_id',
                     'products.product_name',
                     'products.product_description',
                     'products.product_image',
@@ -63,6 +65,7 @@ class ProductApiController extends Controller
                     ->leftjoin('sub_categories', 'sub_categories.id', '=', 'products.sub_category_id')
                     ->leftjoin('product_forms', 'product_forms.id', '=', 'products.product_form_id')
                     ->leftjoin('packaging_treatments', 'packaging_treatments.id', '=', 'products.packaging_treatment_id')
+                    ->leftJoin('measurement_units','measurement_units.id','products.unit_id')
                     ->where('products.status', 1);
 
                 // $data = Product::select('id','category_id','sub_category_id','product_name','product_description','product_image','product_thumb_image','meta_title','meta_description','meta_keyword')->where('status', '1');
@@ -97,6 +100,7 @@ class ProductApiController extends Controller
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
                 $i = 0;
                 foreach ($data as $row) {
+                    $data[$i]->unit_id = MeasurementUnit::where('id',$row->unit_id)->pluck('unit_symbol')[0];
                     $data[$i]->product_image = getFile($row->product_image, 'product');
                     $data[$i]->product_thumb_image = getFile($row->product_thumb_image, 'product', false, 'thumb');
                     $i++;

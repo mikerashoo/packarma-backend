@@ -81,25 +81,6 @@
                                                 <label>Display Shelf Life (Days)<span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="display_shelf_life" name="display_shelf_life" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
-                                            <div class="col-sm-12 row">
-                                                <div class="col-sm-6">
-                                                    <label>Product Measurement Unit<span style="color:#ff0000">*</span></label>
-                                                    <select class="select2 required" id="measurement_unit" name="measurement_unit" style="width: 100% !important;">
-                                                        <option value="">Select</option>
-                                                        @foreach($measurement_unit as $units)
-                                                            <option value="{{$units->id}}">{{$units->unit_symbol}}</option>
-                                                        @endforeach
-                                                    </select><br/><br/>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Product Minimum Weight <span id="min_weight_unit_span"></span><span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="min_weight" name="min_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Product Maximum Weight <span id="max_weight_unit_span"></span><span style="color:#ff0000">*</span></label>
-                                                <input class="form-control required" type="text" id="max_weight" name="max_weight" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade mt-2" id="product_details" role="tabpanel" aria-labelledby="product_details-tab">
@@ -166,6 +147,14 @@
                                                         <option value="{{$materials->id}}">{{$materials->packaging_material_name}}</option>
                                                     @endforeach
                                                 </select><br/><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Product Minimum Weight <span id="min_weight_unit_span"></span><span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="min_weight" name="min_weight" value="" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label>Product Maximum Weight <span id="max_weight_unit_span"></span><span style="color:#ff0000">*</span></label>
+                                                <input class="form-control required" type="text" id="max_weight" name="max_weight" value="" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                         </div>
                                     </div>
