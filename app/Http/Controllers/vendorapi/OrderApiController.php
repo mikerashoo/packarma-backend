@@ -216,6 +216,10 @@ class OrderApiController extends Controller
                     $data[$i]->shipping_details = json_decode($row->shipping_details, TRUE);
                     $data[$i]->billing_details = json_decode($row->billing_details, TRUE);
                     $data[$i]->product_details = json_decode($row->product_details, TRUE);
+                    if($row->product_details['entered_shelf_life'] == 0){
+                        $data[$i]->product_details['entered_shelf_life'] = null; 
+                        $data[$i]->product_details['entered_shelf_life_unit'] = null; 
+                    }
                     $data[$i]->material_unit_symbol = 'kg';
                     $data[$i]->order_status = $row->order_delivery_status;
                     //added by : Pradyumn, added on :18-oct-2022, use: sending delivery status value capital letter
@@ -255,11 +259,7 @@ class OrderApiController extends Controller
                         $data[$i]->unit_name = null;
                         $data[$i]->unit_symbol = null;
                     }
-                    if($row->display_shelf_life == 0){
-                        $row->display_shelf_life = null;
-                    }
-
-                    $i++;
+                     $i++;
                 }
 
 
