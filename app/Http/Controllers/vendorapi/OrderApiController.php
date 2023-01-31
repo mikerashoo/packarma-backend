@@ -259,11 +259,7 @@ class OrderApiController extends Controller
                         $data[$i]->unit_name = null;
                         $data[$i]->unit_symbol = null;
                     }
-                    // if($row->entered_shelf_life == 0){
-                    //     //$row->shelf_life = null;
-                    // }
-                    //\Log::info($row);
-                    $i++;
+                     $i++;
                 }
 
 
