@@ -395,7 +395,15 @@ class OrderApiController extends Controller
                         $data[$i]->invoice_url =  $url;
                     }
                     $data[$i]->pay_now =  $payNowButton;
-
+                    if($row->product_weight == 0.00){
+                        $data[$i]->product_weight = null;
+                        $data[$i]->unit_name = null;
+                        $data[$i]->unit_symbol = null;
+                    }
+                    if($row->entered_shelf_life == 0){
+                        $row->entered_shelf_life = null;
+                        $row->entered_shelf_life_unit = null;
+                    }
 
                     $i++;
                 }
