@@ -105,7 +105,7 @@ class GstDetailsApiController extends Controller
                     $userGstData[$i]['gst_certificate'] = getFile($row['gst_certificate'], 'gst_certificate', false, 'gst_certificate');
                     $i++;
                 }
-                $userGstData['social_links'] = GeneralSetting::where('type','youtube_link')->pluck('value')[0]??'Youtube Link Will Soon Be Available';
+                $userGstData['social_links'] = GeneralSetting::where('type','youtube_link')->pluck('value')[0] ?? null;
                 
                 successMessage(__('user.gst_details_fetched'), $userGstData);
             } else {

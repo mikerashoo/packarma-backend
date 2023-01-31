@@ -250,8 +250,14 @@ class OrderApiController extends Controller
 
                         $data[$i]->igst_amount = number_format(($vendor_gst_amount), 2, '.', '');
                     }
-
-
+                    if($row->product_weight == 0.00){
+                        $data[$i]->product_weight = null;
+                        $data[$i]->unit_name = null;
+                        $data[$i]->unit_symbol = null;
+                    }
+                    if($row->display_shelf_life == 0){
+                        $row->display_shelf_life = null;
+                    }
 
                     $i++;
                 }

@@ -17,7 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SubscriptionSeeder::class,
             SubscriptionDurationSeeder::class,
-            GeneralSettingSeeder::class
+            GeneralSettingSeeder::class,
+            RecommendationEngineMeasurementUnitRemoveSeeder::class,
+            RecommendationEngineAddMeasurementUnitSeeder::class
         ]);
     }
 }
