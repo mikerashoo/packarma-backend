@@ -39,6 +39,10 @@
                                             <td>{{$data->product_form->product_form_name}}</td>
                                         </tr>
                                         <tr>
+                                            <td><strong>Product Measurement Unit</strong></td>
+                                            <td>{{$data->units->unit_name. ' '}}({{$data->units->unit_symbol}})</td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>Packaging Treatment Name</strong></td>
                                             <td>{{$data->packaging_treatment->packaging_treatment_name}}</td>
                                         </tr>

@@ -210,6 +210,7 @@ class RecommendationEngineController extends Controller
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['packaging_material'] = PackagingMaterial::all();
         $data['solutionStructureType'] = solutionStructureType();
+        $data['initial_unit'] = Product::with('units')->find($data['data']->product_id);
         // print_r($data);exit;
         return view('backend/recommendation_engine/recommendation_engine_edit', $data);
     }
@@ -300,7 +301,7 @@ class RecommendationEngineController extends Controller
     public function view($id)
     {
         $data['data'] = RecommendationEngine::find($id);
-        $data['product'] = Product::all();
+        $data['product'] = Product::find($data['data']['product_id']);
         $data['category'] = Category::all();
         $data['product_form'] = ProductForm::all();
         $data['packing_type'] = PackingType::all();
