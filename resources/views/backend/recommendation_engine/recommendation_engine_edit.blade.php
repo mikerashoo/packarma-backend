@@ -183,11 +183,11 @@
                                                 </select><br/><br/>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Product Minimum Weight <span id="min_weight_unit_span"></span><span style="color:#ff0000">*</span></label>
+                                                <label>Product Minimum Weight <span id="min_weight_unit_span">(IN {{$initial_unit->units->unit_symbol}})</span><span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="min_weight" name="min_weight" value="{{ $data->min_weight }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label>Product Maximum Weight <span id="max_weight_unit_span"></span><span style="color:#ff0000">*</span></label>
+                                                <label>Product Maximum Weight <span id="max_weight_unit_span">(IN {{$initial_unit->units->unit_symbol}})</span><span style="color:#ff0000">*</span></label>
                                                 <input class="form-control required" type="text" id="max_weight" name="max_weight" value="{{ $data->max_weight }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
                                             </div>
                                         </div>
