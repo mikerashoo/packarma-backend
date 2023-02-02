@@ -73,10 +73,13 @@ class PackagingSolutionApiController extends Controller
                         ->where([['status', '1'], ['category_id', $request->category_id], 
                         ['product_id', $request->product_id],
                         ['packing_type_id', $request->packing_type_id], 
-                        ['display_shelf_life', '>=', $request->shelf_life],
-                        ['min_weight','<=',$request->weight],
-                        ['max_weight','>=',$request->weight]
+                        ['display_shelf_life', '>=', $request->shelf_life]
                         ]);
+                        if($request->weight){
+                           $data = $data->where('min_weight','<=',$request->weight)
+                                        ->where('max_weight','>=',$request->weight);
+                        }
+                        
                     }else{
                         $data = RecommendationEngine::with('packaging_material')
                         ->where([['status', '1'], ['category_id', $request->category_id], ['product_id', $request->product_id],['packing_type_id', $request->packing_type_id]]);
