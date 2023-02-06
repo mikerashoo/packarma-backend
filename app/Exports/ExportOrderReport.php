@@ -2,7 +2,9 @@
 
 namespace App\Exports;
 
+use App\Models\MeasurementUnit;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\UserAddress;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -38,7 +40,7 @@ class ExportOrderReport implements FromCollection, WithHeadings, WithCustomStart
                     $start_date = Carbon::createFromFormat('d/m/Y', trim($string[0]))->format('d/m/Y');
                     $end_date = Carbon::createFromFormat('d/m/Y', trim($string[1]))->format('d/m/Y');
                 }
-                $sheet->mergeCells('A1:AL1');
+                $sheet->mergeCells('A1:AJ1');
                 $sheet->setCellValue('A1', "Order Based Report (" . $start_date .'-'.$end_date. ')');// . " - " . $end_date . ")");
 
 
@@ -61,7 +63,7 @@ class ExportOrderReport implements FromCollection, WithHeadings, WithCustomStart
                         'rgb' => 'FF000000'
                     ]
                 ];
-                $heading = 'A1:AL1'; // Main Heading
+                $heading = 'A1:AJ1'; // Main Heading
                 $event->sheet->getDelegate()->getStyle($heading)->applyFromArray($styleArray);
                 $event->sheet->getDelegate()->getStyle($heading)->getFont()->applyFromArray($headerFontArray);
 
@@ -99,8 +101,8 @@ class ExportOrderReport implements FromCollection, WithHeadings, WithCustomStart
                     ]
                 ];
 
-                $headerColumn = 'A2:AL2'; // Columns
-                for($i='A';$i!='AM';$i++) {
+                $headerColumn = 'A2:AJ2'; // Columns
+                for($i='A';$i!='AJ';$i++) {
                     $elements = $i;
                     $event->sheet->getDelegate()->getColumnDimension($elements)->setWidth(30);
                 }
@@ -125,11 +127,7 @@ class ExportOrderReport implements FromCollection, WithHeadings, WithCustomStart
             'Product Weight',
             'Measurement Unit',
             'Product Quantity',
-            'Storage Condition',
-            'packaging Machine',
-            'Product Form',
             'Packing Type',
-            'Packaging Treatment',
             'Recommendation Engine',
             'Packaging Material',
             'Currency',
@@ -173,16 +171,11 @@ class ExportOrderReport implements FromCollection, WithHeadings, WithCustomStart
                                            'product',
                                            'category',
                                            'sub_category',
-                                           'product_form',
                                            'packing_type',
-                                           'packaging_machine',
                                            'packaging_material',
-                                           'storage_condition',
-                                           'packaging_treatment',
                                            'recommendation_engine',
                                            'user_address',
                                            'measurement_unit',
-                                           'storage_condition',
                                            'currency',
                                            'state',
                                            'country')
@@ -198,11 +191,7 @@ class ExportOrderReport implements FromCollection, WithHeadings, WithCustomStart
                                   'product_weight',
                                   'measurement_unit_id',
                                   'product_quantity',
-                                  'storage_condition_id',
-                                  'packaging_machine_id',
-                                  'product_form_id',
                                   'packing_type_id',
-                                  'packaging_treatment_id',
                                   'recommendation_engine_id',
                                   'packaging_material_id',
                                   'currency_id',
@@ -256,19 +245,15 @@ class ExportOrderReport implements FromCollection, WithHeadings, WithCustomStart
         $user_orders = $user_orders->orWhereBetween('updated_at',[$start_date,$end_date])->get();
         foreach($user_orders as $order){
             $order->user_id =$order->user->name;
+            $order->measurement_unit_id =  MeasurementUnit::find((Product::find($order->product_id))->unit_id)->unit_symbol;
             $order->vendor_id =$order->vendor->vendor_name;
+            $order->shelf_life = $order->shelf_life!=''? $order->shelf_life:'-';
             $order->category_id =  $order->category->category_name;
             $order->product_id =  $order->product->product_name;
             $order->sub_category_id =  $order->sub_category->sub_category_name;
-            $order->storage_condition_id =  $order->storage_condition->storage_condition_name;
-            $order->packaging_machine_id =  $order->packaging_machine->packaging_machine_name;
-            $order->packaging_treatment_id =  $order->packaging_treatment->packaging_treatment_name;
-            $order->product_form_id =  $order->product_form->product_form_name;
             $order->recommendation_engine_id =  $order->recommendation_engine->engine_name;
             $order->packaging_material_id =  $order->packaging_material->packaging_material_name;
             $order->packing_type_id =  $order->packing_type->packing_name;
-            $order->measurement_unit_id =  $order->measurement_unit->unit_name;
-            $order->storage_condition_id =  $order->storage_condition->storage_condition_title;
             $order->currency_id =  $order->currency->currency_name;
             $order->processing_datetime = $order->processing_datetime!=null? Carbon::parse($order->processing_datetime)->format('Y-m-d'):'-';
             $order->out_for_delivery_datetime = $order->out_for_delivery_datetime!=null? Carbon::parse($order->out_for_delivery_datetime)->format('Y-m-d'):'-';
