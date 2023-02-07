@@ -163,8 +163,8 @@ class ExportVendorQuotationReport implements FromCollection, WithHeadings, WithC
                                            'customer_enquiry')
                                   ->select('vendor_quotations.id',
                                            'vendor_quotations.customer_enquiry_id',
-                                           'vendor_quotations.vendor_price',
                                            'vendor_quotations.vendor_id',
+                                           'vendor_quotations.vendor_price',
                                            'vendor_quotations.product_id',
                                            'vendor_quotations.product_quantity',
                                            'vendor_quotations.mrp',
