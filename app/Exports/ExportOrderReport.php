@@ -242,7 +242,7 @@ class ExportOrderReport implements FromCollection, WithHeadings, WithCustomStart
                $user_orders->whereIn('recommendation_engine_id',$recommendation_engine_ids);
             }
         }
-        $user_orders = $user_orders->orWhereBetween('updated_at',[$start_date,$end_date])->get();
+        $user_orders = $user_orders->get();
         foreach($user_orders as $order){
             $order->user_id =$order->user->name;
             $order->measurement_unit_id =  MeasurementUnit::find((Product::find($order->product_id))->unit_id)->unit_symbol;

@@ -193,7 +193,6 @@ class ExportEnquiryReport implements FromCollection, WithHeadings, WithCustomSta
             
         }
         $user_enquiries = $user_enquiries->whereBetween('created_at',[$start_date,$end_date])
-                                         ->orWhereBetween('updated_at',[$start_date,$end_date])
                                          ->get();
         foreach($user_enquiries as $enquiry){
             $enquiry->user_id =$enquiry->user->name;
