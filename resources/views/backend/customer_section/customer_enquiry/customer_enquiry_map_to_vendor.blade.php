@@ -111,6 +111,7 @@ function getVendorWarehouse(vendor,i)
 {
     var product_id ='<?php echo $data->product_id; ?>';
     var product_quantity = '<?php echo $data->product_quantity; ?>';
+    var packaging_material_id = '<?php echo $data->packaging_material_id; ?>';
 
     $("#vendor_price_bulk").val('');
     $("#commission_rate_bulk").val('');
@@ -119,7 +120,7 @@ function getVendorWarehouse(vendor,i)
         type: "POST",
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         data: {
-            vendor_id: vendor, product_id: product_id,
+            vendor_id: vendor, product_id: product_id, packaging_material_id:packaging_material_id
         },
         success:function(result)
         {
