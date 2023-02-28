@@ -536,10 +536,9 @@ class CustomerEnquiryController extends Controller
     {
         $data['vendor_data'] = Vendor::select('gstin')->find($request->vendor_id);
         $data['vendor_warehouse'] = VendorWarehouse::where("vendor_id", $request->vendor_id)->get();
-        $data['recommendationData'] = RecommendationEngine::where('product_id', $request->product_id)->get();
-        $data['vendorMaterialMapData'] = VendorMaterialMapping::where('packaging_material_id', $data['recommendationData'][0]->packaging_material_id)
-            ->where('vendor_id', $request->vendor_id)
-            ->get();
+        $data['vendorMaterialMapData'] = VendorMaterialMapping::where('packaging_material_id', $request->packaging_material_id)
+                                                              ->where('vendor_id', $request->vendor_id)
+                                                              ->get();
         successMessage('Data fetched successfully', $data);
     }
 
@@ -680,7 +679,6 @@ class CustomerEnquiryController extends Controller
         // print_r($data['customer_enquiry_data']);
         // die;
         // $data = VendorQuotation::find($id);
-
         return view('backend/customer_section/customer_enquiry/map_vendor_form', $data);
     }
 
