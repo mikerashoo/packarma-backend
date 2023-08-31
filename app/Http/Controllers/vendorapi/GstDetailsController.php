@@ -60,7 +60,7 @@ class GstDetailsController extends Controller
 
                     $file_to_unlink =  getFile($vendorGstDetails->gst_certificate, 'vendor_gst_certificate', FALSE, 'unlink');
                     if ($file_to_unlink != 'file_not_found') {
-                        unlink($file_to_unlink);
+                        //unlink($file_to_unlink);
                     }
                 }
 

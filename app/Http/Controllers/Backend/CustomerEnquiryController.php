@@ -491,7 +491,7 @@ class CustomerEnquiryController extends Controller
             if (!empty($notificationData)) {
                 $notificationData['type_id'] = $vendor_quotation_id;
 
-                if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/vendor' . $notificationData['notification_image'])) {
+                if (!empty($notificationData['notification_image']) && \Storage::disk('s3')->exists('notification/vendor'. '/' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
                 }
 
@@ -536,10 +536,9 @@ class CustomerEnquiryController extends Controller
     {
         $data['vendor_data'] = Vendor::select('gstin')->find($request->vendor_id);
         $data['vendor_warehouse'] = VendorWarehouse::where("vendor_id", $request->vendor_id)->get();
-        $data['recommendationData'] = RecommendationEngine::where('product_id', $request->product_id)->get();
-        $data['vendorMaterialMapData'] = VendorMaterialMapping::where('packaging_material_id', $data['recommendationData'][0]->packaging_material_id)
-            ->where('vendor_id', $request->vendor_id)
-            ->get();
+        $data['vendorMaterialMapData'] = VendorMaterialMapping::where('packaging_material_id', $request->packaging_material_id)
+                                                              ->where('vendor_id', $request->vendor_id)
+                                                              ->get();
         successMessage('Data fetched successfully', $data);
     }
 
@@ -552,7 +551,7 @@ class CustomerEnquiryController extends Controller
      */
     public function view($id)
     {
-        $data['data'] = CustomerEnquiry::with('user_address','recommendation_engine')->find($id);
+        $data['data'] = CustomerEnquiry::with('user_address','recommendation_engine','measurement_unit')->find($id);
         $data['addressType'] = addressType();
         $data['customer_enquiry_id'] = getFormatid($data['data']->id, 'customer_enquiries');
         // $data['vendors'] = VendorQuotation::with('vendor', 'vendor_warehouse')->where('customer_enquiry_id', '=', $data['data']->id)->get(); //->pluck('vendor_id')->toArray();
@@ -680,7 +679,6 @@ class CustomerEnquiryController extends Controller
         // print_r($data['customer_enquiry_data']);
         // die;
         // $data = VendorQuotation::find($id);
-
         return view('backend/customer_section/customer_enquiry/map_vendor_form', $data);
     }
 

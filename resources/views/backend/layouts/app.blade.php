@@ -126,7 +126,7 @@
                                 {{-- {{ $lastParam ==  'country' ? 'open' : ''  }}
                                 {{ $lastParam ==  'currency' ? 'open' : ''  }} --}}
                                 {{ $lastParam ==  'subscription' ? 'open' : ''  }}
-                                {{ $lastParam ==  'banner' ? 'open' : ''  }}
+                                {{ $lastParam ==  'banners' ? 'open' : ''  }}
                             ">
                                 <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span data-i18n="" class="menu-title">Master</span></a>
                                 <ul class="menu-content">
@@ -161,7 +161,7 @@
                                         </li>
                                     @endif
                                     @if(in_array('banner', $permission_array) || session('data')['role_id'] == 1)
-                                        <li class="{{ $lastParam ==  'banner' ? 'active' : ''  }}">
+                                        <li class="{{ $lastParam ==  'banners' ? 'active' : ''  }}">
                                             <a href="banners" class="menu-item"><i class="fa fa-circle fs_i"></i>Banner</a>
                                         </li>
                                     @endif

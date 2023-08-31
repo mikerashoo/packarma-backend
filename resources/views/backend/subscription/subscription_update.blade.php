@@ -21,14 +21,14 @@
                                             <div class="col-md-12 row">
                                                 <div class="col-md-6">
                                                     <dl class="row">
-                                                        <dt class="col-sm-5 text-left">Subscription Type :</dt>
-                                                        <dd class="col-sm-7">{{ subscriptionType($data->subscription_type); }}</dd>
+                                                        <dt class="col-md-8 text-left">Subscription Type :</dt>
+                                                        <dd class="col-md-4">{{ subscriptionType($data->subscription_type); }}</dd>
                                                     </dl>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <dl class="row">                                                                        
-                                                        <dt class="col-sm-5 text-left">Subscription Amount :</dt>
-                                                        <dd class="col-sm-7">{{ $data->amount }} </dd>
+                                                        <dt class="col-md-8 text-left">Subscription Amount:</dt>
+                                                        <dd class="col-md-4">{{ $data->amount }} </dd>
                                                     </dl>  
                                                 </div>
                                             </div>                                    
@@ -38,9 +38,18 @@
                         		<div class="row">
                                     <div class="col-sm-6">
                         				<label>Subscription Amount<span style="color:#ff0000">*</span></label>
-                        				<input class="form-control required" type="text" step=".001" id="amount" name="amount" value="{{ $data->amount }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46'><br/>
+                        				<input class="form-control" type="text" step=".001" id="amount" name="amount" value="{{ $data->amount }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46' <?php echo ($data->subscription_type == 'free' ? 'disabled' : '')?>><br/>
                         			</div>                        		
                         		</div>
+                                <?php if($data->subscription_type =='free'){ ?>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label>Duration(in days)<span style="color:#ff0000">*</span></label>
+                                            <input class="form-control required" type="number" id="duration" name="duration" value="{{ $data->duration }}">
+                                            <br/>
+                                        </div>
+                                    </div>
+                                <?php } ?>
                         		<hr>
                         		<div class="row">
                         			<div class="col-sm-12">

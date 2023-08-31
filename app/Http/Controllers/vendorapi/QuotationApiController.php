@@ -195,6 +195,16 @@ class QuotationApiController extends Controller
                     $data[$i]->quote_id = getFormatid($row->id, $main_table);
                     $data[$i]->material_unit_symbol = 'kg';
                     $data[$i]->delivery_in_days_unit = $delivery_in_days_unit;
+                    if($row->product_weight == 0.00){
+                        $data[$i]->product_weight = null;
+                        $data[$i]->unit_name = null;
+                        $data[$i]->unit_symbol = null;
+                    }
+                    if($row->entered_shelf_life == 0){
+                        $data[$i]->entered_shelf_life = null;
+                        $data[$i]->entered_shelf_life_unit = null;
+                    }
+
                     $i++;
                 }
 

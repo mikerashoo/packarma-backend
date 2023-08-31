@@ -395,7 +395,15 @@ class OrderApiController extends Controller
                         $data[$i]->invoice_url =  $url;
                     }
                     $data[$i]->pay_now =  $payNowButton;
-
+                    if($row->product_weight == 0.00){
+                        $data[$i]->product_weight = null;
+                        $data[$i]->unit_name = null;
+                        $data[$i]->unit_symbol = null;
+                    }
+                    if($row->entered_shelf_life == 0){
+                        $row->entered_shelf_life = null;
+                        $row->entered_shelf_life_unit = null;
+                    }
 
                     $i++;
                 }
@@ -878,14 +886,14 @@ class OrderApiController extends Controller
             'product_id' => 'required|integer',
             // 'shelf_life' => 'required|int|digits_between:1,3',
             // 'shelf_life_unit' => 'required',
-            'product_weight' => 'required|numeric',
-            'measurement_unit_id' => 'required|integer',
+            'product_weight' => 'sometimes',
+            'measurement_unit_id' => 'sometimes',
             'product_quantity' => 'required|numeric',
-            'storage_condition_id' => 'required|integer',
-            'packaging_machine_id' => 'required|integer',
-            'product_form_id' => 'required|integer',
+            'storage_condition_id' => 'sometimes|integer',
+            'packaging_machine_id' => 'sometimes|integer',
+            'product_form_id' => 'sometimes|integer',
             'packing_type_id' => 'required|integer',
-            'packaging_treatment_id' => 'required|integer',
+            'packaging_treatment_id' => 'sometimes|integer',
             'recommendation_engine_id' => 'required|integer',
             'packaging_material_id' => 'required|integer',
             'same_address_checkbox' => 'required|in:yes,no',

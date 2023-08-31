@@ -39,12 +39,12 @@
                                             <td>{{$data->display_shelf_life}} (Days)</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Minimum Weight</strong></td>
-                                            <td>{{$data->min_weight.' '.$data->measurement_unit->unit_symbol}}</td>
+                                            <td><strong>Maximum Weight</strong></td>
+                                            <td>{{$data->max_weight.' '}} {{$product->units->unit_symbol}}</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>Maximum Weight</strong></td>
-                                            <td>{{$data->max_weight.' '.$data->measurement_unit->unit_symbol}}</td>
+                                            <td><strong>Minimum Weight</strong></td>
+                                            <td>{{$data->min_weight.' '}} {{$product->units->unit_symbol}}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Minimum Order Quantity</strong></td>

@@ -51,8 +51,6 @@ class PackagingSolutionApiController extends Controller
                     $userSubscriptionCheck = User::find($user_id);
                     $subscriptionEndDate = $userSubscriptionCheck->subscription_end;
                     $todaysDate = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now());
-
-
                     if (($userSubscriptionCheck->subscription_id == 0) || ($subscriptionEndDate < $todaysDate)) {
                         $isSubscribed = false;
                         $msg_data['is_subscribed'] = $isSubscribed;
@@ -68,8 +66,25 @@ class PackagingSolutionApiController extends Controller
                     $offset = ($page_no - 1) * $limit;
 
                     // $data = RecommendationEngine::select('id', 'engine_name', 'structure_type', 'display_shelf_life')
-                    $data = RecommendationEngine::with('packaging_material')
-                        ->where([['status', '1'], ['category_id', $request->category_id], ['product_id', $request->product_id], ['storage_condition_id', $request->storage_condition_id], ['product_form_id', $request->product_form_id], ['packing_type_id', $request->packing_type_id], ['display_shelf_life', '>=', $request->shelf_life]]);
+                    //$primary_type = PackingType::where('packing_name',"Primary Packaging")->first();
+                    //primary packaging id is 1 and below are the formulas
+                    if($request->packing_type_id == config('global.PRIMARY_PACKAGING_TYPE_ID')){
+                        $data = RecommendationEngine::with('packaging_material')
+                        ->where([['status', '1'], ['category_id', $request->category_id], 
+                        ['product_id', $request->product_id],
+                        ['packing_type_id', $request->packing_type_id], 
+                        ['display_shelf_life', '>=', $request->shelf_life]
+                        ]);
+                        if($request->weight){
+                           $data = $data->where('min_weight','<=',$request->weight)
+                                        ->where('max_weight','>=',$request->weight);
+                        }
+                        
+                    }else{
+                        $data = RecommendationEngine::with('packaging_material')
+                        ->where([['status', '1'], ['category_id', $request->category_id], ['product_id', $request->product_id],['packing_type_id', $request->packing_type_id]]);
+                    }
+                   
                     $engineData = RecommendationEngine::whereRaw('1 = 1');
                     if ($request->engine_id) {
                         $engineData = $engineData->where('id', $request->engine_id);
@@ -132,17 +147,14 @@ class PackagingSolutionApiController extends Controller
         return \Validator::make($request->all(), [
             'category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
-            'storage_condition_id' => 'required|numeric',
-            'product_form_id' => 'required|numeric',
             'packing_type_id' => 'required|numeric',
-            'shelf_life' => 'required|integer'
         ])->errors();
     }
 
     /**
      * Created By : Pradyumn Dwivedi
      * Created at : 20-Sept-2022
-     * Uses : Display a listing of the alternatve Packaging Solution (Recommendation engine) based on required parameters.
+     * Uses : Display a listing of the alternative Packaging Solution (Recommendation engine) based on required parameters.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -164,7 +176,8 @@ class PackagingSolutionApiController extends Controller
                 } else {
                     $page_no = 1;
                     $limit = 10;
-                    $orderByArray = ['recommendation_engines.sequence' => 'ASC'];
+                    $orderByArray = ['recommendation_engines.display_shelf_life' => 'ASC',
+                                    'recommendation_engines.sequence' => 'ASC'];
                     $defaultSortByName = false;
                     $user_id = $token['sub'];
                     $userSubscriptionCheck = User::find($user_id);
@@ -187,12 +200,14 @@ class PackagingSolutionApiController extends Controller
                     $offset = ($page_no - 1) * $limit;
 
                     $data = RecommendationEngine::select('id', 'engine_name', 'structure_type', 'sequence', 'product_id', 'min_shelf_life', 'max_shelf_life', 'min_weight', 'max_weight',
-                                                        'measurement_unit_id','approx_price','min_order_quantity','min_order_quantity_unit','category_id','product_form_id','packing_type_id',
+                                                        'approx_price','min_order_quantity','min_order_quantity_unit','category_id','product_form_id','packing_type_id',
                                                         'packaging_machine_id','packaging_treatment_id','packaging_material_id','storage_condition_id','display_shelf_life','meta_title','meta_description','meta_keyword')
                     ->with(['packaging_material' => function ($query) {
                         $query->select('id', 'packaging_material_name', 'material_description','shelf_life','approx_price','wvtr','otr','cof','sit','gsm','special_feature','meta_title','meta_description','meta_keyword');
                     }])
-                    ->where([['status', '1'],['product_id', $request->product_id]]);
+                    ->where([['status', '1'],['product_id', $request->product_id],['packing_type_id', $request->packing_type_id]]);//->toSql();
+                   // print_r($data);
+                   // exit;
 
                     $engineData = RecommendationEngine::whereRaw('1 = 1');
                     if ($request->engine_id) {
@@ -204,8 +219,8 @@ class PackagingSolutionApiController extends Controller
                         $data = $data->where('engine_name', $request->engine_name);
                     }
                     if ($request->display_shelf_life) {
-                        $engineData = $engineData->where('display_shelf_life', $request->display_shelf_life);
-                        $data = $data->where('display_shelf_life', $request->display_shelf_life);
+                        $engineData = $engineData->where('display_shelf_life','>=', $request->display_shelf_life);
+                        $data = $data->where('display_shelf_life','>=', $request->display_shelf_life);
                     }
                     if (empty($engineData->first())) {
                         errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
@@ -231,10 +246,17 @@ class PackagingSolutionApiController extends Controller
                     }
 
                     $i=0;
+                    $min_shelf_life = $data[$i]['display_shelf_life'];
+                    $max_arr_len = 0;
                     foreach($data as $value){
+                        if($min_shelf_life != $value['display_shelf_life']){
+
+                            break;
+                        }
+                        $max_arr_len++;
                         $product_name_db = Product::select('product_name')->where('id',$value['product_id'])->first();
                         $data[$i]['product_name'] = $product_name_db->product_name;
-                        $unit_name_db = MeasurementUnit::select('unit_symbol')->where('id',$value['measurement_unit_id'])->first();
+                        $unit_name_db = MeasurementUnit::select('unit_symbol')->where('id',Product::where('id',$value['product_id'])->pluck('unit_id')[0])->first();
                         $data[$i]['unit_symbol'] = $unit_name_db->unit_symbol;
                         $category_name_db = Category::select('category_name')->where('id',$value['category_id'])->first();
                         $data[$i]['category_name'] = $category_name_db->category_name;
@@ -251,7 +273,11 @@ class PackagingSolutionApiController extends Controller
                         $data[$i]['display_shelf_life_unit'] = 'days';
                         $i++;
                     }
-                    $responseData['result'] = $data;
+                    $data_copy = array();
+                    for($j=0; $j < $max_arr_len; $j++) {
+                        $data_copy[$j] = $data[$j];
+                    }
+                    $responseData['result'] = $data_copy;
                     $responseData['is_subscribed'] = $isSubscribed;
                     $responseData['place_enquiry'] = $placeEnquiry;
                     $responseData['product_packaging_solution'] = $product_packaging_solution;

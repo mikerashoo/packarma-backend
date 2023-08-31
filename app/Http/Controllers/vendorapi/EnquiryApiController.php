@@ -181,6 +181,15 @@ class EnquiryApiController extends Controller
                 foreach ($data as $row) {
                     $data[$i]->enq_id = getFormatid($row->id, $main_table);
                     $data[$i]->material_unit_symbol = 'kg';
+                    if($row->product_weight == 0.00){
+                        $data[$i]->product_weight = null;
+                        $data[$i]->unit_name = null;
+                        $data[$i]->unit_symbol = null;
+                    }
+                    if($row->entered_shelf_life == 0){
+                        $data[$i]->entered_shelf_life = null;
+                        $data[$i]->entered_shelf_life_unit = null;
+                    }
                     $i++;
                 }
 
@@ -365,7 +374,7 @@ class EnquiryApiController extends Controller
                     ->where([['customer_enquiries.id', $enquiry_id], ['customer_enquiries.deleted_at', NULL]])
                     ->leftjoin('packaging_materials', 'customer_enquiries.packaging_material_id', '=', 'packaging_materials.id')->first();
 
-                if (!empty($notificationData['notification_image']) && file_exists(URL::to('/') . '/storage/app/public/uploads/notification/customer' . $notificationData['notification_image'])) {
+                if (!empty($notificationData['notification_image']) && \Storage::disk('s3')->exists('notification/customer'. '/' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/customer');
                 }
 
