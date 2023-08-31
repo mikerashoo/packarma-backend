@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterDeliveryStatusColumnCommentToOrderTable extends Migration
+class AlterEmailUsersTable extends Migration
 {
     /**
      * @author Mohammed Taqi Syed <mohammed.s@mypcot.com>
