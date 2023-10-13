@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddNotificationNameToMessageNotificationsTable extends Migration
+class SubscriptionDataSeederMigration extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class AddNotificationNameToMessageNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('message_notifications', function (Blueprint $table) {
-            //
-        });
+        \DB::table('subscriptions')->truncate();
+        Artisan::call('db:seed', [
+            '--class' => 'SubscriptionDurationSeeder',
+            '--force' => true
+        ]
+
+        );
     }
 
     /**
@@ -25,8 +29,6 @@ class AddNotificationNameToMessageNotificationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('message_notifications', function (Blueprint $table) {
-            $table->string('notification_name', 255)->after('user_type')->unique();
-        });
+        \DB::table('subscriptions')->truncate();
     }
 }

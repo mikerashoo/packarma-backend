@@ -26,7 +26,7 @@ if (!function_exists('errorMessage')) {
         if ($expireSessionCode != "") {
             $return_array['success'] = $expireSessionCode;
         }
-       
+
         if (isset($data) && count($data) > 0)
             $return_array['data'] = $data;
         if (isset($other_data) && !empty($other_data)) {
@@ -34,8 +34,8 @@ if (!function_exists('errorMessage')) {
                 $return_array[$key] = $val;
         }
         if (isset($message_content) && !empty($message_content)) {
-             foreach ($message_content as $key => $val)
-                $msg = str_replace('$$'.$key.'$$', $val, $msg);
+            foreach ($message_content as $key => $val)
+                $msg = str_replace('$$' . $key . '$$', $val, $msg);
         }
         $return_array['message'] = $msg;
         echo json_encode($return_array);
@@ -63,7 +63,7 @@ if (!function_exists('successMessage')) {
 if (!function_exists('generateRandomOTP')) {
     function generateRandomOTP()
     {
-        return (rand(1000,9999));
+        return (rand(1000, 9999));
         // return (1234);
     }
 }
@@ -231,7 +231,7 @@ if (!function_exists('isRecordDeleted')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 01-Mar-2022
- *   Uses :  To fetch value in customer enquiry type       
+ *   Uses :  To fetch value in customer enquiry type
  */
 if (!function_exists('customerEnquiryType')) {
     function customerEnquiryType($displayValue = "", $allKeys = false)
@@ -253,7 +253,7 @@ if (!function_exists('customerEnquiryType')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 01-Mar-2022
- *   Uses :  To fetch value in customer enquiry quote type       
+ *   Uses :  To fetch value in customer enquiry quote type
  */
 if (!function_exists('customerEnquiryQuoteType')) {
     function customerEnquiryQuoteType($displayValue = "", $allKeys = false)
@@ -279,7 +279,7 @@ if (!function_exists('customerEnquiryQuoteType')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 01-Mar-2022
- *   Uses :  To fetch value in customer enquiry quote type       
+ *   Uses :  To fetch value in customer enquiry quote type
  */
 if (!function_exists('vendorEnquiryStatus')) {
     function vendorEnquiryStatus($displayValue = "", $allKeys = false)
@@ -306,7 +306,7 @@ if (!function_exists('vendorEnquiryStatus')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 03-Mar-2022
- *   Uses :  To fetch value in subscription type       
+ *   Uses :  To fetch value in subscription type
  */
 if (!function_exists('subscriptionType')) {
     function subscriptionType($displayValue = "", $allKeys = false)
@@ -315,7 +315,8 @@ if (!function_exists('subscriptionType')) {
             'monthly' => 'Monthly',
             'quarterly' => 'Quarterly',
             'semi_yearly' => 'Semi Yearly',
-            'yearly' => 'Yearly'
+            'yearly' => 'Yearly',
+            'free' => 'Free'
         );
         if (!empty($displayValue)) {
             $returnArray = $returnArray[$displayValue];
@@ -335,7 +336,7 @@ if (!function_exists('subscriptionType')) {
 if (!function_exists('solutionStructureType')) {
     function solutionStructureType($displayValue = "", $allKeys = false)
     {
-        $returnArray = array('Economical Solution','Advance Solution','Sustainable Solution');
+        $returnArray = array('Economical Solution', 'Advance Solution', 'Sustainable Solution');
         if (!empty($displayValue)) {
             $returnArray = $returnArray[$displayValue];
         }
@@ -349,7 +350,7 @@ if (!function_exists('solutionStructureType')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 03-Mar-2022
- *   Uses :  To fetch value in order delivery status type       
+ *   Uses :  To fetch value in order delivery status type
  */
 if (!function_exists('deliveryStatus')) {
     function deliveryStatus($displayValue = "", $allKeys = false)
@@ -375,7 +376,7 @@ if (!function_exists('deliveryStatus')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 03-Mar-2022
- *   Uses :  To fetch value in order payment status type       
+ *   Uses :  To fetch value in order payment status type
  */
 if (!function_exists('paymentStatus')) {
     function paymentStatus($displayValue = "", $allKeys = false)
@@ -398,7 +399,7 @@ if (!function_exists('paymentStatus')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 03-Mar-2022
- *   Uses :  To fetch value in order payment status type       
+ *   Uses :  To fetch value in order payment status type
  */
 if (!function_exists('customerPaymentStatus')) {
     function customerPaymentStatus($displayValue = "", $allKeys = false)
@@ -420,7 +421,7 @@ if (!function_exists('customerPaymentStatus')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 03-Mar-2022
- *   Uses :  To fetch value in order payment during payment status type       
+ *   Uses :  To fetch value in order payment during payment status type
  */
 if (!function_exists('paymentStatusType')) {
     function paymentStatusType($displayValue = "", $allKeys = false)
@@ -442,7 +443,7 @@ if (!function_exists('paymentStatusType')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 10-Mar-2022
- *   Uses :  To fetch value in user subscription payment status type       
+ *   Uses :  To fetch value in user subscription payment status type
  */
 if (!function_exists('subscriptionPaymentStatus')) {
     function subscriptionPaymentStatus($displayValue = "", $allKeys = false)
@@ -465,7 +466,7 @@ if (!function_exists('subscriptionPaymentStatus')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 10-Mar-2022
- *   Uses :  To fetch value in user subscription payment mode type       
+ *   Uses :  To fetch value in user subscription payment mode type
  */
 if (!function_exists('paymentMode')) {
     function paymentMode($displayValue = "", $allKeys = false)
@@ -489,7 +490,7 @@ if (!function_exists('paymentMode')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 06-may-2022
- *   Uses :  To fetch payment value in customer and subscription payment mode type       
+ *   Uses :  To fetch payment value in customer and subscription payment mode type
  */
 if (!function_exists('onlinePaymentMode')) {
     function onlinePaymentMode($displayValue = "", $allKeys = false)
@@ -510,7 +511,7 @@ if (!function_exists('onlinePaymentMode')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 18-Mar-2022
- *   Uses :  To fetch value in user message user type       
+ *   Uses :  To fetch value in user message user type
  */
 if (!function_exists('messageUserType')) {
     function messageUserType($displayValue = "", $allKeys = false)
@@ -533,7 +534,7 @@ if (!function_exists('messageUserType')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 18-Mar-2022
- *   Uses :  To fetch value in user message message trigger       
+ *   Uses :  To fetch value in user message message trigger
  */
 if (!function_exists('messageTrigger')) {
     function messageTrigger($displayValue = "", $allKeys = false)
@@ -556,7 +557,7 @@ if (!function_exists('messageTrigger')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 29-April-2022
- *   Uses :  To fetch value in measurement  message trigger       
+ *   Uses :  To fetch value in measurement  message trigger
  */
 if (!function_exists('measurementUnitForm')) {
     function measurementUnitForm($displayValue = "", $allKeys = false)
@@ -619,7 +620,7 @@ if (!function_exists('allOrderBy')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 11-May-2022
- *   Uses :  To fetch value in user address       
+ *   Uses :  To fetch value in user address
  */
 if (!function_exists('addressType')) {
     function addressType($displayValue = "", $allKeys = false)
@@ -641,7 +642,7 @@ if (!function_exists('addressType')) {
 /**
  *   created by : Pradyumn Dwivedi
  *   Created On : 21-May-2022
- *   Uses :  To fetch value in gst type dropdown in customer enquiry map to vendor       
+ *   Uses :  To fetch value in gst type dropdown in customer enquiry map to vendor
  */
 if (!function_exists('gstType')) {
     function gstType($displayValue = "", $allKeys = false)
@@ -664,7 +665,7 @@ if (!function_exists('gstType')) {
 /**
  *   created by : Maaz Ansari
  *   Created On : 14-June-2022
- *   Uses :  to get pin code details   
+ *   Uses :  to get pin code details
  */
 
 
@@ -761,7 +762,7 @@ if (!function_exists('convertNumberToWord')) {
  * Created by : Pradyumn Dwivedi.
  * Created at : 18-Oct-2022
  * Use : Converting Currency Numbers to words currency format
- * 
+ *
  */
 if (!function_exists('currencyConvertToWord')) {
     function currencyConvertToWord($number = false)
@@ -772,16 +773,18 @@ if (!function_exists('currencyConvertToWord')) {
         $digits_1 = strlen($no);
         $i = 0;
         $str = array();
-        $words = array('0' => '', '1' => 'one', '2' => 'two',
+        $words = array(
+            '0' => '', '1' => 'one', '2' => 'two',
             '3' => 'three', '4' => 'four', '5' => 'five', '6' => 'six',
             '7' => 'seven', '8' => 'eight', '9' => 'nine',
             '10' => 'ten', '11' => 'eleven', '12' => 'twelve',
             '13' => 'thirteen', '14' => 'fourteen',
             '15' => 'fifteen', '16' => 'sixteen', '17' => 'seventeen',
-            '18' => 'eighteen', '19' =>'nineteen', '20' => 'twenty',
+            '18' => 'eighteen', '19' => 'nineteen', '20' => 'twenty',
             '30' => 'thirty', '40' => 'forty', '50' => 'fifty',
             '60' => 'sixty', '70' => 'seventy',
-            '80' => 'eighty', '90' => 'ninety');
+            '80' => 'eighty', '90' => 'ninety'
+        );
         $digits = array('', 'hundred', 'thousand', 'lakh', 'crore');
         while ($i < $digits_1) {
             $divider = ($i == 2) ? 10 : 100;
@@ -791,7 +794,7 @@ if (!function_exists('currencyConvertToWord')) {
             if ($number) {
                 $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
                 $hundred = ($counter == 1 && $str[0]) ? ' ' : null;
-                $str [] = ($number < 21) ? $words[$number] .
+                $str[] = ($number < 21) ? $words[$number] .
                     " " . $digits[$counter] . $plural . " " . $hundred
                     :
                     $words[floor($number / 10) * 10]
@@ -802,8 +805,8 @@ if (!function_exists('currencyConvertToWord')) {
         $str = array_reverse($str);
         $result = implode('', $str);
         $points = ($point) ?
-            " and " . $words[$point / 10] . " " . 
-                $words[$point = $point % 10] . " Paise" : '';
+            " and " . $words[$point / 10] . " " .
+            $words[$point = $point % 10] . " Paise" : '';
         return ucwords($result . "Rupees  " . $points);
     }
 }
@@ -814,9 +817,9 @@ if (!function_exists('currencyConvertToWord')) {
  * Use : function to format numbers to nearest thousands such as Kilos, Millions, Billions, and Trillions with comma
  */
 if (!function_exists('thousandsCurrencyFormat')) {
-        function thousandsCurrencyFormat($num = false)
-        {
-        if($num > 1000) {
+    function thousandsCurrencyFormat($num = false)
+    {
+        if ($num > 1000) {
             $x = round($num);
             $x_number_format = number_format($x);
             $x_array = explode(',', $x_number_format);
@@ -834,7 +837,7 @@ if (!function_exists('thousandsCurrencyFormat')) {
 /**
  *   created by : Maaz Ansari
  *   Created On : 21-july-2022
- *   Uses :  to disply message  
+ *   Uses :  to disply message
  */
 
 
@@ -845,11 +848,11 @@ if (!function_exists('displayMessage')) {
             case 'qoutation_accepted_by_customer':
                 $final_msg = 'Customer has already accepted the qoutation for vendor  ' . $value;
                 break;
-            
+
             case 'qoutation_rejected_by_customer':
                 $final_msg = 'Customer has rejected the qoutation for vendor  ' . $value;
                 break;
-            
+
             case 'enquiry_order':
                 $final_msg = 'Customer already placed order';
                 break;
@@ -872,7 +875,7 @@ if (!function_exists('displayMessage')) {
 /**
  *   created by : Maaz Ansari
  *   Created On : 27-july-2022
- *   Uses :  calculate subscription  
+ *   Uses :  calculate subscription
  */
 
 
@@ -908,6 +911,14 @@ if (!function_exists('calcCustomerSubscription')) {
 
             $newDateTime = Carbon::now()->addDays(360)->toArray();
             $subscription_end_date =  $newDateTime['formatted'];
+        }
+        if ($subscription->subscription_type == 'free') {
+            $currentDateTime = Carbon::now()->toArray();
+            $subscription_start_date = $currentDateTime['formatted'];
+            \Log::info($subscription->duration);
+            $newDateTime = Carbon::now()->addDays($subscription->duration)->toArray();
+            $subscription_end_date =  $newDateTime['formatted'];
+            \Log::info($subscription_end_date);
         }
         if ($user->subscription_end != null && $user->subscription_end > $subscription_start_date) {
             $diff_days = strtotime($user->subscription_end) - strtotime($subscription_start_date);
@@ -1008,7 +1019,7 @@ if (!function_exists('sendEmail')) {
 }
 
 if (!function_exists('sendFcmNotification')) {
-    function sendFcmNotification($fcm_ids = array(), $notification_data = array(), $for = 'vendor', $id)
+    function sendFcmNotification($fcm_ids = array(), $notification_data = array(), $for = 'vendor', $id = null)
     {
         $auth_key = config('global.TEST_VENDOR_FCM_SERVER_KEY');
         if ($for == 'customer') {
@@ -1022,7 +1033,7 @@ if (!function_exists('sendFcmNotification')) {
 
             if (is_array($fcm_ids)) {
                 $auth_token = $auth_token;
-                
+
                 //FCM MSG DATA
                 $data_array['title']        = $notification_data['title'];
                 $data_array['body']         = $notification_data['body'];
@@ -1034,10 +1045,10 @@ if (!function_exists('sendFcmNotification')) {
                 // $device_array = $fcm_ids;
                 //store fcm id to device array
                 $device_array = array();
-                foreach($fcm_ids as $key => $val){
-                        $device_array[] = $val;
+                foreach ($fcm_ids as $key => $val) {
+                    $device_array[] = $val;
                 }
-                
+
                 $array_chunk_length = 500;
                 $deviceArrayChunk = array_chunk($device_array, $array_chunk_length, true);
                 $is_post = true;
@@ -1098,14 +1109,15 @@ if (!function_exists('fcmCallingToCurl')) {
  * Uses: To show only first 2 and last 4 character
  */
 if (!function_exists('maskPhoneNumber')) {
-    function maskPhoneNumber($phoneNumber = ''){
+    function maskPhoneNumber($phoneNumber = '')
+    {
         $phoneNumberLength = strlen($phoneNumber);
-        $returnP1 = substr($phoneNumber, 0,1);
+        $returnP1 = substr($phoneNumber, 0, 1);
         $returnP2 = substr($phoneNumber, -4);
 
         $paddingLength = $phoneNumberLength - 4;
         $finalP1 = str_pad($returnP1, $paddingLength, 'X');
-        $result = $finalP1.$returnP2;
+        $result = $finalP1 . $returnP2;
         return $result;
     }
 }
@@ -1116,14 +1128,15 @@ if (!function_exists('maskPhoneNumber')) {
  * Uses: To show only first 6 and last 4 character
  */
 if (!function_exists('maskCardNumber')) {
-    function maskCardNumber($cardNumber = '',$isWallet=false) {
+    function maskCardNumber($cardNumber = '', $isWallet = false)
+    {
         $cardNumberLength = strlen($cardNumber);
         $returnP1 = substr($cardNumber, 0, 6);
         $returnP2 = substr($cardNumber, -4);
         $paddingLength = $cardNumberLength - 6;
-        if($isWallet){ 
-        $returnP1 = substr($cardNumber, 0,0);
-        $paddingLength = $cardNumberLength - 4;
+        if ($isWallet) {
+            $returnP1 = substr($cardNumber, 0, 0);
+            $paddingLength = $cardNumberLength - 4;
         }
         $finalP1 = str_pad($returnP1, $paddingLength, 'X');
         $result = $finalP1 . $returnP2;
@@ -1137,9 +1150,10 @@ if (!function_exists('maskCardNumber')) {
  * Uses: To show only first 6 and last 4 character
  */
 if (!function_exists('maskVendorName')) {
-    function maskVendorName($vendorName = '') {
+    function maskVendorName($vendorName = '')
+    {
         $vendorNameLength = strlen($vendorName);
-        $returnP1 = substr($vendorName, 0,2);
+        $returnP1 = substr($vendorName, 0, 2);
 
         // $returnP2 = substr($vendorName, -2);
         // $paddingLength = $vendorNameLength - 2;
@@ -1161,14 +1175,15 @@ if (!function_exists('maskVendorName')) {
  * Uses: Store notification history in table for customer and vendor
  */
 if (!function_exists('storeNotificationHistory')) {
-    function storeNotificationHistory($fcm_ids = array(), $notification_data = array(), $for, $id) {
+    function storeNotificationHistory($fcm_ids = array(), $notification_data = array(), $for = '', $id = null)
+    {
         //store fcm notification history
         $current_datetime = Carbon::now()->format('Y-m-d H:i:s');
         $device_array = array();
         $customer_notification = array();
         $vendor_notification = array();
-        $i=0;
-        foreach($fcm_ids as $key => $val){
+        $i = 0;
+        foreach ($fcm_ids as $key => $val) {
             $device_array[] = $val;
             if ($for == 'customer' && !empty($val) && !empty($key)) {
                 $customer_notification[$i]['user_id'] = $id;

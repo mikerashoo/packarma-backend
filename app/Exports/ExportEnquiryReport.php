@@ -40,7 +40,7 @@ class ExportEnquiryReport implements FromCollection, WithHeadings, WithCustomSta
                     $start_date = Carbon::createFromFormat('d/m/Y', trim($string[0]))->format('d/m/Y');
                     $end_date = Carbon::createFromFormat('d/m/Y', trim($string[1]))->format('d/m/Y');
                 }
-                $sheet->mergeCells('A1:R1');
+                $sheet->mergeCells('A1:M1');
                 $sheet->setCellValue('A1', "Customer Enquiry Based Report (" . $start_date .'-'.$end_date. ')');// . " - " . $end_date . ")");
 
 
@@ -63,7 +63,7 @@ class ExportEnquiryReport implements FromCollection, WithHeadings, WithCustomSta
                         'rgb' => 'FF000000'
                     ]
                 ];
-                $heading = 'A1:R1'; // Main Heading
+                $heading = 'A1:M1'; // Main Heading
                 $event->sheet->getDelegate()->getStyle($heading)->applyFromArray($styleArray);
                 $event->sheet->getDelegate()->getStyle($heading)->getFont()->applyFromArray($headerFontArray);
 
@@ -101,8 +101,8 @@ class ExportEnquiryReport implements FromCollection, WithHeadings, WithCustomSta
                     ]
                 ];
 
-                $headerColumn = 'A2:R2'; // Columns
-                $columns = range('A', 'R');
+                $headerColumn = 'A2:M2'; // Columns
+                $columns = range('A', 'M');
                 foreach ($columns as $elements) {
                     $event->sheet->getDelegate()->getColumnDimension($elements)->setWidth(20);
                 }
@@ -124,11 +124,7 @@ class ExportEnquiryReport implements FromCollection, WithHeadings, WithCustomSta
             'Product Name',
             'Product Quantity',
             'Shelf Life',
-            'Storage Condition',
-            'Packaging Machine',
-            'Product Form',
             'Packing Type',
-            'Packaging Treatment',
             'Recommendation Engine',
             'Packaging Material',
             'Enquiry Status',
@@ -153,12 +149,8 @@ class ExportEnquiryReport implements FromCollection, WithHeadings, WithCustomSta
                                            'product',
                                            'category',
                                            'sub_category',
-                                           'product_form',
                                            'packing_type',
-                                           'packaging_machine',
                                            'packaging_material',
-                                           'storage_condition',
-                                           'packaging_treatment',
                                            'recommendation_engine')
                                   ->select('id',
                                            'user_id',
@@ -168,11 +160,7 @@ class ExportEnquiryReport implements FromCollection, WithHeadings, WithCustomSta
                                            'product_id',
                                            'product_quantity',
                                            'shelf_life',
-                                           'storage_condition_id',
-                                           'packaging_machine_id',
-                                           'product_form_id',
                                            'packing_type_id',
-                                           'packaging_treatment_id',
                                            'recommendation_engine_id',
                                            'packaging_material_id',
                                            'quote_type',
@@ -205,23 +193,17 @@ class ExportEnquiryReport implements FromCollection, WithHeadings, WithCustomSta
             
         }
         $user_enquiries = $user_enquiries->whereBetween('created_at',[$start_date,$end_date])
-                                         ->orWhereBetween('updated_at',[$start_date,$end_date])
                                          ->get();
         foreach($user_enquiries as $enquiry){
             $enquiry->user_id =$enquiry->user->name;
             $enquiry->category_id =  $enquiry->category->category_name;
             $enquiry->product_id =  $enquiry->product->product_name;
             $enquiry->sub_category_id =  $enquiry->sub_category->sub_category_name;
-            $enquiry->storage_condition_id =  $enquiry->storage_condition->storage_condition_title;
-            $enquiry->packaging_machine_id =  $enquiry->packaging_machine->packaging_machine_name;
-            $enquiry->packaging_treatment_id =  $enquiry->packaging_treatment->packaging_treatment_name;
-            $enquiry->product_form_id =  $enquiry->product_form->product_form_name;
             $enquiry->recommendation_engine_id =  $enquiry->recommendation_engine->engine_name;
             $enquiry->packaging_material_id =  $enquiry->packaging_material->packaging_material_name;
             $enquiry->packing_type_id =  $enquiry->packing_type->packing_name;
             $enquiry->country_id =  $enquiry->country->country_name;
             $enquiry->quote_type = customerEnquiryQuoteType($enquiry->quote_type);
-            $enquiry->enquiry_type = customerEnquiryType($enquiry->enquiry_type);
         }
         return $user_enquiries;
     }

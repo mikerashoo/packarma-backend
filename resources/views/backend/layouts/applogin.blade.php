@@ -8,8 +8,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="public/backend/img/ico/favicon.png">
     <title>@yield('title')</title>
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900%7CMontserrat:300,400,500,600,700,800,900" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{url('public/backend/fonts/feather/style.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{url('public/backend/fonts/simple-line-icons/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('public/backend/fonts/feather/style.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('public/backend/fonts/simple-line-icons/style.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url('public/backend/fonts/font-awesome/css/font-awesome.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url('public/backend/vendors/css/perfect-scrollbar.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url('public/backend/vendors/css/prism.min.css')}}">
@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="{{url('public/backend/css/bootstrap-extended.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url('public/backend/css/colors.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url('public/backend/css/components.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{url('public/backend/css/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('public/backend/css/style.css')}}">
     <link rel="stylesheet" href="{{url('public/backend/css/pages/authentication.css')}}">
     <script src="{{url('public/backend/js/jquery-3.2.1.min.js')}}"></script>
     <script src="{{url('public/backend/vendors/js/core/bootstrap.min.js')}}" type="text/javascript"></script>
