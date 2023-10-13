@@ -15,4 +15,11 @@ return [
 
     'not_found' => 'Profile Details Not Found',
     'info_fetch' => 'Profile Fetch Successfully ',
+    'credits_fetch' => 'User Credits Fetch Successfully ',
+    'credits_history_fetch' => 'User Credits History Fetch Successfully ',
+    'credits_added' => 'User Credits Added Successfully ',
+    'invalid_enquery_id' => 'Wrong Enquery for user ',
+    'credit_limit' => 'User has no credit remaining',
+    'enquery_result_credit_deduct' => 'Enquery result',
+    'credit_deduct' => 'User Credits Deducted Successfully',
 ];

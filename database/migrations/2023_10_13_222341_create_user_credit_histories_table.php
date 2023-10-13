@@ -16,7 +16,7 @@ class CreateUserCreditHistoriesTable extends Migration
         Schema::create('user_credit_histories', function (Blueprint $table) {
             $table->integer('user_id')->default(0);
             $table->integer('amount')->default(0);
-            $table->integer('transaction_idphp')->default(0);
+            $table->integer('transaction_id')->default(0);
             $table->enum('action', ['add', 'deduct']);
             $table->string('reason')->default('');
             $table->softDeletes();

@@ -50,6 +50,7 @@ class User extends Authenticatable implements JWTSubject
         'type',
         'gstin',
         'gst_certificate',
+        'current_credit_amount'
     ];
 
     /**
