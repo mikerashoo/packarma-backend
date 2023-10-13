@@ -22,6 +22,7 @@ class UserSubscriptionPayment extends Model
     protected $fillable = [
         'user_id',
         'subscription_id',
+        'transaction_id',
         'amount',
         'subscription_type',
         'payment_reference',

@@ -8,7 +8,13 @@ use App\Models\Subscription;
 use App\Models\UserSubscriptionPayment;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\FacadesLog;
+use Illuminate\Support\FacadesValidator;
+use Illuminate\Validation\Rule;
 use Response;
+use stdClass;
 
 class UserSubscriptionPaymentApiController extends Controller
 {
@@ -33,10 +39,10 @@ class UserSubscriptionPaymentApiController extends Controller
 
                 $validationErrors = $this->validateNewSubscriptionPayment($request);
                 if (count($validationErrors)) {
-                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
-                \Log::info("Subscription payment started!");
+                Log::info("Subscription payment started!");
 
                 // $user = User::find(auth('api')->user()->id);
                 $Subscription = Subscription::find($request->subscription_id);
@@ -57,8 +63,8 @@ class UserSubscriptionPaymentApiController extends Controller
                         );
                         $razorpay_order_id = $razorpay_order['id'];
                     }
-                    $already_availed = UserSubscriptionPayment::where('user_id',$user_id)->where('subscription_type','free')->first();
-                    if($already_availed&&$Subscription->subscription_type=='free'){
+                    $already_availed = UserSubscriptionPayment::where('user_id', $user_id)->where('subscription_type', 'free')->first();
+                    if ($already_availed && $Subscription->subscription_type == 'free') {
                         errorMessage(__('subscription.already_availed'), $msg_data, 400);
                     }
                     $userSubscriptionPayment = new UserSubscriptionPayment();
@@ -82,7 +88,6 @@ class UserSubscriptionPaymentApiController extends Controller
                         $data['success'] = 200;
                         $data['message'] = __('subscription.you_have_successfully_subscribed');
                         $updateUser = calcCustomerSubscription($user_id, $Subscription->id);
-
                     } else {
                         $data['gateway_id'] = $razorpay_order_id;
                         $data['razorpay_api_key'] = config('app.testRazerpayKeyId');
@@ -99,7 +104,7 @@ class UserSubscriptionPaymentApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data, 400);
             }
         } catch (\Exception $e) {
-            \Log::error("My new Subscription payment failed: " . $e->getMessage());
+            Log::error("My new Subscription payment failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
@@ -124,13 +129,13 @@ class UserSubscriptionPaymentApiController extends Controller
 
                 $validationErrors = $this->validatePaymentSuccess($request);
                 if (count($validationErrors)) {
-                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
-                \Log::info("Checking Payment success status!");
+                Log::info("Checking Payment success status!");
 
                 // $user = User::find(auth('api')->user()->id);
-                
+
                 $api = new Api(config('app.testRazerpayKeyId'), config('app.testRazerpayKeySecrete'));
                 try {
                     $payment = $api->payment->fetch($request->gateway_key);
@@ -147,8 +152,9 @@ class UserSubscriptionPaymentApiController extends Controller
                         $subscriptionPayment->call_from = $platform;
                         $subscriptionPayment->ip_address = $ip_address;
                         $subscriptionPayment->payment_status = 'paid';
+                        $subscriptionPayment->transaction_id = $request->transaction_id ?? 0;
                         $subscriptionPayment->save();
-                        //update subscription status in users table 
+                        //update subscription status in users table
                         $updateUser = calcCustomerSubscription($user_id, $subscriptionPayment->subscription_id);
                         // return response()->json(['msg' => 'Subscribed successfully'], 200);
                         successMessage(__('subscription.you_have_successfully_subscribed'), $msg_data);
@@ -164,9 +170,57 @@ class UserSubscriptionPaymentApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("My subscription payment success checking failed: " . $e->getMessage());
+            Log::error("My subscription payment success checking failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
+    }
+
+    public function subscriptionHistory(Request $request)
+    {
+        $msg_data = array();
+
+        try {
+
+            $validateRequest = Validator::make(
+                $request->all(),
+                [
+                    'user_id' => ['required', Rule::exists('users', 'id')],
+                ],
+            );
+
+            if ($validateRequest->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateRequest->errors()
+                ], 401);
+            }
+
+
+            $userId = $request->user_id;
+            $enqueryId = $request->enquery_id;
+            $user = User::select('id', 'subscription_id')->where('id', $userId)->first();
+            $history = UserSubscriptionPayment::where('user_id', $userId)->get();
+
+            // $data->enq = $customerEnquery;
+            $currentSubsctription = UserSubscriptionPayment::find($user->subscription_id);
+            $data = new stdClass;
+            $data->current_subscription = $currentSubsctription;
+            $data->history = $history;
+
+            $msg_data['result'] = $data;
+
+            successMessage(__('subscription.user_subscription_history_fetched'), $msg_data);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $e->getMessage()
+            ], 500);
+            Log::error("Adding credit failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+        // return $user;,
     }
 
 
@@ -174,7 +228,7 @@ class UserSubscriptionPaymentApiController extends Controller
      * Created By : Maaz Ansari
      * Created at : 22/07/2022
      * Uses : To validate order payment request
-     * 
+     *
      * Validate request for registeration.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -182,7 +236,7 @@ class UserSubscriptionPaymentApiController extends Controller
      */
     private function validateNewSubscriptionPayment(Request $request)
     {
-        return \Validator::make($request->all(), [
+        return Validator::make($request->all(), [
             'subscription_id' => 'required|numeric'
         ])->errors();
     }
@@ -191,7 +245,7 @@ class UserSubscriptionPaymentApiController extends Controller
      * Created By : Maaz Ansari
      * Created at : 22/07/2022
      * Uses : To validate payment success request
-     * 
+     *
      * Validate request for registeration.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -199,7 +253,7 @@ class UserSubscriptionPaymentApiController extends Controller
      */
     private function validatePaymentSuccess(Request $request)
     {
-        return \Validator::make($request->all(), [
+        return Validator::make($request->all(), [
             'gateway_id' => 'sometimes',
             'gateway_key' => 'sometimes'
         ])->errors();

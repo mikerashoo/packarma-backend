@@ -29,6 +29,8 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/credit-history', 'UserCreditController@creditHistory');
     });
 
+    Route::post('/user-subscription-history', 'UserSubscriptionPaymentApiController@subscriptionHistory');
+
     Route::middleware(['tokenAuth'])->group(function () {
         //Product
         Route::post('/products/listing', 'ProductApiController@index');
