@@ -57,8 +57,8 @@ class UserSubscriptionPaymentApiController extends Controller
                         );
                         $razorpay_order_id = $razorpay_order['id'];
                     }
-                    $already_availed = UserSubscriptionPayment::where('user_id',$user_id)->where('subscription_type','free')->first();
-                    if($already_availed&&$Subscription->subscription_type=='free'){
+                    $already_availed = UserSubscriptionPayment::where('user_id', $user_id)->where('subscription_type', 'free')->first();
+                    if ($already_availed && $Subscription->subscription_type == 'free') {
                         errorMessage(__('subscription.already_availed'), $msg_data, 400);
                     }
                     $userSubscriptionPayment = new UserSubscriptionPayment();
@@ -82,7 +82,6 @@ class UserSubscriptionPaymentApiController extends Controller
                         $data['success'] = 200;
                         $data['message'] = __('subscription.you_have_successfully_subscribed');
                         $updateUser = calcCustomerSubscription($user_id, $Subscription->id);
-
                     } else {
                         $data['gateway_id'] = $razorpay_order_id;
                         $data['razorpay_api_key'] = config('app.testRazerpayKeyId');
@@ -130,7 +129,7 @@ class UserSubscriptionPaymentApiController extends Controller
                 \Log::info("Checking Payment success status!");
 
                 // $user = User::find(auth('api')->user()->id);
-                
+
                 $api = new Api(config('app.testRazerpayKeyId'), config('app.testRazerpayKeySecrete'));
                 try {
                     $payment = $api->payment->fetch($request->gateway_key);
@@ -147,8 +146,9 @@ class UserSubscriptionPaymentApiController extends Controller
                         $subscriptionPayment->call_from = $platform;
                         $subscriptionPayment->ip_address = $ip_address;
                         $subscriptionPayment->payment_status = 'paid';
+                        $subscriptionPayment->transaction_id = $request->transaction_id ?? 0;
                         $subscriptionPayment->save();
-                        //update subscription status in users table 
+                        //update subscription status in users table
                         $updateUser = calcCustomerSubscription($user_id, $subscriptionPayment->subscription_id);
                         // return response()->json(['msg' => 'Subscribed successfully'], 200);
                         successMessage(__('subscription.you_have_successfully_subscribed'), $msg_data);
@@ -174,7 +174,7 @@ class UserSubscriptionPaymentApiController extends Controller
      * Created By : Maaz Ansari
      * Created at : 22/07/2022
      * Uses : To validate order payment request
-     * 
+     *
      * Validate request for registeration.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -191,7 +191,7 @@ class UserSubscriptionPaymentApiController extends Controller
      * Created By : Maaz Ansari
      * Created at : 22/07/2022
      * Uses : To validate payment success request
-     * 
+     *
      * Validate request for registeration.
      *
      * @param  \Illuminate\Http\Request  $request
