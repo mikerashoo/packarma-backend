@@ -22,6 +22,13 @@ Route::middleware(['basicAuth'])->group(function () {
     Route::post('/forgot_password_api', 'ForgotPasswordApiController@index');
     Route::post('/customer_general_info_all', 'CustomerGeneralInfoApiController@customerGeneralInforAll');
 
+    Route::prefix('credits')->group(function () {
+        Route::post('/user-credits', 'UserCreditController@index');
+        Route::post('/add-user-credits', 'UserCreditController@addCredits');
+        Route::post('/on-enquery-result', 'UserCreditController@onEnqueryResult');
+        Route::post('/credit-history', 'UserCreditController@creditHistory');
+    });
+
     Route::middleware(['tokenAuth'])->group(function () {
         //Product
         Route::post('/products/listing', 'ProductApiController@index');
@@ -101,7 +108,7 @@ Route::middleware(['basicAuth'])->group(function () {
         //Change Password
         Route::post('/my_profile/change_password_api', 'ChangePasswordApiController@index');
 
-        //Customer Enquiry Quote 
+        //Customer Enquiry Quote
         Route::post('/customer_quote/my_listing', 'CustomerQuoteApiController@index');
         Route::post('/customer_quote/my_accept_quotation', 'CustomerQuoteApiController@accept_quotation');
         Route::post('/customer_quote/my_reject_quotation', 'CustomerQuoteApiController@reject_quotation');
@@ -151,4 +158,3 @@ Route::middleware(['basicAuth'])->group(function () {
     });
 });
 Route::post('/customer_app_version', 'CustomerVersionControlApiController@index');
-
