@@ -18,6 +18,8 @@ class UserCreditHistory extends Model
         'action',
         'reason',
         'transaction_id',
+        'amount_paid',
+        'expire_date',
         'created_at'
     ];
 }

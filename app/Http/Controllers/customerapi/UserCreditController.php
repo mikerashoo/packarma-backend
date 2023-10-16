@@ -57,6 +57,8 @@ class UserCreditController extends Controller
                 [
                     'user_id' => ['required', Rule::exists('users', 'id')],
                     'amount' => ['required', 'numeric', 'min:0'],
+                    'amount_paid' => ['required', 'numeric', 'min:0'],
+                    'expire_date' => ['required', 'date'],
                     'transaction_id' => ['numeric'],
                     'reason' => 'required'
                 ],
@@ -84,6 +86,8 @@ class UserCreditController extends Controller
                     'user_id' => $request->user_id,
                     'amount' => $request->amount,
                     'reason' => $request->reason,
+                    'amount_paid' => $request->amount_paid,
+                    'expire_date' => $request->expire_date,
                     'transaction_id' => $request->transaction_id ?? 0,
                     'action' => 'add'
                 ]
@@ -254,7 +258,9 @@ class UserCreditController extends Controller
                 'amount',
                 'reason',
                 'action',
-
+                'amount_paid',
+                'expire_date',
+                'created_at'
             )->where('user_id', $userId)->get();
 
             // $data->enq = $customerEnquery;
