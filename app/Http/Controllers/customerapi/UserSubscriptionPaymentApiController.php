@@ -8,6 +8,7 @@ use App\Models\Subscription;
 use App\Models\UserSubscriptionPayment;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\FacadesLog;
@@ -156,6 +157,17 @@ class UserSubscriptionPaymentApiController extends Controller
                         $subscriptionPayment->save();
                         //update subscription status in users table
                         $updateUser = calcCustomerSubscription($user_id, $subscriptionPayment->subscription_id);
+
+                        $data = DB::table('users')->select(
+                            'users.subscription_id',
+                            'users.type',
+                            'subscriptions.subscription_type',
+                            'users.subscription_start',
+                            'users.subscription_end'
+                        )
+                            ->leftjoin('subscriptions', 'users.subscription_id', '=', 'subscriptions.id')
+                            ->where([['users.id', $user_id]]);
+                        $msg_data['my_subscription'] = $data;
                         // return response()->json(['msg' => 'Subscribed successfully'], 200);
                         successMessage(__('subscription.you_have_successfully_subscribed'), $msg_data);
                     } else {
