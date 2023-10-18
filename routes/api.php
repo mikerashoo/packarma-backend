@@ -30,6 +30,7 @@ Route::middleware(['basicAuth'])->group(function () {
     });
 
     Route::post('/user-subscription-history', 'UserSubscriptionPaymentApiController@subscriptionHistory');
+    Route::post('/user-search-history', 'CustomerEnquiryApiController@searchHistory');
 
     Route::middleware(['tokenAuth'])->group(function () {
         //Product

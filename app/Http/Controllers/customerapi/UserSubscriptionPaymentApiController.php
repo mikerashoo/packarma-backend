@@ -224,11 +224,6 @@ class UserSubscriptionPaymentApiController extends Controller
 
             successMessage(__('subscription.user_subscription_history_fetched'), $msg_data);
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Unkown error occured',
-                'error' => $e->getMessage()
-            ], 500);
             Log::error("Adding credit failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
