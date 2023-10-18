@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\UserAddress;
 use App\Models\VendorQuotation;
 use App\Models\RecommendationEngine;
+use App\Models\UserCreditHistory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -430,6 +431,7 @@ class CustomerEnquiryApiController extends Controller
             $userId = $request->user_id;
             $history = CustomerEnquiry::where('user_id', $userId)->get(
                 [
+                    'id',
                     'user_id',
                     'description',
                     'enquiry_type',
@@ -446,6 +448,11 @@ class CustomerEnquiryApiController extends Controller
                     'status'
                 ]
             );
+
+            foreach ($history as $hist) {
+                $credit = UserCreditHistory::where('enquery_id', $hist->id)->select('id')->first();
+                $hist->credit_id = $credit ? $credit->id : null;
+            }
 
             $msg_data['result'] = $history;
 
