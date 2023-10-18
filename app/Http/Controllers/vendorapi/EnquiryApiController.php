@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\vendorapi;
 
 use App\Http\Controllers\Controller;
+use App\Models\CustomerEnquiry;
 use App\Models\MessageNotification;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Request;
 use App\Models\VendorQuotation;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Response;
 
 class EnquiryApiController extends Controller
@@ -181,12 +186,12 @@ class EnquiryApiController extends Controller
                 foreach ($data as $row) {
                     $data[$i]->enq_id = getFormatid($row->id, $main_table);
                     $data[$i]->material_unit_symbol = 'kg';
-                    if($row->product_weight == 0.00){
+                    if ($row->product_weight == 0.00) {
                         $data[$i]->product_weight = null;
                         $data[$i]->unit_name = null;
                         $data[$i]->unit_symbol = null;
                     }
-                    if($row->entered_shelf_life == 0){
+                    if ($row->entered_shelf_life == 0) {
                         $data[$i]->entered_shelf_life = null;
                         $data[$i]->entered_shelf_life_unit = null;
                     }
@@ -206,7 +211,7 @@ class EnquiryApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("Enquiry fetching failed: " . $e->getMessage());
+            Log::error("Enquiry fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
@@ -220,7 +225,7 @@ class EnquiryApiController extends Controller
             if ($vendor_token) {
                 $vendor_id = $vendor_token['sub'];
 
-                \Log::info("Sending Quotation Started!");
+                Log::info("Sending Quotation Started!");
                 $quotation_data = array();
                 if (!$request->id) {
                     errorMessage(__('quotation.id_require'), $msg_data);
@@ -233,7 +238,7 @@ class EnquiryApiController extends Controller
 
                 $validationErrors = $this->validateSendQuotation($request);
                 if (count($validationErrors)) {
-                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage(__('auth.validation_failed'), $validationErrors->all());
                 }
 
@@ -255,17 +260,15 @@ class EnquiryApiController extends Controller
                 $new_vendor_price = number_format((float)$request->vendor_price, 2, '.', '');
 
                 //Added by : Pradyumn, added on : 21-sept-2022, uses: to set freight amount and delivery charges
-                if(isset($request->freight_amount) && !empty($request->freight_amount)){
+                if (isset($request->freight_amount) && !empty($request->freight_amount)) {
                     $freight_amount = $request->freight_amount;
-                }
-                else{
+                } else {
                     $freight_amount = $checkQuotation->freight_amount;
                 }
 
-                if(isset($request->delivery_in_days) && !empty($request->delivery_in_days)){
+                if (isset($request->delivery_in_days) && !empty($request->delivery_in_days)) {
                     $delivery_in_days = $request->delivery_in_days;
-                }
-                else{
+                } else {
                     $delivery_in_days = $checkQuotation->delivery_in_days;
                 }
 
@@ -305,7 +308,7 @@ class EnquiryApiController extends Controller
                 $quotationData->created_at->toDateTimeString();
                 $quotationData->updated_at->toDateTimeString();
 
-                \Log::info("Quotation sent successfully!");
+                Log::info("Quotation sent successfully!");
 
                 // trigger notification to customer
                 $can_send_fcm_notification =  DB::table('general_settings')->where('type', 'trigger_customer_fcm_notification')->value('value');
@@ -322,7 +325,7 @@ class EnquiryApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("Quotation sending failed: " . $e->getMessage());
+            Log::error("Quotation sending failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
@@ -335,7 +338,7 @@ class EnquiryApiController extends Controller
      */
     private function validateSendQuotation(Request $request)
     {
-        return \Validator::make(
+        return Validator::make(
             $request->all(),
             [
                 'vendor_price' => 'required|numeric|gt:0',
@@ -374,7 +377,7 @@ class EnquiryApiController extends Controller
                     ->where([['customer_enquiries.id', $enquiry_id], ['customer_enquiries.deleted_at', NULL]])
                     ->leftjoin('packaging_materials', 'customer_enquiries.packaging_material_id', '=', 'packaging_materials.id')->first();
 
-                if (!empty($notificationData['notification_image']) && \Storage::disk('s3')->exists('notification/customer'. '/' . $notificationData['notification_image'])) {
+                if (!empty($notificationData['notification_image']) && Storage::disk('s3')->exists('notification/customer' . '/' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/customer');
                 }
 
@@ -384,7 +387,7 @@ class EnquiryApiController extends Controller
 
                 $notificationData['title'] = str_replace('$$enquiry_id$$', $enqFormattedId, $notificationData['title']);
                 $notificationData['body'] = str_replace('$$material_name$$', $materialData->packaging_material_name, $notificationData['body']);
-                $userFcmData = DB::table('users')->select('users.id', 'customer_devices.fcm_id','customer_devices.imei_no','customer_devices.remember_token')
+                $userFcmData = DB::table('users')->select('users.id', 'customer_devices.fcm_id', 'customer_devices.imei_no', 'customer_devices.remember_token')
                     ->where([['users.id', $user_id], ['users.status', 1], ['users.fcm_notification', 1], ['users.approval_status', 'accepted'], ['users.deleted_at', NULL]])
                     ->leftjoin('customer_devices', 'customer_devices.user_id', '=', 'users.id')
                     ->get();
@@ -394,9 +397,9 @@ class EnquiryApiController extends Controller
                     //modified by : Pradyumn Dwivedi, Modified at : 14-Oct-2022
                     $device_ids = array();
                     $imei_nos = array();
-                    $i=0;
+                    $i = 0;
                     foreach ($userFcmData as $key => $val) {
-                        if (!empty($val->remember_token)){
+                        if (!empty($val->remember_token)) {
                             array_push($device_ids, $val->fcm_id);
                             array_push($imei_nos, $val->imei_no);
                         }

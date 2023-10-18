@@ -17,5 +17,6 @@ return [
     'subscription_payment_entry_created_successfully' => 'Subscription Payment Entery Created Successfull',
     'you_have_successfully_subscribed' => 'You have Successfully Subscribed',
     'already_availed' => 'You have already availed the Free Subscription',
-    'user_subscription_history_fetched' => 'User Subscription History Fetched Successfully'
+    'user_subscription_history_fetched' => 'User Subscription History Fetched Successfully',
+    'user_search_history_fetched' => 'User Search History Fetched Successfully'
 ];

@@ -206,6 +206,7 @@ class UserCreditController extends Controller
                     [
                         'user_id' => $request->user_id,
                         'amount' => 1,
+                        'enquery_id' => $enqueryId,
                         'reason' => __('my_profile.enquery_result_credit_deduct'),
                         'action' => 'deduct'
                     ]

@@ -11,7 +11,12 @@ use App\Models\Product;
 use App\Models\UserAddress;
 use App\Models\VendorQuotation;
 use App\Models\RecommendationEngine;
+use App\Models\UserCreditHistory;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\FacadesValidator;
+use Illuminate\Validation\Rule;
 use Response;
 
 class CustomerEnquiryApiController extends Controller
@@ -123,11 +128,11 @@ class CustomerEnquiryApiController extends Controller
                     $quotationCount = VendorQuotation::where([['user_id', $user_id], ['customer_enquiry_id', $row->id]])
                         ->whereIn('enquiry_status', ['quoted', 'viewed'])->get()->count();
                     $data[$i]->quotation_count = $quotationCount;
-                    if($row->product_weight == 0){
+                    if ($row->product_weight == 0) {
                         $data[$i]->product_weight = null;
                         $data[$i]->measurement_unit_id = null;
                     }
-                    if($row->entered_shelf_life == 0){
+                    if ($row->entered_shelf_life == 0) {
                         $data[$i]->entered_shelf_life = null;
                         $data[$i]->entered_shelf_life_unit = null;
                     }
@@ -143,7 +148,7 @@ class CustomerEnquiryApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("Customer Enquiry fetching failed: " . $e->getMessage());
+            Log::error("Customer Enquiry fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
@@ -161,7 +166,7 @@ class CustomerEnquiryApiController extends Controller
         $msg_data = array();
         $isSubscribed = true;
 
-        \Log::info("Initiating Customer Enquiry process, starting at: " . Carbon::now()->format('H:i:s:u'));
+        Log::info("Initiating Customer Enquiry process, starting at: " . Carbon::now()->format('H:i:s:u'));
         try {
             $token = readHeaderToken();
             if ($token) {
@@ -181,12 +186,12 @@ class CustomerEnquiryApiController extends Controller
 
                 $validationErrors = $this->validateEnquiry($request);
                 if (count($validationErrors)) {
-                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
 
-                $minOrderQuantityDataDB = RecommendationEngine::where('id',$request->recommendation_engine_id)->pluck('min_order_quantity')->first();
-                if (isset($request->product_quantity) && ($request->product_quantity < $minOrderQuantityDataDB)){
+                $minOrderQuantityDataDB = RecommendationEngine::where('id', $request->recommendation_engine_id)->pluck('min_order_quantity')->first();
+                if (isset($request->product_quantity) && ($request->product_quantity < $minOrderQuantityDataDB)) {
                     errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
                 }
 
@@ -227,13 +232,13 @@ class CustomerEnquiryApiController extends Controller
                 $enquiryData = CustomerEnquiry::create($request->all());
                 $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
                 $enquiryData->is_subscribed = $isSubscribed;
-                \Log::info("Customer Enquiry Created successfully");
+                Log::info("Customer Enquiry Created successfully");
                 successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("Customer enquiry creation failed: " . $e->getMessage());
+            Log::error("Customer enquiry creation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
@@ -246,7 +251,7 @@ class CustomerEnquiryApiController extends Controller
      */
     private function validateEnquiry(Request $request)
     {
-        return \Validator::make($request->all(), [
+        return Validator::make($request->all(), [
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
@@ -266,8 +271,8 @@ class CustomerEnquiryApiController extends Controller
             'product_form_id' => 'nullable|numeric',
             'packaging_treatment_id' => 'nullable|numeric',
             // 'product_quantity' => 'required|numeric',
-            ])->errors();
-        return \Validator::make($request->all(), [
+        ])->errors();
+        return Validator::make($request->all(), [
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
@@ -301,7 +306,7 @@ class CustomerEnquiryApiController extends Controller
         $msg_data = array();
         $isSubscribed = true;
 
-        \Log::info("Initiating Product Customer Enquiry process, starting at: " . Carbon::now()->format('H:i:s:u'));
+        Log::info("Initiating Product Customer Enquiry process, starting at: " . Carbon::now()->format('H:i:s:u'));
         try {
             $token = readHeaderToken();
             if ($token) {
@@ -322,34 +327,34 @@ class CustomerEnquiryApiController extends Controller
 
                 $validationErrors = $this->validateProductEnquiry($request);
                 if (count($validationErrors)) {
-                    \Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
+                    Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
 
                 //get recommendation engine(packaging solution) data from table
-                $packagingSolutionData = RecommendationEngine::where('id',$request->packaging_solution_id)->first();
-                
-                //checking min order quantity 
-                if (isset($request->product_quantity) && ($request->product_quantity < $packagingSolutionData->min_order_quantity)){
+                $packagingSolutionData = RecommendationEngine::where('id', $request->packaging_solution_id)->first();
+
+                //checking min order quantity
+                if (isset($request->product_quantity) && ($request->product_quantity < $packagingSolutionData->min_order_quantity)) {
                     errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
                 }
 
-                //checking min order quantity 
-                if (isset($request->product_weight)){
+                //checking min order quantity
+                if (isset($request->product_weight)) {
                     if ($request->product_weight < $packagingSolutionData->min_weight || $request->product_weight > $packagingSolutionData->max_weight)
-                    errorMessage(__('customer_enquiry.product_weight_should_be_in_between_min_and_max_weight'), $msg_data);
+                        errorMessage(__('customer_enquiry.product_weight_should_be_in_between_min_and_max_weight'), $msg_data);
                 }
-                
+
                 //getting shelf life and shelf life unit from config
                 $shelf_life = config('global.DEFAULT_SHELF_LIFE');
                 $shelf_life_unit = config('global.DEFAULT_SHELF_LIFE_UNIT');
                 if ($packagingSolutionData->display_shelf_life) {
                     $shelf_life = $packagingSolutionData->display_shelf_life;
                 }
-               //get product data
-                $productData = Product::select('sub_category_id','unit_id')->where('id',$packagingSolutionData->product_id)->first();
-              
-                //getting data from recommendation engine table 
+                //get product data
+                $productData = Product::select('sub_category_id', 'unit_id')->where('id', $packagingSolutionData->product_id)->first();
+
+                //getting data from recommendation engine table
                 $request['user_id'] = $user_id;
                 $request['category_id'] = $packagingSolutionData->category_id;
                 $request['sub_category_id'] = $productData->sub_category_id;
@@ -372,7 +377,7 @@ class CustomerEnquiryApiController extends Controller
                 $request['country_id'] = $userAddress->country_id;
                 $request['state_id'] = $userAddress->state_id;
                 $request['city_name'] = $userAddress->city_name;
-                
+
                 // $request['address'] = $userAddress->address;
                 $request['flat'] = $userAddress->flat;
                 $request['area'] = $userAddress->area;
@@ -384,29 +389,94 @@ class CustomerEnquiryApiController extends Controller
                 } else {
                     $request['shelf_life'] =  $shelf_life;
                 }
-                
+
                 // Store a new enquiry
                 $enquiryData = CustomerEnquiry::create($request->all());
                 $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
                 $enquiryData->is_subscribed = $isSubscribed;
-                \Log::info("Product Customer Enquiry Created successfully");
+                Log::info("Product Customer Enquiry Created successfully");
                 successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
-            \Log::error("Customer enquiry creation failed: " . $e->getMessage());
+            Log::error("Customer enquiry creation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
 
-    
+
+    public function searchHistory(Request $request)
+    {
+        $msg_data = array();
+
+        try {
+
+            $validateRequest = Validator::make(
+                $request->all(),
+                [
+                    'user_id' => ['required', Rule::exists('users', 'id')],
+                ],
+            );
+
+            if ($validateRequest->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateRequest->errors()
+                ], 401);
+            }
+
+
+            $userId = $request->user_id;
+            $history = CustomerEnquiry::where('user_id', $userId)->get(
+                [
+                    'id',
+                    'user_id',
+                    'description',
+                    'enquiry_type',
+                    'category_id',
+                    'category_id',
+                    'sub_category_id',
+                    'product_id',
+                    'shelf_life',
+                    'entered_shelf_life_unit',
+                    'product_weight',
+                    'measurement_unit_id',
+                    'created_at',
+                    'updated_at',
+                    'status'
+                ]
+            );
+
+            foreach ($history as $hist) {
+                $credit = UserCreditHistory::where('enquery_id', $hist->id)->select('id')->first();
+                $hist->credit_id = $credit ? $credit->id : null;
+            }
+
+            $msg_data['result'] = $history;
+
+            successMessage(__('subscription.user_search_history_fetched'), $msg_data);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $e->getMessage()
+            ], 500);
+            Log::error("Adding credit failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+        // return $user;,
+    }
+
+
+
 
     /**
      * Created By Pradyumn Dwivedi
      * Created at : 29-Sept-2022
      * Uses : Validate product customer enquiry request
-     * 
+     *
      * Validate request for Customer Enquiry.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -414,7 +484,7 @@ class CustomerEnquiryApiController extends Controller
      */
     private function validateProductEnquiry(Request $request)
     {
-        return \Validator::make($request->all(), [
+        return Validator::make($request->all(), [
             'packaging_solution_id' => 'required|integer',
             'product_quantity' => 'required|numeric',
             'product_weight' => 'sometimes|numeric',
