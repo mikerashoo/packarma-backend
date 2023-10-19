@@ -77,7 +77,7 @@ class UserCreditController extends Controller
 
 
             $userId = $request->user_id;
-            $user = User::select('id', 'current_credit_amount')->where('id', $userId)->first();
+            $user = User::select('id', 'current_credit_amount', 'credit_totals')->where('id', $userId)->first();
             $currentCredit = $user->current_credit_amount;
             $credits = $currentCredit + $request->amount;
             $user->update([
@@ -96,12 +96,13 @@ class UserCreditController extends Controller
                 ]
             );
 
-            if ($request->is_subscription) {
-                $currentTotal = $currentCredit + $request->amount;
+            $currentTotal = $request->is_subscription ? $currentCredit : $user->credit_totals;
 
-                $user->credit_totals = $currentTotal;
-                $user->save();
-            }
+            $newTotal = $currentTotal + $request->amount;
+
+            $user->credit_totals = $newTotal;
+            $user->save();
+
             $data = new stdClass;
 
             $data->credit_history = $userCreditHistory;
