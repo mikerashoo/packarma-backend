@@ -7,6 +7,7 @@ use App\Models\CustomerEnquiry;
 use App\Models\User;
 use App\Models\UserCreditHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -35,7 +36,8 @@ class UserCreditController extends Controller
 
 
             $userId = $request->user_id;
-            $data = User::select('current_credit_amount')->where('id', $userId)->first();
+            $data = User::select('current_credit_amount', 'credit_totals', DB::raw('subscription_end AS expire_date'))->where('id', $userId)->first();
+
             $msg_data['result'] = $data;
             successMessage(__('my_profile.credits_fetch'), $msg_data);
         } catch (\Exception $e) {
@@ -60,7 +62,8 @@ class UserCreditController extends Controller
                     'amount_paid' => ['required', 'numeric', 'min:0'],
                     'expire_date' => ['required', 'date'],
                     'transaction_id' => ['numeric'],
-                    'reason' => 'required'
+                    'reason' => 'required',
+                    'is_subscription' => 'bool'
                 ],
             );
 
@@ -74,7 +77,7 @@ class UserCreditController extends Controller
 
 
             $userId = $request->user_id;
-            $user = User::select('id', 'current_credit_amount')->where('id', $userId)->first();
+            $user = User::select('id', 'current_credit_amount', 'credit_totals')->where('id', $userId)->first();
             $currentCredit = $user->current_credit_amount;
             $credits = $currentCredit + $request->amount;
             $user->update([
@@ -92,6 +95,14 @@ class UserCreditController extends Controller
                     'action' => 'add'
                 ]
             );
+
+            $currentTotal = $request->is_subscription ? $currentCredit : $user->credit_totals;
+
+            $newTotal = $currentTotal + $request->amount;
+
+            $user->credit_totals = $newTotal;
+            $user->save();
+
             $data = new stdClass;
 
             $data->credit_history = $userCreditHistory;
