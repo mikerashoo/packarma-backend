@@ -54,13 +54,6 @@ class User extends Authenticatable implements JWTSubject
         'credit_totals'
     ];
 
-    public function getCreditTotalsAttribute($credit_totals)
-    {
-
-        $current = $this->current_credit_amount;
-
-        return $credit_totals >= $current ? $credit_totals : $current;
-    }
 
     /**
      * The attributes that should be hidden for serialization.
