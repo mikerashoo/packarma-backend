@@ -48,22 +48,22 @@ class UserSubscriptionPaymentApiController extends Controller
                 // $user = User::find(auth('api')->user()->id);
                 $Subscription = Subscription::find($request->subscription_id);
                 if ($Subscription) {
-                    $data = [];
+                    // $data = [];
 
-                    if ($Subscription->amount == 0) {
-                        $payment_status = 'paid';
-                        $razorpay_order_id = NULL;
-                    } else {
-                        $payment_status = 'pending';
-                        $api = new Api(config('app.testRazerpayKeyId'), config('app.testRazerpayKeySecrete'));
-                        $razorpay_order = $api->order->create(
-                            array(
-                                'amount' => $Subscription->amount * 100,
-                                'currency' => 'INR'
-                            )
-                        );
-                        $razorpay_order_id = $razorpay_order['id'];
-                    }
+                    // if ($Subscription->amount == 0) {
+                    //     $payment_status = 'paid';
+                    //     $razorpay_order_id = NULL;
+                    // } else {
+                    //     $payment_status = 'pending';
+                    //     $api = new Api(config('app.testRazerpayKeyId'), config('app.testRazerpayKeySecrete'));
+                    //     $razorpay_order = $api->order->create(
+                    //         array(
+                    //             'amount' => $Subscription->amount * 100,
+                    //             'currency' => 'INR'
+                    //         )
+                    //     );
+                    //     $razorpay_order_id = $razorpay_order['id'];
+                    // }
                     $already_availed = UserSubscriptionPayment::where('user_id', $user_id)->where('subscription_type', 'free')->first();
                     if ($already_availed && $Subscription->subscription_type == 'free') {
                         errorMessage(__('subscription.already_availed'), $msg_data, 400);
@@ -73,11 +73,12 @@ class UserSubscriptionPaymentApiController extends Controller
                     $userSubscriptionPayment->subscription_id = $Subscription->id;
                     $userSubscriptionPayment->subscription_type = $Subscription->subscription_type;
                     $userSubscriptionPayment->amount = $Subscription->amount;
-                    $userSubscriptionPayment->gateway_id = $razorpay_order_id;
-                    $userSubscriptionPayment->payment_status = $payment_status;
+                    $userSubscriptionPayment->gateway_id = '';
+                    $userSubscriptionPayment->payment_status = 'paid';
                     $userSubscriptionPayment->transaction_date = date('Y-m-d');
                     $userSubscriptionPayment->call_from = $platform;
                     $userSubscriptionPayment->ip_address = $ip_address;
+                    $userSubscriptionPayment->transaction_id = $request->trid;
                     $userSubscriptionPayment->save();
 
                     if ($Subscription->amount == 0) {
@@ -88,14 +89,15 @@ class UserSubscriptionPaymentApiController extends Controller
                         $data['gateway_call'] = 'no';
                         $data['success'] = 200;
                         $data['message'] = __('subscription.you_have_successfully_subscribed');
-                        $updateUser = calcCustomerSubscription($user_id, $Subscription->id);
+                        calcCustomerSubscription($user_id, $Subscription->id);
                     } else {
-                        $data['gateway_id'] = $razorpay_order_id;
-                        $data['razorpay_api_key'] = config('app.testRazerpayKeyId');
+                        $data['gateway_id'] = '';
+                        $data['razorpay_api_key'] = '';
                         $data['currency'] = 'INR';
                         $data['amount'] = $Subscription->amount;
-                        $data['gateway_call'] = 'yes';
-                        $data['message'] = 'Please continue to pay the order amount';
+                        $data['gateway_call'] = 'no';
+                        $data['message'] = __('subscription.you_have_successfully_subscribed');
+                        calcCustomerSubscription($user_id, $Subscription->id);
                     }
                     return response()->json($data)->setStatusCode(200);
                 } else {
