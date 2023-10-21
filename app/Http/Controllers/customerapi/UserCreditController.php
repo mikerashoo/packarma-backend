@@ -265,15 +265,7 @@ class UserCreditController extends Controller
             $userId = $request->user_id;
             $enqueryId = $request->enquery_id;
             $user = User::select('id', 'current_credit_amount')->where('id', $userId)->first();
-            $history = UserCreditHistory::select(
-                'user_id',
-                'amount',
-                'reason',
-                'action',
-                'amount_paid',
-                'expire_date',
-                'created_at'
-            )->where('user_id', $userId)->get();
+            $history = UserCreditHistory::where('user_id', $userId)->get();
 
             // $data->enq = $customerEnquery;
 
