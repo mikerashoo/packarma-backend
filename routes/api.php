@@ -62,8 +62,9 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/subscription/my_subscription', 'SubscriptionApiController@my_subscription');
 
         //Subscription payment
-        Route::post('/subscription_payment/new_payment', 'UserSubscriptionPaymentApiController@new_subscription_payment');
-        Route::post('/subscription_payment/payment_success', 'UserSubscriptionPaymentApiController@subscription_payment_success');
+        // Route::post('/subscription_payment/new_payment', 'UserSubscriptionPaymentApiController@new_subscription_payment');
+        // Route::post('/subscription_payment/payment_success', 'UserSubscriptionPaymentApiController@subscription_payment_success');
+        Route::post('/subscription_payment/payment_success', 'UserSubscriptionPaymentApiController@new_subscription_payment');
 
         //Measurement Unit
         Route::post('/measurement_unit/listing', 'MeasurementUnitApiController@index');
