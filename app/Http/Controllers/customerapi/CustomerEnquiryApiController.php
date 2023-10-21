@@ -85,6 +85,7 @@ class CustomerEnquiryApiController extends Controller
                     'recommendation_engines.min_order_quantity_unit',
                     'customer_enquiries.packaging_material_id',
                     'customer_enquiries.quote_type',
+                    'user_credit_histories.*',
                     'customer_enquiries.created_at'
                 )
                     ->leftjoin('categories', 'categories.id', '=', 'customer_enquiries.category_id')
@@ -98,6 +99,7 @@ class CustomerEnquiryApiController extends Controller
                     ->leftjoin('packaging_treatments', 'packaging_treatments.id', '=', 'customer_enquiries.packaging_treatment_id')
                     ->leftjoin('user_addresses', 'user_addresses.id', '=', 'customer_enquiries.user_address_id')
                     ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'customer_enquiries.recommendation_engine_id')
+                    ->leftjoin('user_credit_histories', 'user_credit_histories.enquery_id', '=', 'customer_enquiries.id')
                     ->where('customer_enquiries.user_id', $user_id)
                     ->whereIn('customer_enquiries.quote_type', ['enquired', 'map_to_vendor', 'accept_cust']);
 
