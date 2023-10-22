@@ -35,14 +35,6 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        // $totalCredits = $user->credit_totals;
-        // $currentCredit = $user->current_credit_amount;
-
-        // if ($totalCredits < $currentCredit) {
-        //     $user->update([
-        //         'credit_totals' => $currentCredit
-        //     ]);
-        // }
     }
 
     /**
