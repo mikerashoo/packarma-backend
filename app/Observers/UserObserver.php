@@ -15,12 +15,6 @@ class UserObserver
      */
     public function retrieved(User $user)
     {
-        $totalCredits = $user->credit_totals;
-        $currentCredit = $user->current_credit_amount;
-        if ($currentCredit > $totalCredits) {
-            $user->credit_totals = $currentCredit;
-            $user->save();
-        }
     }
     /**
      * Handle the User "created" event.
@@ -41,7 +35,14 @@ class UserObserver
      */
     public function updated(User $user)
     {
-        //
+        // $totalCredits = $user->credit_totals;
+        // $currentCredit = $user->current_credit_amount;
+
+        // if ($totalCredits < $currentCredit) {
+        //     $user->update([
+        //         'credit_totals' => $currentCredit
+        //     ]);
+        // }
     }
 
     /**
