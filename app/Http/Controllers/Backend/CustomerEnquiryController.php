@@ -30,6 +30,7 @@ use App\Models\VendorMaterialMapping;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Models\MessageNotification;
+use Illuminate\Support\Facades\Log;
 
 class CustomerEnquiryController extends Controller
 {
@@ -122,7 +123,7 @@ class CustomerEnquiryController extends Controller
                     ->addIndexColumn()
                     ->rawColumns(['description', 'user_name', 'product_name', 'enquiry_status', 'updated_at', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
-                \Log::error("Something Went Wrong. Error: " . $e->getMessage());
+                Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
                     'draw'            => 0,
                     'recordsTotal'    => 0,
@@ -174,7 +175,7 @@ class CustomerEnquiryController extends Controller
         $msg = "";
         $validationErrors = $this->validateRequest($request, 'addEnquiry');
         if (count($validationErrors)) {
-            \Log::error("Customer Enquiry Validation Exception: " . implode(", ", $validationErrors->all()));
+            Log::error("Customer Enquiry Validation Exception: " . implode(", ", $validationErrors->all()));
             errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
         $tblObj = new CustomerEnquiry;
@@ -195,7 +196,7 @@ class CustomerEnquiryController extends Controller
         $tblObj->packing_type_id = $request->packing_type;
         $tblObj->packaging_treatment_id = $request->packaging_treatment;
         $tblObj->quote_type = $request->quote_type;
-        // getting user address 
+        // getting user address
         if (isset($request->user_address)) {
             $userAddress = UserAddress::find($request->user_address);
             $tblObj->user_address_id = $request->user_address;
@@ -229,7 +230,7 @@ class CustomerEnquiryController extends Controller
     //     $data['customerEnquiryType'] = customerEnquiryType();
     //     $data['vendorEnquiryStatus'] = vendorEnquiryStatus();
     //     $data['customerEnquiryQuoteType'] = customerEnquiryQuoteType();
-    //     // $data['vendor_warehouse'] = VendorWarehouse::all()->toArray();        
+    //     // $data['vendor_warehouse'] = VendorWarehouse::all()->toArray();
     //     $data['city'] = City::all();
     //     $data['state'] = State::all();
     //     return view('backend/customer_section/customer_enquiry/customer_enquiry_map_to_vendor', $data);
@@ -255,7 +256,7 @@ class CustomerEnquiryController extends Controller
         $data['customerEnquiryQuoteType'] = customerEnquiryQuoteType();
         $data['customer_enquiry_id'] = getFormatid($data['data']->id, 'customer_enquiries');
 
-        // $data['vendor_warehouse'] = VendorWarehouse::all();  
+        // $data['vendor_warehouse'] = VendorWarehouse::all();
 
         $data['mapped_vendor'] = DB::table('vendor_quotations')->select(
             'vendor_quotations.id',
@@ -299,10 +300,10 @@ class CustomerEnquiryController extends Controller
 
 
     /**
-     * 
+     *
      *   created by : Pradyumn Dwivedi
      *   Created On : 04-April-2022
-     *   Uses :  To store customer enquiry map to vendor 
+     *   Uses :  To store customer enquiry map to vendor
      *   @param Request request
      *   @return Response
      */
@@ -312,7 +313,7 @@ class CustomerEnquiryController extends Controller
     //     $msg = "";
     //     $validationErrors = $this->validateRequest($request, 'vendor');
     //     if (count($validationErrors)) {
-    //         \Log::error("Cutomer Enquire Map To Vendor Validation Exception: " . implode(", ", $validationErrors->all()));
+    //         Log::error("Cutomer Enquire Map To Vendor Validation Exception: " . implode(", ", $validationErrors->all()));
     //         errorMessage(implode("\n", $validationErrors->all()), $msg_data);
     //     }
     //     $msg = "Vendor Mapped successfully to Enquiry";
@@ -363,7 +364,7 @@ class CustomerEnquiryController extends Controller
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 04-April-2022
-     *   Uses :  To store customer enquiry map to vendor 
+     *   Uses :  To store customer enquiry map to vendor
      *   @param Request request
      *   @return Response
      */
@@ -375,7 +376,7 @@ class CustomerEnquiryController extends Controller
         $msg = "";
         $validationErrors = $this->validateRequest($request, 'vendor');
         if (count($validationErrors)) {
-            \Log::error("Cutomer Enquire Map To Vendor Validation Exception: " . implode(", ", $validationErrors->all()));
+            Log::error("Cutomer Enquire Map To Vendor Validation Exception: " . implode(", ", $validationErrors->all()));
             errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
         $msg = "Vendor Mapped successfully to Enquiry";
@@ -398,34 +399,33 @@ class CustomerEnquiryController extends Controller
         $vendor_price_calc = $request->vendor_price_bulk / $request->product_quantity;
         $vendor_price_per_kg = number_format((float)$vendor_price_calc, 2, '.', '');
         $tblObj->vendor_amount = $request->vendor_price_bulk;
-        
+
         $commission_price_calc = $request->commission_rate_bulk / $request->product_quantity;
         $commission_per_kg = number_format((float)$commission_price_calc, 2, '.', '');
         $tblObj->commission = $request->commission_rate_bulk;
-        
+
         $tblObj->vendor_price = $vendor_price_per_kg;
         $tblObj->commission_amt = $commission_per_kg;
         $tblObj->delivery_in_days = $request->delivery_in_days;
         // modified by Pradyumn, 29-sept-2022, storing delivery charge to freight amount
-        if(isset($request->delivery_charges) && !empty($request->delivery_charges)){
+        if (isset($request->delivery_charges) && !empty($request->delivery_charges)) {
             $freight_amount = $request->delivery_charges;
             $tblObj->freight_amount = $freight_amount;
-        }else{
+        } else {
             $freight_amount = 0;
         }
         //Modified by : Pradyumn, Created at: 27-Sept-2022, Uses: calculating vendor price and commission rate per kg :END
 
         $tblObj->product_quantity = $request->product_quantity;
         $gst = $request->gst_type ?? 'not_applicable';
-        
+
         //Created by : Pradyumn, Created at: 27-Sept-2022, Uses: storing gst percentage when gst type is selected :START
-        if(!empty($request->gst_type) && $request->gst_type != 'not_applicable'){
+        if (!empty($request->gst_type) && $request->gst_type != 'not_applicable') {
             $tblObj->gst_percentage = $request->gst_percentage; // ?? 0.00;
-        }
-        else{
+        } else {
             $tblObj->gst_percentage = 0.00;
         }
-        
+
         //Created by : Pradyumn, Created at: 27-Sept-2022, Uses: storing gst percentage when gst type is selected :END
         // print_r($commission_per_kg);exit;
         $mrp_rate =   $vendor_price_per_kg + $commission_per_kg; //$request->commission_rate + $request->vendor_price;
@@ -433,7 +433,7 @@ class CustomerEnquiryController extends Controller
         $sub_total_amount = $request->product_quantity * $mrp_rate;
         $tblObj->sub_total = $sub_total_amount;
         $tblObj->vendor_warehouse_id = $warehouse;
-        
+
         if ($gst == 'applicable') {
             if ($enquiry_state_id == $warehouse_state_id) {
                 $gst_type = 'cgst+sgst';
@@ -441,7 +441,7 @@ class CustomerEnquiryController extends Controller
                 $gst_type = 'igst';
             }
             $tblObj->gst_percentage = $request->gst_percentage ?? 0.00;
-        
+
             // modified by : pradyumn, at: 27-Sept-2022, Desc: calculating gst on sub_total amount
             $gst_amount_calc = $sub_total_amount * ($request->gst_percentage / 100.00); //$mrp_rate * ($request->gst_percentage / 100.00);
             $gst_amount = number_format((float)$gst_amount_calc, 2, '.', '');
@@ -466,7 +466,7 @@ class CustomerEnquiryController extends Controller
         $final_val = $tblObj->toarray();
 
         $quotationData = VendorQuotation::updateOrCreate(['id' => $request->id], $final_val);
-        
+
         CustomerEnquiry::where('id', $request->customer_enquiry_id)->update(['quote_type' => 'map_to_vendor']);
 
         //send fcm notification to vendor after enquiry mapped to vendor
@@ -478,8 +478,8 @@ class CustomerEnquiryController extends Controller
     }
 
     /*
-    *Created By: Pradyumn, 
-    *Created At : 7-sept-2022, 
+    *Created By: Pradyumn,
+    *Created At : 7-sept-2022,
     *uses: send enquiry mapped notification to vendor
     */
     private function callEnquiryMappedFcmNotification($vendor_id, $vendor_quotation_id)
@@ -491,7 +491,7 @@ class CustomerEnquiryController extends Controller
             if (!empty($notificationData)) {
                 $notificationData['type_id'] = $vendor_quotation_id;
 
-                if (!empty($notificationData['notification_image']) && \Storage::disk('s3')->exists('notification/vendor'. '/' . $notificationData['notification_image'])) {
+                if (!empty($notificationData['notification_image']) && \Storage::disk('s3')->exists('notification/vendor' . '/' . $notificationData['notification_image'])) {
                     $notificationData['image_path'] = getFile($notificationData['notification_image'], 'notification/vendor');
                 }
 
@@ -502,7 +502,7 @@ class CustomerEnquiryController extends Controller
                 $formatted_quotation_id = getFormatid($vendor_quotation_id, 'vendor_quotations');
                 // $notificationData['title'] = str_replace('$$enquiry_id$$', $formatted_id, $notificationData['title']);
                 $notificationData['body'] = str_replace('$$vendor_quotation_id$$', $formatted_quotation_id, $notificationData['body']);
-                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id','vendor_devices.imei_no','vendor_devices.remember_token')
+                $userFcmData = DB::table('vendors')->select('vendors.id', 'vendor_devices.fcm_id', 'vendor_devices.imei_no', 'vendor_devices.remember_token')
                     ->where([['vendors.id', $vendor_id], ['vendors.status', 1], ['vendors.fcm_notification', 1], ['vendors.approval_status', 'accepted'], ['vendors.deleted_at', NULL]])
                     ->leftjoin('vendor_devices', 'vendor_devices.vendor_id', '=', 'vendors.id')
                     ->get();
@@ -511,9 +511,9 @@ class CustomerEnquiryController extends Controller
                     //modified by : Pradyumn Dwivedi, Modified at : 14-Oct-2022
                     $device_ids = array();
                     $imei_nos = array();
-                    $i=0;
+                    $i = 0;
                     foreach ($userFcmData as $key => $val) {
-                        if (!empty($val->remember_token)){
+                        if (!empty($val->remember_token)) {
                             array_push($device_ids, $val->fcm_id);
                             array_push($imei_nos, $val->imei_no);
                         }
@@ -537,21 +537,21 @@ class CustomerEnquiryController extends Controller
         $data['vendor_data'] = Vendor::select('gstin')->find($request->vendor_id);
         $data['vendor_warehouse'] = VendorWarehouse::where("vendor_id", $request->vendor_id)->get();
         $data['vendorMaterialMapData'] = VendorMaterialMapping::where('packaging_material_id', $request->packaging_material_id)
-                                                              ->where('vendor_id', $request->vendor_id)
-                                                              ->get();
+            ->where('vendor_id', $request->vendor_id)
+            ->get();
         successMessage('Data fetched successfully', $data);
     }
 
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 02-Feb-2022
-     *   Uses :  To view customer enquiry  
+     *   Uses :  To view customer enquiry
      *   @param int $id
      *   @return Response
      */
     public function view($id)
     {
-        $data['data'] = CustomerEnquiry::with('user_address','recommendation_engine','measurement_unit')->find($id);
+        $data['data'] = CustomerEnquiry::with('user_address', 'recommendation_engine', 'measurement_unit')->find($id);
         $data['addressType'] = addressType();
         $data['customer_enquiry_id'] = getFormatid($data['data']->id, 'customer_enquiries');
         // $data['vendors'] = VendorQuotation::with('vendor', 'vendor_warehouse')->where('customer_enquiry_id', '=', $data['data']->id)->get(); //->pluck('vendor_id')->toArray();
@@ -608,15 +608,14 @@ class CustomerEnquiryController extends Controller
             $vendor_name = $rejected_vendor->vendor_name;
             $data['view_only'] = false;
 
-            if ($rejected_vendor->enquiry_status == 'reject'){
+            if ($rejected_vendor->enquiry_status == 'reject') {
                 $data['view_only'] = true;
                 if ($id == -1) {
                     displayMessage('qoutation_rejected_by_customer', $vendor_name);
                 }
             }
             // return 'No more Vendors can be map, it is accepted for Vendor ' . $vendor_name;
-        }
-        else if ($data['customer_enquiry_data']->quote_type == 'accept_cust') {
+        } else if ($data['customer_enquiry_data']->quote_type == 'accept_cust') {
             $accepted_vendor = DB::table('vendor_quotations')->select(
                 'vendor_quotations.vendor_id',
                 'vendors.vendor_name',
@@ -642,8 +641,8 @@ class CustomerEnquiryController extends Controller
             }
         }
 
-        //get min_order_quantity_unit from from recommendation engine 
-        $order_quantity_unit = RecommendationEngine::select('min_order_quantity_unit')->where('id',$data['customer_enquiry_data']->recommendation_engine_id)->first();
+        //get min_order_quantity_unit from from recommendation engine
+        $order_quantity_unit = RecommendationEngine::select('min_order_quantity_unit')->where('id', $data['customer_enquiry_data']->recommendation_engine_id)->first();
         $data['min_order_quantity_unit'] = $order_quantity_unit->min_order_quantity_unit;
 
         if ($id != -1) {
@@ -695,13 +694,13 @@ class CustomerEnquiryController extends Controller
         $id = $request->ib;
         $msg_data = array();
         try {
-            \Log::error("Deleting Mapped Vendor");
+            Log::error("Deleting Mapped Vendor");
             VendorQuotation::destroy($id);
             $msg = 'Mapped Vendor Deleted Successfully';
-            \Log::error("Mapped Vendor Deleted Successfully");
+            Log::error("Mapped Vendor Deleted Successfully");
             successMessage($msg, $msg_data);
         } catch (\Exception $e) {
-            \Log::error("Something Went Wrong. Error: " . $e->getMessage());
+            Log::error("Something Went Wrong. Error: " . $e->getMessage());
         }
         echo $request->ib;
         die;

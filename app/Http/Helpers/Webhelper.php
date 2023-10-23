@@ -699,7 +699,7 @@ if (!function_exists('getFormatid')) {
                 break;
 
             default:
-                $prefix = '#PCK';
+                $prefix = '#PSH';
                 break;
         }
         $formatId = str_pad($id, 6, 0, STR_PAD_LEFT);
