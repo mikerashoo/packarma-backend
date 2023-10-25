@@ -26,6 +26,7 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/user-credits', 'UserCreditController@index');
         Route::post('/add-user-credits', 'UserCreditController@addCredits');
         Route::post('/on-enquery-result', 'UserCreditController@onEnqueryResult');
+        Route::post('/deduct-credit', 'UserCreditController@deductCredit');
         Route::post('/credit-history', 'UserCreditController@creditHistory');
     });
 

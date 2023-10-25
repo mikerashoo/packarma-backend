@@ -118,8 +118,7 @@ class UserCreditController extends Controller
         // return $user;,
     }
 
-
-    public function onEnqueryResult(Request $request)
+    public function deductCredit(Request $request)
     {
         $msg_data = array();
 
@@ -128,8 +127,7 @@ class UserCreditController extends Controller
             $validateRequest = Validator::make(
                 $request->all(),
                 [
-                    'user_id' => ['required', Rule::exists('users', 'id')],
-                    'enquery_id' => ['required', Rule::exists('customer_enquiries', 'id')],
+                    'user_id' => ['required', Rule::exists('users', 'id')]
                 ],
             );
 
@@ -144,6 +142,85 @@ class UserCreditController extends Controller
 
             $userId = $request->user_id;
             $enqueryId = $request->enquery_id;
+            $user = User::select('id', 'current_credit_amount')->where('id', $userId)->first();
+
+            $currentCredit = $user->current_credit_amount;
+            if ($currentCredit == 0) {
+                errorMessage(__('my_profile.credit_limit'), $msg_data);
+            }
+            $data = new stdClass;
+
+
+
+            $remaingCredit = $currentCredit - 1;
+            $user->update([
+                'current_credit_amount' => $remaingCredit
+            ]);
+            // $user->save();
+            $userCreditHistory = UserCreditHistory::create(
+                [
+                    'user_id' => $request->user_id,
+                    'amount' => 1,
+                    'reason' => __('my_profile.enquery_result_credit_deduct'),
+                    'action' => 'deduct'
+                ]
+            );
+
+            $data->is_deducted = true;
+            $data->remaining_credit = $remaingCredit;
+            $data->credit = $userCreditHistory;
+
+
+            // $data->enq = $customerEnquery;
+
+            $msg_data['result'] = $data;
+
+            successMessage(__('my_profile.credit_deduct'), $msg_data);
+        } catch (\Exception $e) {
+
+            Log::error("Adding credit failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+        // return $user;,
+    }
+
+
+    public function onEnqueryResult(Request $request)
+    {
+        $msg_data = array();
+
+        try {
+
+            $validateRequest = Validator::make(
+                $request->all(),
+                [
+                    'user_id' => ['required', Rule::exists('users', 'id')],
+                    'enquery_id' => ['required', Rule::exists('customer_enquiries', 'id')],
+                    'credit_id' => ['required', Rule::exists('user_credit_histories', 'id')],
+                ],
+            );
+
+            if ($validateRequest->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateRequest->errors()
+                ], 401);
+            }
+
+
+            $userId = $request->user_id;
+            $enqueryId = $request->enquery_id;
+            $creditId = $request->credit_id;
+
+            $credit = UserCreditHistory::find($creditId);
+            if ($credit->user_id != $userId) {
+                errorMessage(__('my_profile.invalid_credit_id'), $msg_data);
+            }
+
+            if ($credit->enquery_id != null) {
+                errorMessage(__('my_profile.credit_enquery_exists_id'), $msg_data);
+            }
             $user = User::select('id', 'current_credit_amount')->where('id', $userId)->first();
             $customerEnquery = CustomerEnquiry::select(
                 'id',
@@ -169,67 +246,13 @@ class UserCreditController extends Controller
             if ($customerEnquery->user_id != $userId) {
                 errorMessage(__('my_profile.invalid_enquery_id'), $msg_data);
             }
+            $credit->enquery_id = $enqueryId;
+            $credit->save();
 
-            $currentCredit = $user->current_credit_amount;
-            if ($currentCredit == 0) {
-                errorMessage(__('my_profile.credit_limit'), $msg_data);
-            }
-            $data = new stdClass;
-
-            $similarEnqueryCount = CustomerEnquiry::select(
-                'id',
-            )->where(
-                'id',
-                '!=',
-                $enqueryId
-            )->where([
-                'user_id' => $customerEnquery->user_id,
-                'category_id' => $customerEnquery->category_id,
-                'sub_category_id' => $customerEnquery->sub_category_id,
-                'product_id' => $customerEnquery->product_id,
-                'shelf_life' => $customerEnquery->shelf_life,
-                'entered_shelf_life' => $customerEnquery->entered_shelf_life,
-                'entered_shelf_life_unit' => $customerEnquery->entered_shelf_life_unit,
-                'product_weight' => $customerEnquery->product_weight,
-                'measurement_unit_id' => $customerEnquery->measurement_unit_id,
-                'product_quantity' => $customerEnquery->product_quantity,
-                'storage_condition_id' => $customerEnquery->storage_condition_id,
-                'packaging_machine_id' => $customerEnquery->packaging_machine_id,
-                'product_form_id' => $customerEnquery->product_form_id,
-                'packing_type_id' => $customerEnquery->packing_type_id,
-                'packaging_treatment_id' => $customerEnquery->packaging_treatment_id,
-                'recommendation_engine_id' => $customerEnquery->recommendation_engine_id,
-                'packaging_material_id' => $customerEnquery->packaging_material_id,
-            ])->count();
-            // successMessage("no similar $similarEnqueryCount");
-
-            if ($similarEnqueryCount && $similarEnqueryCount > 0) {
-                $data->is_deducted = false;
-                $data->remaining_credit = $currentCredit;
-            } else {
-
-                $remaingCredit = $currentCredit - 1;
-                $user->update([
-                    'current_credit_amount' => $remaingCredit
-                ]);
-                // $user->save();
-                $userCreditHistory = UserCreditHistory::create(
-                    [
-                        'user_id' => $request->user_id,
-                        'amount' => 1,
-                        'enquery_id' => $enqueryId,
-                        'reason' => __('my_profile.enquery_result_credit_deduct'),
-                        'action' => 'deduct'
-                    ]
-                );
-
-                $data->is_deducted = true;
-                $data->remaining_credit = $remaingCredit;
-            }
 
             // $data->enq = $customerEnquery;
 
-            $msg_data['result'] = $data;
+            $msg_data['result'] = $credit;
 
             successMessage(__('my_profile.credit_deduct'), $msg_data);
         } catch (\Exception $e) {

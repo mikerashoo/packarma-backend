@@ -19,6 +19,8 @@ return [
     'credits_history_fetch' => 'User Credits History Fetch Successfully ',
     'credits_added' => 'User Credits Added Successfully ',
     'invalid_enquery_id' => 'Wrong Enquery for user ',
+    'invalid_credit_id' => 'Wrong Credit for user ',
+    'credit_enquery_exists_id' => 'Credit has enquery already',
     'credit_limit' => 'User has no credit remaining',
     'enquery_result_credit_deduct' => 'Enquery result',
     'credit_deduct' => 'User Credits Deducted Successfully',
