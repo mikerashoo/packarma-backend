@@ -513,7 +513,7 @@ class CustomerEnquiryApiController extends Controller
     private function validateProductEnquiry(Request $request)
     {
         return Validator::make($request->all(), [
-            'packaging_solution_id' => 'required|array',
+            'packaging_solution_id' => 'required|integer',
             'packaging_solution_ids' => 'required|array',
             'packaging_solution_ids.*' => 'exists:recommendation_engines,id',
             'product_quantity' => 'required|numeric',
