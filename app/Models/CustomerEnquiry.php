@@ -11,6 +11,7 @@ class CustomerEnquiry extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+    protected $hidden = ['pivot'];
 
     /**
      * The attributes that are mass assignable.

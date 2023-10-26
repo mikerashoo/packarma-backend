@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\CustomerEnquiry;
 use App\Models\User;
 use App\Models\UserCreditHistory;
+use App\Observers\CustomerEnqueryObserver;
 use App\Observers\UserCreditHistoryObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -33,5 +35,6 @@ class EventServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
         UserCreditHistory::observe(UserCreditHistoryObserver::class);
+        CustomerEnquiry::observe(CustomerEnqueryObserver::class);
     }
 }

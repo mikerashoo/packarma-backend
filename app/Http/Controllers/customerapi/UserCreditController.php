@@ -143,9 +143,13 @@ class UserCreditController extends Controller
             }
 
             $t = CustomerEnquiry::first();
-            $t->recommendationEngines()->attach($request->ids);
-
-            return $t->recommendationEngines;
+            // $t->recommendationEngines()->attach($request->ids);
+            // 'recommendation_engines.engine_name',
+            // 'recommendation_engines.structure_type',
+            // 'recommendation_engines.display_shelf_life',
+            // 'recommendation_engines.min_order_quantity',
+            // 'recommendation_engines.min_order_quantity_unit',
+            return $t->recommendationEngines()->select(['engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
             $userId = $request->user_id;
             $enqueryId = $request->enquery_id;
             $user = User::select('id', 'current_credit_amount')->where('id', $userId)->first();
