@@ -237,4 +237,13 @@ class CustomerEnquiry extends Model
     {
         return $this->belongsTo('App\Models\RecommendationEngine');
     }
+
+    /**
+     *
+     * uses : to get data of recommendation engines data customer enquiry table
+     */
+    public function recommendationEngines()
+    {
+        return $this->belongsToMany('App\Models\RecommendationEngine', 'customer_enquiries_recommendations', 'customer_enquiry_id', 'recommendation_id');
+    }
 }

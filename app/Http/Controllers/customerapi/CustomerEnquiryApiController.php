@@ -192,9 +192,13 @@ class CustomerEnquiryApiController extends Controller
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
 
-                $minOrderQuantityDataDB = RecommendationEngine::where('id', $request->recommendation_engine_id)->pluck('min_order_quantity')->first();
-                if (isset($request->product_quantity) && ($request->product_quantity < $minOrderQuantityDataDB)) {
-                    errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                $recommendantionIds = $request->recommendation_engine_ids;
+
+                if (isset($request->product_quantity)) {
+                    $minOrderQuantityDataDB = RecommendationEngine::whereIn('id', $recommendantionIds)->where('min_order_quantity', '>', $request->product_quantity)->select('min_order_quantity')->first();
+                    if ($minOrderQuantityDataDB) {
+                        errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                    }
                 }
 
                 $shelf_life = config('global.DEFAULT_SHELF_LIFE');
@@ -220,6 +224,7 @@ class CustomerEnquiryApiController extends Controller
                 $request['user_id'] = $user_id;
                 $request['entered_shelf_life'] = $shelf_life;
                 $request['entered_shelf_life_unit'] = $shelf_life_unit;
+                $request['recommendation_engine_id'] = $recommendantionIds[0];
 
 
                 if ($shelf_life_unit == 'months') {
@@ -234,6 +239,9 @@ class CustomerEnquiryApiController extends Controller
                 $enquiryData = CustomerEnquiry::create($request->all());
                 $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
                 $enquiryData->is_subscribed = $isSubscribed;
+
+                $enquiryData->recommendationEngines()->attach($recommendantionIds);
+
                 Log::info("Customer Enquiry Created successfully");
                 successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
             } else {
@@ -249,7 +257,7 @@ class CustomerEnquiryApiController extends Controller
      * Validate request for Customer Enquiry.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Countable|array
      */
     private function validateEnquiry(Request $request)
     {
@@ -257,7 +265,8 @@ class CustomerEnquiryApiController extends Controller
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
-            'recommendation_engine_id' => 'required|numeric',
+            'recommendation_engine_ids' => 'required|array',
+            'recommendation_engine_ids.*' => 'exists:recommendation_engines,id',
             'user_address_id' => 'required|numeric',
             'packaging_material_id' => 'required|numeric',
             'product_quantity' => 'required|numeric',
