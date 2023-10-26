@@ -11,6 +11,7 @@ class CustomerEnquiry extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+    protected $hidden = ['pivot'];
 
     /**
      * The attributes that are mass assignable.
@@ -236,5 +237,14 @@ class CustomerEnquiry extends Model
     public function recommendation_engine()
     {
         return $this->belongsTo('App\Models\RecommendationEngine');
+    }
+
+    /**
+     *
+     * uses : to get data of recommendation engines data customer enquiry table
+     */
+    public function recommendationEngines()
+    {
+        return $this->belongsToMany('App\Models\RecommendationEngine', 'customer_enquiries_recommendations', 'customer_enquiry_id', 'recommendation_id');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerEnquiry;
+use App\Models\RecommendationEngine;
 use App\Models\User;
 use App\Models\UserCreditHistory;
 use Illuminate\Http\Request;
@@ -127,7 +128,9 @@ class UserCreditController extends Controller
             $validateRequest = Validator::make(
                 $request->all(),
                 [
-                    'user_id' => ['required', Rule::exists('users', 'id')]
+                    'user_id' => ['required', Rule::exists('users', 'id')],
+                    'ids' => 'required|array',
+                    'ids.*' => 'exists:recommendation_engines,id',
                 ],
             );
 
@@ -139,7 +142,14 @@ class UserCreditController extends Controller
                 ], 401);
             }
 
-
+            $t = CustomerEnquiry::first();
+            // $t->recommendationEngines()->attach($request->ids);
+            // 'recommendation_engines.engine_name',
+            // 'recommendation_engines.structure_type',
+            // 'recommendation_engines.display_shelf_life',
+            // 'recommendation_engines.min_order_quantity',
+            // 'recommendation_engines.min_order_quantity_unit',
+            return $t->recommendationEngines()->select(['engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
             $userId = $request->user_id;
             $enqueryId = $request->enquery_id;
             $user = User::select('id', 'current_credit_amount')->where('id', $userId)->first();

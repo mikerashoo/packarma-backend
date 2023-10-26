@@ -11,6 +11,8 @@ class RecommendationEngine extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+    protected $hidden = ['pivot'];
+
 
     /**
      * Developed By : Pradyumn Dwivedi

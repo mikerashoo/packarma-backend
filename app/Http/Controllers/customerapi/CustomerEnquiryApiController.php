@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\FacadesValidator;
 use Illuminate\Validation\Rule;
 use Response;
+use stdClass;
 
 class CustomerEnquiryApiController extends Controller
 {
@@ -78,11 +79,7 @@ class CustomerEnquiryApiController extends Controller
                     'user_addresses.address',
                     'user_addresses.pincode',
                     'customer_enquiries.recommendation_engine_id',
-                    'recommendation_engines.engine_name',
-                    'recommendation_engines.structure_type',
-                    'recommendation_engines.display_shelf_life',
-                    'recommendation_engines.min_order_quantity',
-                    'recommendation_engines.min_order_quantity_unit',
+
                     'customer_enquiries.packaging_material_id',
                     'customer_enquiries.quote_type',
                     'user_credit_histories.*',
@@ -98,7 +95,7 @@ class CustomerEnquiryApiController extends Controller
                     ->leftjoin('packing_types', 'packing_types.id', '=', 'customer_enquiries.packing_type_id')
                     ->leftjoin('packaging_treatments', 'packaging_treatments.id', '=', 'customer_enquiries.packaging_treatment_id')
                     ->leftjoin('user_addresses', 'user_addresses.id', '=', 'customer_enquiries.user_address_id')
-                    ->leftjoin('recommendation_engines', 'recommendation_engines.id', '=', 'customer_enquiries.recommendation_engine_id')
+
                     ->leftjoin('user_credit_histories', 'user_credit_histories.enquery_id', '=', 'customer_enquiries.id')
                     ->where('customer_enquiries.user_id', $user_id)
                     ->whereIn('customer_enquiries.quote_type', ['enquired', 'map_to_vendor', 'accept_cust']);
@@ -138,6 +135,9 @@ class CustomerEnquiryApiController extends Controller
                         $data[$i]->entered_shelf_life = null;
                         $data[$i]->entered_shelf_life_unit = null;
                     }
+
+                    $currentEnquery = CustomerEnquiry::find($row->id);
+                    $data[$i]->recommendation_engines = $currentEnquery->recommendationEngines()->select(['engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
                     $i++;
                 }
                 if (empty($data)) {
@@ -192,9 +192,13 @@ class CustomerEnquiryApiController extends Controller
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
 
-                $minOrderQuantityDataDB = RecommendationEngine::where('id', $request->recommendation_engine_id)->pluck('min_order_quantity')->first();
-                if (isset($request->product_quantity) && ($request->product_quantity < $minOrderQuantityDataDB)) {
-                    errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                $recommendantionIds = $request->recommendation_engine_ids;
+
+                if (isset($request->product_quantity)) {
+                    $minOrderQuantityDataDB = RecommendationEngine::whereIn('id', $recommendantionIds)->where('min_order_quantity', '>', $request->product_quantity)->select('min_order_quantity')->first();
+                    if ($minOrderQuantityDataDB) {
+                        errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                    }
                 }
 
                 $shelf_life = config('global.DEFAULT_SHELF_LIFE');
@@ -220,6 +224,7 @@ class CustomerEnquiryApiController extends Controller
                 $request['user_id'] = $user_id;
                 $request['entered_shelf_life'] = $shelf_life;
                 $request['entered_shelf_life_unit'] = $shelf_life_unit;
+                $request['recommendation_engine_id'] = $recommendantionIds[0];
 
 
                 if ($shelf_life_unit == 'months') {
@@ -231,9 +236,20 @@ class CustomerEnquiryApiController extends Controller
                 // die;
                 // Store a new enquiry
 
+
+
                 $enquiryData = CustomerEnquiry::create($request->all());
                 $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
                 $enquiryData->is_subscribed = $isSubscribed;
+
+
+
+                $enquiryData->recommendationEngines()->attach($recommendantionIds);
+
+                // $this->deductEnquiryStore()
+
+
+
                 Log::info("Customer Enquiry Created successfully");
                 successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
             } else {
@@ -249,7 +265,7 @@ class CustomerEnquiryApiController extends Controller
      * Validate request for Customer Enquiry.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Countable|array
      */
     private function validateEnquiry(Request $request)
     {
@@ -257,7 +273,8 @@ class CustomerEnquiryApiController extends Controller
             'category_id' => 'required|numeric',
             'sub_category_id' => 'required|numeric',
             'product_id' => 'required|numeric',
-            'recommendation_engine_id' => 'required|numeric',
+            'recommendation_engine_ids' => 'required|array',
+            'recommendation_engine_ids.*' => 'exists:recommendation_engines,id',
             'user_address_id' => 'required|numeric',
             'packaging_material_id' => 'required|numeric',
             'product_quantity' => 'required|numeric',
@@ -336,6 +353,12 @@ class CustomerEnquiryApiController extends Controller
                 //get recommendation engine(packaging solution) data from table
                 $packagingSolutionData = RecommendationEngine::where('id', $request->packaging_solution_id)->first();
 
+                if (isset($request->product_quantity)) {
+                    $minOrderQuantityDataDB = RecommendationEngine::whereIn('id', $recommendantionIds)->where('min_order_quantity', '>', $request->product_quantity)->select('min_order_quantity')->first();
+                    if ($minOrderQuantityDataDB) {
+                        errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                    }
+                }
                 //checking min order quantity
                 if (isset($request->product_quantity) && ($request->product_quantity < $packagingSolutionData->min_order_quantity)) {
                     errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
@@ -396,6 +419,9 @@ class CustomerEnquiryApiController extends Controller
                 $enquiryData = CustomerEnquiry::create($request->all());
                 $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
                 $enquiryData->is_subscribed = $isSubscribed;
+                $recommendantionIds = $request->packaging_solution_ids;
+                $enquiryData->recommendationEngines()->attach($recommendantionIds);
+
                 Log::info("Product Customer Enquiry Created successfully");
                 successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
             } else {
@@ -487,7 +513,9 @@ class CustomerEnquiryApiController extends Controller
     private function validateProductEnquiry(Request $request)
     {
         return Validator::make($request->all(), [
-            'packaging_solution_id' => 'required|integer',
+            'packaging_solution_id' => 'required|array',
+            'packaging_solution_ids' => 'required|array',
+            'packaging_solution_ids.*' => 'exists:recommendation_engines,id',
             'product_quantity' => 'required|numeric',
             'product_weight' => 'sometimes|numeric',
             'user_address_id' => 'required|integer'
