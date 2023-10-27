@@ -150,6 +150,11 @@ class CustomerEnquiryApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $th->getMessage()
+            ], 500);
             Log::error("Customer Enquiry fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
@@ -256,10 +261,16 @@ class CustomerEnquiryApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $th->getMessage()
+            ], 500);
             Log::error("Customer enquiry creation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
     }
+
 
     /**
      * Validate request for Customer Enquiry.
@@ -428,6 +439,11 @@ class CustomerEnquiryApiController extends Controller
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $th->getMessage()
+            ], 500);
             Log::error("Customer enquiry creation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }
