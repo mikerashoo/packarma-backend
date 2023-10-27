@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CustomerEnquiry extends Model
@@ -246,5 +247,15 @@ class CustomerEnquiry extends Model
     public function recommendationEngines()
     {
         return $this->belongsToMany('App\Models\RecommendationEngine', 'customer_enquiries_recommendations', 'customer_enquiry_id', 'recommendation_id');
+    }
+
+    /**
+     * Get all of the credits for the CustomerEnquiry
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function credit(): HasMany
+    {
+        return $this->hasMany(UserCreditHistory::class, 'enquery_id', 'id');
     }
 }

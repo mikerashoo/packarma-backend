@@ -37,6 +37,7 @@ class CustomerEnquiryApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
+                // $user_id = $request->user_id;
                 $page_no = 1;
                 $limit = 10;
                 $orderByArray = ['customer_enquiries.id' => 'DESC',];
@@ -50,6 +51,68 @@ class CustomerEnquiryApiController extends Controller
                 }
                 $offset = ($page_no - 1) * $limit;
                 $main_table = 'customer_enquiries';
+
+                $customerEnquiryData = CustomerEnquiry::where('user_id', $user_id)->whereIn('quote_type', ['enquired', 'map_to_vendor', 'accept_cust']);
+
+
+                if ($request->enquiry_id) {
+                    $customerEnquiryData = $customerEnquiryData->where('id', $request->enquiry_id);
+                    // $data = $data->where($main_table . '' . '.id', $request->enquiry_id);
+                }
+                if ($request->product_id) {
+                    $productId = $request->product_id;
+                    $customerEnquiryData = $customerEnquiryData->where('product_id', $productId);
+
+                    // $data = $data->where($main_table . '' . '.product_id', $request->product_id);
+                }
+                if (empty($customerEnquiryData->first())) {
+                    errorMessage(__('customer_enquiry.customer_enquiry_not_found'), $msg_data);
+                }
+                if (isset($request->search) && !empty($request->search)) {
+                    // $data = fullSearchQuery($data, $request->search, 'description');
+                }
+                if ($defaultSortByName) {
+                    $orderByArray = ['products.product_name' => 'ASC'];
+                }
+
+                $total_records = $customerEnquiryData->get()->count();
+                $customerEnqueries = $customerEnquiryData->limit($limit)->offset($offset)->get();
+
+                // $customerEnqueries = $customerEnquiryData->get();
+
+                foreach ($customerEnqueries as $enquery) {
+                    $enquery->category;
+                    $enquery->product;
+                    $enquery->measurement_unit;
+                    $enquery->sub_category;
+                    $enquery->storage_condition;
+                    $enquery->packaging_machine;
+                    $enquery->product_form;
+                    $enquery->packing_type;
+                    $enquery->packaging_treatment;
+                    $enquery->user_address;
+                    $enquery->credit;
+
+                    $enquery->enquiry_id = getFormatid($enquery->id, 'customer_enquiries');
+                    $quotationCount = VendorQuotation::where([['user_id', $user_id], ['customer_enquiry_id', $enquery->id]])
+                        ->whereIn('enquiry_status', ['quoted', 'viewed'])->get()->count();
+                    $enquery->quotation_count = $quotationCount;
+                    if ($enquery->product_weight == 0) {
+                        $enquery->product_weight = null;
+                        $enquery->measurement_unit_id = null;
+                    }
+                    if ($enquery->entered_shelf_life == 0) {
+                        $enquery->entered_shelf_life = null;
+                        $enquery->entered_shelf_life_unit = null;
+                    }
+
+                    $enquery->recommendationEngines  = $enquery->recommendationEngines()->select(['engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
+                }
+
+                $responseData['result'] = $customerEnqueries;
+                $responseData['total_records'] = $total_records;
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
+                return $customerEnqueries;
                 $data = DB::table('customer_enquiries')->select(
                     'customer_enquiries.id',
                     'customer_enquiries.category_id',
@@ -97,8 +160,9 @@ class CustomerEnquiryApiController extends Controller
                     ->leftjoin('user_addresses', 'user_addresses.id', '=', 'customer_enquiries.user_address_id')
 
                     ->leftjoin('user_credit_histories', 'user_credit_histories.enquery_id', '=', 'customer_enquiries.id')
-                    ->where('customer_enquiries.user_id', $user_id)
-                    ->whereIn('customer_enquiries.quote_type', ['enquired', 'map_to_vendor', 'accept_cust']);
+                    ->where('customer_enquiries.user_id', $user_id);
+                // ->whereIn('customer_enquiries.quote_type', ['enquired', 'map_to_vendor', 'accept_cust']);
+                // return $data;
 
                 $customerEnquiryData = CustomerEnquiry::whereRaw("1 = 1");
                 if ($request->enquiry_id) {
@@ -121,8 +185,11 @@ class CustomerEnquiryApiController extends Controller
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
+                // return $total_records;
+
                 $i = 0;
                 foreach ($data as $row) {
+                    return $row;
                     $data[$i]->enquiry_id = getFormatid($row->id, 'customer_enquiries');
                     $quotationCount = VendorQuotation::where([['user_id', $user_id], ['customer_enquiry_id', $row->id]])
                         ->whereIn('enquiry_status', ['quoted', 'viewed'])->get()->count();
@@ -137,7 +204,8 @@ class CustomerEnquiryApiController extends Controller
                     }
 
                     $currentEnquery = CustomerEnquiry::find($row->id);
-                    $data[$i]->recommendation_engines = $currentEnquery->recommendationEngines()->select(['engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
+                    if ($currentEnquery)
+                        $data[$i]->recommendation_engines = $currentEnquery->recommendationEngines()->select(['engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
                     $i++;
                 }
                 if (empty($data)) {
@@ -153,7 +221,7 @@ class CustomerEnquiryApiController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Unkown error occured',
-                'error' => $th->getMessage()
+                'error' => $e->getMessage()
             ], 500);
             Log::error("Customer Enquiry fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
@@ -179,6 +247,7 @@ class CustomerEnquiryApiController extends Controller
             if ($token) {
                 $user_id = $token['sub'];
                 // Request Validation
+                $user_id = $request->user_id;
 
                 $userSubscriptionCheck = User::find($user_id);
                 $subscriptionEndDate = $userSubscriptionCheck->subscription_end;
@@ -264,7 +333,7 @@ class CustomerEnquiryApiController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Unkown error occured',
-                'error' => $th->getMessage()
+                'error' => $e->getMessage()
             ], 500);
             Log::error("Customer enquiry creation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
@@ -360,7 +429,7 @@ class CustomerEnquiryApiController extends Controller
                     Log::error("Auth Exception: " . implode(", ", $validationErrors->all()));
                     errorMessage($validationErrors->all(), $validationErrors->all());
                 }
-
+                $recommendantionIds = $request->packaging_solution_ids;
                 //get recommendation engine(packaging solution) data from table
                 $packagingSolutionData = RecommendationEngine::where('id', $request->packaging_solution_id)->first();
 
@@ -442,7 +511,7 @@ class CustomerEnquiryApiController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Unkown error occured',
-                'error' => $th->getMessage()
+                'error' => $e->getMessage()
             ], 500);
             Log::error("Customer enquiry creation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
