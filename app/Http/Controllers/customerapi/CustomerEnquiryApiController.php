@@ -106,9 +106,9 @@ class CustomerEnquiryApiController extends Controller
                         $enquery->entered_shelf_life_unit = null;
                     }
 
-                    $recommendationEngines = $enquery->recommendationEngines()->select(['engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
+                    $recommendationEngines = $enquery->recommendationEngines()->select(['recommendation_id as packaging_solution_id', 'engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
                     if (count($recommendationEngines) == 0) {
-                        $recommendationEngines = RecommendationEngine::where('id', $enquery->recommendation_engine_id)->select(['engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
+                        $recommendationEngines = RecommendationEngine::where('id', $enquery->recommendation_engine_id)->select(['id as packaging_solution_id', 'engine_name', 'structure_type', 'display_shelf_life', 'min_order_quantity', 'min_order_quantity_unit'])->get();
                     }
 
                     $enquery->recommendationEngines  = $recommendationEngines;
