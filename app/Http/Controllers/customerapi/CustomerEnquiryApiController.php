@@ -76,7 +76,7 @@ class CustomerEnquiryApiController extends Controller
                 }
 
                 $total_records = $customerEnquiryData->get()->count();
-                $customerEnqueries = $customerEnquiryData->limit($limit)->offset($offset)->get();
+                $customerEnqueries = $customerEnquiryData->orderBy('created_at', 'desc')->limit($limit)->offset($offset)->get();
 
                 // $customerEnqueries = $customerEnquiryData->get();
 
