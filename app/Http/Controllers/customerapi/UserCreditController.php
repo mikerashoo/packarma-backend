@@ -7,6 +7,7 @@ use App\Models\CustomerEnquiry;
 use App\Models\RecommendationEngine;
 use App\Models\User;
 use App\Models\UserCreditHistory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -38,6 +39,18 @@ class UserCreditController extends Controller
 
             $userId = $request->user_id;
             $data = User::select('current_credit_amount', 'credit_totals', DB::raw('subscription_end AS expire_date'))->where('id', $userId)->first();
+
+            if ($data) {
+                $isSubscripitonActive = false;
+
+                if ($data->expire_date && !Carbon::parse($data->expire_date)->isPast()) {
+                    $isSubscripitonActive = true;
+                }
+
+                $data->is_subscription_active = $isSubscripitonActive;
+            }
+
+
 
             $msg_data['result'] = $data;
             successMessage(__('my_profile.credits_fetch'), $msg_data);
