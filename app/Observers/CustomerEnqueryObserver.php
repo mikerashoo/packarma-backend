@@ -45,7 +45,7 @@ class CustomerEnqueryObserver
             ])->count();
 
             $creditAmountToDeduct = 0;
-            if ($similarEnqueryCount) {
+            if (!$similarEnqueryCount) {
                 $creditAmountToDeduct = 1;
             }
 
