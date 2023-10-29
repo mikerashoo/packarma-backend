@@ -39,7 +39,9 @@ class RegisterApiController extends Controller
             $password = md5(strtolower($request->email) . $request->password);
             unset($request->password);
             $request['password'] = $password;
-
+            $request['status'] = 1;
+            $request['approved_by'] = 1;
+            $request['approved_on'] = Carbon::now();
             $checkUser = User::where('phone', $request->phone)->orWhere('email', strtolower($request->email))->first();
             if (empty($checkUser)) {
                 // Store a new user
@@ -64,14 +66,14 @@ class RegisterApiController extends Controller
                 $visiting_card_front = $request->file('visiting_card_front');
                 $extension = $visiting_card_front->extension();
                 $imgname_front = $user['id'] . '_front_' . Carbon::now()->format('dmYHis') . '.' . $extension;
-                $user['visiting_card_front'] = $input['visiting_card_front'] = saveImageGstVisitingCard($visiting_card_front,'visiting_card/front', $imgname_front);
+                $user['visiting_card_front'] = $input['visiting_card_front'] = saveImageGstVisitingCard($visiting_card_front, 'visiting_card/front', $imgname_front);
             }
             if ($request->hasFile('visiting_card_back')) {
                 \Log::info("Storing visiting card back image.");
                 $visiting_card_back = $request->file('visiting_card_back');
                 $extension = $visiting_card_back->extension();
                 $imgname_back = $user['id'] . '_back_' . Carbon::now()->format('dmYHis') . '.' . $extension;
-                $user['visiting_card_back'] = $input['visiting_card_back'] = saveImageGstVisitingCard($visiting_card_back,'visiting_card/back', $imgname_back);
+                $user['visiting_card_back'] = $input['visiting_card_back'] = saveImageGstVisitingCard($visiting_card_back, 'visiting_card/back', $imgname_back);
             }
             if (!empty($input)) {
                 User::find($user['id'])->update($input);
