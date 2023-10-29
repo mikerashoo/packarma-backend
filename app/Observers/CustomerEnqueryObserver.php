@@ -23,29 +23,20 @@ class CustomerEnqueryObserver
             )->where(
                 'id',
                 '!=',
-                $customerEnquiry
+                $customerEnquiry->id
             )->where([
                 'user_id' => $customerEnquiry->user_id,
                 'category_id' => $customerEnquiry->category_id,
                 'sub_category_id' => $customerEnquiry->sub_category_id,
                 'product_id' => $customerEnquiry->product_id,
-                'shelf_life' => $customerEnquiry->shelf_life,
-                'entered_shelf_life' => $customerEnquiry->entered_shelf_life,
-                'entered_shelf_life_unit' => $customerEnquiry->entered_shelf_life_unit,
-                'product_weight' => $customerEnquiry->product_weight,
-                'measurement_unit_id' => $customerEnquiry->measurement_unit_id,
                 'product_quantity' => $customerEnquiry->product_quantity,
-                'storage_condition_id' => $customerEnquiry->storage_condition_id,
-                'packaging_machine_id' => $customerEnquiry->packaging_machine_id,
-                'product_form_id' => $customerEnquiry->product_form_id,
                 'packing_type_id' => $customerEnquiry->packing_type_id,
-                'packaging_treatment_id' => $customerEnquiry->packaging_treatment_id,
-                // 'recommendation_engine_id' => $customerEnquiry->recommendation_engine_id,
                 'packaging_material_id' => $customerEnquiry->packaging_material_id,
             ])->count();
 
+
             $creditAmountToDeduct = 0;
-            if (!$similarEnqueryCount) {
+            if ($similarEnqueryCount == 0) {
                 $creditAmountToDeduct = 1;
             }
 
