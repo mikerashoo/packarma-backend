@@ -273,12 +273,12 @@ class CustomerEnquiryApiController extends Controller
 
                 $recommendantionIds = $request->recommendation_engine_ids;
 
-                if (isset($request->product_quantity)) {
-                    $minOrderQuantityDataDB = RecommendationEngine::whereIn('id', $recommendantionIds)->where('min_order_quantity', '>', $request->product_quantity)->select('min_order_quantity')->first();
-                    if ($minOrderQuantityDataDB) {
-                        errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
-                    }
-                }
+                // if (isset($request->product_quantity)) {
+                //     $minOrderQuantityDataDB = RecommendationEngine::whereIn('id', $recommendantionIds)->where('min_order_quantity', '>', $request->product_quantity)->select('min_order_quantity')->first();
+                //     if ($minOrderQuantityDataDB) {
+                //         errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                //     }
+                // }
 
                 $shelf_life = config('global.DEFAULT_SHELF_LIFE');
                 $shelf_life_unit = config('global.DEFAULT_SHELF_LIFE_UNIT');
@@ -438,16 +438,16 @@ class CustomerEnquiryApiController extends Controller
                 //get recommendation engine(packaging solution) data from table
                 $packagingSolutionData = RecommendationEngine::where('id', $request->packaging_solution_id)->first();
 
-                if (isset($request->product_quantity)) {
-                    $minOrderQuantityDataDB = RecommendationEngine::whereIn('id', $recommendantionIds)->where('min_order_quantity', '>', $request->product_quantity)->select('min_order_quantity')->first();
-                    if ($minOrderQuantityDataDB) {
-                        errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
-                    }
-                }
-                //checking min order quantity
-                if (isset($request->product_quantity) && ($request->product_quantity < $packagingSolutionData->min_order_quantity)) {
-                    errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
-                }
+                // if (isset($request->product_quantity)) {
+                //     $minOrderQuantityDataDB = RecommendationEngine::whereIn('id', $recommendantionIds)->where('min_order_quantity', '>', $request->product_quantity)->select('min_order_quantity')->first();
+                //     if ($minOrderQuantityDataDB) {
+                //         errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                //     }
+                // }
+                // //checking min order quantity
+                // if (isset($request->product_quantity) && ($request->product_quantity < $packagingSolutionData->min_order_quantity)) {
+                //     errorMessage(__('customer_enquiry.product_quantity_should_be_greater_than_minimum_order_quantity'), $msg_data);
+                // }
 
                 //checking min order quantity
                 if (isset($request->product_weight)) {
