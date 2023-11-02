@@ -315,22 +315,33 @@ class CustomerEnquiryApiController extends Controller
                 // die;
                 // Store a new enquiry
 
+                $similarEnqueryCount = CustomerEnquiry::where([
+                    'user_id' => $request['user_id'],
+                    'category_id' => $request['category_id'],
+                    'sub_category_id' => $request['sub_category_id'],
+                    'product_id' => $request['product_id'],
+                    'product_quantity' => $request['product_quantity'],
+                    'packing_type_id' => $request['packing_type_id'],
+                    'packaging_material_id' => $request['packaging_material_id'],
+                ])->first();
+
+                if ($similarEnqueryCount) {
+                    $similarEnqueryCount->enquiry_id = getFormatid($similarEnqueryCount->id, 'customer_enquiries');
+                    $similarEnqueryCount->is_subscribed = $isSubscribed;
+                    successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $similarEnqueryCount->toArray());
+                } else {
+                    $enquiryData = CustomerEnquiry::create($request->all());
+                    $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
+                    $enquiryData->is_subscribed = $isSubscribed;
+                    $enquiryData->recommendationEngines()->attach($recommendantionIds);
 
 
-                $enquiryData = CustomerEnquiry::create($request->all());
-                $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
-                $enquiryData->is_subscribed = $isSubscribed;
 
+                    $this->deductCredit($enquiryData->user_id, $enquiryData->id);
 
-
-                $enquiryData->recommendationEngines()->attach($recommendantionIds);
-
-                // $this->deductEnquiryStore()
-
-
-
-                Log::info("Customer Enquiry Created successfully");
-                successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
+                    Log::info("Customer Enquiry Created successfully");
+                    successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
+                }
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
@@ -342,6 +353,36 @@ class CustomerEnquiryApiController extends Controller
             ], 500);
             Log::error("Customer enquiry creation failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    private function deductCredit($userId, $enqueryId)
+    {
+        try {
+            $creditAmountToDeduct = 1;
+            $user = User::select('id', 'current_credit_amount')->where('id', $userId)->first();
+            $currentCredit = $user->current_credit_amount;
+
+            if ($currentCredit == 0) {
+                $creditAmountToDeduct = 0;
+            }
+
+            $remaingCredit = $currentCredit - $creditAmountToDeduct;
+            $user->update([
+                'current_credit_amount' => $remaingCredit
+            ]);
+            // $user->save();
+            UserCreditHistory::create(
+                [
+                    'user_id' => $userId,
+                    'amount' => $creditAmountToDeduct,
+                    'enquery_id' => $enqueryId,
+                    'reason' => __('my_profile.enquery_result_credit_deduct'),
+                    'action' => 'deduct'
+                ]
+            );
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 
@@ -500,15 +541,33 @@ class CustomerEnquiryApiController extends Controller
                     $request['shelf_life'] =  $shelf_life;
                 }
 
-                // Store a new enquiry
-                $enquiryData = CustomerEnquiry::create($request->all());
-                $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
-                $enquiryData->is_subscribed = $isSubscribed;
-                $recommendantionIds = $request->packaging_solution_ids;
-                $enquiryData->recommendationEngines()->attach($recommendantionIds);
+                $similarEnqueryCount = CustomerEnquiry::where([
+                    'user_id' => $request['user_id'],
+                    'category_id' => $request['category_id'],
+                    'sub_category_id' => $request['sub_category_id'],
+                    'product_id' => $request['product_id'],
+                    'product_quantity' => $request['product_quantity'],
+                    'packing_type_id' => $request['packing_type_id'],
+                    'packaging_material_id' => $request['packaging_material_id'],
+                ])->first();
 
-                Log::info("Product Customer Enquiry Created successfully");
-                successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
+                if ($similarEnqueryCount) {
+                    $similarEnqueryCount->enquiry_id = getFormatid($similarEnqueryCount->id, 'customer_enquiries');
+                    $similarEnqueryCount->is_subscribed = $isSubscribed;
+                    successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $similarEnqueryCount->toArray());
+                } else {
+
+                    // Store a new enquiry
+                    $enquiryData = CustomerEnquiry::create($request->all());
+                    $enquiryData->enquiry_id = getFormatid($enquiryData->id, 'customer_enquiries');
+                    $enquiryData->is_subscribed = $isSubscribed;
+                    $recommendantionIds = $request->packaging_solution_ids;
+                    $enquiryData->recommendationEngines()->attach($recommendantionIds);
+                    $this->deductCredit($enquiryData->user_id, $enquiryData->id);
+
+                    Log::info("Product Customer Enquiry Created successfully");
+                    successMessage(__('customer_enquiry.customer_enquiry_placed_successfully'), $enquiryData->toArray());
+                }
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
