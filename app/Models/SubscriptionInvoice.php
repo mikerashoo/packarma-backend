@@ -23,9 +23,10 @@ class SubscriptionInvoice extends Model
     protected $BRANCH_NAME = "Vile Parle ";
     protected $ACCOUNT_NUMBER = "50200064942088";
     protected $IFSC_CODE = "HDFC0000227";
+    protected $ACCOUNT_NAME = "Packarma";
 
 
-    protected $appends = ['address', 'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'ifsc_code', 'gst_prices'];
+    protected $appends = ['address', 'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'account_name', 'ifsc_code', 'gst_prices'];
 
 
     public function getGstInAttribute()
@@ -60,6 +61,12 @@ class SubscriptionInvoice extends Model
         return $this->ACCOUNT_NUMBER;
     }
 
+
+    public function getAccountNameAttribute()
+    {
+        return $this->ACCOUNT_NAME;
+    }
+
     public function getIfscCodeAttribute()
     {
         return $this->BRANCH_NAME;
@@ -83,18 +90,33 @@ class SubscriptionInvoice extends Model
         $igst = 0;
         $cgst = 0;
         $sgst = 0;
+
+        $igst_total = 0;
+        $cgst_total = 0;
+        $sgst_total = 0;
         $maharashtra = 'maharashtra';
         if ($maharashtra == strtolower($stateName)) {
-            $cgst =  round(($total * 9) / 100, 2);
-            $sgst =  round(($total * 9) / 100, 2);
+            $cgst = 9;
+            $sgst = 9;
         } else {
-            $igst =  round(($total * 9) / 100, 2);
+            $igst = 18;
         }
+        $cgst_total =  round(($total * $cgst) / 100, 2);
+        $sgst_total =  round(($total * $sgst) / 100, 2);
+        $igst_total =  round(($total * $igst) / 100, 2);
+
 
         $data = new stdClass;
         $data->igst = $igst;
         $data->cgst = $cgst;
         $data->sgst = $sgst;
+
+        $data->igst_total = $igst_total;
+        $data->cgst_total = $cgst_total;
+        $data->sgst_total = $sgst_total;
+
+
+        $data->sub_total = $total - $igst_total - $cgst_total - $sgst;
         $data->total = $total;
 
 
