@@ -20,41 +20,36 @@ class BannerApiController extends Controller
     public function index(Request $request)
     {
         $msg_data = array();
-        try
-        {
+        try {
             $token = readHeaderToken();
-            if($token)
-            {
-                $data =array();
-                $page_no=1;
-                $limit=10;
+            if ($token) {
+                $data = array();
+                $page_no = 1;
+                $limit = 10;
                 $orderByArray = ['banners.updated_at' => 'DESC',];
                 $defaultSortByName = false;
-                if(isset($request->page_no) && !empty($request->page_no)) {
-                    $page_no=$request->page_no;
+                if (isset($request->page_no) && !empty($request->page_no)) {
+                    $page_no = $request->page_no;
                 }
-                if(isset($request->limit) && !empty($request->limit)) {
-                    $limit=$request->limit;
+                if (isset($request->limit) && !empty($request->limit)) {
+                    $limit = $request->limit;
                 }
-                $offset=($page_no-1)*$limit;
-                $data = Banner::select('id','title','banner_image','banner_thumb_image','seo_url','meta_title','meta_description','meta_keyword')->where('status','1');
+                $offset = ($page_no - 1) * $limit;
+                $data = Banner::select('id', 'title', 'link', 'description', 'banner_image', 'banner_thumb_image', 'seo_url', 'meta_title', 'meta_description', 'meta_keyword')->where('status', '1');
                 $bannerData = Banner::whereRaw("1 = 1");
-                if($request->banner_id)
-                {
+                if ($request->banner_id) {
                     $bannerData = $bannerData->where('id', $request->banner_id);
-                    $data = $data->where('id',$request->banner_id);
+                    $data = $data->where('id', $request->banner_id);
                 }
-                if($request->banner_title)
-                {
-                    $bannerData = $bannerData->where('title',$request->banner_title);
-                    $data = $data->where('title',$request->banner_title);
+                if ($request->banner_title) {
+                    $bannerData = $bannerData->where('title', $request->banner_title);
+                    $data = $data->where('title', $request->banner_title);
                 }
-                if(empty($bannerData->first()))
-                {
+                if (empty($bannerData->first())) {
                     errorMessage(__('banner.banner_not_found'), $msg_data);
                 }
-                if(isset($request->search) && !empty($request->search)) {
-                    $data = fullSearchQuery($data, $request->search,'title');
+                if (isset($request->search) && !empty($request->search)) {
+                    $data = fullSearchQuery($data, $request->search, 'title');
                 }
                 if ($defaultSortByName) {
                     $orderByArray = ['products.product_name' => 'ASC'];
@@ -62,29 +57,24 @@ class BannerApiController extends Controller
                 $data = allOrderBy($data, $orderByArray);
                 $total_records = $data->get()->count();
                 $data = $data->limit($limit)->offset($offset)->get()->toArray();
-                $i=0;
-                foreach($data as $row)
-                {
+                $i = 0;
+                foreach ($data as $row) {
                     $data[$i]['banner_image'] = getFile($row['banner_image'], 'banner');
-                    $data[$i]['banner_thumb_image'] = getFile($row['banner_thumb_image'], 'banner',false,'thumb');
+                    $data[$i]['banner_thumb_image'] = getFile($row['banner_thumb_image'], 'banner', false, 'thumb');
                     $i++;
                 }
-                if(empty($data)) {
+                if (empty($data)) {
                     $data[0]['banner_image'] = getFile('banner_image', 'banner');
-                    $data[0]['banner_thumb_image'] = getFile('banner_thumb_image', 'banner',false,'thumb');
+                    $data[0]['banner_thumb_image'] = getFile('banner_thumb_image', 'banner', false, 'thumb');
                     // errorMessage(__('banner.banner_not_found'), $msg_data);
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
-                successMessage(__('success_msg.data_fetched_successfully'), $responseData); 
-            }
-            else
-            {
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
+            } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             \Log::error("Banner fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }

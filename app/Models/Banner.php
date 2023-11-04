@@ -1,7 +1,7 @@
 <?php
 /*
-    *	Developed by : Sagar Thokal - Mypcot Infotech 
-    *	Project Name : RRPL 
+    *	Developed by : Sagar Thokal - Mypcot Infotech
+    *	Project Name : RRPL
     *	File Name : Banner.php
     *	File Path : app\Models\Banner.php
     *	Created On : 28-01-2022
@@ -27,7 +27,9 @@ class Banner extends Model
      */
     protected $fillable = [
         'title',
-        'banner_image'
+        'banner_image',
+        'link',
+        'description'
     ];
 
 

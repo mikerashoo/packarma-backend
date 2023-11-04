@@ -1,5 +1,5 @@
 <section class="users-list-wrapper">
-	<div class="users-list-table">
+    <div class="users-list-table">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -7,69 +7,92 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-12 col-sm-7">
-                                     <h5 class="pt-2">Edit Banner : {{$data->title}}</h5>
+                                    <h5 class="pt-2">Edit Banner : {{ $data->title }}</h5>
                                 </div>
                                 <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
-                                    <a href="{{URL::previous()}}" class="btn btn-sm btn-primary px-3 py-1"><i class="fa fa-arrow-left"></i> Back</a>
+                                    <a href="{{ URL::previous() }}" class="btn btn-sm btn-primary px-3 py-1"><i
+                                            class="fa fa-arrow-left"></i> Back</a>
                                 </div>
                             </div>
                         </div>
                         <!-- <hr class="mb-0"> -->
-                    	<div class="card-body">
+                        <div class="card-body">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item">
-                                    <a href="#details" role="tab" id="details-tab" class="nav-link d-flex align-items-center active" data-toggle="tab" aria-controls="details" aria-selected="true">
+                                    <a href="#details" role="tab" id="details-tab"
+                                        class="nav-link d-flex align-items-center active" data-toggle="tab"
+                                        aria-controls="details" aria-selected="true">
                                         <i class="ft-info mr-1"></i>
                                         <!-- <span class="d-none d-sm-block">Details</span> -->
                                         <span class="">Details</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#page_description" role="tab" id="page_description-tab" class="nav-link d-flex align-items-center" data-toggle="tab" aria-controls="page_description" aria-selected="false">
+                                    <a href="#page_description" role="tab" id="page_description-tab"
+                                        class="nav-link d-flex align-items-center" data-toggle="tab"
+                                        aria-controls="page_description" aria-selected="false">
                                         <i class="ft-info mr-1"></i>
                                         <!-- <span class="d-none d-sm-block">SEO description</span> -->
                                         <span class="">SEO description</span>
                                     </a>
                                 </li>
                             </ul>
-                            <form id="editBannersForm" method="post" action="saveBanners?id={{$data->id}}">
-                            @csrf
+                            <form id="editBannersForm" method="post" action="saveBanners?id={{ $data->id }}">
+                                @csrf
                                 <div class="tab-content">
-                                    <div class="tab-pane fade mt-2 show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                                    <div class="tab-pane fade mt-2 show active" id="details" role="tabpanel"
+                                        aria-labelledby="details-tab">
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <label>Banner Title<span class="text-danger">*</span></label>
-                                                <input class="form-control required" type="text" id="title" name="title" value="{{$data->title}}"><br/>
+                                                <input class="form-control required" type="text" id="title"
+                                                    name="title" value="{{ $data->title }}"><br />
+
+
+                                                <label>Banners Link<span class="text-danger">*</span></label>
+                                                <input class="form-control required" type="text" id="link"
+                                                    value="{{ $data->link }}" name="link"><br />
+
+                                                <label>Banners Description<span class="text-danger">*</span></label>
+                                                <textarea class="form-control required" id="description" name="description">{{ $data->description }}</textarea><br />
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Banner Image<span class="text-danger">*</span></label>
-                                                <p style="color:blue;">Note : Upload file size <?php echo  config('global.DIMENTIONS.BANNER'); ?></p>
-                                                <input class="form-control" type="file" id="banner_image" name="banner_image" accept="image/png, image/jpg, image/jpeg" multiple><br/>
-                                                <img src="{{ $data->image_path}}" width="200px" height="auto">
+                                                <p style="color:blue;">Note : Upload file size <?php echo config('global.DIMENTIONS.BANNER'); ?></p>
+                                                <input class="form-control" type="file" id="banner_image"
+                                                    name="banner_image" accept="image/png, image/jpg, image/jpeg"
+                                                    multiple><br />
+                                                <img src="{{ $data->image_path }}" width="200px" height="auto">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade mt-2" id="page_description" role="tabpanel" aria-labelledby="page_description-tab">
+                                    <div class="tab-pane fade mt-2" id="page_description" role="tabpanel"
+                                        aria-labelledby="page_description-tab">
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <label>Meta Title</label>
-                                                <input class="form-control" type="text" id="meta_title" name="meta_title" value="{{$data->meta_title}}"><br/>
+                                                <input class="form-control" type="text" id="meta_title"
+                                                    name="meta_title" value="{{ $data->meta_title }}"><br />
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Meta Description</label>
-                                                <input class="form-control" type="text" id="meta_description" name="meta_description" value="{{$data->meta_description}}"><br/>
+                                                <input class="form-control" type="text" id="meta_description"
+                                                    name="meta_description" value="{{ $data->meta_description }}"><br />
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Meta Keyword</label>
-                                                <input class="form-control" type="text" id="meta_keyword" name="meta_keyword" value="{{$data->meta_keyword}}"><br/>
+                                                <input class="form-control" type="text" id="meta_keyword"
+                                                    name="meta_keyword" value="{{ $data->meta_keyword }}"><br />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="pull-right">
-                                                <button type="button" class="btn btn-success" onclick="submitForm('editBannersForm','post')">Update</button>
-                                                <a href="{{URL::previous()}}" class="btn btn-danger px-3 py-1"></i>Cancel</a>
+                                                <button type="button" class="btn btn-success"
+                                                    onclick="submitForm('editBannersForm','post')">Update</button>
+                                                <a href="{{ URL::previous() }}"
+                                                    class="btn btn-danger px-3 py-1"></i>Cancel</a>
                                             </div>
                                         </div>
                                     </div>

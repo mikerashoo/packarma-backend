@@ -309,7 +309,7 @@ class InvoiceController extends Controller
             $pdf->SetTitle('Order Invoice');
             $pdf->AddPage();
             $pdf->writeHTML($html, true, false, true, false, '');
-            $pdf->Output('Order Invoice.pdf', 'I');
+            $pdf->Output('Order Invoice.pdf', 'D');
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
