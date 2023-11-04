@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -83,7 +84,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function getInvoiceAddressIdAttribute()
     {
-        return InvoiceAddress::where('user_id', $this->id)->select('id')->first();
+        return DB::table('invoice_addresses')->select('id')->where('user_id', $this->id)->first();
     }
 
     /**
