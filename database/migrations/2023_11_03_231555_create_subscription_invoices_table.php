@@ -21,8 +21,7 @@ class CreateSubscriptionInvoicesTable extends Migration
             $table->foreignId('user_subscription_id')->references('id')
                 ->on('user_subscription_payments')->cascadeOnDelete();
 
-            $table->foreignId('user_address_id')->references('id')
-                ->on('user_addresses')->cascadeOnDelete();
+
             $table->softDeletes();
             $table->timestamps();
         });
