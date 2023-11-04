@@ -15,6 +15,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Models\CustomerDevice;
+use App\Models\GeneralSetting;
 use App\Models\InvoiceAddress;
 use App\Models\State;
 use App\Models\SubscriptionInvoice;
@@ -218,14 +219,29 @@ class InvoiceController extends Controller
             $invoiceId = $request->invoice_id;
 
             $invoice = SubscriptionInvoice::find($invoiceId);
-            // $invoice->address;
+            $invoice->address->state;
+            $invoice->user;
+            $invoice->subscription;
+            $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
+            $invoiceDate = Carbon::now()->format('d/m/Y');
+            $orderDate = Carbon::parse($invoice->created_at)->format('d/m/Y');
+            $inWords = currencyConvertToWord($invoice->gst_prices->total);
 
-            // $userAddress = UserAddress::find($invoice->address_id);
 
-            // $invoice->billing_address = $userAddress;
+            $logo = public_path() . "/backend/img/Packarma_logo.png";
+            $orderFormatedId = getFormatid($invoiceId, 'orders');
 
+            $result = [
+                'invoice' => $invoice,
+                'invoiceDate' => $invoiceDate,
+                'orderDate' => $orderDate,
+                'no_image' => $logo,
+                'financialYear' => $financialYear,
+                'in_words' => $inWords,
+                'orderFormatedId' => $orderFormatedId
+            ];
             Log::info("Invoice data fetch successfully");
-            successMessage(__('invoice.info_fetch'), $invoice->toArray());
+            successMessage(__('invoice.info_fetch'), $result);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
@@ -270,19 +286,20 @@ class InvoiceController extends Controller
             $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
             $invoiceDate = Carbon::now()->format('d/m/Y');
             $orderDate = Carbon::parse($invoice->created_at)->format('d/m/Y');
+            $inWords = currencyConvertToWord($invoice->gst_prices->total);
 
 
-            $state = State::select('state_name')->find($invoice->address->state_id);
-            $country = Country::select('country_name')->find($invoice->address->country_id);
+            $logo = public_path() . "/backend/img/Packarma_logo.png";
+            $orderFormatedId = getFormatid($invoiceId, 'orders');
 
             $result = [
                 'invoice' => $invoice,
                 'invoiceDate' => $invoiceDate,
                 'orderDate' => $orderDate,
-                'no_image' => URL::to('/') . '/public/backend/img/Packarma_logo.png',
+                'no_image' => $logo,
                 'financialYear' => $financialYear,
-                'stateName' => $state->state_name,
-                'countryName' => $country->country_name,
+                'in_words' => $inWords,
+                'orderFormatedId' => $orderFormatedId
             ];
 
 
