@@ -34,19 +34,23 @@
         </td>
     </tr>
     <tr class="table_row">
-        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black;">Invoice No:
+        <td width="33.33%"
+            style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Invoice No:
             {{ $financialYear }}/{{ $invoice->id }}</td>
-        <td width="33.33%" style="border-left-color: black;border-top-color: black;border-right-color: black;">Order No:
-            {{ $financialYear }}/{{ $invoice->id }}</td>
-        <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">State:
+        <td width="33.33%"></td>
+        <td width="33.33%"
+            style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-left-color: black;">State:
             {{ $stateName }}</td>
     </tr>
     <tr class="table_row">
-        <td width="33.33%" style="border-left-color: rgb(207, 2, 2);border-top-color: black;">Invoice Date:
+        <td width="33.33%"
+            style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-right-color: black;">Invoice Date:
             {{ $invoiceDate }}</td>
-        <td width="33.33%" style="border-left-color: black;border-top-color: black;border-right-color: black;">Order
-            Date: {{ $orderDate }} </td>
-        <td width="33.33%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">State Code: IN-MH</td>
+        <td width="33.33%"></td>
+        <td width="33.33%"
+            style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-left-color: black; border-bottom-color: black;">
+            State Code:
+            IN-MH</td>
     </tr>
 
     <tr>
