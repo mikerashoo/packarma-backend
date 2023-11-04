@@ -1,8 +1,8 @@
 <?php
 
 /*
-    *	Developed by : Pradyumn Dwivedi - Mypcot Infotech 
-    *	Project Name : Packult 
+    *	Developed by : Pradyumn Dwivedi - Mypcot Infotech
+    *	Project Name : Packult
     *	File Name : BannerController.php
     *	File Path : app\Http\Controllers\Backend\BannerController.php
     *	Created On : 28-03-2022
@@ -81,7 +81,7 @@ class BannerController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['title', 'banner_image_url', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'action'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -108,7 +108,7 @@ class BannerController extends Controller
     /**
      *   Created by : Pradyumn Dwivedi
      *   Created On : 28-Mar-2022
-     *   Uses :  
+     *   Uses :
      *   @param int $id
      *   @return Response
      */
@@ -124,7 +124,7 @@ class BannerController extends Controller
     /**
      *    created by : Pradyumn Dwivedi
      *    Created On : 28-Mar-2022
-     *   Uses :  
+     *   Uses :
      *   @param Request request
      *   @return Response
      */
@@ -164,6 +164,8 @@ class BannerController extends Controller
         $seoUrl = generateSeoURL($request->title, 60);
         $tableObject->seo_url = $seoUrl;
         $tableObject->meta_title = $request->meta_title;
+        $tableObject->link = $request->link;
+        $tableObject->description = $request->description;
         $tableObject->meta_description = $request->meta_description;
         $tableObject->meta_keyword = $request->meta_keyword;
         if ($isEditFlow) {
@@ -213,10 +215,10 @@ class BannerController extends Controller
     public function updateStatus(Request $request)
     {
         $msg_data = array();
-        if($request->status == 0) {
+        if ($request->status == 0) {
             $activeCount = Banner::where('status', 1)->get()->count();
-            if($activeCount == 1){
-                errorMessage('Last One Banner Must Be Active',$msg_data);
+            if ($activeCount == 1) {
+                errorMessage('Last One Banner Must Be Active', $msg_data);
             }
         }
         $recordData = Banner::find($request->id);
@@ -240,7 +242,7 @@ class BannerController extends Controller
     {
         return \Validator::make($request->all(), [
             'title' => 'required|string',
-            'banner_image' => 'mimes:jpeg,png,jpg|max:'.config('global.SIZE.BANNER'),
+            'banner_image' => 'mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
         ])->errors();
     }
 
@@ -255,7 +257,7 @@ class BannerController extends Controller
     {
         return \Validator::make($request->all(), [
             'title' => 'required|string',
-            'banner_image' => 'required|mimes:jpeg,png,jpg|max:'.config('global.SIZE.BANNER'),
+            'banner_image' => 'required|mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
         ])->errors();
     }
 }
