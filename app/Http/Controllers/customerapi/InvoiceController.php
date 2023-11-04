@@ -95,7 +95,25 @@ class InvoiceController extends Controller
 
             $userId =  $request->user_id;
             $userSubscriptionPaymentId = $request->user_subscription_id;
-            $addressId = $request->user_address_id;
+            $addressExists = DB::table('invoice_addresses')->select('id')->where('user_id', $request->user_id)->first();
+
+            if (!$addressExists) {
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => 'User has no invoice address'
+                ], 401);
+            }
+
+            $exists = SubscriptionInvoice::ofUser($userId)->ofSubscription($userSubscriptionPaymentId)->count() > 0;
+            if ($exists) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => 'Invoice With The Same User And Subscription Exists'
+                ], 401);
+            }
 
             $invoice = SubscriptionInvoice::create([
                 'user_id' => $userId,
