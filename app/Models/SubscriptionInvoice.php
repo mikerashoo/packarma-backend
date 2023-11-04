@@ -125,4 +125,14 @@ class SubscriptionInvoice extends Model
     {
         return $this->belongsTo(UserSubscriptionPayment::class, 'user_subscription_id');
     }
+
+    public function scopeOfUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    public function scopeOfSubscription($query, $subscriptionId)
+    {
+        return $query->where('user_subscription_id', $subscriptionId);
+    }
 }
