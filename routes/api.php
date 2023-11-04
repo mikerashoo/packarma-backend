@@ -30,6 +30,13 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/credit-history', 'UserCreditController@creditHistory');
     });
 
+
+    Route::prefix('invoices')->group(function () {
+        Route::get('list', 'InvoiceController@index');
+        Route::post('detail', 'InvoiceController@detail');
+        Route::post('save', 'InvoiceController@store');
+    });
+
     Route::post('/user-subscription-history', 'UserSubscriptionPaymentApiController@subscriptionHistory');
     Route::post('/user-search-history', 'CustomerEnquiryApiController@searchHistory');
 
