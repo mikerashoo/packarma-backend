@@ -15,7 +15,6 @@ class SubscriptionInvoice extends Model
     protected $fillable = [
         'user_id',
         'user_subscription_id',
-        'user_address_id',
     ];
     protected $GSTIN = "18AABCU9603R1ZK";
     protected $CID_NUMNER = "U74999MH2021PTC366605";
@@ -26,7 +25,7 @@ class SubscriptionInvoice extends Model
     protected $IFSC_CODE = "HDFC0000227";
 
 
-    protected $appends = ['gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'ifsc_code', 'gst_prices'];
+    protected $appends = ['address', 'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'ifsc_code', 'gst_prices'];
 
 
     public function getGstInAttribute()
@@ -66,14 +65,17 @@ class SubscriptionInvoice extends Model
         return $this->BRANCH_NAME;
     }
 
+    public function getAddressAttribute()
+    {
+        return InvoiceAddress::where('user_id', $this->user_id)->first();
+    }
+
 
     public function getGstPricesAttribute()
     {
 
-        // $state = State::find($this->address)
-        $userAddress = UserAddress::select('state_id')->find($this->user_address_id);
-        $state = DB::table('states')->select('state_name')->where('id', $userAddress->state_id)->first();
-        $stateName = $state->state_name;
+
+        $stateName = $this->address->state_name;
 
         $total = UserSubscriptionPayment::select('amount')->find($this->user_subscription_id)->amount;
 
@@ -82,7 +84,6 @@ class SubscriptionInvoice extends Model
         $cgst = 0;
         $sgst = 0;
         $maharashtra = 'maharashtra';
-        $isMaharashtra = false;
         if ($maharashtra == strtolower($stateName)) {
             $cgst =  round(($total * 9) / 100, 2);
             $sgst =  round(($total * 9) / 100, 2);
@@ -112,15 +113,8 @@ class SubscriptionInvoice extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * Get the address that owns the SubscriptionInvoice
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function address(): BelongsTo
-    {
-        return $this->belongsTo(UserAddress::class, 'user_address_id');
-    }
+
+
 
     /**
      * Get the subscription that owns the SubscriptionInvoice

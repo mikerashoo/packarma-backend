@@ -78,6 +78,14 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['invoice_address_id'];
+
+
+    public function getInvoiceAddressIdAttribute()
+    {
+        return InvoiceAddress::where('user_id', $this->id)->select('id')->first();
+    }
+
     /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 22-mar-2022

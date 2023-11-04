@@ -16,4 +16,5 @@ return [
     'not_found' => 'No Details Found for this info type',
     'info_fetch' => 'Invoices Fetched Successfully ',
     'save_success' => 'Invoices Saved Successfully ',
+    'save_address_success' => 'Invoice Address Saved Successfully ',
 ];

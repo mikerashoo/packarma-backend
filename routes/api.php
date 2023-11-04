@@ -34,7 +34,9 @@ Route::middleware(['basicAuth'])->group(function () {
     Route::prefix('invoices')->group(function () {
         Route::get('list', 'InvoiceController@index');
         Route::post('detail', 'InvoiceController@detail');
+        Route::post('download', 'InvoiceController@download');
         Route::post('save', 'InvoiceController@store');
+        Route::post('save-address', 'InvoiceController@saveAddress');
     });
 
     Route::post('/user-subscription-history', 'UserSubscriptionPaymentApiController@subscriptionHistory');
