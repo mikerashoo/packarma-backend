@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
@@ -137,6 +138,8 @@ class ProductController extends Controller
     {
         $data['data'] = Product::all();
         $data['category'] = Category::all();
+        $data['banner'] = Banner::all();
+
         $data['product_form'] = ProductForm::all();
         $data['sub_category'] = SubCategory::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
@@ -154,15 +157,16 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        
+
         $data['category'] = Category::all();
+        $data['banner'] = Banner::all();
         $data['product_form'] = ProductForm::all();
         $data['packaging_treatment'] = PackagingTreatment::all();
         $data['measurement_units'] = MeasurementUnit::all();
         $data['data'] = Product::find($id);
         if ($data['data']) {
             $data['data']->image_path = getFile($data['data']->product_image, 'product', true);
-            $data['sub_category'] = SubCategory::where('category_id',$data['data']['category_id'])->get();
+            $data['sub_category'] = SubCategory::where('category_id', $data['data']['category_id'])->get();
         }
         return view('backend/product/product_edit', $data);
     }
@@ -210,6 +214,7 @@ class ProductController extends Controller
         $tableObject->category_id = $request->category;
         $tableObject->sub_category_id = $request->sub_category;
         $tableObject->product_form_id = $request->product_form;
+        $tableObject->banner_id = $request->banner;
         $tableObject->unit_id = $request->unit;
         $tableObject->packaging_treatment_id = $request->packaging_treatment;
         if ($isEditFlow) {
@@ -240,7 +245,7 @@ class ProductController extends Controller
      */
     public function view($id)
     {
-        $data['data'] = Product::with('sub_category', 'category', 'product_form', 'packaging_treatment')->find($id);
+        $data['data'] = Product::with('sub_category', 'category', 'banner', 'product_form', 'packaging_treatment')->find($id);
         if ($data['data']) {
             $data['data']->image_path = getFile($data['data']->product_image, 'product', true);
         }
@@ -283,7 +288,7 @@ class ProductController extends Controller
             'category' => 'required|integer',
             'product_form' => 'required|integer',
             'packaging_treatment' => 'required|integer',
-            'product_image' => 'nullable|mimes:jpeg,png,jpg|mimes:jpeg,png,jpg|max:'.config('global.SIZE.PRODUCT'),
+            'product_image' => 'nullable|mimes:jpeg,png,jpg|mimes:jpeg,png,jpg|max:' . config('global.SIZE.PRODUCT'),
         ])->errors();
     }
 
@@ -303,7 +308,7 @@ class ProductController extends Controller
             'category' => 'required|integer',
             'product_form' => 'required|integer',
             'packaging_treatment' => 'required|integer',
-            'product_image' => 'required|mimes:jpeg,png,jpg|mimes:jpeg,png,jpg|max:'.config('global.SIZE.PRODUCT'),
+            'product_image' => 'required|mimes:jpeg,png,jpg|mimes:jpeg,png,jpg|max:' . config('global.SIZE.PRODUCT'),
         ])->errors();
     }
 }
