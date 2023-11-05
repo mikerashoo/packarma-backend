@@ -14,7 +14,7 @@ class GstDetailsApiController extends Controller
     /**Created by : Pradyumn Dwivedi
      * Created at : 27/06/2022
      * uses : To store gst details of customer
-     * 
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -41,16 +41,18 @@ class GstDetailsApiController extends Controller
                 unset($user_gst_details['country_id']);
                 if ($request->hasFile('gst_certificate')) {
                     \Log::info("Storing Gst Certificate image.");
-                    $gst_certificate = $request->file('gst_certificate');
-                    $extension = $gst_certificate->extension();
-                    $certificate_imgname = $user_id . '_certificate_' . Carbon::now()->format('dmYHis') . '.' . $extension;
-                    $user_gst_details['gst_certificate'] = saveImageGstVisitingCard($gst_certificate,'gst_certificate', $certificate_imgname);
+                    if ($request->file('gst_certificate')) {
+                        $gst_certificate = $request->file('gst_certificate');
+                        $extension = $gst_certificate->extension();
+                        $certificate_imgname = $user_id . '_certificate_' . Carbon::now()->format('dmYHis') . '.' . $extension;
+                        $user_gst_details['gst_certificate'] = saveImageGstVisitingCard($gst_certificate, 'gst_certificate', $certificate_imgname);
+                    }
                 }
                 if (!empty($UserGstDetails->gst_certificate)) {
 
                     $file_to_unlink =  getFile($UserGstDetails->gst_certificate, 'gst_certificate', FALSE, 'unlink');
                     if ($file_to_unlink != 'file_not_found') {
-                       // Commented by Swayama because unlink was not working on http links for S3 
+                        // Commented by Swayama because unlink was not working on http links for S3
                         // unlink($file_to_unlink);
                     }
                 }
@@ -105,8 +107,8 @@ class GstDetailsApiController extends Controller
                     $userGstData[$i]['gst_certificate'] = getFile($row['gst_certificate'], 'gst_certificate', false, 'gst_certificate');
                     $i++;
                 }
-                $userGstData['social_links'] = GeneralSetting::where('type','youtube_link')->pluck('value')[0] ?? null;
-                
+                $userGstData['social_links'] = GeneralSetting::where('type', 'youtube_link')->pluck('value')[0] ?? null;
+
                 successMessage(__('user.gst_details_fetched'), $userGstData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
@@ -126,8 +128,9 @@ class GstDetailsApiController extends Controller
     private function validateGstDetailsRegister(Request $request, $id)
     {
         return \Validator::make($request->all(), [
-            'gstin' => 'required|string|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin,' . $id . ',id,deleted_at,NULL',
-            'gst_certificate' => 'sometimes|required|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
+            'gstin' => 'string|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin,' . $id . ',id,deleted_at,NULL',
+            'gst_certificate' => 'mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
+            'domain_email_id' => 'required|string'
 
         ])->errors();
     }

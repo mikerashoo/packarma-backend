@@ -55,6 +55,7 @@ class User extends Authenticatable implements JWTSubject
         'credit_totals',
         'approved_by',
         'approved_on',
+        'domain_email_id',
         'status'
     ];
 
