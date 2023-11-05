@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -15,7 +16,7 @@ class Product extends Model
     /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 30-mar-2022
-     * uses : to to get data of sub category in product 
+     * uses : to to get data of sub category in product
      */
     public function sub_category()
     {
@@ -25,7 +26,7 @@ class Product extends Model
     /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 30-mar-2022
-     * uses : to to get data of category in product 
+     * uses : to to get data of category in product
      */
     public function category()
     {
@@ -35,7 +36,7 @@ class Product extends Model
     /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 30-mar-2022
-     * uses : to to get data of product form in product 
+     * uses : to to get data of product form in product
      */
     public function product_form()
     {
@@ -49,7 +50,7 @@ class Product extends Model
     /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 30-mar-2022
-     * uses : to to get data of product treatment in product 
+     * uses : to to get data of product treatment in product
      */
     public function packaging_treatment()
     {
@@ -76,6 +77,16 @@ class Product extends Model
     public function setProductDescriptionAttribute($value)
     {
         $this->attributes['product_description'] = ucwords(strtolower($value));
+    }
+
+    /**
+     * Get the banner that owns the Product
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function banner(): BelongsTo
+    {
+        return $this->belongsTo(Banner::class, 'banner_id',);
     }
     // mutators end
 }
