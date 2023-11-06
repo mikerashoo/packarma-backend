@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class UserSubscriptionPayment extends Model
 {
@@ -31,6 +32,15 @@ class UserSubscriptionPayment extends Model
         'payment_status',
         'created_by'
     ];
+    protected $appends = ['invoice_id'];
+
+
+    public function getInvoiceIdAttribute()
+    {
+        $invoice = DB::table('subscription_invoices')->select('id AS invoice_id')->where('user_subscription_id', $this->id)->first();
+        return $invoice ? $invoice->invoice_id : null;
+    }
+
     /**
      * Developed By : Pradyumn Dwivedi
      * Created On : 24-mar-2022
