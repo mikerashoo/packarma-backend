@@ -17,6 +17,7 @@ use App\Models\Currency;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use App\Models\CustomerDevice;
+use App\Models\UserCreditHistory;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
 
@@ -204,6 +205,31 @@ class UserController extends Controller
                 }
             }
             $tableObject = User::find($_GET['id']);
+
+            $currentCredits = (int)$tableObject->current_credit_amount;
+            $newCredit = (int) $request->current_credit_amount;
+
+            $difference = $currentCredits - $newCredit;
+            if ($difference != 0) {
+                $reason = 'Admin';
+                if ($difference > 0) {
+                    $action = 'deduct';
+                    $amount = $difference;
+                } else {
+                    $action = 'add';
+                    $amount = $difference * -1;
+                }
+
+                UserCreditHistory::create([
+                    'action' => $action,
+                    'reason' => $reason,
+                    'amount' => $amount,
+                    'user_id' => $tableObject->id
+                ]);
+
+                $tableObject->current_credit_amount = $newCredit;
+                $tableObject->credit_totals = $newCredit;
+            }
             $msg = "Data Updated Successfully";
         } else {
             $tableObject = new User;
@@ -225,6 +251,21 @@ class UserController extends Controller
                     errorMessage('Whatsapp Number Already Exist', $msg_data);
                 }
             }
+
+            // $toalCredits = $request->current_credit_amount;
+            // $tableObject->credit_totals = $toalCredits;
+
+            // if ($toalCredits > 0) {
+            //     $reason = 'Admin';
+
+            //     UserCreditHistory::create([
+            //         'action' => 'add',
+            //         'reason' => $reason,
+            //         'amount' => $toalCredits,
+            //         'user_id' => $tableObject->id
+            //     ]);
+            // }
+
             $msg = "Data Saved Successfully";
         }
         $maxPhoneCodeLength = Country::where('id', $request->phone_country_code)->get()->toArray();
@@ -313,6 +354,7 @@ class UserController extends Controller
             'name' => 'required|string',
             'phone_country_code' => 'required|integer',
             'phone' => 'required|digits:10',
+            'current_credit_amount' => 'integer|min:0',
             'whatsapp_country_code' => 'integer',
             'whatsapp_no' => 'digits:10'
         ])->errors();
