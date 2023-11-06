@@ -148,7 +148,7 @@ class InvoiceController extends Controller
                     'user_id' => ['required', Rule::exists('users', 'id')],
                     'state_id' => ['required', Rule::exists('states', 'id')],
 
-                    'city_id' => ['required', Rule::exists('cities', 'id')->where('state_id', $request->state_id)],
+                    'city_name' => ['required', 'string'],
 
                     'name' => 'required',
                     'email' => 'email',

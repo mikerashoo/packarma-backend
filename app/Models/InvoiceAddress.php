@@ -25,14 +25,14 @@ class InvoiceAddress extends Model
         'billing_address',
         'country_id',
         'state_id',
-        'city_id',
+        'city_name',
 
         'gstin',
         'pincode',
         'email',
     ];
 
-    protected $appends = ['city_name', 'state_name', 'country_name'];
+    protected $appends = ['state_name', 'country_name'];
 
 
     public function getCountryNameAttribute()
@@ -48,21 +48,7 @@ class InvoiceAddress extends Model
         return $state ? $state->state_name : '';
     }
 
-    public function getCityNameAttribute()
-    {
-        $city = City::select('city_name')->find($this->city_id);
-        return $city ? $city->city_name : '';
-    }
 
-    /**
-     * Developed By : Pradyumn Dwivedi
-     * Created On : 24-mar-2022
-     * uses : to to get data of city in user address table
-     */
-    public function city()
-    {
-        return $this->belongsTo('App\Models\City');
-    }
 
     /**
      * Developed By : Pradyumn Dwivedi
