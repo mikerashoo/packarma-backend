@@ -303,6 +303,9 @@ class PackagingSolutionApiController extends Controller
                     for ($j = 0; $j < $max_arr_len; $j++) {
                         $data_copy[$j] = $data[$j];
                     }
+
+                    $relatedBanner = Product::find($request->product_id)->banner;
+                    $responseData['banner'] = $relatedBanner;
                     $responseData['result'] = $data_copy;
                     $responseData['is_subscribed'] = $isSubscribed;
                     $responseData['place_enquiry'] = $placeEnquiry;
