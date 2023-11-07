@@ -118,6 +118,8 @@ class PackagingSolutionApiController extends Controller
                         errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
                     }
 
+                    $relatedBanner = Product::find($request->product_id)->banner;
+                    $data['banner'] = $relatedBanner;
                     $responseData['result'] = $data;
                     $responseData['is_subscribed'] = $isSubscribed;
                     $responseData['place_enquiry'] = $placeEnquiry;
