@@ -34,9 +34,17 @@ class Banner extends Model
         'end_date_time'
     ];
 
+    protected $appends = ['clicks'];
+
     public function getStartDateTimeAttribute()
     {
         return $this->start_date_time ?? $this->created_at;
+    }
+
+
+    public function getClicksAttribute()
+    {
+        return BannerClick::ofBanner($this->id)->count();
     }
 
 

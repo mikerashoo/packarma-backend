@@ -14,6 +14,8 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Banner;
+use App\Models\BannerClick;
+use stdClass;
 use Yajra\DataTables\DataTables;
 
 class BannerController extends Controller
@@ -44,6 +46,7 @@ class BannerController extends Controller
     {
         if ($request->ajax()) {
             try {
+                // return Banner::first();
                 $query = Banner::select('*')->orderBy('updated_at', 'desc');
                 return DataTables::of($query)
                     ->filter(function ($query) use ($request) {
@@ -58,6 +61,14 @@ class BannerController extends Controller
                     ->editColumn('banner_image_url', function ($event) {
                         $imageUrl = ListingImageUrl('banner', $event->banner_thumb_image, 'thumb');
                         return ' <img src="' . $imageUrl . '" />';
+                    })
+                    ->editColumn('clicks', function ($event) {
+                        $actions = '<span style="white-space:nowrap;">' . $event->clicks;
+                        if ($event->clicks > 0)
+                            $actions .= '<a href="banner_clicks_view/' . $event->id . '" class="btn ml-2 btn-primary btn-sm modal_src_data" data-size="large" data-title="View Banner Click Details" title="View"><i class="fa fa-eye"></i></a>';
+
+                        $actions .= '</span>';
+                        return $actions;
                     })
                     ->editColumn('action', function ($event) {
                         $banner_view = checkPermission('banner_view');
@@ -81,7 +92,7 @@ class BannerController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'action', 'start_date_time', 'end_date_time'])->setRowId('id')->make(true);
+                    ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'clicks', 'action', 'start_date_time', 'end_date_time'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -205,6 +216,27 @@ class BannerController extends Controller
             $data->image_path = getFile($data->banner_image, 'banner', true);
         }
         return view('backend/banners/banners_view', ["data" => $data]);
+    }
+
+    /**
+     *   Created by : Pradyumn Dwivedi
+     *   Created On : 28-Mar-2022
+     *   Uses :  to load banners view
+     *   @param int $id
+     *   @return Response
+     */
+    public function clickViews($id)
+    {
+        $clicks = BannerClick::ofBanner($id)->get();
+        $data = $clicks->map(function ($click) {
+            $newData = new stdClass;
+            $newData->user_name = $click->user->name;
+            $newData->date = $click->created_at;
+            return $newData;
+        });
+
+
+        return view('backend/banners/banner_clicks', ["data" => $data]);
     }
 
     /**

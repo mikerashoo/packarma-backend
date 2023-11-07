@@ -51,6 +51,10 @@
                                                         <th id="link" data-orderable="false" data-searchable="false">
                                                             Banner Link</th>
 
+
+                                                        <th id="clicks" data-orderable="false" data-searchable="false"
+                                                            width="130px">Clicks</th>
+
                                                         {{-- <th id="start_date_time" data-orderable="false"
                                                             data-searchable="false">
                                                             Start Date Time</th>

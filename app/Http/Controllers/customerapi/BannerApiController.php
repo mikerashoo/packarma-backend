@@ -5,6 +5,9 @@ namespace App\Http\Controllers\customerapi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Banner;
+use App\Models\BannerClick;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Response;
 
 class BannerApiController extends Controller
@@ -70,6 +73,56 @@ class BannerApiController extends Controller
                 }
                 $responseData['result'] = $data;
                 $responseData['total_records'] = $total_records;
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Banner fetching failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    /**
+     * Created By : Pradyumn Dwivedi
+     * Created at : 09-05-2022
+     * Uses : Display a listing of the banner.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function saveClick(Request $request)
+    {
+        $msg_data = array();
+        try {
+            $token = readHeaderToken();
+            if ($token) {
+                $validateRequest = Validator::make(
+                    $request->all(),
+                    [
+                        'user_id' => ['required', Rule::exists('users', 'id')],
+                        'banner_id' => ['required', Rule::exists('banners', 'id')],
+                    ],
+                );
+
+                if ($validateRequest->fails()) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'validation error',
+                        'errors' => $validateRequest->errors()
+                    ], 401);
+                }
+                $userId = $request->user_id;
+                $bannerId = $request->banner_id;
+
+                $bannerClick = BannerClick::ofUser($userId)->ofBanner($bannerId)->first();
+                if (!$bannerClick) {
+                    $bannerClick = new BannerClick();
+                    $bannerClick->user_id = $userId;
+                    $bannerClick->banner_id = $bannerId;
+                    $bannerClick->save();
+                }
+                $responseData['result'] = $bannerClick;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
