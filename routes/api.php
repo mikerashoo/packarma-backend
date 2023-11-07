@@ -34,7 +34,7 @@ Route::middleware(['basicAuth'])->group(function () {
     Route::prefix('invoices')->group(function () {
         Route::get('list', 'InvoiceController@index');
         Route::post('detail', 'InvoiceController@detail');
-        Route::get('download/{invoiceId}', 'InvoiceController@download')->name('invoice.download');
+        Route::post('download', 'InvoiceController@download');
         Route::post('save', 'InvoiceController@store');
         Route::post('save-address', 'InvoiceController@saveAddress');
     });

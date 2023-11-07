@@ -323,20 +323,26 @@ class InvoiceController extends Controller
      *   @param Request request
      *   @return Response
      */
-    public function download($invoiceId)
+    public function download(Request $request)
     {
         try {
+            $validateRequest = Validator::make(
+                $request->all(),
+                [
+                    'invoice_id' => ['required', 'exists:user_invoices,id']
+                ],
+            );
 
-            $invoice = UserInvoice::find($invoiceId);
-
-
-            if (!$invoice) {
+            if ($validateRequest->fails()) {
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => "Invoice Not Found"
+                    'errors' => $validateRequest->errors()
                 ], 401);
             }
+            $invoiceId = $request->invoice_id;
+            $invoice = UserInvoice::find($invoiceId);
+
 
 
             $invoice->address->state;
