@@ -24,4 +24,13 @@ class UserCreditHistory extends Model
         'expire_date',
         'created_at'
     ];
+
+    protected $appends = ['invoice_id'];
+
+
+    public function getInvoiceIdAttribute()
+    {
+        $invoice = UserInvoice::select('id AS invoice_id')->where('credit_id', $this->id)->first();
+        return $invoice ? $invoice->invoice_id : null;
+    }
 }

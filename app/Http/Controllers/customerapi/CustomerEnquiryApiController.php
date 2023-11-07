@@ -291,15 +291,18 @@ class CustomerEnquiryApiController extends Controller
                 }
 
                 //getting user address details from userAddress and putting value to request to store in cumstomer enquiry table
-                $userAddress = UserAddress::find($request->user_address_id);
-                $request['country_id'] = $userAddress->country_id;
-                $request['state_id'] = $userAddress->state_id;
-                $request['city_name'] = $userAddress->city_name;
-                // $request['address'] = $userAddress->address;
-                $request['flat'] = $userAddress->flat;
-                $request['area'] = $userAddress->area;
-                $request['land_mark'] = $userAddress->land_mark;
-                $request['pincode'] = $userAddress->pincode;
+                $userAddress = UserAddress::where('user_id', $request->user_id)->first();
+                if ($userAddress) {
+                    $request['country_id'] = $userAddress->country_id;
+                    $request['state_id'] = $userAddress->state_id;
+                    $request['city_name'] = $userAddress->city_name;
+                    // $request['address'] = $userAddress->address;
+                    $request['flat'] = $userAddress->flat;
+                    $request['area'] = $userAddress->area;
+                    $request['land_mark'] = $userAddress->land_mark;
+                    $request['pincode'] = $userAddress->pincode;
+                }
+
                 $request['user_id'] = $user_id;
                 $request['entered_shelf_life'] = $shelf_life;
                 $request['entered_shelf_life_unit'] = $shelf_life_unit;
@@ -401,7 +404,6 @@ class CustomerEnquiryApiController extends Controller
             'product_id' => 'required|numeric',
             'recommendation_engine_ids' => 'required|array',
             'recommendation_engine_ids.*' => 'exists:recommendation_engines,id',
-            'user_address_id' => 'required|numeric',
             'packaging_material_id' => 'required|numeric',
             'product_quantity' => 'required|numeric',
             'packing_type_id' => 'required|numeric',

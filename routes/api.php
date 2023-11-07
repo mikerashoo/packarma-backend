@@ -34,7 +34,7 @@ Route::middleware(['basicAuth'])->group(function () {
     Route::prefix('invoices')->group(function () {
         Route::get('list', 'InvoiceController@index');
         Route::post('detail', 'InvoiceController@detail');
-        Route::post('download', 'InvoiceController@download');
+        Route::get('download/{invoiceId}', 'InvoiceController@download')->name('invoice.download');
         Route::post('save', 'InvoiceController@store');
         Route::post('save-address', 'InvoiceController@saveAddress');
     });
@@ -147,7 +147,7 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('/customer_general_info', 'CustomerGeneralInfoApiController@index');
 
         //Update vendor quotation
-        Route::post('/vendor_quotation/update_product_quantity', 'VendorQuotationApiController@update_quantity');
+        // Route::post('/vendor_quotation/update_product_quantity', 'VendorQuotationApiController@update_quantity');
 
         //Get pincode data
         Route::post('/get_pincode_data', 'PincodeDetailApiController@index');

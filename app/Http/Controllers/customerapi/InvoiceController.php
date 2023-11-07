@@ -10,6 +10,7 @@ namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Country;
+use App\Models\CreditInvoice;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
@@ -20,6 +21,8 @@ use App\Models\InvoiceAddress;
 use App\Models\State;
 use App\Models\SubscriptionInvoice;
 use App\Models\UserAddress;
+use App\Models\UserCreditHistory;
+use App\Models\UserInvoice;
 use App\Models\UserSubscriptionPayment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -199,6 +202,68 @@ class InvoiceController extends Controller
     public function detail(Request $request)
     {
         try {
+            $validateRequest = Validator::make(
+                $request->all(),
+                [
+                    'user_id' => ['required', Rule::exists('users', 'id')],
+                    'invoice_id' => ['required', Rule::exists('user_invoices', 'id')->where('user_id', $request->user_id)],
+                ],
+            );
+
+            if ($validateRequest->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateRequest->errors()
+                ], 401);
+            }
+
+
+
+            $invoiceId = $request->invoice_id;
+
+            $invoice = UserInvoice::find($invoiceId);
+            $invoice->address;
+            $invoice->user;
+            $invoice->subscription;
+            $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
+            $invoiceDate = Carbon::now()->format('d/m/Y');
+            $orderDate = Carbon::parse($invoice->created_at)->format('d/m/Y');
+            $inWords = currencyConvertToWord($invoice->gst_prices->total);
+
+
+            $logo = public_path() . "/backend/img/Packarma_logo.png";
+            $orderFormatedId = getFormatid($invoiceId, 'orders');
+
+            $result = [
+                'invoice' => $invoice,
+                'invoiceDate' => $invoiceDate,
+                'orderDate' => $orderDate,
+                'no_image' => $logo,
+                'financialYear' => $financialYear,
+                'in_words' => $inWords,
+                'orderFormatedId' => $orderFormatedId
+            ];
+            Log::info("Invoice data fetch successfully");
+            successMessage(__('invoice.info_fetch'), $result);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $e->getMessage()
+            ], 500);
+            Log::error("Invoice data fetch creation failed: " . $e->getMessage());
+        }
+    }
+
+    /**
+     *   created by : Mikiyas Birhanu
+     *   @param Request request
+     *   @return Response
+     */
+    public function creditInvoice(Request $request)
+    {
+        try {
 
             $validateRequest = Validator::make(
                 $request->all(),
@@ -215,6 +280,7 @@ class InvoiceController extends Controller
                     'errors' => $validateRequest->errors()
                 ], 401);
             }
+
 
             $invoiceId = $request->invoice_id;
 
@@ -257,31 +323,25 @@ class InvoiceController extends Controller
      *   @param Request request
      *   @return Response
      */
-    public function download(Request $request)
+    public function download($invoiceId)
     {
         try {
 
-            $validateRequest = Validator::make(
-                $request->all(),
-                [
-                    'user_id' => ['required', Rule::exists('users', 'id')],
-                    'invoice_id' => ['required', Rule::exists('subscription_invoices', 'id')->where('user_id', $request->user_id)],
-                ],
-            );
+            $invoice = UserInvoice::find($invoiceId);
 
-            if ($validateRequest->fails()) {
+
+            if (!$invoice) {
                 return response()->json([
                     'status' => false,
                     'message' => 'validation error',
-                    'errors' => $validateRequest->errors()
+                    'errors' => "Invoice Not Found"
                 ], 401);
             }
 
-            $invoiceId = $request->invoice_id;
 
-            $invoice = SubscriptionInvoice::find($invoiceId);
             $invoice->address->state;
             $invoice->user;
+            // return $invoice;
             $invoice->subscription;
             $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
             $invoiceDate = Carbon::now()->format('d/m/Y');
