@@ -81,7 +81,7 @@ class BannerController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'action'])->setRowId('id')->make(true);
+                    ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'action', 'start_date_time', 'end_date_time'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 \Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -165,6 +165,8 @@ class BannerController extends Controller
         $tableObject->seo_url = $seoUrl;
         $tableObject->meta_title = $request->meta_title;
         $tableObject->link = $request->link;
+        $tableObject->start_date_time = $request->start_date_time;
+        $tableObject->end_date_time = $request->end_date_time;
         $tableObject->description = $request->description;
         $tableObject->meta_description = $request->meta_description;
         $tableObject->meta_keyword = $request->meta_keyword;

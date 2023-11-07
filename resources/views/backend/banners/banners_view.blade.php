@@ -17,6 +17,15 @@
                                             <td>{{ displayStatus($data->status) }}</td>
                                         </tr>
                                         <tr>
+                                            <td><strong>Start Date Time</strong></td>
+                                            <td>{{ date('d-m-Y h:i A', strtotime($data->start_date_time)) }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>End Date Time</strong></td>
+                                            <td>{{ date('d-m-Y h:i A', strtotime($data->end_date_time)) }}</td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>Date Time</strong></td>
                                             <td>{{ date('d-m-Y h:i A', strtotime($data->updated_at)) }}</td>
                                         </tr>
