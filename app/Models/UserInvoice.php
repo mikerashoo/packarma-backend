@@ -114,9 +114,9 @@ class UserInvoice extends Model
         } else {
             $igst = 18;
         }
-        $cgst_total =  round(($total * $cgst) / 100, 2);
-        $sgst_total =  round(($total * $sgst) / 100, 2);
-        $igst_total =  round(($total * $igst) / 100, 2);
+        $cgst_total = $cgst == 0 || $total == 0 ? 0 : $this->calculatePercentage($cgst, $total);
+        $sgst_total =  $sgst == 0 || $total == 0 ? 0 :  $this->calculatePercentage($sgst, $total);
+        $igst_total =  $igst == 0 || $total == 0 ? 0 : $this->calculatePercentage($igst, $total);
 
 
         $data = new stdClass;
@@ -148,7 +148,15 @@ class UserInvoice extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    private function calculatePercentage($percentage, $total)
+    {
+        if ($total == 0) {
+            return 0;
+        }
 
+        $value = ($percentage * $total) / 100;
+        return round($value, 2);
+    }
 
 
     /**
