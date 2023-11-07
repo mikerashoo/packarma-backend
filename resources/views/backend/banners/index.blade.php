@@ -51,6 +51,13 @@
                                                         <th id="link" data-orderable="false" data-searchable="false">
                                                             Banner Link</th>
 
+                                                        {{-- <th id="start_date_time" data-orderable="false"
+                                                            data-searchable="false">
+                                                            Start Date Time</th>
+                                                        <th id="end_date_time" data-orderable="false"
+                                                            data-searchable="false">
+                                                            End Date Time</th> --}}
+
                                                         <th id="description" data-orderable="false" data-searchable="false">
                                                             Banner Description</th>
                                                         <th id="banner_image_url" data-orderable="false"

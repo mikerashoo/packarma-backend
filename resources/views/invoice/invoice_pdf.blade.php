@@ -13,7 +13,7 @@
         <td width="70%"
             style="border-left-color: black; border-right-color: rgb(207, 2, 2); border-top-color:rgb(207, 2, 2);"><br>
             <h3>&nbsp;&nbsp;&nbsp;{{ $invoice->user->email }}</h3><br>
-            &nbsp;&nbsp;{{ $invoice->address->billing_address ?? '' }} <br><br>
+            &nbsp;&nbsp;{{ $invoice->address->billing_address ?? ($invoice->address->address_name ?? '') }} <br><br>
             &nbsp;&nbsp;<b>Tel:</b>{{ $invoice->address->mobile_no }} &nbsp;&nbsp; <b>Email
                 ID:</b>{{ $invoice->user->email }}
 
@@ -151,7 +151,7 @@
             1</td>
         <td width="9%"
             style="border-right-color: black;border-top-color: black; border-bottom-color: black; font-size: 7px; text-align:center;">
-            {{ $invoice->subscription->type ?? '' }} subscription</td>
+            {{ $invoice->title ?? '' }} </td>
         <td width="6%"> </td>
         <td width="5%"> </td>
         <td width="5%"> </td>

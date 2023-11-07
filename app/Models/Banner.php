@@ -29,9 +29,15 @@ class Banner extends Model
         'title',
         'banner_image',
         'link',
-        'description'
+        'description',
+        'start_date_time',
+        'end_date_time'
     ];
 
+    public function getStartDateTimeAttribute()
+    {
+        return $this->start_date_time ?? $this->created_at;
+    }
 
 
     /**

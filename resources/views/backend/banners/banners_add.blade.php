@@ -49,11 +49,20 @@
                                                     name="title"><br />
 
                                                 <label>Banners Link<span class="text-danger">*</span></label>
-                                                <input class="form-control required" type="text" id="link"
+                                                <input class="form-control " type="text" id="link"
                                                     name="link"><br />
 
                                                 <label>Banners Description<span class="text-danger">*</span></label>
-                                                <textarea class="form-control required" id="description" name="description"></textarea><br />
+                                                <textarea class="form-control " id="description" name="description"></textarea><br />
+
+                                                <label>Banners Start Date Time<span class="text-danger">*</span></label>
+                                                <input class="form-control required" type="datetime-local"
+                                                    id="start_date_time" min={{ \Carbon\Carbon::now() }}
+                                                    name="start_date_time"><br />
+
+                                                <label>Banners End Date Time<span class="text-danger">*</span></label>
+                                                <input class="form-control required" type="datetime-local"
+                                                    id="end_date_time" name="end_date_time"><br />
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Banner Image<span class="text-danger">*</span></label>

@@ -55,6 +55,18 @@
 
                                                 <label>Banners Description<span class="text-danger">*</span></label>
                                                 <textarea class="form-control required" id="description" name="description">{{ $data->description }}</textarea><br />
+
+
+
+                                                <label>Banners Start Date Time<span class="text-danger">*</span></label>
+                                                <input class="form-control required" type="datetime-local"
+                                                    id="start_date_time" value="{{ $data->start_date_time }}"
+                                                    name="start_date_time"><br />
+
+                                                <label>Banners End Date Time<span class="text-danger">*</span></label>
+                                                <input class="form-control required" type="datetime-local"
+                                                    id="end_date_time" value="{{ $data->end_date_time }}"
+                                                    name="end_date_time"><br />
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Banner Image<span class="text-danger">*</span></label>
@@ -77,7 +89,8 @@
                                             <div class="col-sm-6">
                                                 <label>Meta Description</label>
                                                 <input class="form-control" type="text" id="meta_description"
-                                                    name="meta_description" value="{{ $data->meta_description }}"><br />
+                                                    name="meta_description"
+                                                    value="{{ $data->meta_description }}"><br />
                                             </div>
                                             <div class="col-sm-6">
                                                 <label>Meta Keyword</label>

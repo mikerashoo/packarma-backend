@@ -129,7 +129,7 @@ class GstDetailsApiController extends Controller
     {
         return \Validator::make($request->all(), [
             'gstin' => 'string|regex:' . config('global.GST_NO_VALIDATION') . '|unique:users,gstin,' . $id . ',id,deleted_at,NULL',
-            'gst_certificate' => 'mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
+            'gst_certificate' => 'sometimes|mimes:jpeg,png,jpg,pdf|max:' . config('global.MAX_IMAGE_SIZE'),
             'domain_email_id' => 'required|string'
 
         ])->errors();
