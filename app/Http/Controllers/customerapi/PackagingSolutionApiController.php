@@ -119,7 +119,7 @@ class PackagingSolutionApiController extends Controller
                     }
 
                     $relatedBanner = Product::find($request->product_id)->banner;
-                    $data['banner'] = $relatedBanner;
+                    $responseData['banner'] = $relatedBanner;
                     $responseData['result'] = $data;
                     $responseData['is_subscribed'] = $isSubscribed;
                     $responseData['place_enquiry'] = $placeEnquiry;
