@@ -97,7 +97,7 @@ class GstDetailsApiController extends Controller
             if ($token) {
                 $user_id = $token['sub'];
 
-                $userGstData = User::select('name', 'gstin', 'gst_certificate')->where('id', $user_id)->get()->toArray();
+                $userGstData = User::select('name', 'gstin', 'domain_email_id', 'gst_certificate')->where('id', $user_id)->get()->toArray();
 
                 $i = 0;
                 foreach ($userGstData as $row) {

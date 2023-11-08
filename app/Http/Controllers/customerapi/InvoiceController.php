@@ -9,28 +9,15 @@
 namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
-use App\Models\Country;
-use App\Models\CreditInvoice;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Carbon\Carbon;
-use Tymon\JWTAuth\Facades\JWTAuth;
-use App\Models\CustomerDevice;
-use App\Models\GeneralSetting;
 use App\Models\InvoiceAddress;
-use App\Models\State;
 use App\Models\SubscriptionInvoice;
-use App\Models\UserAddress;
-use App\Models\UserCreditHistory;
 use App\Models\UserInvoice;
-use App\Models\UserSubscriptionPayment;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Session;
 use Response;
 
 // - CIN
@@ -368,14 +355,21 @@ class InvoiceController extends Controller
                 'orderFormatedId' => $orderFormatedId
             ];
 
-
             $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $html =  view('invoice.invoice_pdf', $result);
-
             $pdf->SetTitle('Order Invoice');
             $pdf->AddPage();
             $pdf->writeHTML($html, true, false, true, false, '');
-            $pdf->Output('Order Invoice.pdf', 'D');
+            // Generate the PDF content as a string
+            $pdfContent = $pdf->Output('Order_Invoice.pdf', 'S');
+            $headers = [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Order_Invoice.pdf"',
+            ];
+
+            return response($pdfContent, 200, $headers);
+
+            // $pdf->Output('Order Invoice.pdf', 'D');
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
