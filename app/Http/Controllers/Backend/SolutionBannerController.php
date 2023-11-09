@@ -135,6 +135,8 @@ class SolutionBannerController extends Controller
     public function edit($id)
     {
         $data = SolutionBanner::find($id);
+        $data->products;
+        $data->page;
         if ($data) {
             $data->image_path = getFile($data->banner_image, 'banner', true);
         }
@@ -199,7 +201,7 @@ class SolutionBannerController extends Controller
 
         $tableObject->save();
 
-        // $tableObject->products()->sync($request->product_ids);
+        $tableObject->products()->sync($request->product_ids);
         $last_inserted_id = $tableObject->id;
 
         if ($request->hasFile('banner_image')) {

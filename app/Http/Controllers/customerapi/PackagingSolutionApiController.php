@@ -118,8 +118,8 @@ class PackagingSolutionApiController extends Controller
                         errorMessage(__('packaging_solution.packaging_solution_not_found'), $msg_data);
                     }
 
-                    $relatedBanner = Product::find($request->product_id)->banner;
-                    $responseData['banner'] = $relatedBanner;
+                    $relatedBanner = Product::find($request->product_id)->banners;
+                    $responseData['banners'] = $relatedBanner;
                     $responseData['result'] = $data;
                     $responseData['is_subscribed'] = $isSubscribed;
                     $responseData['place_enquiry'] = $placeEnquiry;
@@ -280,7 +280,7 @@ class PackagingSolutionApiController extends Controller
                             break;
                         }
                         $max_arr_len++;
-                        $product_name_db = Product::select('product_name')->with(['banner'])->where('id', $value['product_id'])->first();
+                        $product_name_db = Product::select('product_name')->where('id', $value['product_id'])->first();
                         $data[$i]['product_name'] = $product_name_db->product_name;
                         $unit_name_db = MeasurementUnit::select('unit_symbol')->where('id', Product::where('id', $value['product_id'])->pluck('unit_id')[0])->first();
                         $data[$i]['unit_symbol'] = $unit_name_db->unit_symbol;
@@ -304,8 +304,8 @@ class PackagingSolutionApiController extends Controller
                         $data_copy[$j] = $data[$j];
                     }
 
-                    $relatedBanner = Product::find($request->product_id)->banner;
-                    $responseData['banner'] = $relatedBanner;
+                    $relatedBanner = Product::find($request->product_id)->banners;
+                    $responseData['banners'] = $relatedBanner;
                     $responseData['result'] = $data_copy;
                     $responseData['is_subscribed'] = $isSubscribed;
                     $responseData['place_enquiry'] = $placeEnquiry;
