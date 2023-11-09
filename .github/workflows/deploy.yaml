@@ -12,13 +12,11 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
       - name: Install dependencies
         run: composer install --no-dev
-      - name: Run Laravel deployment commands
+      - name: Deploy to AWS EC2
         run: |
-          cd /var/www/packult
-          git pull
-          composer install --no-dev
-          php artisan migrate --force
-          php artisan optimize
+          echo "$SSH_PRIVATE_KEY" > key.pem
+          chmod 600 key.pem
+          ssh -i key.pem ubuntu@ec2-43-205-23-51.ap-south-1.compute.amazonaws.com "cd /var/www/packult && git pull && composer install --no-dev && php artisan migrate --force && php artisan optimize"
