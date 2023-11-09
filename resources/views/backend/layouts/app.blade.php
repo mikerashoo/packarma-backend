@@ -29,6 +29,7 @@
     <link rel="stylesheet" type="text/css" href="/backend/css/style.css">
     <link rel="stylesheet" type="text/css" href="/backend/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="/backend/vendors/css/daterangepicker/daterangepicker.css">
+
     <script src="/backend/js/jquery-3.2.1.min.js"></script>
     <script src="/backend/vendors/js/core/bootstrap.min.js" type="text/javascript"></script>
     <script src="/backend/vendors/js/vendors.min.js"></script>
@@ -290,6 +291,11 @@
                                                     class="fa fa-circle fs_i"></i>Packaging Solution</a>
                                         </li>
                                     @endif
+
+                                    <li class="{{ $lastParam == 'packaging_solution' ? 'active' : '' }}">
+                                        <a href="solution_banners" class="menu-item"><i
+                                                class="fa fa-circle fs_i"></i>Vendor Add</a>
+                                    </li>
                                 </ul>
                         @endif
 

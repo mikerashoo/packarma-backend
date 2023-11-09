@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -80,13 +81,13 @@ class Product extends Model
     }
 
     /**
-     * Get the banner that owns the Product
+     * Get the banners that owns the Product
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function banner(): BelongsTo
+    public function banners(): BelongsToMany
     {
-        return $this->belongsTo(Banner::class, 'banner_id',);
+        return $this->belongsToMany(Banner::class, 'banner_products', 'product_id', 'solution_banner_id');
     }
     // mutators end
 }

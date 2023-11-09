@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class BannerClick extends Model
+class SolutionBannerClick extends Model
 {
     use HasFactory;
-
 
     /**
      * The attributes that are mass assignable.
@@ -18,7 +17,6 @@ class BannerClick extends Model
      */
     protected $fillable = [
         'user_id',
-        'banner_id',
         'solution_banner_id',
     ];
 
@@ -43,29 +41,12 @@ class BannerClick extends Model
     }
 
 
-    /**
-     * Get the solutionBanner that owns the BannerClick
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function solutionBanner(): BelongsTo
-    {
-        return $this->belongsTo(SolutionBanner::class, 'solution_banner_id');
-    }
-
-
     public function scopeOfUser($query, $userId)
     {
         return $query->where('user_id', $userId);
     }
 
     public function scopeOfBanner($query, $bannerId)
-    {
-        return $query->where('banner_id', $bannerId);
-    }
-
-
-    public function scopeOfSolutionBanner($query, $bannerId)
     {
         return $query->where('solution_banner_id', $bannerId);
     }
