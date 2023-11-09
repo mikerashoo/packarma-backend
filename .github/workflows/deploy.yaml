@@ -1,5 +1,3 @@
-# Log some information to a file
-echo "Deployment started at $(date)" >> deployment.log
 name: Laravel Deployment
 on:
   push:
@@ -26,4 +24,4 @@ jobs:
       - name: Deploy to AWS EC2
         run: ssh ${{ secrets.AWS_INSTANCE_IP }} "cd /var/www/packult && git pull && composer install --no-dev && php artisan migrate --force && php artisan optimize"
       - name: Log deployment finished time
-        run: echo "Deployment finished at $(date)" >> deployment.log
+        run: echo "Deployment finished at $(date)" >> .github/workflows/deployment.log
