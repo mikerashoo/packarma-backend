@@ -31,7 +31,7 @@ class SolutionBanner extends Model
         'end_date_time'
     ];
 
-    protected $appends = ['clicks', 'is_solution'];
+    protected $appends = ['clicks', 'is_solution', 'in_app_link'];
 
     public function getStartDateTimeAttribute()
     {
@@ -42,6 +42,13 @@ class SolutionBanner extends Model
     public function getClicksAttribute()
     {
         return BannerClick::ofSolutionBanner($this->id)->count();
+    }
+
+
+    public function getInAppLinkAttribute()
+    {
+        $appPage =  AppPage::find($this->app_page_id);
+        return $appPage ? $appPage->pageName : null;
     }
 
 

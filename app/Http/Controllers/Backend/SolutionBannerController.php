@@ -298,8 +298,6 @@ class SolutionBannerController extends Controller
         return Validator::make($request->all(), [
             'title' => 'required|string',
             'banner_image' => 'mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
-            'product_ids' => 'required|array',
-            'product_ids.*' => 'exists|products,id'
         ])->errors();
     }
 

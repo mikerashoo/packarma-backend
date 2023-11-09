@@ -37,7 +37,8 @@
                                     </a>
                                 </li>
                             </ul>
-                            <form id="editBannersForm" method="post" action="saveBanners?id={{ $data->id }}">
+                            <form id="editBannersForm" method="post"
+                                action="save_solution_banner?id={{ $data->id }}">
                                 @csrf
                                 <div class="tab-content">
                                     <div class="tab-pane fade mt-2 show active" id="details" role="tabpanel"
