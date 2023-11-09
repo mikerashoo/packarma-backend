@@ -31,7 +31,7 @@ class SolutionBanner extends Model
         'end_date_time'
     ];
 
-    protected $appends = ['clicks'];
+    protected $appends = ['clicks', 'is_solution'];
 
     public function getStartDateTimeAttribute()
     {
@@ -42,6 +42,12 @@ class SolutionBanner extends Model
     public function getClicksAttribute()
     {
         return BannerClick::ofSolutionBanner($this->id)->count();
+    }
+
+
+    public function getIsSolutionAttribute()
+    {
+        return true;
     }
 
     /**

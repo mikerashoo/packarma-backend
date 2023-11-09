@@ -226,7 +226,7 @@ Route::group(['middleware' => ['customAuth']], function () {
     Route::get('/solution_banner_edit/{id}', 'SolutionBannerController@edit');
     Route::post('/publish_solution_banner', 'SolutionBannerController@updateStatus');
     Route::get('/solution_banner_view/{id}', 'SolutionBannerController@view');
-    Route::get('/solution_banner_clicks/{id}', 'SolutionBannerController@clickViews');
+    Route::get('/solution_banner_clicks_view/{id}', 'SolutionBannerController@clickViews');
 
     //Vendor
     Route::get('/vendor_list', 'VendorController@index');

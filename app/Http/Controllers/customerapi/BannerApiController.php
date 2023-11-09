@@ -101,7 +101,8 @@ class BannerApiController extends Controller
                     $request->all(),
                     [
                         'user_id' => ['required', Rule::exists('users', 'id')],
-                        'banner_id' => ['required', Rule::exists('banners', 'id')],
+                        'banner_id' => [Rule::exists('banners', 'id'), 'required_without:solution_banner_id'],
+                        'solution_banner_id' => ['required_without:banner_id', Rule::exists('solution_banners', 'id')],
                     ],
                 );
 
@@ -114,20 +115,36 @@ class BannerApiController extends Controller
                 }
                 $userId = $request->user_id;
                 $bannerId = $request->banner_id;
-
-                $bannerClick = BannerClick::ofUser($userId)->ofBanner($bannerId)->first();
-                if (!$bannerClick) {
-                    $bannerClick = new BannerClick();
-                    $bannerClick->user_id = $userId;
-                    $bannerClick->banner_id = $bannerId;
-                    $bannerClick->save();
+                $solutionId = $request->solution_banner_id;
+                if ($bannerId) {
+                    $bannerClick = BannerClick::ofUser($userId)->ofBanner($bannerId)->first();
+                    if (!$bannerClick) {
+                        $bannerClick = new BannerClick();
+                        $bannerClick->user_id = $userId;
+                        $bannerClick->banner_id = $bannerId;
+                        $bannerClick->save();
+                    }
+                } else {
+                    $bannerClick = BannerClick::ofUser($userId)->ofSolutionBanner($solutionId)->first();
+                    if (!$bannerClick) {
+                        $bannerClick = new BannerClick();
+                        $bannerClick->user_id = $userId;
+                        $bannerClick->solution_banner_id = $solutionId;
+                        $bannerClick->save();
+                    }
                 }
+
                 $responseData['result'] = $bannerClick;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);
             }
         } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $e->getMessage()
+            ], 500);
             \Log::error("Banner fetching failed: " . $e->getMessage());
             errorMessage(__('auth.something_went_wrong'), $msg_data);
         }

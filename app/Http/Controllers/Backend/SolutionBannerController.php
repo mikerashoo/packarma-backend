@@ -13,6 +13,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\AppPage;
+use App\Models\BannerClick;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\SolutionBanner;
@@ -234,26 +235,26 @@ class SolutionBannerController extends Controller
         return view('backend/solution_banners/solution_banner_view', ["data" => $data]);
     }
 
-    // /**
-    //  *   Created by : Pradyumn Dwivedi
-    //  *   Created On : 28-Mar-2022
-    //  *   Uses :  to load banners view
-    //  *   @param int $id
-    //  *   @return Response
-    //  */
-    // public function clickViews($id)
-    // {
-    //     $clicks = BannerClick::ofBanner($id)->get();
-    //     $data = $clicks->map(function ($click) {
-    //         $newData = new stdClass;
-    //         $newData->user_name = $click->user->name;
-    //         $newData->date = $click->created_at;
-    //         return $newData;
-    //     });
+    /**
+     *   Created by : Pradyumn Dwivedi
+     *   Created On : 28-Mar-2022
+     *   Uses :  to load banners view
+     *   @param int $id
+     *   @return Response
+     */
+    public function clickViews($id)
+    {
+        $clicks = BannerClick::ofSolutionBanner($id)->get();
+        $data = $clicks->map(function ($click) {
+            $newData = new stdClass;
+            $newData->user_name = $click->user->name;
+            $newData->date = $click->created_at;
+            return $newData;
+        });
 
 
-    //     return view('backend/solution_banners/banner_clicks', ["data" => $data]);
-    // }
+        return view('backend/solution_banners/solution_banner_clicks', ["data" => $data]);
+    }
 
     /**
      *   Created by : Pradyumn Dwivedi
