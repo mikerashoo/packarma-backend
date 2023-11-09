@@ -21,6 +21,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+      - name: Add host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.AWS_INSTANCE_IP }} >> ~/.ssh/known_hosts
       - name: Deploy to AWS EC2
         run: |
           ssh ${{ secrets.AWS_INSTANCE_IP }} "sudo su && cd /var/www/packult && git pull && composer install --no-dev && php artisan migrate --force && php artisan optimize"

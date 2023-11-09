@@ -49,9 +49,7 @@
                                                     name="title" value="{{ $data->title }}"><br />
 
 
-                                                <label>Banners Link<span class="text-danger">*</span></label>
-                                                <input class="form-control required" type="text" id="link"
-                                                    value="{{ $data->link }}" name="link"><br />
+
 
                                                 <label>Banners Description<span class="text-danger">*</span></label>
                                                 <textarea class="form-control required" id="description" name="description">{{ $data->description }}</textarea><br />
@@ -69,6 +67,32 @@
                                                     name="end_date_time"><br />
                                             </div>
                                             <div class="col-sm-6">
+                                                <label>Banners Link<span class="text-danger">*</span></label>
+                                                <input class="form-control required" type="text" id="link"
+                                                    value="{{ $data->link }}" name="link"><br />
+
+                                                <label>App Page</label>
+                                                <select class="select2" id="app_page_id" name="app_page_id"
+                                                    value="{{ $data->page->id }}" style="width: 100% !important;">
+                                                    <option value="">Select</option>
+                                                    @foreach ($data->appPages as $appPage)
+                                                        <option value="{{ $appPage->id }}">
+                                                            {{ $appPage->pageName }}</option>
+                                                    @endforeach
+                                                </select><br /><br>
+
+                                                <label>Products</label>
+
+
+                                                <select name="product_ids[]" multiple="multiple" class="select2"
+                                                    value="{{ $data->products_ids }}" id="product_ids"
+                                                    style="width: 100% !important;">
+                                                    @foreach ($data->products as $product)
+                                                        <option value="{{ $product->id }}">
+                                                            {{ $product->product_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                                 <label>Banner Image<span class="text-danger">*</span></label>
                                                 <p style="color:blue;">Note : Upload file size <?php echo config('global.DIMENTIONS.BANNER'); ?></p>
                                                 <input class="form-control" type="file" id="banner_image"
@@ -118,3 +142,7 @@
         </div>
     </div>
 </section>
+
+<script>
+    $('.select2').select2().val({{ $data->product_ids }}).trigger("change");
+</script>

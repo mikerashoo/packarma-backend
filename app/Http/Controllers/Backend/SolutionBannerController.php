@@ -136,8 +136,12 @@ class SolutionBannerController extends Controller
     public function edit($id)
     {
         $data = SolutionBanner::find($id);
-        $data->products;
+        $data->product_ids = $data->products->map->id;
         $data->page;
+        $appPages = AppPage::all();
+        $products = Product::select(['id', 'product_name'])->get();
+        $data->appPages = $appPages;
+        $data->products = $products;
         if ($data) {
             $data->image_path = getFile($data->banner_image, 'banner', true);
         }
