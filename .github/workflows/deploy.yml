@@ -1,3 +1,5 @@
+# Log some information to a file
+echo "Deployment started at $(date)" >> deployment.log
 name: Laravel Deployment
 on:
  push:
@@ -23,3 +25,4 @@ steps:
  aws-region: ${{ secrets.AWS_REGION }}
 - name: Deploy to AWS EC2
  run: ssh ${{ secrets.AWS_INSTANCE_IP }} "cd /var/www/html && git pull && composer install - no-dev && php artisan migrate - force && php artisan optimize"
+echo "Deployment finished at $(date)" >> deployment.log
