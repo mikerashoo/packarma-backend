@@ -87,7 +87,7 @@ class Product extends Model
      */
     public function banners(): BelongsToMany
     {
-        return $this->belongsToMany(Banner::class, 'banner_products', 'product_id', 'solution_banner_id');
+        return $this->belongsToMany(SolutionBanner::class, 'banner_products', 'product_id', 'solution_banner_id');
     }
     // mutators end
 }

@@ -12,7 +12,7 @@ class UserInvoice extends Model
 {
     use HasFactory;
 
-    protected $GSTIN = "18AABCU9603R1ZK";
+    protected $GSTIN = "27AAMCP2500K1ZD";
     protected $CID_NUMNER = "U74999MH2021PTC366605";
     protected $PAN_NUMNER = "AAMCP2500K";
     protected $BANK_NAME = "HDFC bank";

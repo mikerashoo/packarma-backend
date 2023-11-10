@@ -37,6 +37,8 @@ Route::middleware(['basicAuth'])->group(function () {
         Route::post('download', 'InvoiceController@download');
         Route::post('save', 'InvoiceController@store');
         Route::post('save-address', 'InvoiceController@saveAddress');
+        Route::post('update-invoice-address', 'InvoiceController@updateAddress');
+        Route::post('address-detail', 'InvoiceController@addressDetail');
     });
 
     Route::post('/user-subscription-history', 'UserSubscriptionPaymentApiController@subscriptionHistory');

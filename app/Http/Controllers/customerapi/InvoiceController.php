@@ -128,6 +128,45 @@ class InvoiceController extends Controller
      *   @param Request request
      *   @return Response
      */
+    public function addressDetail(Request $request)
+    {
+        try {
+
+            $validateRequest = Validator::make(
+                $request->all(),
+                [
+                    'address_id' => ['required', Rule::exists('invoice_addresses', 'id')],
+
+                ],
+            );
+
+            if ($validateRequest->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateRequest->errors()
+                ], 401);
+            }
+
+            $address = InvoiceAddress::find($request->address_id);
+
+            Log::info("Invoice address saved successfully");
+            successMessage(__('invoice.save_address_success'), $address->toArray());
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $e->getMessage()
+            ], 500);
+            Log::error("Invoice data fetch creation failed: " . $e->getMessage());
+        }
+    }
+
+    /**
+     *   created by : Mikiyas Birhanu
+     *   @param Request request
+     *   @return Response
+     */
     public function saveAddress(Request $request)
     {
         try {
@@ -167,6 +206,57 @@ class InvoiceController extends Controller
             }
 
             $address = InvoiceAddress::create($request->all());
+
+            Log::info("Invoice address saved successfully");
+            successMessage(__('invoice.save_address_success'), $address->toArray());
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $e->getMessage()
+            ], 500);
+            Log::error("Invoice data fetch creation failed: " . $e->getMessage());
+        }
+    }
+
+    /**
+     *   created by : Mikiyas Birhanu
+     *   @param Request request
+     *   @return Response
+     */
+    public function updateAddress(Request $request)
+    {
+        try {
+
+            $validateRequest = Validator::make(
+                $request->all(),
+                [
+                    'user_id' => ['required', Rule::exists('users', 'id')],
+                    'id' => ['required', Rule::exists('invoice_addresses', 'id')->where('user_id', $request->user_id)],
+                    'state_id' => ['required', Rule::exists('states', 'id')],
+
+                    'city_name' => ['required', 'string'],
+
+                    'name' => 'required',
+                    'email' => 'email',
+                    'billing_address' => 'required',
+                    'mobile_no' => 'required|numeric|digits:10',
+                    'pincode' => 'numeric|digits:6',
+                    'gstin' => 'string|min:15|max:15|regex:' . config('global.GST_NO_VALIDATION'),
+
+                ],
+            );
+
+            if ($validateRequest->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'validation error',
+                    'errors' => $validateRequest->errors()
+                ], 401);
+            }
+
+            $address = InvoiceAddress::find($request->id);
+            $address->update($request->all());
 
             Log::info("Invoice address saved successfully");
             successMessage(__('invoice.save_address_success'), $address->toArray());
