@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Response;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // - CIN
 // - PAN
@@ -395,6 +396,8 @@ class InvoiceController extends Controller
         }
     }
 
+
+
     /**
      *   created by : Mikiyas Birhanu
      *   @param Request request
@@ -445,19 +448,27 @@ class InvoiceController extends Controller
                 'orderFormatedId' => $orderFormatedId
             ];
 
-            $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            $html =  view('invoice.invoice_pdf', $result);
-            $pdf->SetTitle('Order Invoice');
-            $pdf->AddPage();
-            $pdf->writeHTML($html, true, false, true, false, '');
-            // Generate the PDF content as a string
-            $pdfContent = $pdf->Output('Order_Invoice.pdf', 'S');
-            $headers = [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="Order_Invoice.pdf"',
-            ];
+            $pdf = PDF::loadView('invoice.invoice_pdf', $result);
 
-            return response($pdfContent, 200, $headers);
+            // Get the PDF content as a string
+            $pdfContent = $pdf->output();
+
+            // Send the PDF content as a response
+            return response()->json(['result' => base64_encode($pdfContent)]);
+
+            // $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            // $html =  view('invoice.invoice_pdf', $result);
+            // $pdf->SetTitle('Order Invoice');
+            // $pdf->AddPage();
+            // $pdf->writeHTML($html, true, false, true, false, '');
+            // // Generate the PDF content as a string
+            // $pdfContent = $pdf->Output('Order_Invoice.pdf', 'S');
+            // $headers = [
+            //     'Content-Type' => 'application/pdf',
+            //     'Content-Disposition' => 'attachment; filename="Order_Invoice.pdf"',
+            // ];
+
+            // return response($pdfContent, 200, $headers);
 
             // $pdf->Output('Order Invoice.pdf', 'D');
         } catch (\Exception $e) {
