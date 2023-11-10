@@ -12,6 +12,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Banner extends Model
@@ -31,10 +32,12 @@ class Banner extends Model
         'link',
         'description',
         'start_date_time',
-        'end_date_time'
-    ];
+        'end_date_time',
+        'app_page_id',
 
-    protected $appends = ['clicks'];
+    ];
+    protected $appends = ['clicks', 'is_solution', 'in_app_link', 'banner_image_link'];
+
 
     public function getStartDateTimeAttribute()
     {
@@ -45,6 +48,39 @@ class Banner extends Model
     public function getClicksAttribute()
     {
         return BannerClick::ofBanner($this->id)->count();
+    }
+
+
+
+    public function getInAppLinkAttribute()
+    {
+        $appPage =  AppPage::find($this->app_page_id);
+        return $appPage ? $appPage->pageName : null;
+    }
+
+
+    public function getIsSolutionAttribute()
+    {
+        return false;
+    }
+
+
+    public function getBannerImageLinkAttribute()
+    {
+
+        $imageUrl = getFile($this->banner_image, 'banner', true);
+
+        return str_replace("\\", "", $imageUrl);
+    }
+
+    /**
+     * Get the AppPage that owns the SolutionBanner
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function page(): BelongsTo
+    {
+        return $this->belongsTo(AppPage::class, 'app_page_id');
     }
 
 

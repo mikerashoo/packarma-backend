@@ -12,9 +12,13 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\AppPage;
 use Illuminate\Http\Request;
 use App\Models\Banner;
 use App\Models\BannerClick;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use stdClass;
 use Yajra\DataTables\DataTables;
 
@@ -94,7 +98,7 @@ class BannerController extends Controller
                     ->addIndexColumn()
                     ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'clicks', 'action', 'start_date_time', 'end_date_time'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
-                \Log::error("Something Went Wrong. Error: " . $e->getMessage());
+                Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
                     'draw'            => 0,
                     'recordsTotal'    => 0,
@@ -113,7 +117,12 @@ class BannerController extends Controller
      */
     public function add()
     {
-        return view('backend/banners/banners_add');
+
+        $appPages = AppPage::all();
+
+
+        $data['appPages'] = $appPages;
+        return view('backend/banners/banners_add', $data);
     }
 
     /**
@@ -126,6 +135,10 @@ class BannerController extends Controller
     public function edit($id)
     {
         $data = Banner::find($id);
+        $selectedPageId = $data->page ? $data->page->id : null;
+        $data->page_id = $selectedPageId;
+        $appPages = AppPage::all();
+        $data->appPages = $appPages;
         if ($data) {
             $data->image_path = getFile($data->banner_image, 'banner', true);
         }
@@ -143,6 +156,7 @@ class BannerController extends Controller
     {
         $msg_data = array();
         $msg = "";
+
         if (isset($_GET['id'])) {
             $validationErrors = $this->validateRequest($request);
         } else {
@@ -150,7 +164,7 @@ class BannerController extends Controller
         }
         //$validationErrors = $this->validateRequest($request);
         if (count($validationErrors)) {
-            \Log::error("Banner Validation Exception: " . implode(", ", $validationErrors->all()));
+            Log::error("Banner Validation Exception: " . implode(", ", $validationErrors->all()));
             errorMessage(implode("\n", $validationErrors->all()), $msg_data);
         }
         $isEditFlow = false;
@@ -176,6 +190,7 @@ class BannerController extends Controller
         $tableObject->seo_url = $seoUrl;
         $tableObject->meta_title = $request->meta_title;
         $tableObject->link = $request->link;
+        $tableObject->app_page_id = $request->app_page_id;
         $tableObject->start_date_time = $request->start_date_time;
         $tableObject->end_date_time = $request->end_date_time;
         $tableObject->description = $request->description;
@@ -212,6 +227,7 @@ class BannerController extends Controller
     public function view($id)
     {
         $data = Banner::find($id);
+        $data->page;
         if ($data) {
             $data->image_path = getFile($data->banner_image, 'banner', true);
         }
@@ -270,13 +286,15 @@ class BannerController extends Controller
      *   Created On : 28-Mar-2022
      *   Uses :  Banner Add|Edit Form Validation part will be handle by below function
      *   @param Request request
-     *   @return Response
+     *   @return Countable|array
      */
     private function validateRequest(Request $request)
     {
-        return \Validator::make($request->all(), [
+        return Validator::make($request->all(), [
             'title' => 'required|string',
             'banner_image' => 'mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
+            'app_page_id' =>  ['prohibited_unless:link,null'],
+            'link' => ['prohibited_unless:app_page_id,null'],
         ])->errors();
     }
 
@@ -285,13 +303,15 @@ class BannerController extends Controller
      *   Created On : 28-Mar-2022
      *   Uses :  Banner Add|Edit Form Validation part will be handle by below function
      *   @param Request request
-     *   @return Response
+     *   @return Countable|array
      */
     private function validateNewRequest(Request $request)
     {
-        return \Validator::make($request->all(), [
+        return Validator::make($request->all(), [
             'title' => 'required|string',
             'banner_image' => 'required|mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
+            'app_page_id' =>  ['prohibited_unless:link,null'],
+            'link' => ['prohibited_unless:app_page_id,null'],
         ])->errors();
     }
 }

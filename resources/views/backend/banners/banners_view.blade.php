@@ -17,6 +17,20 @@
                                             <td>{{ displayStatus($data->status) }}</td>
                                         </tr>
                                         <tr>
+                                            <td><strong>Banners Description</strong></td>
+                                            <td>{{ $data->description }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Banner Link</strong></td>
+                                            <td>{{ $data->link ?? '-' }}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><strong>Banner App Link</strong></td>
+                                            <td>{{ $data->page ? $data->page->pageName : '-' }}</td>
+                                        </tr>
+                                        <tr>
                                             <td><strong>Start Date Time</strong></td>
                                             <td>{{ date('d-m-Y h:i A', strtotime($data->start_date_time)) }}</td>
                                         </tr>

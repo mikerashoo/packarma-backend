@@ -48,9 +48,7 @@
                                                 <input class="form-control required" type="text" id="title"
                                                     name="title"><br />
 
-                                                <label>Banners Link</label>
-                                                <input class="form-control " type="text" id="link"
-                                                    name="link"><br />
+
 
                                                 <label>Banners Description</label>
                                                 <textarea class="form-control " id="description" name="description"></textarea><br />
@@ -64,6 +62,18 @@
                                                     name="end_date_time"><br />
                                             </div>
                                             <div class="col-sm-6">
+                                                <label>Banners Link</label>
+                                                <input class="form-control " type="text" id="link"
+                                                    name="link"><br />
+                                                <label>App Page</label>
+                                                <select class="select2" id="app_page_id" name="app_page_id"
+                                                    style="width: 100% !important;">
+                                                    <option value="">Select</option>
+                                                    @foreach ($appPages as $appPage)
+                                                        <option value="{{ $appPage->id }}">
+                                                            {{ $appPage->pageName }}</option>
+                                                    @endforeach
+                                                </select><br /><br>
                                                 <label>Banner Image<span class="text-danger">*</span></label>
                                                 <p style="color:blue;">Note : Upload file size <?php echo config('global.DIMENTIONS.BANNER'); ?></p>
                                                 <input type="file" id="banner_image" name="banner_image"
@@ -111,3 +121,7 @@
         </div>
     </div>
 </section>
+
+<script>
+    $('.select2').select2();
+</script>
