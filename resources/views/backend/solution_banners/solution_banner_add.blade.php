@@ -51,14 +51,13 @@
                                                 <textarea class="form-control " id="description" name="description"></textarea><br />
 
 
-                                                <label>Banners Start Date Time<span class="text-danger">*</span></label>
-                                                <input class="form-control required" type="datetime-local"
-                                                    id="start_date_time" min={{ \Carbon\Carbon::now() }}
-                                                    name="start_date_time"><br />
+                                                <label>Banners Start Date Time</label>
+                                                <input class="form-control " type="datetime-local" id="start_date_time"
+                                                    min={{ \Carbon\Carbon::now() }} name="start_date_time"><br />
 
-                                                <label>Banners End Date Time<span class="text-danger">*</span></label>
-                                                <input class="form-control required" type="datetime-local"
-                                                    id="end_date_time" name="end_date_time"><br />
+                                                <label>Banners End Date Time</label>
+                                                <input class="form-control " type="datetime-local" id="end_date_time"
+                                                    name="end_date_time"><br />
 
 
 
