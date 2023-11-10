@@ -150,6 +150,7 @@
                                 {{ $lastParam ==  'currency' ? 'open' : ''  }} --}}
                                 {{ $lastParam == 'subscription' ? 'open' : '' }}
                                 {{ $lastParam == 'banners' ? 'open' : '' }}
+                                {{ $lastParam == 'solution_banners' ? 'open' : '' }}
                             ">
                                 <a href="javascript:;" class="dropdown-parent"><i class="ft-grid"></i><span
                                         data-i18n="" class="menu-title">Master</span></a>
@@ -192,6 +193,10 @@
                                                     class="fa fa-circle fs_i"></i>Banner</a>
                                         </li>
                                     @endif
+                                    <li class="{{ $lastParam == 'solution_banners' ? 'active' : '' }}">
+                                        <a href="solution_banners" class="menu-item"><i
+                                                class="fa fa-circle fs_i"></i>Ads</a>
+                                    </li>
                                 </ul>
                             </li>
                         @endif
@@ -292,10 +297,7 @@
                                         </li>
                                     @endif
 
-                                    <li class="{{ $lastParam == 'packaging_solution' ? 'active' : '' }}">
-                                        <a href="solution_banners" class="menu-item"><i
-                                                class="fa fa-circle fs_i"></i>Vendor Add</a>
-                                    </li>
+
                                 </ul>
                         @endif
 
