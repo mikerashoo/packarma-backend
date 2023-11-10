@@ -31,7 +31,7 @@ class SolutionBanner extends Model
         'end_date_time'
     ];
 
-    protected $appends = ['clicks', 'is_solution', 'in_app_link'];
+    protected $appends = ['clicks', 'is_solution', 'in_app_link', 'banner_image_link'];
 
     public function getStartDateTimeAttribute()
     {
@@ -55,6 +55,15 @@ class SolutionBanner extends Model
     public function getIsSolutionAttribute()
     {
         return true;
+    }
+
+
+    public function getBannerImageLinkAttribute()
+    {
+
+        $imageUrl = getFile($this->banner_image, 'banner', true);
+
+        return str_replace("\\", "", $imageUrl);
     }
 
     /**

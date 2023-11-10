@@ -164,7 +164,8 @@ class SolutionBannerController extends Controller
         } else {
             $validationErrors = $this->validateNewRequest($request);
         }
-        //$validationErrors = $this->validateRequest($request);
+
+
         if (count($validationErrors)) {
             Log::error("Banner Validation Exception: " . implode(", ", $validationErrors->all()));
             errorMessage(implode("\n", $validationErrors->all()), $msg_data);
@@ -298,6 +299,9 @@ class SolutionBannerController extends Controller
         return Validator::make($request->all(), [
             'title' => 'required|string',
             'banner_image' => 'mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
+            'app_page_id' =>  ['prohibited_unless:link,null', 'required_without:link', Rule::exists('app_pages', 'id')],
+            'link' => ['prohibited_unless:app_page_id,null', 'required_without:app_page_id'],
+
         ])->errors();
     }
 
@@ -315,7 +319,9 @@ class SolutionBannerController extends Controller
             'banner_image' => 'required|mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
             // 'product_ids' => 'required|array',
             // 'product_ids.*' => 'exists|products,id',
-            'app_page_id' =>  [Rule::exists('app_pages', 'id')]
+            'app_page_id' =>  ['prohibited_unless:link,null', 'required_without:link', Rule::exists('app_pages', 'id')],
+            'link' => ['prohibited_unless:app_page_id,null', 'required_without:app_page_id'],
+
         ])->errors();
     }
 }
