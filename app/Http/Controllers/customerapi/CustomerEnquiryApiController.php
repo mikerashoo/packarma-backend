@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Models\CustomerEnquiry;
 use App\Models\User;
 use App\Models\Product;
-use App\Models\UserAddress;
 use App\Models\VendorQuotation;
 use App\Models\RecommendationEngine;
 use App\Models\UserCreditHistory;
@@ -90,7 +89,6 @@ class CustomerEnquiryApiController extends Controller
                     $enquery->product_form;
                     $enquery->packing_type;
                     $enquery->packaging_treatment;
-                    $enquery->user_address;
                     $enquery->credit;
 
                     $enquery->enquiry_id = getFormatid($enquery->id, 'customer_enquiries');
@@ -143,9 +141,6 @@ class CustomerEnquiryApiController extends Controller
                     'packing_types.packing_name',
                     'customer_enquiries.packaging_treatment_id',
                     'packaging_treatments.packaging_treatment_name',
-                    'customer_enquiries.user_address_id',
-                    'user_addresses.address',
-                    'user_addresses.pincode',
                     'customer_enquiries.recommendation_engine_id',
 
                     'customer_enquiries.packaging_material_id',
@@ -162,7 +157,6 @@ class CustomerEnquiryApiController extends Controller
                     ->leftjoin('product_forms', 'product_forms.id', '=', 'customer_enquiries.product_form_id')
                     ->leftjoin('packing_types', 'packing_types.id', '=', 'customer_enquiries.packing_type_id')
                     ->leftjoin('packaging_treatments', 'packaging_treatments.id', '=', 'customer_enquiries.packaging_treatment_id')
-                    ->leftjoin('user_addresses', 'user_addresses.id', '=', 'customer_enquiries.user_address_id')
 
                     ->leftjoin('user_credit_histories', 'user_credit_histories.enquery_id', '=', 'customer_enquiries.id')
                     ->where('customer_enquiries.user_id', $user_id);
@@ -290,18 +284,6 @@ class CustomerEnquiryApiController extends Controller
                     $shelf_life_unit = $request->shelf_life_unit;
                 }
 
-                //getting user address details from userAddress and putting value to request to store in cumstomer enquiry table
-                $userAddress = UserAddress::where('user_id', $request->user_id)->first();
-                if ($userAddress) {
-                    $request['country_id'] = $userAddress->country_id;
-                    $request['state_id'] = $userAddress->state_id;
-                    $request['city_name'] = $userAddress->city_name;
-                    $request['user_address_id'] = $userAddress->id;
-                    $request['flat'] = $userAddress->flat;
-                    $request['area'] = $userAddress->area;
-                    $request['land_mark'] = $userAddress->land_mark;
-                    $request['pincode'] = $userAddress->pincode;
-                }
 
                 $request['user_id'] = $user_id;
                 $request['entered_shelf_life'] = $shelf_life;
@@ -436,7 +418,6 @@ class CustomerEnquiryApiController extends Controller
             // 'product_quantity' => 'required|numeric',
             'product_quantity' => 'nullable|numeric',
             'packaging_material_id' => 'required|numeric',
-            'user_address_id' => 'required|numeric'
         ])->errors();
     }
 
@@ -525,18 +506,7 @@ class CustomerEnquiryApiController extends Controller
                 $request['packaging_material_id'] = $packagingSolutionData->packaging_material_id;
                 $request['status'] = '1';
 
-                //getting user address details from userAddress and putting value to request to store in cumstomer enquiry table
-                $userAddress = UserAddress::find($request->user_address_id);
-                $request['user_address_id'] = $userAddress->id;
-                $request['country_id'] = $userAddress->country_id;
-                $request['state_id'] = $userAddress->state_id;
-                $request['city_name'] = $userAddress->city_name;
 
-                // $request['address'] = $userAddress->address;
-                $request['flat'] = $userAddress->flat;
-                $request['area'] = $userAddress->area;
-                $request['land_mark'] = $userAddress->land_mark;
-                $request['pincode'] = $userAddress->pincode;
 
                 if ($shelf_life_unit == 'months') {
                     $request['shelf_life'] = $shelf_life * config('global.MONTH_TO_MULTIPLY_SHELF_LIFE');
@@ -660,7 +630,7 @@ class CustomerEnquiryApiController extends Controller
      * Validate request for Customer Enquiry.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Countable|array
      */
     private function validateProductEnquiry(Request $request)
     {
@@ -670,7 +640,6 @@ class CustomerEnquiryApiController extends Controller
             'packaging_solution_ids.*' => 'exists:recommendation_engines,id',
             'product_quantity' => 'required|numeric',
             'product_weight' => 'sometimes|numeric',
-            'user_address_id' => 'required|integer'
         ])->errors();
     }
 }
