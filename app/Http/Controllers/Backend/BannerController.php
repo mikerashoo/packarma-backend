@@ -190,7 +190,14 @@ class BannerController extends Controller
         $tableObject->seo_url = $seoUrl;
         $tableObject->meta_title = $request->meta_title;
         $tableObject->link = $request->link;
-        $tableObject->app_page_id = $request->app_page_id;
+        // Check if app_page_id is null in the request
+        if ($request->app_page_id === null) {
+            // Set app_page_id to null before saving
+            $tableObject->app_page_id = null;
+        } else {
+            // Set app_page_id based on the request
+            $tableObject->app_page_id = $request->app_page_id;
+        }
         $tableObject->start_date_time = $request->start_date_time;
         $tableObject->end_date_time = $request->end_date_time;
         $tableObject->description = $request->description;
@@ -293,8 +300,21 @@ class BannerController extends Controller
         return Validator::make($request->all(), [
             'title' => 'required|string',
             'banner_image' => 'mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
-            'app_page_id' =>  ['prohibited_unless:link,null',],
-            'link' => ['prohibited_unless:app_page_id,null', 'url'],
+
+            'app_page_id' => [
+                Rule::requiredIf(function () use ($request) {
+                    return empty($request->link);
+                }),
+                'nullable',
+                'exists:app_pages,id', // Make sure the selected app_page_id exists in the app_pages table
+            ],
+            'link' => [
+                Rule::requiredIf(function () use ($request) {
+                    return empty($request->app_page_id);
+                }),
+                'nullable',
+                'url',
+            ],
         ])->errors();
     }
 
@@ -310,8 +330,21 @@ class BannerController extends Controller
         return Validator::make($request->all(), [
             'title' => 'required|string',
             'banner_image' => 'required|mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
-            'app_page_id' =>  ['prohibited_unless:link,null',],
-            'link' => ['prohibited_unless:app_page_id,null', 'url'],
+
+            'app_page_id' => [
+                Rule::requiredIf(function () use ($request) {
+                    return empty($request->link);
+                }),
+                'nullable',
+                'exists:app_pages,id', // Make sure the selected app_page_id exists in the app_pages table
+            ],
+            'link' => [
+                Rule::requiredIf(function () use ($request) {
+                    return empty($request->app_page_id);
+                }),
+                'nullable',
+                'url',
+            ],
         ])->errors();
     }
 }

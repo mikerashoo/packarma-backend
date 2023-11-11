@@ -72,9 +72,9 @@
 
                                                 <label>App Page</label>
                                                 <select class="select2" allowClear="true" id="app_page_id"
-                                                    name="app_page_id" value="{{ $data->page->id }}"
+                                                    name="app_page_id" value="{{ $data->selected_page_id }}"
                                                     style="width: 100% !important;">
-                                                    <option value="">Select</option>
+                                                    <option value={{ null }}>Select</option>
                                                     @foreach ($data->appPages as $appPage)
                                                         <option value="{{ $appPage->id }}">
                                                             {{ $appPage->pageName }}</option>
