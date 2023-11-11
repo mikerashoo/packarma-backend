@@ -45,9 +45,11 @@ class UserInvoice extends Model
         $localFilePath = $storagePath . $fileName;
 
 
-        if (Storage::exists($localFilePath)) {
-            // File exists
-            return  $url = Storage::url($localFilePath);
+        if (Storage::disk('s3')->exists($localFilePath)) {
+
+            $expiryDate = now()->addMinutes(60); // URL will expire in 60 minutes
+            $url = Storage::disk('s3')->temporaryUrl($storagePath . $fileName, $expiryDate);
+            return $url;
         }
         // Check if the directory exists, if not, create it
         if (!file_exists($storagePath)) {
@@ -104,7 +106,12 @@ class UserInvoice extends Model
         $pdfData = $pdf->output('', 'S');
 
         // Save the generated PDF to the storage directory
-        Storage::put($storagePath . $fileName, $pdfData);
+        Storage::disk("s3")->put($storagePath . $fileName, $pdfData);
+
+        // If you want to get the public URL for the stored file
+        $expiryDate = now()->addMinutes(60); // URL will expire in 60 minutes
+        $url = Storage::disk('s3')->temporaryUrl($storagePath . $fileName, $expiryDate);
+        return $url;
 
         // Get the URL of the stored PDF
         $publicUrl = Storage::url($storagePath . $fileName);
