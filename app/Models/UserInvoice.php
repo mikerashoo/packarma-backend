@@ -41,7 +41,7 @@ class UserInvoice extends Model
         $fileName = 'invoice_' . $this->id . '.pdf';
 
         // Define the directory path for saving the PDF in the storage directory
-        $storagePath = storage_path('app/public/pdfs/');
+        $storagePath = storage_path('app/public/invoices/');
         $localFilePath = $storagePath . $fileName;
 
 
