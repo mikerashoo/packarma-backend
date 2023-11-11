@@ -43,11 +43,11 @@ class UserInvoice extends Model
         // Define the directory path for saving the PDF in the storage directory
         $storagePath = storage_path('app/public/invoices/');
         $localFilePath = $storagePath . $fileName;
+        $expiryDate = now()->addDay(); //The link will be expire after 1 day
 
 
         if (Storage::disk('s3')->exists($localFilePath)) {
 
-            $expiryDate = now()->addMinutes(60); // URL will expire in 60 minutes
             $url = Storage::disk('s3')->temporaryUrl($storagePath . $fileName, $expiryDate);
             return $url;
         }
@@ -108,8 +108,7 @@ class UserInvoice extends Model
         // Save the generated PDF to the storage directory
         Storage::disk("s3")->put($storagePath . $fileName, $pdfData);
 
-        // If you want to get the public URL for the stored file
-        $expiryDate = now()->addMinutes(60); // URL will expire in 60 minutes
+
         $url = Storage::disk('s3')->temporaryUrl($storagePath . $fileName, $expiryDate);
         return $url;
 
