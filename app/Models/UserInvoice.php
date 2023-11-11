@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\File;
+
 use stdClass;
 
 class UserInvoice extends Model
@@ -22,12 +25,76 @@ class UserInvoice extends Model
     protected $ACCOUNT_NAME = "Packarma";
 
 
-    protected $appends = ['address', 'title',  'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'account_name', 'ifsc_code', 'gst_prices'];
+    protected $appends = ['attachment', 'address', 'title',  'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'account_name', 'ifsc_code', 'gst_prices'];
 
 
     public function getGstInAttribute()
     {
         return $this->GSTIN;
+    }
+
+
+    public function getAttachmentAttribute()
+    {
+        // Generate a dynamic file name (e.g., based on timestamp)
+        $fileName = 'invoice_' . $this->id . '.pdf';
+
+        // Define the directory path
+        $directory = public_path('invoices/');
+
+        // Check if the directory exists, if not, create it
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true, true);
+        }
+
+        $filePath = public_path() . '/invoices' . '/' . $fileName;
+        if (file_exists($filePath)) {
+            return $fileName;
+        }
+        // Create a TCPDF instance
+        // $pdf = new TCPDF();
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // Set TCPDF options as needed
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
+        // Add a page
+        $pdf->AddPage();
+
+        $this->address->state;
+        $this->user;
+        // return $this;
+        $this->subscription;
+        $this->this;
+        $transactionId = $this->subscription ? $this->subscription->transaction_id : $this->credit->transaction_id;
+        $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
+        $invoiceDate = Carbon::now()->format('d/m/Y');
+        $orderDate = Carbon::parse($this->created_at)->format('d/m/Y');
+        $inWords = currencyConvertToWord($this->gst_prices->total);
+
+
+        $logo = public_path() . "/backend/img/Packarma_logo.png";
+        $orderFormatedId = getFormatid($this->id, 'orders');
+
+        $result = [
+            'invoice' => $this,
+            'invoiceDate' => $invoiceDate,
+            'orderDate' => $orderDate,
+            'no_image' => $logo,
+            'financialYear' => $financialYear,
+            'in_words' => $inWords,
+            'orderFormatedId' => $orderFormatedId,
+            'transactionId' => $transactionId
+        ];
+
+        // Load your view into the TCPDF instance
+        $view = view('invoice.invoice_pdf', $result)->render();
+        $pdf->writeHTML($view, true, false, true, false, '');
+
+        // Store the generated PDF to the public directory
+        $pdf->Output($directory . $fileName, 'F');
+        return $fileName;
     }
 
     public function getCidNumberAttribute()
@@ -138,6 +205,7 @@ class UserInvoice extends Model
 
 
 
+
     /**
      * Get the user that owns the UserInvoice
      *
@@ -168,6 +236,18 @@ class UserInvoice extends Model
     {
         return $this->belongsTo(UserSubscriptionPayment::class, 'user_subscription_id');
     }
+
+
+    /**
+     * Get the subscription that owns the UserInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function credit(): BelongsTo
+    {
+        return $this->belongsTo(UserCreditHistory::class, 'credit_id');
+    }
+
 
     public function scopeOfUser($query, $userId)
     {

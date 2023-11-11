@@ -20,7 +20,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Response;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Dompdf\Options;
+use Illuminate\Support\Facades\File;
 // - CIN
 // - PAN
 
@@ -429,6 +430,8 @@ class InvoiceController extends Controller
             $invoice->user;
             // return $invoice;
             $invoice->subscription;
+            $invoice->invoice;
+            $transactionId = $invoice->subscription ? $invoice->subscription->transaction_id : $invoice->credit->transaction_id;
             $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
             $invoiceDate = Carbon::now()->format('d/m/Y');
             $orderDate = Carbon::parse($invoice->created_at)->format('d/m/Y');
@@ -445,30 +448,181 @@ class InvoiceController extends Controller
                 'no_image' => $logo,
                 'financialYear' => $financialYear,
                 'in_words' => $inWords,
-                'orderFormatedId' => $orderFormatedId
+                'orderFormatedId' => $orderFormatedId,
+                'transactionId' => $transactionId
             ];
+            // return $result;
+            // return $result;
+            $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $html =  view('invoice.invoice_pdf', $result);
+            $pdf->SetTitle('Order Invoice');
+            $pdf->AddPage();
+            $pdf->writeHTML($html, true, false, true, false, '');
+            // Generate the PDF content as a string
+            $pdfContent = $pdf->Output('Order_Invoice.pdf', 'S');
+            $headers = [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Order_Invoice.pdf"',
+            ];
+
+            return response($pdfContent, 200, $headers);
+
+            // Generate a dynamic file name (e.g., based on timestamp)
+            $fileName = 'subscription_' . $invoiceId . '_invoice_' . '.pdf';
+
+            // Define the directory path
+            $directory = public_path('pdfs/');
+
+            // Check if the directory exists, if not, create it
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0755, true, true);
+            }
+
+            // if (file_exists(public_path() . '/pdfs' . '/' . $fileName)) {
+            //     return "File Exists";
+            // }
+            // Create a TCPDF instance
+            // $pdf = new TCPDF();
+            $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+            // Set TCPDF options as needed
+            $pdf->setPrintHeader(false);
+            $pdf->setPrintFooter(false);
+
+            // Add a page
+            $pdf->AddPage();
+
+            // Load your view into the TCPDF instance
+            $view = view('invoice.invoice_pdf', $result)->render();
+            $pdf->writeHTML($view, true, false, true, false, '');
+
+            // Store the generated PDF to the public directory
+            $pdf->Output($directory . $fileName, 'F');
+
+            // Optionally, you can also force the PDF to download by using the download method
+            return response()->download($directory . $fileName);
+
+            // Generate a dynamic file name (e.g., based on timestamp)
+            $fileName = 'invoice_' . time() . '.pdf';
+
+            // Define the directory path
+            $directory = public_path('pdfs/');
+
+            // Check if the directory exists, if not, create it
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0755, true, true);
+            }
+
+            // Create a Dompdf instance
+            $pdf = PDF::loadView('invoice.invoice_pdf', $result);
+
+            // Set Dompdf options as an array
+            $options = [
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true,
+                // Add more options as needed
+            ];
+
+            // Set options on the Dompdf instance
+            $pdf->setOptions($options);
+
+            // Store the generated PDF to the public directory
+            $pdf->save($directory . $fileName);
+
+            // Optionally, you can also force the PDF to download by using the download method
+            return $pdf->download($fileName);
+
+            // Generate a dynamic file name (e.g., based on timestamp)
+            $fileName = 'invoice_' . time() . '.pdf';
+
+            // Define the directory path
+            $directory = public_path('pdfs/');
+
+            // Check if the directory exists, if not, create it
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0755, true, true);
+            }
+
+            // Create a Dompdf instance
+            $pdf = PDF::loadView('invoice.invoice_pdf', $result);
+
+            // Create Dompdf options
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isPhpEnabled', true);
+
+            // Set options on the Dompdf instance
+            $pdf->setOptions($options);
+
+            // Store the generated PDF to the public directory
+            $pdf->save($directory . $fileName);
+
+            // Optionally, you can also force the PDF to download by using the download method
+            return $pdf->download($fileName);
+
+            // Generate a dynamic file name (e.g., based on timestamp)
+            $fileName = 'invoice_' . time() . '.pdf';
+
+            // Define the directory path
+            $directory = public_path('pdfs/');
+
+            // Check if the directory exists, if not, create it
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0755, true, true);
+            }
+
+            // Create Dompdf options
+            $options = new Options();
+            $options->set('isHtml5ParserEnabled', true);
+            $options->set('isPhpEnabled', true);
+
+            // Create a Dompdf instance with options
+            $pdf = PDF::setOptions($options);
+
+            // Load your view into the Dompdf instance
+            $pdf->loadView('invoice.invoice_pdf', $result);
+
+            // Store the generated PDF to the public directory
+            $pdf->save($directory . $fileName);
+
+            // Optionally, you can also force the PDF to download by using the download method
+            return $pdf->download($fileName);
 
             $pdf = PDF::loadView('invoice.invoice_pdf', $result);
 
             // Get the PDF content as a string
             $pdfContent = $pdf->output();
+            // Generate a dynamic file name (e.g., based on timestamp)
+            // Generate a dynamic file name (e.g., based on timestamp)
+            $fileName = 'invoice_' . time() . '.pdf';
 
-            // Send the PDF content as a response
-            return response()->json(['result' => base64_encode($pdfContent)]);
+            // Define the directory path
+            $directory = public_path('pdfs/');
 
-            // $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            // $html =  view('invoice.invoice_pdf', $result);
-            // $pdf->SetTitle('Order Invoice');
-            // $pdf->AddPage();
-            // $pdf->writeHTML($html, true, false, true, false, '');
-            // // Generate the PDF content as a string
-            // $pdfContent = $pdf->Output('Order_Invoice.pdf', 'S');
-            // $headers = [
-            //     'Content-Type' => 'application/pdf',
-            //     'Content-Disposition' => 'attachment; filename="Order_Invoice.pdf"',
-            // ];
+            // Check if the directory exists, if not, create it
+            if (!File::exists($directory)) {
+                File::makeDirectory($directory, 0755, true, true);
+            }
 
-            // return response($pdfContent, 200, $headers);
+            // Store the generated PDF to the public directory
+            $pdf->save($directory . $fileName);
+
+            // Optionally, you can also force the PDF to download by using the download method
+            return $pdf->download($fileName);
+
+            $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $html =  view('invoice.invoice_pdf', $result);
+            $pdf->SetTitle('Order Invoice');
+            $pdf->AddPage();
+            $pdf->writeHTML($html, true, false, true, false, '');
+            // Generate the PDF content as a string
+            $pdfContent = $pdf->Output('Order_Invoice.pdf', 'S');
+            $headers = [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="Order_Invoice.pdf"',
+            ];
+
+            return response($pdfContent, 200, $headers);
 
             // $pdf->Output('Order Invoice.pdf', 'D');
         } catch (\Exception $e) {
