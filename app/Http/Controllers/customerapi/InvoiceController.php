@@ -309,10 +309,16 @@ class InvoiceController extends Controller
             $invoiceDate = Carbon::now()->format('d/m/Y');
             $orderDate = Carbon::parse($invoice->created_at)->format('d/m/Y');
             $inWords = currencyConvertToWord($invoice->gst_prices->total);
-
+            $transactionId = "";
+            if ($invoice->subscription) {
+                $transactionId = $invoice->subscription->transaction_id;
+            } else if ($invoice->credit) {
+                $transactionId = $invoice->credit->transaction_id;
+            }
 
             $logo = public_path() . "/backend/img/Packarma_logo.png";
             $orderFormatedId = getFormatid($invoiceId, 'orders');
+
 
             $result = [
                 'invoice' => $invoice,
@@ -321,8 +327,37 @@ class InvoiceController extends Controller
                 'no_image' => $logo,
                 'financialYear' => $financialYear,
                 'in_words' => $inWords,
-                'orderFormatedId' => $orderFormatedId
+                'orderFormatedId' => $orderFormatedId,
+                'transactionId' => $transactionId,
             ];
+            $filename = 'invoice_' . $invoiceId . '.pdf';
+            $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $html =  view('invoice.invoice_pdf', $result);
+            $pdf->SetTitle('Order Invoice');
+            $pdf->AddPage();
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+            $invoiceDir = "app/attachments";
+
+            $storagePath =  storage_path($invoiceDir);
+            if (!file_exists($storagePath)) {
+                mkdir($storagePath, 0755, true);
+            }
+            $file = $pdf->output($filename, 'S');
+
+            $filePath = $invoiceDir . '/' . $filename;
+
+            \Storage::disk('s3')->put($filePath, $file);
+
+            // Generate the public URL for the uploaded file
+            $publicUrl = \Storage::disk('s3')->url($filePath);
+
+            // $pdf->Output($filePath, 'F');
+
+            // $publicUrl = \Storage::url($filePath);
+
+            // $invoice->attachment = $publicUrl;
+            $result['file_path'] = $publicUrl;
             Log::info("Invoice data fetch successfully");
             successMessage(__('invoice.info_fetch'), $result);
         } catch (\Exception $e) {
@@ -453,12 +488,13 @@ class InvoiceController extends Controller
             ];
             // return $result;
             // return $result;
+
+            // Generate the PDF content as a string
             $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
             $html =  view('invoice.invoice_pdf', $result);
             $pdf->SetTitle('Order Invoice');
             $pdf->AddPage();
             $pdf->writeHTML($html, true, false, true, false, '');
-            // Generate the PDF content as a string
             $pdfContent = $pdf->Output('Order_Invoice.pdf', 'S');
             $headers = [
                 'Content-Type' => 'application/pdf',
