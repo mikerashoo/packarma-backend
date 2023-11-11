@@ -53,12 +53,20 @@ class UserInvoice extends Model
         // Specify the S3 disk
         $s3Disk = 's3';
 
-
+        // Check if the file exists in the specified storage path
         if (Storage::disk('s3')->exists($localFilePath)) {
+            $fileUrl = Storage::disk('s3')->url($localFilePath);
 
-            $url = Storage::disk('s3')->temporaryUrl($storagePath . $fileName, $expiryDate);
-            return $url;
+            return $fileUrl;
         }
+
+        // if (Storage::disk('s3')->exists($localFilePath)) {
+
+        //     $url = Storage::disk('s3')->temporaryUrl($storagePath . $fileName, $expiryDate);
+        //     return $url;
+        // }
+
+        // return "No pdf";
 
 
 
@@ -108,14 +116,26 @@ class UserInvoice extends Model
         $pdf->writeHTML($view, true, false, true, false, '');
 
         // Convert PDF to binary data
-        $pdfData = $pdf->output('', 'S');
+        // Get the PDF content
+        $pdfData = $pdf->Output('', 'S');
 
+
+        try {
+            Storage::disk('s3')->put($localFilePath, $pdfData);
+
+            // Get the URL of the stored file
+            $fileUrl = Storage::disk('s3')->url($localFilePath);
+
+            return $fileUrl;
+        } catch (\Exception $e) {
+            // Log or handle the exception
+            return $e->getMessage();
+        }
         // Save the generated PDF to the storage directory
         Storage::disk("s3")->put($storagePath . $fileName, $pdfData);
 
 
-        $url = Storage::disk('s3')->temporaryUrl($storagePath . $fileName, $expiryDate);
-        return $url;
+
 
         // Get the URL of the stored PDF
         $publicUrl = Storage::url($storagePath . $fileName);
