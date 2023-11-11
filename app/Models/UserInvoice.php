@@ -26,7 +26,7 @@ class UserInvoice extends Model
     protected $ACCOUNT_NAME = "Packarma";
 
 
-    protected $appends = ['attachment', 'address', 'title',  'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'account_name', 'ifsc_code', 'gst_prices'];
+    protected $appends = ['address', 'title',  'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'account_name', 'ifsc_code', 'gst_prices'];
 
 
     public function getGstInAttribute()
@@ -34,13 +34,6 @@ class UserInvoice extends Model
         return $this->GSTIN;
     }
 
-
-    public function getAttachmentAttribute()
-    {
-        $filename = 'invoice_' . $this->id . '.pdf';
-        return $filename;
-        $storagePath =  storage_path('app/invoices');
-    }
 
     public function saveSingleImage($file, $type = "", $id = "", $extension = "")
     {

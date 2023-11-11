@@ -22,6 +22,8 @@ use Response;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 // - CIN
 // - PAN
 
@@ -330,34 +332,12 @@ class InvoiceController extends Controller
                 'orderFormatedId' => $orderFormatedId,
                 'transactionId' => $transactionId,
             ];
-            $filename = 'invoice_' . $invoiceId . '.pdf';
-            $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            $html =  view('invoice.invoice_pdf', $result);
-            $pdf->SetTitle('Order Invoice');
-            $pdf->AddPage();
-            $pdf->writeHTML($html, true, false, true, false, '');
 
-            $invoiceDir = "app/attachments";
 
-            $storagePath =  storage_path($invoiceDir);
-            if (!file_exists($storagePath)) {
-                mkdir($storagePath, 0755, true);
-            }
-            $file = $pdf->output($filename, 'S');
 
-            $filePath = $invoiceDir . '/' . $filename;
 
-            \Storage::disk('s3')->put($filePath, $file);
-
-            // Generate the public URL for the uploaded file
-            $publicUrl = \Storage::disk('s3')->url($filePath);
-
-            // $pdf->Output($filePath, 'F');
-
-            // $publicUrl = \Storage::url($filePath);
-
-            // $invoice->attachment = $publicUrl;
-            $result['file_path'] = $publicUrl;
+            $downloadLink = $this->getInvoicePdf($invoiceId, $result);
+            $result['download_link'] = $downloadLink;
             Log::info("Invoice data fetch successfully");
             successMessage(__('invoice.info_fetch'), $result);
         } catch (\Exception $e) {
@@ -370,6 +350,32 @@ class InvoiceController extends Controller
         }
     }
 
+    public function getInvoicePdf($invoiceId, $result)
+    {
+
+        $invoiceDir = "app/attachments";
+        $storagePath =  storage_path($invoiceDir);
+        $filename = 'invoice_' . $invoiceId . '.pdf';
+        $filePath = $invoiceDir . '/' . $filename;
+
+        $exists = Storage::disk('s3')->has($filePath);
+        if ($exists) {
+            return Storage::disk('s3')->temporaryUrl($filePath, now()->addMinutes(30));
+        }
+
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0755, true);
+        }
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $html =  view('invoice.invoice_pdf', $result);
+        $pdf->SetTitle('Order Invoice');
+        $pdf->AddPage();
+        $pdf->writeHTML($html, true, false, true, false, '');
+        $file = $pdf->output($filename, 'S');
+        Storage::disk('s3')->put($filePath, $file);
+
+        return Storage::disk('s3')->temporaryUrl($filePath, now()->addMinutes(30));
+    }
     /**
      *   created by : Mikiyas Birhanu
      *   @param Request request
