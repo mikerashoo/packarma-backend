@@ -293,8 +293,8 @@ class BannerController extends Controller
         return Validator::make($request->all(), [
             'title' => 'required|string',
             'banner_image' => 'mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
-            'app_page_id' =>  ['prohibited_unless:link,null'],
-            'link' => ['prohibited_unless:app_page_id,null'],
+            'app_page_id' =>  ['prohibited_unless:link,null',],
+            'link' => ['prohibited_unless:app_page_id,null', 'url'],
         ])->errors();
     }
 
@@ -310,8 +310,8 @@ class BannerController extends Controller
         return Validator::make($request->all(), [
             'title' => 'required|string',
             'banner_image' => 'required|mimes:jpeg,png,jpg|max:' . config('global.SIZE.BANNER'),
-            'app_page_id' =>  ['prohibited_unless:link,null'],
-            'link' => ['prohibited_unless:app_page_id,null'],
+            'app_page_id' =>  ['prohibited_unless:link,null',],
+            'link' => ['prohibited_unless:app_page_id,null', 'url'],
         ])->errors();
     }
 }
