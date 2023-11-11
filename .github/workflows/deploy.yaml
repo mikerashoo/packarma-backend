@@ -27,9 +27,7 @@ jobs:
         run: composer install --no-interaction --prefer-dist --optimize-autoloader  --ignore-platform-reqs
 
       - name: Deploy to EC2
-        run: |
-          rsync -avz --delete --exclude-from=".rsyncignore" -e "ssh -o StrictHostKeyChecking=no" ./ ubuntu@${{ secrets.AWS_INSTANCE_IP }}:/var/www/packult
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.AWS_INSTANCE_IP }} 'cd /var/www/packult && composer install --no-interaction --prefer-dist --optimize-autoloader && php artisan migrate --force && php artisan config:cache && php artisan route:cache'
+        run: rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ubuntu@***:/var/www/packult
 
       - name: Clear SSH key
         run: rm -f $HOME/.ssh/id_rsa
