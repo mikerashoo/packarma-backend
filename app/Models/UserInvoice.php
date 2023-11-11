@@ -67,7 +67,13 @@ class UserInvoice extends Model
         // return $this;
         $this->subscription;
         $this->this;
-        $transactionId = $this->subscription ? $this->subscription->transaction_id :  $this->credit ? $this->credit->transaction_id : '';
+        $transactionId = "";
+        if ($this->subscription) {
+            $transactionId = $this->subscription->transaction_id;
+        } else if ($this->credit) {
+            $transactionId = $this->credit->transaction_id;
+        }
+
         $financialYear = (date('m') > 4) ?  date('Y') . '-' . substr((date('Y') + 1), -2) : (date('Y') - 1) . '-' . substr(date('Y'), -2);
         $invoiceDate = Carbon::now()->format('d/m/Y');
         $orderDate = Carbon::parse($this->created_at)->format('d/m/Y');
