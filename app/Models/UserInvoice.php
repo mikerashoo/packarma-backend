@@ -41,19 +41,22 @@ class UserInvoice extends Model
         $fileName = 'invoice_' . $this->id . '.pdf';
 
         // Define the directory path for saving the PDF in the storage directory
-        $storagePath = storage_path('app/public/invoices/');
+        $storagePath = storage_path('invoices/');
         $localFilePath = $storagePath . $fileName;
         $expiryDate = now()->addDay(); //The link will be expire after 1 day
 
-
-        if (Storage::disk('s3')->exists($localFilePath)) {
-
-            $url = Storage::disk('s3')->temporaryUrl($storagePath . $fileName, $expiryDate);
-            return $url;
-        }
         // Check if the directory exists, if not, create it
         if (!file_exists($storagePath)) {
             mkdir($storagePath, 0755, true);
+        }
+
+        // Specify the S3 disk
+        $s3Disk = 's3';
+
+        // Check if the file exists on the S3 disk
+        if (Storage::disk($s3Disk)->exists($localFilePath)) {
+            $url = Storage::url($localFilePath);
+            return $url;
         }
 
 
@@ -106,10 +109,15 @@ class UserInvoice extends Model
         $pdfData = $pdf->output('', 'S');
 
         // Save the generated PDF to the storage directory
-        Storage::disk("s3")->put($storagePath . $fileName, $pdfData);
+        Storage::disk("s3")->put($localFilePath, $pdfData);
+
+        // \Storage::disk('s3')->put($thumbnailFilePath . '/' . $filename, (string)$normal);
 
 
-        $url = Storage::disk('s3')->temporaryUrl($storagePath . $fileName, $expiryDate);
+        // \Storage::disk("s3")->putFileAs($localFilePath, $pdfData, $fileName);
+
+
+        $url = Storage::url($localFilePath);
         return $url;
 
         // Get the URL of the stored PDF
