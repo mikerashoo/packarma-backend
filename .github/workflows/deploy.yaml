@@ -1,32 +1,33 @@
-name: Laravel Deployment
+name: Deploy to EC
+
 on:
   push:
     branches:
       - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.5
         with:
-          php-version: "8.2"
-      - name: Install dependencies
-        run: composer install --no-dev
-      - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - name: Add host to known_hosts
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install PHP and dependencies
+        run: sudo apt-get update && sudo apt-get install php php-mbstring php-xml
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Deploy to EC2
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.AWS_INSTANCE_IP }} >> ~/.ssh/known_hosts
-      - name: Deploy to AWS EC2
-        run: |
-          ssh ${{ secrets.AWS_INSTANCE_IP }} "sudo su && cd /var/www/packult && git pull && composer install --no-dev && php artisan migrate --force && php artisan optimize"
-      - name: Log deployment finished time
-        run: echo "Deployment finished at $(date)" >> .github/workflows/deployment.log
+          rsync -avz --delete --exclude-from=".rsyncignore" -e "ssh -o StrictHostKeyChecking=no" ./ ubuntu@${{ secrets.AWS_INSTANCE_IP }}:/var/www/packult
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.AWS_INSTANCE_IP }} 'cd /var/www/packult && composer install --no-interaction --prefer-dist --optimize-autoloader && php artisan migrate --force && php artisan config:cache && php artisan route:cache'
+
+      - name: Clear SSH key
+        run: rm $SSH_AUTH_SOCK
