@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 use stdClass;
 
@@ -39,28 +40,20 @@ class UserInvoice extends Model
         // Generate a dynamic file name (e.g., based on timestamp)
         $fileName = 'invoice_' . $this->id . '.pdf';
 
-        // Define the directory path
-        $directory = public_path('invoices/');
+        // Define the directory path for saving the PDF in the storage directory
+        $storagePath = storage_path('app/public/pdfs/');
+        $localFilePath = $storagePath . $fileName;
 
+
+        if (Storage::exists($localFilePath)) {
+            // File exists
+            return  $url = Storage::url($localFilePath);
+        }
         // Check if the directory exists, if not, create it
-        if (!File::exists($directory)) {
-            File::makeDirectory($directory, 0755, true, true);
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0755, true);
         }
 
-        $filePath = public_path() . '/invoices' . '/' . $fileName;
-        if (file_exists($filePath)) {
-            return $fileName;
-        }
-        // Create a TCPDF instance
-        // $pdf = new TCPDF();
-        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-        // Set TCPDF options as needed
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
-
-        // Add a page
-        $pdf->AddPage();
 
         $this->address->state;
         $this->user;
@@ -94,13 +87,62 @@ class UserInvoice extends Model
             'transactionId' => $transactionId
         ];
 
+        // Create a TCPDF instance
+        $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // Set TCPDF options as needed
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
+        // Add a page
+        $pdf->AddPage();
         // Load your view into the TCPDF instance
         $view = view('invoice.invoice_pdf', $result)->render();
         $pdf->writeHTML($view, true, false, true, false, '');
 
-        // Store the generated PDF to the public directory
-        $pdf->Output($directory . $fileName, 'F');
-        return $fileName;
+        // Convert PDF to binary data
+        $pdfData = $pdf->output('', 'S');
+
+        // Save the generated PDF to the storage directory
+        Storage::put($storagePath . $fileName, $pdfData);
+
+        // Get the URL of the stored PDF
+        $publicUrl = Storage::url($storagePath . $fileName);
+        // Optionally, you can return the URL or any other response as needed
+        $publicUrl = str_replace('\\', '/', $publicUrl);
+        return  $url = Storage::url($localFilePath);
+
+        return  asset($publicUrl);
+
+        // Optionally, you can return the S3 file path or any other response as needed
+        // return response()->json(['message' => 'PDF generated and uploaded to S3 s
+        // // Load your view into the TCPDF instance
+        // $view = view('invoice.invoice_pdf', $result)->render();
+        // $pdf->writeHTML($view, true, false, true, false, '');
+
+        // // Store the generated PDF to the public directory
+        // $pdf->Output($directory . $fileName, 'F');
+
+        // After saving the PDF, upload it to S3 using your existing saveSingleImage function
+        // $s3FilePath = saveSingleImage($file, 's3-path', $fileName);
+
+        // return $fileName;
+    }
+
+    public function saveSingleImage($file, $type = "", $id = "", $extension = "")
+    {
+        $actualImagePath = $type;
+
+        // If the extension is not provided, attempt to extract it from the file name
+        if (empty($extension)) {
+            $extension = pathinfo($file, PATHINFO_EXTENSION);
+        }
+
+        $originalImageName = $type . '_' . $id . '.' . $extension;
+
+        Storage::disk("s3")->putFileAs($actualImagePath, $file, $originalImageName);
+
+        return $originalImageName;
     }
 
     public function getCidNumberAttribute()
