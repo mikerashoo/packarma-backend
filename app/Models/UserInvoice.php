@@ -35,22 +35,6 @@ class UserInvoice extends Model
     }
 
 
-    public function saveSingleImage($file, $type = "", $id = "", $extension = "")
-    {
-        $actualImagePath = $type;
-
-        // If the extension is not provided, attempt to extract it from the file name
-        if (empty($extension)) {
-            $extension = pathinfo($file, PATHINFO_EXTENSION);
-        }
-
-        $originalImageName = $type . '_' . $id . '.' . $extension;
-
-        Storage::disk("s3")->putFileAs($actualImagePath, $file, $originalImageName);
-
-        return $originalImageName;
-    }
-
     public function getCidNumberAttribute()
     {
         return $this->CID_NUMNER;
@@ -150,7 +134,7 @@ class UserInvoice extends Model
         $data->sgst_total = $sgst_total;
 
 
-        $data->sub_total = $total - $igst_total - $cgst_total - $sgst;
+        $data->sub_total = $total - $igst_total - $cgst_total - $sgst_total;
         $data->total = $total;
 
 

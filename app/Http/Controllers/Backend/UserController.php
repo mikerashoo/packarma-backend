@@ -355,8 +355,8 @@ class UserController extends Controller
             'phone_country_code' => 'required|integer',
             'phone' => 'required|digits:10',
             'current_credit_amount' => 'integer|min:0',
-            'whatsapp_country_code' => 'integer',
-            'whatsapp_no' => 'digits:10'
+            'whatsapp_country_code' => 'nullable|integer',
+            'whatsapp_no' => 'nullable|digits:10'
         ])->errors();
     }
 
