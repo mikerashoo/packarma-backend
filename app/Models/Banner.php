@@ -36,7 +36,7 @@ class Banner extends Model
         'app_page_id',
 
     ];
-    protected $appends = ['clicks', 'is_solution', 'in_app_link', 'banner_image_link'];
+    protected $appends = ['click_count', 'view_count', 'is_solution', 'in_app_link', 'banner_image_link'];
 
 
     public function getStartDateTimeAttribute()
@@ -45,10 +45,17 @@ class Banner extends Model
     }
 
 
-    public function getClicksAttribute()
+    public function getClickCountAttribute()
     {
         return BannerClick::ofBanner($this->id)->count();
     }
+
+
+    public function getViewCountAttribute()
+    {
+        return BannerView::ofBanner($this->id)->count();
+    }
+
 
 
 

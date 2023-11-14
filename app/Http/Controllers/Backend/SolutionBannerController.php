@@ -11,15 +11,19 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Exports\ExportBannerReports;
 use App\Http\Controllers\Controller;
 use App\Models\AppPage;
 use App\Models\BannerClick;
+use App\Models\BannerView;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\SolutionBanner;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use stdClass;
 use Yajra\DataTables\DataTables;
 
@@ -67,10 +71,18 @@ class SolutionBannerController extends Controller
                         $imageUrl = ListingImageUrl('banner', $event->banner_thumb_image, 'thumb');
                         return ' <img src="' . $imageUrl . '" />';
                     })
-                    ->editColumn('clicks', function ($event) {
-                        $actions = '<span style="white-space:nowrap;">' . $event->clicks;
-                        if ($event->clicks > 0)
-                            $actions .= '<a href="solution_banner_clicks_view/' . $event->id . '" class="btn ml-2 btn-primary btn-sm modal_src_data" data-size="large" data-title="View Banner Click Details" title="View"><i class="fa fa-eye"></i></a>';
+                    ->editColumn('click_count', function ($event) {
+                        $actions = '<span style="white-space:nowrap;">' . $event->click_count;
+                        if ($event->click_count > 0)
+                            $actions .= '<a href="' . route('solution_banner_clicks_report', ['id' => $event->id]) . '" class="btn ml-2 btn-primary btn-sm modal_src_data" data-size="large" data-title="Banner Click Report" title="View"><i class="fa fa-eye"></i></a>';
+
+                        $actions .= '</span>';
+                        return $actions;
+                    })
+                    ->editColumn('view_count', function ($event) {
+                        $actions = '<span style="white-space:nowrap;">' . $event->view_count;
+                        if ($event->view_count > 0)
+                            $actions .= '<a href="' . route('solution_banner_views_report', ['id' => $event->id]) . '" class="btn ml-2 btn-primary btn-sm modal_src_data" data-size="large" data-title="Banner Views Report" title="View"><i class="fa fa-eye"></i></a>';
 
                         $actions .= '</span>';
                         return $actions;
@@ -97,7 +109,7 @@ class SolutionBannerController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'clicks', 'action', 'start_date_time', 'end_date_time'])->setRowId('id')->make(true);
+                    ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'click_count', 'view_count', 'action', 'start_date_time', 'end_date_time'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([
@@ -249,6 +261,55 @@ class SolutionBannerController extends Controller
         return view('backend/solution_banners/solution_banner_view', ["data" => $data]);
     }
 
+
+    public function exportImpressionData(Request $request)
+    {
+
+        $validateRequest = Validator::make(
+            $request->all(),
+            [
+                'id' => 'exists:solution_banners,id'
+            ],
+        );
+
+        if ($validateRequest->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'validation error',
+                'errors' => $validateRequest->errors()
+            ], 401);
+        }
+
+        $id = $request->id;
+        $banner = SolutionBanner::find($request->id);
+
+        $date = Carbon::now()->toDateTimeString();
+
+        $fileName = $banner->title . '_' . str_replace('-', $date, '_') . '.xlsx';
+
+
+        $startDate = Carbon::parse($banner->start_date_time ?? $banner->created_at)->toDateTimeString();
+        $endDate = $banner->end_date_time ? Carbon::parse($banner->end_date_time)->toDateTimeString() : Carbon::now()->toDateTimeString();
+
+        $views = BannerView::ofSolutionBanner($id)->get();
+        $data = new stdClass;
+        $data->id = $id;
+        $data->start_date = $startDate;
+        $data->end_date = $endDate;
+        $data->data = $views->map(function ($click) {
+            $newData = new stdClass;
+            $newData->user_name = $click->user->name;
+            $newData->email = $click->user->email;
+            $newData->date = $click->created_at;
+            return $newData;
+        });
+
+        $exportViews = new ExportBannerReports($data);
+
+
+        return Excel::download($exportViews, $fileName);
+    }
+
     /**
      *   Created by : Pradyumn Dwivedi
      *   Created On : 28-Mar-2022
@@ -262,12 +323,44 @@ class SolutionBannerController extends Controller
         $data = $clicks->map(function ($click) {
             $newData = new stdClass;
             $newData->user_name = $click->user->name;
+            $newData->email = $click->user->email;
             $newData->date = $click->created_at;
             return $newData;
         });
 
 
         return view('backend/solution_banners/solution_banner_clicks', ["data" => $data]);
+    }
+
+    /**
+     *   Created by : Pradyumn Dwivedi
+     *   Created On : 28-Mar-2022
+     *   Uses :  to load banners view
+     *   @param int $id
+     *   @return Response
+     */
+    public function impressionViews($id)
+    {
+
+        $banner = SolutionBanner::find($id);
+        $startDate = Carbon::parse($banner->start_date_time ?? $banner->created_at)->toDateTimeString();
+        $endDate = $banner->end_date_time ? Carbon::parse($banner->end_date_time)->toDateTimeString() : Carbon::now()->toDateTimeString();
+
+        $views = BannerView::ofSolutionBanner($id)->get();
+        $data = new stdClass;
+        $data->id = $id;
+        $data->start_date = $startDate;
+        $data->end_date = $endDate;
+        $data->data = $views->map(function ($click) {
+            $newData = new stdClass;
+            $newData->user_name = $click->user->name;
+            $newData->email = $click->user->email;
+            $newData->date = $click->created_at;
+            return $newData;
+        });
+
+
+        return view('backend/solution_banners/solution_banner_impressions', ["data" => $data]);
     }
 
     /**

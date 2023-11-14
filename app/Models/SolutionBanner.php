@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SolutionBanner extends Model
@@ -31,7 +32,7 @@ class SolutionBanner extends Model
         'end_date_time'
     ];
 
-    protected $appends = ['clicks', 'is_solution', 'in_app_link', 'banner_image_link'];
+    protected $appends = ['click_count', 'view_count',  'is_solution', 'in_app_link', 'banner_image_link'];
 
     public function getStartDateTimeAttribute()
     {
@@ -39,9 +40,15 @@ class SolutionBanner extends Model
     }
 
 
-    public function getClicksAttribute()
+    public function getClickCountAttribute()
     {
         return BannerClick::ofSolutionBanner($this->id)->count();
+    }
+
+
+    public function getViewCountAttribute()
+    {
+        return BannerView::ofSolutionBanner($this->id)->count();
     }
 
 
@@ -84,6 +91,26 @@ class SolutionBanner extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'banner_products', 'solution_banner_id', 'product_id');
+    }
+
+    /**
+     * Get all of the clicks for the SolutionBanner
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function clicks(): HasMany
+    {
+        return $this->hasMany(BannerClick::class, 'solution_banner_id');
+    }
+
+    /**
+     * Get all of the views for the SolutionBanner
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function views(): HasMany
+    {
+        return $this->hasMany(BannerView::class, 'solution_banner_id');
     }
 
     /**

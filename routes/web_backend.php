@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Routing\RouteGroup;
 
 /*
 |--------------------------------------------------------------------------
@@ -217,6 +218,25 @@ Route::group(['middleware' => ['customAuth']], function () {
     Route::get('/banners_view/{id}', 'BannerController@view');
     Route::get('/banner_clicks_view/{id}', 'BannerController@clickViews');
 
+    Route::prefix('banner_reports')->group(function () {
+
+        Route::prefix('clicks')->group(function () {
+            Route::get('/solution/{id}', 'BannerReportController@solutionClicksReport')->name('solution_banner_clicks_report');
+            Route::get('/solution_download/{id}', 'BannerReportController@solutionClicksReportDownload')->name('solution_banner_clicks_download');
+
+            Route::get('/home/{id}', 'BannerReportController@homeClicksReport')->name('home_banner_clicks_report');
+            Route::get('/download/{id}', 'BannerReportController@homeClicksReportDownload')->name('home_banner_clicks_download');
+        });
+
+        Route::prefix('views')->group(function () {
+            Route::get('/solution/{id}', 'BannerReportController@solutionViewsReport')->name('solution_banner_views_report');
+            Route::get('/solution_download/{id}', 'BannerReportController@solutionViewsReportDownload')->name('solution_banner_views_download');
+
+            Route::get('/home/{id}', 'BannerReportController@homeViewsReport')->name('home_banner_views_report');
+            Route::get('/download/{id}', 'BannerReportController@homeViewsReportDownload')->name('home_banner_views_download');
+        });
+    });
+
 
     //Banners
     Route::get('/solution_banners', 'SolutionBannerController@index');
@@ -227,6 +247,8 @@ Route::group(['middleware' => ['customAuth']], function () {
     Route::post('/publish_solution_banner', 'SolutionBannerController@updateStatus');
     Route::get('/solution_banner_view/{id}', 'SolutionBannerController@view');
     Route::get('/solution_banner_clicks_view/{id}', 'SolutionBannerController@clickViews');
+    Route::get('/solution_banner_impressions_view/{id}', 'SolutionBannerController@impressionViews');
+    Route::get('/solution_banner_impressions_download/{id}', 'SolutionBannerController@exportImpressionData')->name('solution_banner_impressions_download');
 
     //Vendor
     Route::get('/vendor_list', 'VendorController@index');

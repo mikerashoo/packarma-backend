@@ -49,9 +49,11 @@
                                                             Banner Title</th>
 
 
+                                                        <th id="view_count" data-orderable="false" data-searchable="false"
+                                                            width="130px">Views</th>
 
 
-                                                        <th id="clicks" data-orderable="false" data-searchable="false"
+                                                        <th id="click_count" data-orderable="false" data-searchable="false"
                                                             width="130px">Clicks</th>
 
                                                         {{-- <th id="start_date_time" data-orderable="false"

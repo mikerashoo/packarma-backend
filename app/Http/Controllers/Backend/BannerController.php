@@ -66,10 +66,19 @@ class BannerController extends Controller
                         $imageUrl = ListingImageUrl('banner', $event->banner_thumb_image, 'thumb');
                         return ' <img src="' . $imageUrl . '" />';
                     })
-                    ->editColumn('clicks', function ($event) {
-                        $actions = '<span style="white-space:nowrap;">' . $event->clicks;
-                        if ($event->clicks > 0)
-                            $actions .= '<a href="banner_clicks_view/' . $event->id . '" class="btn ml-2 btn-primary btn-sm modal_src_data" data-size="large" data-title="View Banner Click Details" title="View"><i class="fa fa-eye"></i></a>';
+
+                    ->editColumn('click_count', function ($event) {
+                        $actions = '<span style="white-space:nowrap;">' . $event->click_count;
+                        if ($event->click_count > 0)
+                            $actions .= '<a href="' . route('home_banner_clicks_report', ['id' => $event->id]) . '" class="btn ml-2 btn-primary btn-sm modal_src_data" data-size="large" data-title="Banner Click Reports" title="View"><i class="fa fa-eye"></i></a>';
+
+                        $actions .= '</span>';
+                        return $actions;
+                    })
+                    ->editColumn('view_count', function ($event) {
+                        $actions = '<span style="white-space:nowrap;">' . $event->view_count;
+                        if ($event->view_count > 0)
+                            $actions .= '<a href="' . route('home_banner_views_report', ['id' => $event->id]) . '" class="btn ml-2 btn-primary btn-sm modal_src_data" data-size="large" data-title="Banner Views Report" title="View"><i class="fa fa-eye"></i></a>';
 
                         $actions .= '</span>';
                         return $actions;
@@ -96,7 +105,7 @@ class BannerController extends Controller
                         return $actions;
                     })
                     ->addIndexColumn()
-                    ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'clicks', 'action', 'start_date_time', 'end_date_time'])->setRowId('id')->make(true);
+                    ->rawColumns(['title', 'link', 'description', 'banner_image_url', 'click_count', 'view_count', 'action', 'start_date_time', 'end_date_time'])->setRowId('id')->make(true);
             } catch (\Exception $e) {
                 Log::error("Something Went Wrong. Error: " . $e->getMessage());
                 return response([

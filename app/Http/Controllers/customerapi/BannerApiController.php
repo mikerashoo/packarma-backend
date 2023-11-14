@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Banner;
 use App\Models\BannerClick;
+use App\Models\BannerView;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Response;
@@ -13,7 +14,7 @@ use Response;
 class BannerApiController extends Controller
 {
     /**
-     * Created By : Pradyumn Dwivedi
+     * Created By :Mikiyas Birhanu
      * Created at : 09-05-2022
      * Uses : Display a listing of the banner.
      *
@@ -84,7 +85,7 @@ class BannerApiController extends Controller
     }
 
     /**
-     * Created By : Pradyumn Dwivedi
+     * Created By :Mikiyas Birhanu
      * Created at : 09-05-2022
      * Uses : Display a listing of the banner.
      *
@@ -135,6 +136,73 @@ class BannerApiController extends Controller
                 }
 
                 $responseData['result'] = $bannerClick;
+                successMessage(__('success_msg.data_fetched_successfully'), $responseData);
+            } else {
+                errorMessage(__('auth.authentication_failed'), $msg_data);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unkown error occured',
+                'error' => $e->getMessage()
+            ], 500);
+            \Log::error("Banner fetching failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+    }
+
+    /**
+     * Created By :Mikiyas Birhanu
+     * Created at : 09-05-2022
+     * Uses : Display a listing of the banner.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function saveView(Request $request)
+    {
+        $msg_data = array();
+        try {
+            $token = readHeaderToken();
+            if ($token) {
+                $validateRequest = Validator::make(
+                    $request->all(),
+                    [
+                        'user_id' => ['required', Rule::exists('users', 'id')],
+                        'banner_id' => [Rule::exists('banners', 'id'), 'required_without:solution_banner_id'],
+                        'solution_banner_id' => ['required_without:banner_id', Rule::exists('solution_banners', 'id')],
+                    ],
+                );
+
+                if ($validateRequest->fails()) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'validation error',
+                        'errors' => $validateRequest->errors()
+                    ], 401);
+                }
+                $userId = $request->user_id;
+                $bannerId = $request->banner_id;
+                $solutionId = $request->solution_banner_id;
+                if ($bannerId) {
+                    $bannerView = BannerView::ofUser($userId)->ofBanner($bannerId)->first();
+                    if (!$bannerView) {
+                        $bannerView = new BannerView();
+                        $bannerView->user_id = $userId;
+                        $bannerView->banner_id = $bannerId;
+                        $bannerView->save();
+                    }
+                } else {
+                    $bannerView = BannerView::ofUser($userId)->ofSolutionBanner($solutionId)->first();
+                    if (!$bannerView) {
+                        $bannerView = new BannerView();
+                        $bannerView->user_id = $userId;
+                        $bannerView->solution_banner_id = $solutionId;
+                        $bannerView->save();
+                    }
+                }
+
+                $responseData['result'] = $bannerView;
                 successMessage(__('success_msg.data_fetched_successfully'), $responseData);
             } else {
                 errorMessage(__('auth.authentication_failed'), $msg_data);

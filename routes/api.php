@@ -63,6 +63,7 @@ Route::middleware(['basicAuth'])->group(function () {
         //Banner
         Route::post('/banner/listing', 'BannerApiController@index');
         Route::post('/banner/on-click', 'BannerApiController@saveClick');
+        Route::post('/banner/on-view', 'BannerApiController@saveView');
 
         //Packaging Treatment
         Route::post('/packaging_treatment/listing', 'PackagingTreatmentApiController@index');
