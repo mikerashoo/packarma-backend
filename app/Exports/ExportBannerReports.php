@@ -4,9 +4,10 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ExportBannerReports implements FromView, WithHeadings
+class ExportBannerReports implements FromView,  WithHeadingRow
 {
 
 
