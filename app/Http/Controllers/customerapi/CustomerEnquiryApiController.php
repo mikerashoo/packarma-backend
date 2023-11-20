@@ -36,6 +36,7 @@ class CustomerEnquiryApiController extends Controller
             $token = readHeaderToken();
             if ($token) {
                 $user_id = $token['sub'];
+                // return User::find($user_id);
                 // $user_id = $request->user_id;
                 $page_no = 1;
                 $limit = 10;
@@ -51,7 +52,7 @@ class CustomerEnquiryApiController extends Controller
                 $offset = ($page_no - 1) * $limit;
                 $main_table = 'customer_enquiries';
 
-                $customerEnquiryData = CustomerEnquiry::where('user_id', $user_id)->whereIn('quote_type', ['enquired', 'map_to_vendor', 'accept_cust']);
+                $customerEnquiryData = CustomerEnquiry::where('user_id', $user_id)->where('is_shown', 1)->whereIn('quote_type', ['enquired', 'map_to_vendor', 'accept_cust']);
 
 
                 if ($request->enquiry_id) {
