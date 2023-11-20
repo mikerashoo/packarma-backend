@@ -19,4 +19,20 @@ class GeneralSetting extends Model
         'value',
 
     ];
+
+
+    public function scopeOfCreditPrice($query)
+    {
+        $creditPrice = config('constants.CREDIT_PRICE');
+
+        return $query->where("type", $creditPrice);
+    }
+
+
+    public function scopeOfCreditPercent($query)
+    {
+        $crditDiscount = config('constants.CREDIT_DISCOUNT_PRICE');
+
+        return $query->where("type", $crditDiscount);
+    }
 }

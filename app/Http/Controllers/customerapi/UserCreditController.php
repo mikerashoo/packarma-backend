@@ -4,6 +4,7 @@ namespace App\Http\Controllers\customerapi;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerEnquiry;
+use App\Models\GeneralSetting;
 use App\Models\RecommendationEngine;
 use App\Models\User;
 use App\Models\UserCreditHistory;
@@ -17,7 +18,27 @@ use stdClass;
 
 class UserCreditController extends Controller
 {
-    public function index(Request $request)
+    public function creditPrice(Request $request)
+    {
+        $msg_data = array();
+        try {
+            $data = new stdClass;
+            $creditPrice = GeneralSetting::ofCreditPrice()->first();
+            $data->credit_price = $creditPrice ? $creditPrice->value : 0;
+
+            $creditPercent = GeneralSetting::ofCreditPercent()->first();
+            $data->credit_price = $creditPrice ? $creditPrice->value : 0;
+            $data->credit_percent= $creditPercent ? $creditPercent->value : 0;
+            $msg_data['result'] = $data;
+            successMessage(__('my_profile.credits_fetch'), $msg_data);
+        } catch (\Exception $e) {
+
+            Log::error("Adding credit failed: " . $e->getMessage());
+            errorMessage(__('auth.something_went_wrong'), $msg_data);
+        }
+        // return $user;,
+    }
+ public function index(Request $request)
     {
         $msg_data = array();
         try {

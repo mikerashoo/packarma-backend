@@ -23,6 +23,7 @@ Route::middleware(['basicAuth'])->group(function () {
     Route::post('/customer_general_info_all', 'CustomerGeneralInfoApiController@customerGeneralInforAll');
 
     Route::prefix('credits')->group(function () {
+        Route::post('/credit-price', 'UserCreditController@creditPrice');
         Route::post('/user-credits', 'UserCreditController@index');
         Route::post('/add-user-credits', 'UserCreditController@addCredits');
         Route::post('/on-enquery-result', 'UserCreditController@onEnqueryResult');
