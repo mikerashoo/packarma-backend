@@ -134,7 +134,7 @@ class UserInvoice extends Model
         $data->sgst_total = $sgst_total;
 
 
-        $data->sub_total = $total + $igst_total + $cgst_total + $sgst_total;
+        $data->total = $total + $igst_total + $cgst_total + $sgst_total;
         $data->sub_total = $total;
 
 
