@@ -29,12 +29,12 @@
                                                     <option value="{{$key}}">{{$val}}</option>
                                                 @endforeach
                                             </select><br/>
-                                        </div>                                                                    
+                                        </div>
                                         <div class="col-md-4">
                                             <label>&nbsp;</label><br/>
                                             <input class="btn btn-md btn-primary px-3 py-1 mb-3" id="clear-form-data" type="reset" value="Clear Search">
                                         </div>
-                                    </div>                                    
+                                    </div>
                             		<div class="table-responsive">
                                         <table class="table table-bordered table-striped datatable" id="dataTable" width="100%" cellspacing="0" data-url="subscription_data">
 				                            <thead>
@@ -53,7 +53,7 @@
                             	</div>
                             </div>
                         </div>
-                    </div>                  
+                    </div>
                 </div>
             </div>
         </section>

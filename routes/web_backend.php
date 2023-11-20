@@ -151,11 +151,18 @@ Route::group(['middleware' => ['customAuth']], function () {
     Route::get('/currency_view/{id}', 'CurrencyController@view');
 
     //Subscription
-    Route::get('/subscription', 'SubscriptionController@index');
+    Route::get('/subscription', 'SubscriptionController@index')->name('subscription.list');
     Route::post('/subscription_data', 'SubscriptionController@fetch')->name('subscription_data');
     Route::get('/subscriptionEdit/{id}', 'SubscriptionController@editSubscription');
     Route::post('/subscriptionUpdate', 'SubscriptionController@updateSubscription');
 
+    Route::prefix('benefits/{id}')->group(function () {
+        Route::get('/list', 'SubscriptionBenefitController@index')->name('subscription_benefits.list');
+        Route::post('/add', 'SubscriptionBenefitController@add')->name('subscription_benefits.add');
+        Route::post('/list_data', 'SubscriptionBenefitController@fetch')->name('subscription_benefit_data');
+        Route::get('/{benefitId}', 'SubscriptionBenefitController@delete')->name('subscription_benefit.delete');
+
+    });
     //Order
     Route::get('/orders', 'OrderController@index');
     Route::post('/order_data', 'OrderController@fetch')->name('order_data');

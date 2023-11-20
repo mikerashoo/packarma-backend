@@ -30,6 +30,12 @@
     <link rel="stylesheet" type="text/css" href="/backend/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="/backend/vendors/css/daterangepicker/daterangepicker.css">
 
+     <!-- Include React and ReactDOM from CDN -->
+     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+     <!-- Include Babel for JSX support (optional) -->
+     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="/backend/js/jquery-3.2.1.min.js"></script>
     <script src="/backend/vendors/js/core/bootstrap.min.js" type="text/javascript"></script>
     <script src="/backend/vendors/js/vendors.min.js"></script>
@@ -608,5 +614,9 @@
 <script src="/backend/vendors/js/pickadate/picker.time.js"></script>
 <script src="/backend/vendors/js/daterangepicker/moment.min.js"></script>
 <script src="/backend/vendors/js/daterangepicker/daterangepicker.min.js"></script>
+
+
+{{-- <script src="{{ asset('backend/js/manageSubscriptionBenefits.js') }}" type="text/babel"></script> --}}
+
 
 </html>
