@@ -36,7 +36,7 @@
                                                         <span class="align-middle">Terms and Condition</span>
                                                     </a>
                                                 </li>
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="privacy-tab" data-toggle="tab" href="#privacy" role="tab" aria-controls="privacy" aria-selected="false">
                                                         <i class="ft-globe mr-1 align-middle"></i>
@@ -55,7 +55,7 @@
                                                         <span class="align-middle">Notification</span>
                                                     </a>
                                                 </li> --}}
-                                                
+
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="customer_app_link-tab" data-toggle="tab" href="#customer_app_link" role="tab" aria-controls="customer_app_link" aria-selected="false">
                                                         <i class="ft-link mr-1 align-middle"></i>
@@ -88,11 +88,26 @@
                                                                 @csrf
                                                                     <div class="row">
                                                                         <div class="col-12 form-group">
+                                                                            <label for="credit_price">Credit Price</label>
+                                                                            <div class="controls">
+                                                                                <input type="text"  min="0" id="credit_price" name="credit_price" class="form-control" placeholder="E-mail" value="{{$data['credit_price']}}" required>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-12 form-group">
+                                                                            <label for="credit_discount_percent">Credit Discount Percent</label>
+                                                                            <div class="controls">
+                                                                                <input type="text"  min="0" max="100" id="credit_discount_percent" name="credit_discount_percent" class="form-control" placeholder="E-mail" value="{{$data['credit_discount_percent']}}" required>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="col-12 form-group">
                                                                             <label for="system_email">System E-mail</label>
                                                                             <div class="controls">
                                                                                 <input type="email" id="system_email" name="system_email" class="form-control" placeholder="E-mail" value="{{$data['system_email']}}" required>
                                                                             </div>
                                                                         </div>
+
                                                                         <div class="col-12 form-group">
                                                                             <label for="meta_title">Meta Title</label>
                                                                             <div class="controls">
@@ -222,7 +237,7 @@
                                                                 @csrf
                                                                     <div class="row">
                                                                         <div class="col-12 form-group">
-                                                                            <label for="customer_android_url">Android</label> 
+                                                                            <label for="customer_android_url">Android</label>
                                                                             <div class="controls">
                                                                                 <input type="text" id="customer_android_url" name="customer_android_url" class="form-control" placeholder="" value="{{$data['customer_android_url']}}" required>
                                                                             </div>
@@ -332,7 +347,7 @@
                                                                             {{-- <button type="reset" class="btn btn-secondary mb-1">Cancel</button> --}}
                                                                         </div>
                                                                     </div>
-                                                                    
+
                                                                 </form>
                                                             </div>
 
@@ -344,8 +359,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>   
-                            	
+                                </div>
+
                             </div>
                         </div>
                     </div>

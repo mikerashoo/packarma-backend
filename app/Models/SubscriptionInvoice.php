@@ -15,65 +15,52 @@ class SubscriptionInvoice extends Model
         'user_id',
         'user_subscription_id',
     ];
-    protected $GSTIN = "18AABCU9603R1ZK";
-    protected $CID_NUMNER = "U74999MH2021PTC366605";
-    protected $PAN_NUMNER = "AAMCP2500K";
-    protected $BANK_NAME = "HDFC bank";
-    protected $BRANCH_NAME = "Vile Parle ";
-    protected $ACCOUNT_NUMBER = "50200064942088";
-    protected $IFSC_CODE = "HDFC0000227";
-    protected $ACCOUNT_NAME = "Packarma";
-
 
     protected $appends = ['address', 'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'account_name', 'ifsc_code', 'gst_prices'];
 
 
     public function getGstInAttribute()
     {
-        return $this->GSTIN;
+        return config("bankDetails.GSTIN");
     }
+
 
     public function getCidNumberAttribute()
     {
-        return $this->CID_NUMNER;
+        return config("bankDetails.CID_NUMNER");
     }
 
     public function getPanNumberAttribute()
     {
-        return $this->PAN_NUMNER;
+        return config("bankDetails.PAN_NUMNER");
     }
 
     public function getBankNameAttribute()
     {
-        return $this->BANK_NAME;
+        return config("bankDetails.BANK_NAME");
     }
 
 
     public function getBranchNameAttribute()
     {
-        return $this->BRANCH_NAME;
+        return config("bankDetails.BRANCH_NAME");
     }
 
 
     public function getAccountNumberAttribute()
     {
-        return $this->ACCOUNT_NUMBER;
+        return config("bankDetails.ACCOUNT_NUMBER");
     }
 
 
     public function getAccountNameAttribute()
     {
-        return $this->ACCOUNT_NAME;
+        return config("bankDetails.ACCOUNT_NAME");
     }
 
     public function getIfscCodeAttribute()
     {
-        return $this->BRANCH_NAME;
-    }
-
-    public function getAddressAttribute()
-    {
-        return InvoiceAddress::where('user_id', $this->user_id)->first();
+        return config("bankDetails.BRANCH_NAME");
     }
 
 

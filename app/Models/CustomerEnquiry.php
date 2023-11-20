@@ -38,7 +38,7 @@ class CustomerEnquiry extends Model
         'packaging_treatment_id',
         'recommendation_engine_id',
         'packaging_material_id',
-
+        'is_shown',
         'created_by'
     ];
 

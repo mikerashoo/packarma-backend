@@ -180,6 +180,7 @@ Route::group(['middleware' => ['customAuth']], function () {
     Route::post('/saveUserApprovalStatus', 'UserController@saveApprovalListFormData');
     Route::get('/user_approval_list_view/{id}', 'UserController@viewApprovalList');
 
+
     //User List
     Route::get('/user_list', 'UserController@indexUserList');
     Route::post('/user_list_data', 'UserController@fetchUserList')->name('user_list_data');
@@ -188,6 +189,12 @@ Route::group(['middleware' => ['customAuth']], function () {
     Route::post('/saveUserList', 'UserController@saveUserListFormData');
     Route::post('/publishUserList', 'UserController@updateStatus');
     Route::get('/user_list_view/{id}', 'UserController@viewUserList');
+
+    Route::prefix('user_enquery_history/{id}')->group(function () {
+        Route::get('/list', 'UserController@enqueryList')->name('user_enquery.list');
+        Route::post('/updateStatus', 'UserController@updateState')->name('user_enquery.updateStatus');
+
+    });
 
     //User Address
     Route::get('/user_address_list', 'UserAddressController@index');

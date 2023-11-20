@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -157,5 +158,14 @@ class User extends Authenticatable implements JWTSubject
     {
         $this->attributes['name'] = ucwords(strtolower($value));
     }
-    // mutators end
+
+    /**
+     * Get all of the enquries for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function enquries(): HasMany
+    {
+        return $this->hasMany(CustomerEnquiry::class, 'user_id');
+    }
 }

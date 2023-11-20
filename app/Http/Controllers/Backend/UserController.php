@@ -17,9 +17,11 @@ use App\Models\Currency;
 use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use App\Models\CustomerDevice;
+use App\Models\CustomerEnquiry;
 use App\Models\UserCreditHistory;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -96,10 +98,12 @@ class UserController extends Controller
                     ->editColumn('action', function ($event) {
                         $isDeleted = isRecordDeleted($event->deleted_at);
                         $user_view = checkPermission('user_list_view');
+                        $history_view = checkPermission('user_list_view');
                         $user_edit = checkPermission('user_list_edit');
                         $user_status = checkPermission('user_list_status');
                         $user_add_address = checkPermission('user_list_add_address');
                         $actions = '<span style="white-space:nowrap;">';
+
                         if ($user_view) {
                             $actions .= '<a href="user_list_view/' . $event->id . '" class="btn btn-primary btn-sm src_data" title="View"><i class="fa fa-eye"></i></a>';
                         }
@@ -120,6 +124,11 @@ class UserController extends Controller
                         } else {
                             $actions .= ' <span class="bg-danger text-center p-1 text-white" style="border-radius:20px !important;">Deleted</span>';
                         }
+
+                        if ($history_view) {
+                            $title = $event->name . " Enquery History";
+                            $actions .= '<a href=' . route("user_enquery.list", ["id" => $event->id]) . ' class="btn btn-info mx-2 btn-sm modal_src_data" data-size="large" data-title="' . $title .'" title="Enquery history"><i class="fa fa-eye"></i></a>';
+                        }
                         $actions .= '</span>';
                         return $actions;
                     })
@@ -137,6 +146,51 @@ class UserController extends Controller
             }
         }
     }
+
+    /**
+     *   created by :Mikiyas Birhanu
+     *   Created On : 20-Nov-2021
+     *   Uses : To load user enquery history
+     */
+    public function enqueryList($id)
+    {
+
+        $user = User::find($id);
+        $user->enquries;
+
+        $data['user'] = $user;
+        return view('backend/customer_section/user_list/user_enquery_history', $data);
+    }
+ /**
+     *   created by :Mikiyas Birhanu
+     *   Created On : 20-Nov-2021
+     *   Uses : To update status of enquery
+     */
+    public function updateState(Request $request, $id)
+    {
+
+        $validateRequest = Validator::make(
+            $request->all(),
+                [
+                'enqueryId' => 'required|exists:customer_enquiries,id',
+                'status' => 'boolean'
+                ],
+        );
+        if ($validateRequest->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'validation error',
+                'errors' => $validateRequest->errors()
+            ], 401);
+        }
+
+        $enquery = CustomerEnquiry::find($request->enqueryId);
+        $enquery->is_shown = $request->status;
+        $enquery->save();
+        $msg_data = array();
+        return response()->json(['success' => true]);
+    }
+
 
     /**
      *   created by : Pradyumn Dwivedi

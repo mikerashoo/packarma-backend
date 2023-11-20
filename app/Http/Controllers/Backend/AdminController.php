@@ -1,7 +1,7 @@
 <?php
 /*
-    *	Developed by : Sagar Thokal - Mypcot Infotech 
-    *	Project Name : Packult 
+    *	Developed by : Sagar Thokal - Mypcot Infotech
+    *	Project Name : Packult
     *	File Name : AdminController.php
     *	File Path : app\Http\Controllers\Backend\AdminController.php
     *	Created On : 08-02-2022
@@ -19,10 +19,33 @@ use App\Models\Role;
 use Yajra\DataTables\DataTables;
 use App\Models\GeneralSetting;
 use App\Models\Permission;
+use Illuminate\Support\Facades\Validator;
 use Str;
 
 class AdminController extends Controller
 {
+
+
+    public function __construct()
+    {
+
+         $creditPrice = config('constants.CREDIT_PRICE');
+     $crditDiscount = config('constants.CREDIT_DISCOUNT_PRICE');
+
+        $isCreditPrice = GeneralSetting::where("type",$creditPrice)->first();
+        if(!$isCreditPrice){
+            GeneralSetting::create([
+                "type" =>$creditPrice,
+                'value' => '100'
+            ]);
+
+            GeneralSetting::create([
+                "type" => $crditDiscount,
+                'value' => '10'
+            ]);
+        }
+    }
+
     /**
      *   created by : Sagar Thokal
      *   Created On : 08-Feb-2022
@@ -290,6 +313,24 @@ class AdminController extends Controller
      *   Created On : 16-july-2022
      *   Uses :  Validate gst details for customer
      */
+    private function validateCreditValue(Request $request)
+    {
+
+        $creditPrice = config('constants.CREDIT_PRICE');
+        $crditDiscount = config('constants.CREDIT_DISCOUNT_PRICE');
+
+
+        return Validator::make($request->all(), [
+            $creditPrice => 'numeric|min:0',
+            $crditDiscount => 'numeric|min:0|max:100'
+        ])->errors();
+    }
+
+     /**
+     *   created by : Maaz Ansari
+     *   Created On : 16-july-2022
+     *   Uses :  Validate gst details for customer
+     */
     private function validateCustomerInvoiceDetails(Request $request)
     {
         return \Validator::make($request->all(), [
@@ -333,10 +374,22 @@ class AdminController extends Controller
         $paramCase = $_GET['param'];
         $msg_data = array();
         $msg = "Data Saved Successfully";
+        $creditPrice = config('constants.CREDIT_PRICE');
+        $crditDiscount = config('constants.CREDIT_DISCOUNT_PRICE');
+
+
         if (isset($paramCase) && !empty($paramCase)) {
             try {
                 switch ($paramCase) {
                     case 'general':
+                        $validationErrors = $this->validateCreditValue($request);
+                        if (count($validationErrors)) {
+                            \Log::error("Customer General setting Validation Exception: " . implode(", ", $validationErrors->all()));
+                            errorMessage(implode("\n", $validationErrors->all()), $msg_data);
+                        }
+
+                        GeneralSetting::where("type", $creditPrice)->update(["value" =>  $request->$creditPrice]);
+                        GeneralSetting::where("type", $crditDiscount)->update(["value" =>  $request->$crditDiscount]);
                         GeneralSetting::where("type", 'system_email')->update(["value" => $request->system_email]);
                         GeneralSetting::where("type", 'meta_title')->update(["value" => $request->meta_title]);
                         GeneralSetting::where("type", 'meta_keywords')->update(["value" => $request->meta_keywords]);

@@ -59,11 +59,11 @@
                                                     </tr>
                                                     <tr>
                                                         <td><strong>Address Type</strong></td>
-                                                        <td>{{ addressType($data['user_address']->type);}}</td>
+                                                        <td>{{ $data['user_address'] ? addressType($data['user_address']->type) : '-'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>State</strong></td>
-                                                        <td>{{ $data['state']->state_name;}}</td>
+                                                        <td>{{ $data['state'] ? $data['state']->state_name : '-'}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td><strong>City</strong></td>
@@ -88,7 +88,7 @@
                                                     <tr>
                                                         <td><strong>Status</strong></td>
                                                         <td>{{displayStatus($data->status)}}</td>
-                                                    </tr>                                                                                       
+                                                    </tr>
                                                     <tr>
                                                         <td><strong>Enquiry Date Time</strong></td>
                                                         <td>{{date('d-m-Y h:i A', strtotime($data->updated_at)) }}</td>
@@ -126,11 +126,11 @@
                                                     <tr>
                                                         <td><strong>Product Weight</strong></td>
                                                         <td>{{$data->product_weight.' '}}{{$data->measurement_unit_id!=0?$data->measurement_unit->unit_symbol:'NA';}}</td>
-                                                    </tr> 
+                                                    </tr>
                                                     <tr>
                                                         <td><strong>Product Quantity</strong></td>
                                                         <td>{{$data->product_quantity;}} {{ $data['recommendation_engine']->min_order_quantity_unit; }}</td>
-                                                    </tr> 
+                                                    </tr>
                                                     <tr>
                                                         <td><strong>Storage Condition</strong></td>
                                                         <td>{{$data->storage_condition_id!=0?$data['storage_condition']->storage_condition_title:'NA';}}</td>
@@ -146,18 +146,18 @@
                                                     <tr>
                                                         <td><strong>Packing Type</strong></td>
                                                         <td>{{$data->packing_type_id!=0?$data['packing_type']->packing_name:'NA';}}</td>
-                                                    </tr>  
+                                                    </tr>
                                                     <tr>
                                                         <td><strong>Packaging Treatment</strong></td>
                                                         <td>{{$data->packaging_treatment_id!=0?$data['packaging_treatment']->packaging_treatment_name:'NA';}}</td>
-                                                    </tr>                                                                                     
+                                                    </tr>
                                                     <tr>
                                                         <td><strong>Enquiry Date Time</strong></td>
                                                         <td>{{date('d-m-Y h:i A', strtotime($data->updated_at)) }}</td>
                                                     </tr>
                                                 </table>
                                             </div>
-                                        </div>                                    
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade mt-2" id="map_to_vendor" role="tabpanel" aria-labelledby="page_description-tab">
@@ -193,12 +193,12 @@
                                                                 </tr>
                                                             @endforeach
                                                         @else
-                                                            <tr><td colspan="4" class="text-center col">No vendor map found</td></tr>  
+                                                            <tr><td colspan="4" class="text-center col">No vendor map found</td></tr>
                                                         @endif
                                                     </tbody>
                                                 </table>
                                             </div>
-                                        </div>                                    
+                                        </div>
                                     </div>
                                 </div>
                             </div>
