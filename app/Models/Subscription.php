@@ -12,6 +12,8 @@ class Subscription extends Model
     use HasFactory;
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+    protected $with = ['benefits'];
+
 
     /**
      * Get all of the benefits for the Subscription
@@ -22,5 +24,8 @@ class Subscription extends Model
     {
         return $this->hasMany(SubscriptionBenefit::class, 'subscription_id');
     }
+
+
+
 
 }
