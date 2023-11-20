@@ -13,7 +13,7 @@ class SubscriptionController extends Controller
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 01-April-2022
-     *   Uses :  To show subscription listing page  
+     *   Uses :  To show subscription listing page
      */
     public function index()
     {
@@ -25,9 +25,9 @@ class SubscriptionController extends Controller
     /**
      *   created by : Pradyumn Dwivedi
      *   Created On : 01-April-2022
-     *   Uses :  display dynamic data in datatable for subscription page  
+     *   Uses :  display dynamic data in datatable for subscription page
      *   @param Request request
-     *   @return Response    
+     *   @return Response
      */
     public function fetch(Request $request)
     {
@@ -43,7 +43,7 @@ class SubscriptionController extends Controller
                         $query->get();
                     })
                     ->editColumn('type', function ($event) {
-                        // print_r($event);exit;   
+                        // print_r($event);exit;
                         return subscriptionType($event->subscription_type);
                     })
                     ->editColumn('amount', function ($event) {
@@ -53,10 +53,12 @@ class SubscriptionController extends Controller
                         return date('d-m-Y h:i A', strtotime($event->updated_at));
                     })
                     ->editColumn('status', function ($event) {
+                        $subscription_benefits = checkPermission('subscription_edit');
                         $subscription_edit = checkPermission('subscription_edit');
                         $actions = '<span style="white-space:nowrap;">';
                         if ($subscription_edit) {
                             $actions .= ' <a href="subscriptionEdit/' . $event->id . '" class="btn btn-success btn-sm src_data" title="Update"><i class="fa fa-edit"></i></a>';
+                            $actions .= ' <a href=' . route("subscription_benefits.list", ["id" => $event->id]) .' class="btn btn-warning btn-sm src_data" title="Benefits"><i class="fa fa-list"></i></a>';
                         }
                         $actions .= '</span>';
                         return $actions;
