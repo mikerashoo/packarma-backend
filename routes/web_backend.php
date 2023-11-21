@@ -219,6 +219,7 @@ Route::group(['middleware' => ['customAuth']], function () {
 
     //user subscription payment
     Route::get('/user_subscription_payment', 'UserSubscriptionPaymentController@index');
+    Route::post('/user_subscription_report', 'ExportController@exportHistoryReport')->name('export_user_subscription_history');
     Route::post('/user_subscription_data', 'UserSubscriptionPaymentController@fetch')->name('user_subscription_data');
     Route::get('/user_subscription_payment_view/{id}', 'UserSubscriptionPaymentController@view');
 

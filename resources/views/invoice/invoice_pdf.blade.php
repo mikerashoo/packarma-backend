@@ -41,7 +41,7 @@
 
         <td width="50%"
             style="border-right-color: rgb(207, 2, 2);border-top-color: black; border-left-color: black;">State:
-            {{ $invoice->address->state->state_name }}</td>
+            {{ $invoice->address ? $invoice->address->state->state_name : '' }}</td>
     </tr>
     <tr class="table_row">
         <td width="50%"
@@ -80,8 +80,8 @@
         <td width="100%"
             style="border-left-color: rgb(207, 2, 2);border-top-color: black; border-bottom-color: black; border-right-color: black;">
             State:
-            {{ $invoice->address->state_name ?? '' }} Code: {{ $invoice->address->country_name ?? '' }} -
-            {{ $invoice->address->state_name ?? '' }}</td>
+            {{$invoice->address ? $invoice->address->state_name ?? '' : '' }} Code: {{$invoice->address ?  $invoice->address->country_name ?? '' : ''}} -
+            {{ $invoice->address ? $invoice->address->state_name ?? ''  : ''}}</td>
         {{-- <td width="50%" style="border-right-color: rgb(207, 2, 2);border-top-color: black;">State:
             {{ $shipping_data->state_name ?? '' }} Code: {{ $shipping_data->country_name ?? '' }} -
             {{ $shipping_data->state_name ?? '' }}</td> --}}
