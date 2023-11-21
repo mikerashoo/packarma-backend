@@ -27,7 +27,7 @@
                                                         <button type="button" class="btn btn-danger mt-2 btn btn-success btn-sm" onclick="removeBenefit('description_{{ $index }}')"><i class="fa fa-trash"></i></button>
                                                     </div>
                                                     <div class="col-10">
-                                                        <textarea class="form-control" name="benefits[]" >{{ $benefit->description }}</textarea>
+                                                        <textarea required class="form-control" name="benefits[]" >{{ $benefit->description }}</textarea>
                                                     </div>
                                                 </div>
                                             @endforeach
@@ -67,7 +67,7 @@
                                                 <button type="button" class="btn btn-danger mt-2 btn btn-success btn-sm" onclick="removeBenefit('${descriptionId}')"><i class="fa fa-trash"></i></button>
                                             </div>
                                             <div class="col-10">
-                                                <textarea class="form-control" name="benefits[]"></textarea>
+                                                <textarea required class="form-control" name="benefits[]"></textarea>
                                             </div>
                                         </div>
                                     `;

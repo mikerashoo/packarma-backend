@@ -16,6 +16,12 @@
                                         </div>
                                         <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
                                             <button class="btn btn-sm btn-outline-danger px-3 py-1 mr-2" id="listing-filter-toggle"><i class="fa fa-filter"></i> Filter</button>
+
+                                            <form id="generateCustomerSubscriptionHistory" method="post" action="{{route("export_user_subscription_history")}}">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-success px-3 py-1 mr-2" id="listing-filter-toggle"><i class="fa fa-filter"></i> Export</button>
+
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -30,7 +36,7 @@
                                                         $isUserDeleted = isRecordDeleted($users->deleted_at);
                                                         $isUserDeleted ? $deleted_status = ' - (Deleted)' : $deleted_status = '';
                                                     @endphp
-                                                    <option value="{{$users->id}}">{{$users->name}} {{ $deleted_status }}</option>                                                
+                                                    <option value="{{$users->id}}">{{$users->name}} {{ $deleted_status }}</option>
                                                 @endforeach
                                             </select><br/>
                                         </div>
@@ -39,7 +45,7 @@
                                             <select class="form-control mb-3 select2" id="search_subscription_type" name="search_subscription_type" style="width: 100% !important;">
                                                 <option value="">Select</option>
                                                 @foreach($data['subscriptionType'] as $key => $val)
-                                                <option value="{{$key}}">{{$val}}</option>                                                 
+                                                <option value="{{$key}}">{{$val}}</option>
                                                 @endforeach
                                             </select><br/>
                                         </div>
@@ -53,7 +59,7 @@
 				                            <thead>
 				                                <tr>
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
-                                                    <th id="name" data-orderable="false" data-searchable="false">User Name</th> 
+                                                    <th id="name" data-orderable="false" data-searchable="false">User Name</th>
                                                     <th id="subscription_type" data-orderable="false" data-searchable="false">Subscription Type</th>
                                                     <th id="payment_mode" data-orderable="false" data-searchable="false">Payment Mode</th>
                                                     <th id="payment_status" data-orderable="false" data-searchable="false">Payment Status</th>

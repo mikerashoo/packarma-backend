@@ -97,11 +97,22 @@
                                             @endforeach
                                         </select><br><br>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <label>Credits<span style="color:#ff0000">*</span></label>
-                                        <input class="form-control required" type="number" step="1"
-                                            id="current_credit_amount" name="current_credit_amount"
-                                            value="{{ $data->current_credit_amount }}">
+
+
+                                    <div class="col-sm-2">
+                                        <label>Available Credits: {{ $data->current_credit_amount }}</label> <br/>
+                                        <label>Edit Credits<span style="color:#ff0000">*</span></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <button type="button" class="btn btn-outline-secondary" onclick="decrement()">-</button>
+                                            </div>
+                                            <input class="form-control required" type="number" step="1"
+                                                   id="current_credit_amount" name="current_credit_amount"
+                                                   value="{{ $data->current_credit_amount }}" style="width: 80px;">
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-secondary" onclick="increment()">+</button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm-12">
                                         <div class="pull-right">
@@ -129,4 +140,15 @@
             bootbox.alert("Length exceeded, maximum allowed files are 5");
         }
     }
+
+    function increment() {
+        var inputElement = document.getElementById('current_credit_amount');
+        inputElement.stepUp(1);
+    }
+
+    function decrement() {
+        var inputElement = document.getElementById('current_credit_amount');
+        inputElement.stepDown(1);
+    }
 </script>
+

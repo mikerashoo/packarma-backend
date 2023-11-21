@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Exports\ExportCustomerReport;
+use App\Exports\ExportCustomerSubscriptions;
 use App\Exports\ExportEnquiryReport;
 use App\Exports\ExportOrderReport;
 use App\Exports\ExportVendorQuotationReport;
@@ -40,6 +41,11 @@ class ExportController extends Controller
         $data['vendors'] = Vendor::all();
         $data['recommendation_engines'] = RecommendationEngine::where('status',1)->get();
         return view('backend/report/order_report_form',$data);
+    }
+
+    public function exportHistoryReport(Request $request){
+
+        return Excel::download(new ExportCustomerSubscriptions($request), 'Subscriptions-' . Carbon::now()->format('Y-m-d') .'.xlsx');
     }
     public function exportEnquiryReport(Request $request){
 
