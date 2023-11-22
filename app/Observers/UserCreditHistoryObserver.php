@@ -25,6 +25,20 @@ class UserCreditHistoryObserver
                 ]);
             }
         }
+
+        if($userCreditHistory->deduct == null && $userCreditHistory->add == null){
+            $action = $userCreditHistory->action;
+            $amount = $userCreditHistory->amount;
+            if($action == 'add'){
+                $userCreditHistory->update([
+                    'add' => $amount
+                ]);
+            }else {
+                $userCreditHistory->update([
+                    'deduct' => $amount
+                ]);
+            }
+        }
     }
 
     /**

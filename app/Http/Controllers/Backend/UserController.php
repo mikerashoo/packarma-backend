@@ -260,30 +260,42 @@ class UserController extends Controller
             }
             $tableObject = User::find($_GET['id']);
 
+
+            if (isset($request->current_credit_amount)) {
+
             $currentCredits = (int)$tableObject->current_credit_amount;
+
             $newCredit = (int) $request->current_credit_amount;
 
-            $difference = $currentCredits - $newCredit;
-            if ($difference != 0) {
+            $total = $currentCredits + $newCredit;
+
+            if($total < 0){
+                $msg = "Credit amount to deduct is larger than available credit";
+                errorMessage($msg, $msg_data);
+
+            }
+
+
+
+            if ($newCredit != 0) {
                 $reason = 'Admin';
-                if ($difference > 0) {
+                if ($newCredit < 0) {
                     $action = 'deduct';
-                    $amount = $difference;
                 } else {
                     $action = 'add';
-                    $amount = $difference * -1;
                 }
 
                 UserCreditHistory::create([
                     'action' => $action,
                     'reason' => $reason,
-                    'amount' => $amount,
+                    'amount' => $newCredit,
                     'user_id' => $tableObject->id
                 ]);
 
-                $tableObject->current_credit_amount = $newCredit;
-                $tableObject->credit_totals = $newCredit;
+                $tableObject->current_credit_amount = $total;
+                $tableObject->credit_totals = $total;
             }
+        }
             $msg = "Data Updated Successfully";
         } else {
             $tableObject = new User;
@@ -408,7 +420,7 @@ class UserController extends Controller
             'name' => 'required|string',
             'phone_country_code' => 'required|integer',
             'phone' => 'required|digits:10',
-            'current_credit_amount' => 'integer|min:0',
+            'current_credit_amount' => 'nullable|integer',
             'whatsapp_country_code' => 'nullable|integer',
             'whatsapp_no' => 'nullable|digits:10'
         ])->errors();

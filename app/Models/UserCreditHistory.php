@@ -23,6 +23,8 @@ class UserCreditHistory extends Model
         'transaction_id',
         'amount_paid',
         'enquery_id',
+        'add',
+        'deduct',
         'expire_date',
         'created_at'
     ];
