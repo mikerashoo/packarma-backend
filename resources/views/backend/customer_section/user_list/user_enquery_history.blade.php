@@ -22,7 +22,7 @@
                                 @foreach ($user->enquries as $enquery)
                                 <tr>
                                     <td>{{ $loop->index + 1 }}</td>
-                                    <td>{{ $enquery->product_id }}</td>
+                                    <td>{{ $enquery->product->product_name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($enquery->created_at)->fromNow() }}</td>
                                     <td>
                                         <div class="form-check form-switch">

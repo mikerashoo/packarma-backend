@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class CustomerEnquiry extends Model
 {
@@ -41,6 +42,7 @@ class CustomerEnquiry extends Model
         'is_shown',
         'created_by'
     ];
+
 
     /**
      * Developed By : Pradyumn Dwivedi

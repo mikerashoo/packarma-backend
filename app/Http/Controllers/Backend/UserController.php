@@ -157,6 +157,10 @@ class UserController extends Controller
 
         $user = User::find($id);
         $user->enquries;
+        foreach ($user->enquries as $enquery) {
+            $enquery->product;
+        }
+
 
         $data['user'] = $user;
         return view('backend/customer_section/user_list/user_enquery_history', $data);
