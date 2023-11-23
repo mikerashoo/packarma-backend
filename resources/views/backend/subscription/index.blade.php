@@ -42,6 +42,7 @@
 				                                    <th class="sorting_disabled" id="id" data-orderable="false" data-searchable="false">Id</th>
                                                     <th id="type" data-orderable="false" data-searchable="false">Type</th>
                                                     <th id="amount" data-orderable="false" data-searchable="false">Amount</th>
+                                                    <th id="credit_amount" data-orderable="false" data-searchable="false">Credit Amount</th>
                                                     <th id="updated_at" data-orderable="false" data-searchable="false">Date Time</th>
                                                     @if($data['subscription_edit'])
                                                         <th id="status" data-orderable="false" data-searchable="false" width="130px">Action</th>

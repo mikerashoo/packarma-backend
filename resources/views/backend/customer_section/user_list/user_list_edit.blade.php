@@ -107,7 +107,7 @@
                                                 <button type="button" class="btn btn-outline-secondary" onclick="decrement()">-</button>
                                             </div>
                                             <input class="form-control" type="number" step="1"
-                                                   id="current_credit_amount" min="{{ 0 - $data->current_credit_amount }}" placeholder="0" name="current_credit_amount" style="width: 80px;">
+                                                   id="current_credit_amount" readonly min="{{ 0 - $data->current_credit_amount }}" placeholder="0" name="current_credit_amount" style="width: 80px;">
                                             <div class="input-group-append">
                                                 <button type="button" class="btn btn-outline-secondary" onclick="increment()">+</button>
                                             </div>

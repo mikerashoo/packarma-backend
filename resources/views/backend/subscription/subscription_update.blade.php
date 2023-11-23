@@ -15,8 +15,8 @@
                             </div>
                         </div>
                     	<div class="card-body">
-                    		<form id="editSubscriptionData" method="post" action="subscriptionUpdate?id={{$data->id}}">                                
-                                    <div class="card-text">                                        
+                    		<form id="editSubscriptionData" method="post" action="subscriptionUpdate?id={{$data->id}}">
+                                    <div class="card-text">
                                         <div class="card-text">
                                             <div class="col-md-12 row">
                                                 <div class="col-md-6">
@@ -26,12 +26,12 @@
                                                     </dl>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <dl class="row">                                                                        
+                                                    <dl class="row">
                                                         <dt class="col-md-8 text-left">Subscription Amount:</dt>
                                                         <dd class="col-md-4">{{ $data->amount }} </dd>
-                                                    </dl>  
+                                                    </dl>
                                                 </div>
-                                            </div>                                    
+                                            </div>
                                         </div>
                                     </div>
                     			@csrf
@@ -39,7 +39,12 @@
                                     <div class="col-sm-6">
                         				<label>Subscription Amount<span style="color:#ff0000">*</span></label>
                         				<input class="form-control" type="text" step=".001" id="amount" name="amount" value="{{ $data->amount }}" onkeypress='return event.charCode >= 48 && event.charCode <= 57 || event.charCode ==46' <?php echo ($data->subscription_type == 'free' ? 'disabled' : '')?>><br/>
-                        			</div>                        		
+                        			</div>
+
+                                    <div class="col-sm-6">
+                        				<label>Credit Amount<span style="color:#ff0000">*</span></label>
+                        				<input class="form-control" type="text" min="0" step=".001" id="credit_amount" name="credit_amount" value="{{ $data->credit_amount }}"  ><br/>
+                        			</div>
                         		</div>
                                 <?php if($data->subscription_type =='free'){ ?>
                                     <div class="row">

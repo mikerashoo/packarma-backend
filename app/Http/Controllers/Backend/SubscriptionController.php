@@ -49,6 +49,9 @@ class SubscriptionController extends Controller
                     ->editColumn('amount', function ($event) {
                         return $event->amount;
                     })
+                    ->editColumn('credit_amount', function ($event) {
+                        return $event->credit_amount;
+                    })
                     ->editColumn('updated_at', function ($event) {
                         return date('d-m-Y h:i A', strtotime($event->updated_at));
                     })
@@ -113,6 +116,7 @@ class SubscriptionController extends Controller
             $msg = "Subscription Amount Updated Successfully";
         }
         $tableObject->amount = !empty($request->amount) ? $request->amount : 0.00;
+        $tableObject->credit_amount = !empty($request->credit_amount) ? $request->credit_amount : 0.00;
         $tableObject->updated_at = date('Y-m-d H:i:s');
         $tableObject->updated_by =  session('data')['id'];
 
@@ -135,6 +139,7 @@ class SubscriptionController extends Controller
         return \Validator::make($request->all(), [
             'amount' => 'sometimes|required|numeric|gt:.99',
             'duration' => 'sometimes|required|integer|gt:0',
+            'credit_amount' => 'sometimes|integer|gt:0'
         ])->errors();
     }
 }
