@@ -16,10 +16,12 @@ class UserInvoice extends Model
 {
     use HasFactory;
 
-
-
+    protected $fillable = [
+        'user_id', 'credit_id', 'subscription_id', 'amount'
+    ];
 
     protected $appends = ['address', 'title',  'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'account_name', 'ifsc_code', 'gst_prices'];
+
 
 
     public function getGstInAttribute()
@@ -80,7 +82,7 @@ class UserInvoice extends Model
     public function getTitleAttribute()
     {
         if ($this->subscription) {
-            return $this->subscription->type + ' subscription';
+            return $this->subscription->subscription_type . ' subscription';
         }
 
         return 'Buying credit';
@@ -165,7 +167,7 @@ class UserInvoice extends Model
      */
     public function subscription(): BelongsTo
     {
-        return $this->belongsTo(UserSubscriptionPayment::class, 'user_subscription_id');
+        return $this->belongsTo(UserSubscriptionPayment::class, 'subscription_id');
     }
 
 
@@ -187,6 +189,6 @@ class UserInvoice extends Model
 
     public function scopeOfSubscription($query, $subscriptionId)
     {
-        return $query->where('user_subscription_id', $subscriptionId);
+        return $query->where('subscription_id', $subscriptionId);
     }
 }
