@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/style.css')}}">
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/pages/authentication.css')}}">
     <script src="{{ asset('backend/js/jquery-3.2.1.min.js')}}"></script>
-    <script src="{{ asset('backend/vendors/js/core/bootstrap.min.js" type="text/javascript')}}"></script>
+    <script src="{{ asset('backend/vendors/js/core/bootstrap.min.js')}}"></script>
 </head>
 
 <body class="vertical-layout vertical-menu 1-column auth-page navbar-sticky blank-page" data-menu="vertical-menu"
