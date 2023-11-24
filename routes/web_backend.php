@@ -255,7 +255,7 @@ Route::group(['middleware' => ['customAuth']], function () {
 
     //Banners
     Route::get('/solution_banners', 'SolutionBannerController@index');
-    Route::post('/solution_banners_data', 'SolutionBannerController@fetch')->name('banners_data');
+    Route::post('/solution_banners_data', 'SolutionBannerController@fetch')->name('solution_banners_data');
     Route::get('/solution_banner_add', 'SolutionBannerController@add');
     Route::post('/save_solution_banner', 'SolutionBannerController@saveFormData');
     Route::get('/solution_banner_edit/{id}', 'SolutionBannerController@edit');
