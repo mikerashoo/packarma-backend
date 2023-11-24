@@ -8,27 +8,28 @@
     <meta name="author" content="MYPCOTINFOTECH">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Admin</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/backend/img/ico/favicon.png">
     <link
-        href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900%7CMontserrat:300,400,500,600,700,800,900"
-        rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/backend/css/mypcot.min.css">
-    <link rel="stylesheet" type="text/css" href="/backend/fonts/feather/style.min.css">
-    <link rel="stylesheet" type="text/css" href="/backend/fonts/simple-line-icons/style.css">
-    <link rel="stylesheet" type="text/css" href="/backend/fonts/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="/backend/vendors/css/perfect-scrollbar.min.css">
-    <link rel="stylesheet" type="text/css" href="/backend/vendors/css/prism.min.css">
-    <link rel="stylesheet" type="text/css" href="/backend/vendors/css/switchery.min.css">
-    <link rel="stylesheet" type="text/css" href="/backend/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="/backend/css/bootstrap-extended.css">
-    <link rel="stylesheet" type="text/css" href="/backend/css/colors.css">
-    <link rel="stylesheet" type="text/css" href="/backend/css/components.css">
-    <link rel="stylesheet" type="text/css" href="/backend/css/themes/layout-dark.css">
-    <link rel="stylesheet" type="text/css" href="/backend/css/plugins/switchery.css">
-    <link rel="stylesheet" type="text/css" href="/backend/vendors/css/datatables/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" type="text/css" href="/backend/css/style.css">
-    <link rel="stylesheet" type="text/css" href="/backend/css/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="/backend/vendors/css/daterangepicker/daterangepicker.css">
+    href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900%7CMontserrat:300,400,500,600,700,800,900"
+    rel="stylesheet">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('backend/img/ico/favicon.png') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/mypcot.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/fonts/feather/style.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/fonts/simple-line-icons/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/fonts/font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/vendors/css/perfect-scrollbar.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/vendors/css/prism.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/vendors/css/switchery.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/bootstrap.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/bootstrap-extended.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/colors.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/components.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/themes/layout-dark.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/plugins/switchery.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/vendors/css/datatables/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/css/select2.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/vendors/css/daterangepicker/daterangepicker.css') }}">
 
      <!-- Include React and ReactDOM from CDN -->
      <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
@@ -36,12 +37,12 @@
 
      <!-- Include Babel for JSX support (optional) -->
      <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script src="/backend/js/jquery-3.2.1.min.js"></script>
-    <script src="/backend/vendors/js/core/bootstrap.min.js" type="text/javascript"></script>
-    <script src="/backend/vendors/js/vendors.min.js"></script>
-    <script src="/backend/vendors/js/datatable/jquery.dataTables.min.js"></script>
-    <script src="/backend/vendors/js/datatable/dataTables.bootstrap4.min.js"></script>
-    <script src="/backend/js/bootbox.min.js"></script>
+    <script src="{{ asset('backend/js/jquery-3.2.1.min.js') }} "></script>
+    <script src="{{ asset('backend/vendors/js/core/bootstrap.min.js') }} "></script>
+    <script src="{{ asset('backend/vendors/js/vendors.min.js') }} "></script>
+    <script src="{{ asset('backend/vendors/js/datatable/jquery.dataTables.min.js') }} "></script>
+    <script src="{{ asset('backend/vendors/js/datatable/dataTables.bootstrap4.min.js') }} "></script>
+    <script src="{{ asset('backend/js/bootbox.min.js') }} "></script>
 </head>
 
 <body class="vertical-layout vertical-menu 2-columns" data-menu="vertical-menu" data-col="2-columns" id="container">
@@ -104,12 +105,12 @@
     </nav>
     <div class="wrapper">
         <div class="app-sidebar menu-fixed" data-background-color="man-of-steel"
-            data-image="/backend/img/sidebar-bg/01.jpg" data-scroll-to-active="true">
+            data-image="{{ asset('backend/img/sidebar-bg/01.jpg" data-scroll-to-active="true">
             <div class="sidebar-header">
                 <div class="logo clearfix">
                     <a class="logo-text float-left" href="dashboard">
                         <div class="logo-img" style="">
-                            <img src="/backend/img/Home_logo.png" alt="Logo" /><span class="text-white text bold"
+                            <img src="{{ asset('backend/img/Home_logo.png" alt="Logo" /><span class="text-white text bold"
                                 style="font-size: smaller;">&nbsp;Packarma</span>
                         </div>
                     </a>
@@ -599,21 +600,21 @@
         <div class="drag-target"></div>
     </div>
 </body>
-<script src="/backend/vendors/js/switchery.min.js"></script>
-<script src="/backend/js/core/app-menu.js"></script>
-<script src="/backend/js/core/app.js"></script>
-<script src="/backend/js/notification-sidebar.js"></script>
-<script src="/backend/js/customizer.js"></script>
-<script src="/backend/js/scroll-top.js"></script>
-<script src="/backend/js/scripts.js"></script>
-<script src="/backend/js/ajax-custom.js"></script>
-<script src="/backend/js/mypcot.min.js"></script>
-<script src="/backend/js/select2.min.js"></script>
-<script src="/backend/vendors/js/pickadate/picker.js"></script>
-<script src="/backend/vendors/js/pickadate/picker.date.js"></script>
-<script src="/backend/vendors/js/pickadate/picker.time.js"></script>
-<script src="/backend/vendors/js/daterangepicker/moment.min.js"></script>
-<script src="/backend/vendors/js/daterangepicker/daterangepicker.min.js"></script>
+<script src="{{ asset('backend/vendors/js/switchery.min.js') }}"></script>
+<script src="{{ asset('backend/js/core/app-menu.js') }}"></script>
+<script src="{{ asset('backend/js/core/app.js') }}"></script>
+<script src="{{ asset('backend/js/notification-sidebar.js') }}"></script>
+<script src="{{ asset('backend/js/customizer.js') }}"></script>
+<script src="{{ asset('backend/js/scroll-top.js') }}"></script>
+<script src="{{ asset('backend/js/scripts.js') }}"></script>
+<script src="{{ asset('backend/js/ajax-custom.js') }}"></script>
+<script src="{{ asset('backend/js/mypcot.min.js') }}"></script>
+<script src="{{ asset('backend/js/select2.min.js') }}"></script>
+<script src="{{ asset('backend/vendors/js/pickadate/picker.js') }}"></script>
+<script src="{{ asset('backend/vendors/js/pickadate/picker.date.js') }}"></script>
+<script src="{{ asset('backend/vendors/js/pickadate/picker.time.js') }}"></script>
+<script src="{{ asset('backend/vendors/js/daterangepicker/moment.min.js') }}"></script>
+<script src="{{ asset('backend/vendors/js/daterangepicker/daterangepicker.min.js') }}"></script>
 
 
 {{-- <script src="{{ asset('backend/js/manageSubscriptionBenefits.js') }}" type="text/babel"></script> --}}

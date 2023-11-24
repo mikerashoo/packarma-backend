@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
     <meta name="author" content="MYPCOTINFOTECH">
-    <link rel="shortcut icon" type="image/x-icon" href="public/backend/img/ico/favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('backend/img/ico/favicon.png') }}">
     <title>@yield('title')</title>
     <link
         href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900%7CMontserrat:300,400,500,600,700,800,900"
