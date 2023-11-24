@@ -96,7 +96,7 @@ class UserCreditController extends Controller
                     'amount' => ['required', 'numeric', 'min:0'],
                     'amount_paid' => ['required', 'numeric', 'min:0'],
                     'expire_date' => ['required', 'date'],
-                    'transaction_id' => ['string'],
+                    'transaction_id' => 'string',
                     'reason' => 'required',
                     'is_subscription' => 'bool'
                 ],
@@ -126,7 +126,7 @@ class UserCreditController extends Controller
                     'reason' => $request->reason,
                     'amount_paid' => $request->amount_paid,
                     'expire_date' => $request->expire_date,
-                    'transaction_id' => $request->transaction_id ?? 0,
+                    'transaction_id' => $request->transaction_id,
                     'action' => 'add'
                 ]
             );
