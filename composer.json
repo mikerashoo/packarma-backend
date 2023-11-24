@@ -42,8 +42,7 @@
             "app/Http/Helpers/Webhelper.php",
             "app/Http/Helpers/Imagehelper.php",
             "app/Http/Helpers/Smshelper.php",
-            "app/Http/Helpers/Emailhelper.php",
-            "app/Helpers/AssetHelper.php"
+            "app/Http/Helpers/Emailhelper.php"
         ]
     },
     "autoload-dev": {
