@@ -105,12 +105,12 @@
     </nav>
     <div class="wrapper">
         <div class="app-sidebar menu-fixed" data-background-color="man-of-steel"
-            data-image="{{ asset('backend/img/sidebar-bg/01.jpg" data-scroll-to-active="true">
+            data-image="{{ asset('backend/img/sidebar-bg/01.jpg') }}" data-scroll-to-active="true">
             <div class="sidebar-header">
                 <div class="logo clearfix">
                     <a class="logo-text float-left" href="dashboard">
                         <div class="logo-img" style="">
-                            <img src="{{ asset('backend/img/Home_logo.png" alt="Logo" /><span class="text-white text bold"
+                            <img src="{{ asset('backend/img/Home_logo.png')}}" alt="Logo" /><span class="text-white text bold"
                                 style="font-size: smaller;">&nbsp;Packarma</span>
                         </div>
                     </a>
