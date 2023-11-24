@@ -155,7 +155,7 @@ class UserSubscriptionPaymentApiController extends Controller
                         $subscriptionPayment->call_from = $platform;
                         $subscriptionPayment->ip_address = $ip_address;
                         $subscriptionPayment->payment_status = 'paid';
-                        $subscriptionPayment->transaction_id = $request->transaction_id ?? 0;
+                        $subscriptionPayment->transaction_id = $request->transaction_id;
                         $subscriptionPayment->save();
                         //update subscription status in users table
                         $updateUser = calcCustomerSubscription($user_id, $subscriptionPayment->subscription_id);

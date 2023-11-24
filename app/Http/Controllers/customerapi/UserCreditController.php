@@ -96,7 +96,6 @@ class UserCreditController extends Controller
                     'amount' => ['required', 'numeric', 'min:0'],
                     'amount_paid' => ['required', 'numeric', 'min:0'],
                     'expire_date' => ['required', 'date'],
-                    'transaction_id' => 'string',
                     'reason' => 'required',
                     'is_subscription' => 'bool'
                 ],
