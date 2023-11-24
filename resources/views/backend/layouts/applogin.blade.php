@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="/backend/css/colors.css">
     <link rel="stylesheet" type="text/css" href="/backend/css/components.css">
     <link rel="stylesheet" type="text/css" href="/backend/css/style.css">
-    <link rel="stylesheet" href="/backend/css/pages/authentication.css">
+    <link rel="stylesheet" type="text/css" href="/backend/css/pages/authentication.css">
     <script src="/backend/js/jquery-3.2.1.min.js"></script>
     <script src="/backend/vendors/js/core/bootstrap.min.js" type="text/javascript"></script>
 </head>
