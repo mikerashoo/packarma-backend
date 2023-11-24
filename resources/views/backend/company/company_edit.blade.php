@@ -47,7 +47,7 @@
 
                                             </div>
                                         </div>
-                                    
+
                                     </div>
                             </div>
                             <div class="tab-pane fade mt-2" id="page_description" role="tabpanel" aria-labelledby="page_description-tab">
@@ -64,7 +64,7 @@
                                         <label>Meta Keyword</label>
                                         <input class="form-control" type="text" id="meta_keyword" name="meta_keyword" value="{{$data['data']->meta_keyword}}"><br/>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         		<div class="row">
@@ -86,10 +86,10 @@
 </section>
 <script>
     $('.select2').select2();
-    function checkFiles(files) {       
+    function checkFiles(files) {
         if(files.length>5) {
             $('#attachment').val('');
             bootbox.alert("length exceeded; maximum allowed files are 5");
-        } 
+        }
     }
 </script>
