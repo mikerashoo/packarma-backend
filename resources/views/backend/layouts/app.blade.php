@@ -24,8 +24,8 @@
     <link rel="stylesheet" type="text/css" href="/backend/css/colors.css">
     <link rel="stylesheet" type="text/css" href="/backend/css/components.css">
     <link rel="stylesheet" type="text/css" href="/backend/css/themes/layout-dark.css">
-    <link rel="stylesheet" href="/backend/css/plugins/switchery.css">
-    <link rel="stylesheet" href="/backend/vendors/css/datatables/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="/backend/css/plugins/switchery.css">
+    <link rel="stylesheet" type="text/css" href="/backend/vendors/css/datatables/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="/backend/css/style.css">
     <link rel="stylesheet" type="text/css" href="/backend/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="/backend/vendors/css/daterangepicker/daterangepicker.css">
