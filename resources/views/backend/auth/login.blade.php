@@ -15,7 +15,7 @@
                                             <div class="row m-0">
                                                 <div
                                                     class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center auth-img-bg p-3">
-                                                    <img src="/backend/img/Packarma_logo_1.svg" alt=""
+                                                    <img src="{{ asset('backend/img/Packarma_logo_1.svg')}}" alt=""
                                                         class="img-fluid" width="300" height="230">
                                                     {{-- <h1 style="font-size: 70px;">&nbsp;&nbsp;PACKULT&nbsp;&nbsp;</h1> --}}
                                                 </div>
