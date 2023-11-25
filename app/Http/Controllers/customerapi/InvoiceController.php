@@ -302,7 +302,6 @@ class InvoiceController extends Controller
 
 
             $invoiceId = $request->invoice_id;
-
             $invoice = UserInvoice::find($invoiceId);
             $invoice->address;
             $invoice->user;
@@ -334,10 +333,8 @@ class InvoiceController extends Controller
             ];
 
 
-
-
-            $downloadLink = $this->getInvoicePdf($invoiceId, $result);
-            $result['download_link'] = $downloadLink;
+            // $downloadLink = $this->getInvoicePdf($invoiceId, $result);
+            $result['download_link'] = $invoice->download_link;
             Log::info("Invoice data fetch successfully");
             successMessage(__('invoice.info_fetch'), $result);
         } catch (\Exception $e) {
