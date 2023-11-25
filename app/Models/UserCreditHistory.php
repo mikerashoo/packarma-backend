@@ -41,10 +41,7 @@ class UserCreditHistory extends Model
     public function getDownloadLinkAttribute()
     {
         $invoice = UserInvoice::where('credit_id', $this->id)->first();
-        if (!$invoice) {
-            return '';
-        }
+        return $invoice ? $invoice->download_link : '';
 
-       return $invoice->download_link;
     }
 }
