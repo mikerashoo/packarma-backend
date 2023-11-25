@@ -39,7 +39,7 @@ class BannerApiController extends Controller
                     $limit = $request->limit;
                 }
                 $offset = ($page_no - 1) * $limit;
-                $data = Banner::select('id', 'title', 'link', 'description', 'banner_image', 'banner_thumb_image', 'seo_url', 'meta_title', 'meta_description', 'meta_keyword')->where('status', '1');
+                $data = Banner::select('id', 'title', 'link', 'description', 'app_page_id', 'banner_image', 'banner_thumb_image', 'seo_url', 'meta_title', 'meta_description', 'meta_keyword')->where('status', '1');
                 $bannerData = Banner::whereRaw("1 = 1");
                 if ($request->banner_id) {
                     $bannerData = $bannerData->where('id', $request->banner_id);
