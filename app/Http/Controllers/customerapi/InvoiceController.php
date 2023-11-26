@@ -287,7 +287,7 @@ class InvoiceController extends Controller
                 $request->all(),
                 [
                     'user_id' => ['required', Rule::exists('users', 'id')],
-                    'invoice_id' => ['required', Rule::exists('user_invoices', 'id')->where('user_id', $request->user_id)],
+                    'invoice_id' => ['required', Rule::exists('invoices', 'id')->where('user_id', $request->user_id)],
                 ],
             );
 
@@ -448,7 +448,7 @@ class InvoiceController extends Controller
             $validateRequest = Validator::make(
                 $request->all(),
                 [
-                    'invoice_id' => ['required', 'exists:user_invoices,id']
+                    'invoice_id' => ['required', 'exists:invoices,id']
                 ],
             );
 

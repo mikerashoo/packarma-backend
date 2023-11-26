@@ -57,6 +57,7 @@ class CreateCreditInvoicesTable extends Migration
      */
     public function down()
     {
+        DB::statement("DROP VIEW user_invoices");
         DB::statement("DROP VIEW credit_invoices");
         DB::statement("DROP VIEW user_subscription_invoices");
     }

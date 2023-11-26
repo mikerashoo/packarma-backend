@@ -39,8 +39,9 @@ class UserSubscriptionPayment extends Model
 
     public function getInvoiceIdAttribute()
     {
-        $invoice = UserInvoice::select('id AS invoice_id')->where('subscription_id', $this->id)->first();
-        return $invoice ? $invoice->invoice_id : null;
+        $invoice = DB::table('invoices')->select('id')->where('subscription_id', $this->id)->first();
+        return $invoice ? $invoice->id : null;
+
     }
 
 

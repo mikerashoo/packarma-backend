@@ -35,7 +35,7 @@ class UserCreditHistory extends Model
 
     public function getInvoiceIdAttribute()
     {
-        $invoice = DB::table('user_invoices')->select('id')->where('credit_id', $this->id)->first();
+        $invoice = DB::table('invoices')->select('id')->where('credit_id', $this->id)->first();
         return $invoice ? $invoice->id : null;
     }
 

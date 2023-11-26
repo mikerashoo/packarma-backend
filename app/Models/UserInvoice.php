@@ -18,11 +18,12 @@ class UserInvoice extends Model
 {
     use HasFactory;
 
+    protected $table =  'invoices';
     protected $fillable = [
         'user_id', 'credit_id', 'subscription_id', 'amount'
     ];
 
-    protected $appends = ['download_link', 'transaction_id', 'address', 'title',  'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'account_name', 'ifsc_code', 'gst_prices'];
+    protected $appends = ['download_link',  'address', 'title',  'gstin', 'cid_number', 'pan_number', 'bank_name', 'branch_name', 'account_number', 'account_name', 'ifsc_code', 'gst_prices'];
 
 
 
@@ -91,21 +92,7 @@ class UserInvoice extends Model
         return 'Buying credit';
     }
 
-    public function getTransactionIdAttribute()
-    {
-        $subscriptionId = $this->subscription_id;
-        if($subscriptionId){
-            $transactionId = DB::table('user_subscription_payments')->select('transaction_id')->where('id', $subscriptionId)->first()->transaction_id;
-            return $transactionId;
-        }
 
-        $creditId = $this->credit_id;
-        if($creditId){
-            $transactionId = DB::table('user_credit_histories')->select('transaction_id')->where('id', $creditId)->first()->transaction_id;
-            return $transactionId;
-        }
-        return "";
-    }
 
 
 
