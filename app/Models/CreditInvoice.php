@@ -56,7 +56,7 @@ class CreditInvoice extends Model
 
     public function getIfscCodeAttribute()
     {
-        return config("bankDetails.BRANCH_NAME");
+        return config("bankDetails.IFSC_CODE");
     }
 
 

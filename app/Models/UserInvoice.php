@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\File;
@@ -66,7 +67,7 @@ class UserInvoice extends Model
 
     public function getIfscCodeAttribute()
     {
-        return config("bankDetails.BRANCH_NAME");
+        return config("bankDetails.IFSC_CODE");
     }
 
     public function getAddressAttribute()
@@ -217,8 +218,10 @@ class UserInvoice extends Model
 
         $invoiceDir = "app/attachments";
         $storagePath =  storage_path($invoiceDir);
+        $env = App::environment();
 
-        $prefix = $this->subscription_id ? 'subscription_' : 'credit_';
+        $_env = $env == 'local' ? '_local' : '_';
+        $prefix = $this->subscription_id ? 'subscription_payment' . $_env : 'credit_payment'  . $_env;
         $filename = $prefix . 'invoice_' . $invoiceId . '.pdf';
         $filePath = $invoiceDir . '/' . $filename;
 

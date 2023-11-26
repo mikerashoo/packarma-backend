@@ -464,7 +464,8 @@ class InvoiceController extends Controller
 
 
 
-            $invoice->address->state;
+            $invoice->address;
+            if($invoice->address) $invoice->address->state;
             $invoice->user;
             // return $invoice;
             $invoice->subscription;

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class UserCreditHistory extends Model
@@ -34,8 +35,8 @@ class UserCreditHistory extends Model
 
     public function getInvoiceIdAttribute()
     {
-        $invoice = UserInvoice::select('id AS invoice_id')->where('credit_id', $this->id)->first();
-        return $invoice ? $invoice->invoice_id : null;
+        $invoice = DB::table('user_invoices')->select('id')->where('credit_id', $this->id)->first();
+        return $invoice ? $invoice->id : null;
     }
 
     public function getDownloadLinkAttribute()
