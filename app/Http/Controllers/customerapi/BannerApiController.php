@@ -185,21 +185,16 @@ class BannerApiController extends Controller
                 $bannerId = $request->banner_id;
                 $solutionId = $request->solution_banner_id;
                 if ($bannerId) {
-                    $bannerView = BannerView::ofUser($userId)->ofBanner($bannerId)->first();
-                    if (!$bannerView) {
-                        $bannerView = new BannerView();
-                        $bannerView->user_id = $userId;
-                        $bannerView->banner_id = $bannerId;
-                        $bannerView->save();
-                    }
+                    $bannerView = new BannerView();
+                    $bannerView->user_id = $userId;
+                    $bannerView->banner_id = $bannerId;
+                    $bannerView->save();
                 } else {
-                    $bannerView = BannerView::ofUser($userId)->ofSolutionBanner($solutionId)->first();
-                    if (!$bannerView) {
-                        $bannerView = new BannerView();
-                        $bannerView->user_id = $userId;
-                        $bannerView->solution_banner_id = $solutionId;
-                        $bannerView->save();
-                    }
+
+                    $bannerView = new BannerView();
+                    $bannerView->user_id = $userId;
+                    $bannerView->solution_banner_id = $solutionId;
+                    $bannerView->save();
                 }
 
                 $responseData['result'] = $bannerView;
