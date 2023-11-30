@@ -118,21 +118,17 @@ class BannerApiController extends Controller
                 $bannerId = $request->banner_id;
                 $solutionId = $request->solution_banner_id;
                 if ($bannerId) {
-                    $bannerClick = BannerClick::ofUser($userId)->ofBanner($bannerId)->first();
-                    if (!$bannerClick) {
                         $bannerClick = new BannerClick();
                         $bannerClick->user_id = $userId;
                         $bannerClick->banner_id = $bannerId;
                         $bannerClick->save();
-                    }
+
                 } else {
-                    $bannerClick = BannerClick::ofUser($userId)->ofSolutionBanner($solutionId)->first();
-                    if (!$bannerClick) {
                         $bannerClick = new BannerClick();
                         $bannerClick->user_id = $userId;
                         $bannerClick->solution_banner_id = $solutionId;
                         $bannerClick->save();
-                    }
+
                 }
 
                 $responseData['result'] = $bannerClick;
